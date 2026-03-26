@@ -59,6 +59,9 @@ export default function Home() {
             Documentation
           </a>
         </div>
+        <h1 className="text-3xl font-bold underline">
+          Hello world!
+        </h1>
       </main>
     </div>
   );
