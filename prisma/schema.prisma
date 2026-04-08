@@ -5,31 +5,45 @@ generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
 }
+
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
 }
 
-model Catorgory {
-  id Int @id @default(autoincrement())
-  name String
-  products Product[]
+enum EducationField {
+  BUILDING // Bygg
+  CONSTRUCTION // Annlegg
 }
 
 model Product {
   id Int @id @default(autoincrement())
+  educationField EducationField
   title String
   description String
-  specs String
-  price Float
-  producer String
-  className String
+  price Decimal
+  measures Json?
   amount Int
-  catogoryId Int
-  catorgory Catorgory @relation(fields: [catogoryId], references: [id])
+  publishedAt DateTime @default(now())
+
+  @@index ([educationField])
 }
 
-model Request {
+model ProjectRequest {
   id Int @id @default(autoincrement())
-  title String 
-  }
+  educationField EducationField?
+  title String
+  description String
+  minPrice Decimal
+  maxPrice Decimal
+  clientForename String
+  clientSurname String
+  clientEmail String
+  clientPhone String
+  organizationNumber String?
+  address String
+
+
+  @@index ([clientEmail])
+  @@index ([clientPhone])
+  @@index ([organizationNumber])
+}
