@@ -9,38 +9,23 @@
     "lint": "eslint"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@prisma/adapter-better-sqlite3": "^7.5.0",
-    "@prisma/adapter-pg": "^7.5.0",
-    "@prisma/client": "^7.5.0",
-    "better-sqlite3": "^12.8.0",
-=======
     "@prisma/adapter-better-sqlite3": "^7.7.0",
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
     "crypto": "^1.0.1",
->>>>>>> database
     "dotenv": "^17.3.1",
     "next": "^16.2.1",
     "pg": "^8.20.0",
     "prisma": "^7.7.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-<<<<<<< HEAD
-    "sqlite3": "^6.0.1",
-=======
     "sharp": "^0.34.5",
->>>>>>> database
     "tailwind": "^4.0.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/better-sqlite3": "^7.6.13",
-<<<<<<< HEAD
-    "@types/node": "^20.19.37",
-=======
     "@types/node": "^20",
->>>>>>> database
     "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -50,10 +35,6 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "postcss": "^8.5.8",
-<<<<<<< HEAD
-    "prisma": "^6.19.2",
-=======
->>>>>>> database
     "tailwindcss": "^4.2.2",
     "tsx": "^4.21.0",
     "typescript": "^5"
