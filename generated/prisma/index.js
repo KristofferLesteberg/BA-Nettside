@@ -19,7 +19,10 @@ const {
   skip,
   Decimal,
   Debug,
-  objectEnumValues,
+  DbNull,
+  JsonNull,
+  AnyNull,
+  NullTypes,
   makeStrictEnum,
   Extensions,
   warnOnce,
@@ -27,7 +30,7 @@ const {
   Public,
   getRuntime,
   createParam,
-} = require('./runtime/library.js')
+} = require('./runtime/client.js')
 
 
 const Prisma = {}
@@ -36,12 +39,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.19.2
- * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
+ * Prisma Client JS version: 7.7.0
+ * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
  */
 Prisma.prismaVersion = {
-  client: "6.19.2",
-  engine: "c2990dca591cba766e3b7ef5d9e8a84796e47ab7"
+  client: "7.7.0",
+  engine: "75cbdc1eb7150937890ad5465d861175c6624711"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -69,15 +72,11 @@ Prisma.defineExtension = Extensions.defineExtension
 /**
  * Shorthand utilities for JSON filtering
  */
-Prisma.DbNull = objectEnumValues.instances.DbNull
-Prisma.JsonNull = objectEnumValues.instances.JsonNull
-Prisma.AnyNull = objectEnumValues.instances.AnyNull
+Prisma.DbNull = DbNull
+Prisma.JsonNull = JsonNull
+Prisma.AnyNull = AnyNull
 
-Prisma.NullTypes = {
-  DbNull: objectEnumValues.classes.DbNull,
-  JsonNull: objectEnumValues.classes.JsonNull,
-  AnyNull: objectEnumValues.classes.AnyNull
-}
+Prisma.NullTypes = NullTypes
 
 
 
@@ -91,26 +90,36 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.CatorgoryScalarFieldEnum = {
-  id: 'id',
-  name: 'name'
-};
-
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
+  educationField: 'educationField',
   title: 'title',
   description: 'description',
-  specs: 'specs',
   price: 'price',
-  producer: 'producer',
-  className: 'className',
+  measures: 'measures',
   amount: 'amount',
-  catogoryId: 'catogoryId'
+  publishedAt: 'publishedAt'
 };
 
-exports.Prisma.RequestScalarFieldEnum = {
+exports.Prisma.ProductImageScalarFieldEnum = {
   id: 'id',
-  title: 'title'
+  productId: 'productId',
+  sortOrder: 'sortOrder'
+};
+
+exports.Prisma.ProjectRequestScalarFieldEnum = {
+  id: 'id',
+  educationField: 'educationField',
+  title: 'title',
+  description: 'description',
+  minPrice: 'minPrice',
+  maxPrice: 'maxPrice',
+  clientForename: 'clientForename',
+  clientSurname: 'clientSurname',
+  clientEmail: 'clientEmail',
+  clientPhone: 'clientPhone',
+  organizationNumber: 'organizationNumber',
+  address: 'address'
 };
 
 exports.Prisma.SortOrder = {
@@ -118,101 +127,65 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+exports.EducationField = exports.$Enums.EducationField = {
+  BUILDING: 'BUILDING',
+  CONSTRUCTION: 'CONSTRUCTION'
+};
 
 exports.Prisma.ModelName = {
-  Catorgory: 'Catorgory',
   Product: 'Product',
-  Request: 'Request'
+  ProductImage: 'ProductImage',
+  ProjectRequest: 'ProjectRequest'
 };
 /**
  * Create the Client
  */
 const config = {
-  "generator": {
-    "name": "client",
-    "provider": {
-      "fromEnvVar": null,
-      "value": "prisma-client-js"
-    },
-    "output": {
-      "value": "C:\\Users\\edu6194294\\Documents\\projects\\BA-Nettside\\generated\\prisma",
-      "fromEnvVar": null
-    },
-    "config": {
-      "engineType": "library"
-    },
-    "binaryTargets": [
-      {
-        "fromEnvVar": null,
-        "value": "windows",
-        "native": true
-      }
-    ],
-    "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\edu6194294\\Documents\\projects\\BA-Nettside\\prisma\\schema.prisma",
-    "isCustomOutput": true
-  },
-  "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
-  },
-  "relativePath": "../../prisma",
-  "clientVersion": "6.19.2",
-  "engineVersion": "c2990dca591cba766e3b7ef5d9e8a84796e47ab7",
-  "datasourceNames": [
-    "db"
-  ],
+  "previewFeatures": [],
+  "clientVersion": "7.7.0",
+  "engineVersion": "75cbdc1eb7150937890ad5465d861175c6624711",
   "activeProvider": "sqlite",
-  "inlineDatasources": {
-    "db": {
-      "url": {
-        "fromEnvVar": "DATABASE_URL",
-        "value": null
-      }
-    }
-  },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Catorgory {\n  id       Int       @id @default(autoincrement())\n  name     String\n  products Product[]\n}\n\nmodel Product {\n  id          Int       @id @default(autoincrement())\n  title       String\n  description String\n  specs       String\n  price       Float\n  producer    String\n  className   String\n  amount      Int\n  catogoryId  Int\n  catorgory   Catorgory @relation(fields: [catogoryId], references: [id])\n}\n\nmodel Request {\n  id    Int    @id @default(autoincrement())\n  title String\n}\n",
-  "inlineSchemaHash": "d63447db597d2db71e2169818e70fa6a802c4be98d9ae429d25ec9ed9d8e4418",
-  "copyEngine": true
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n}\n\nenum EducationField {\n  BUILDING // Bygg\n  CONSTRUCTION // Annlegg\n}\n\nmodel Product {\n  id             Int            @id @default(autoincrement())\n  educationField EducationField\n  title          String\n  description    String\n  price          Decimal\n  measures       Json?\n  amount         Int\n  publishedAt    DateTime       @default(now())\n  images         ProductImage[]\n\n  @@index([educationField])\n}\n\nmodel ProductImage {\n  id        String  @id\n  productId Int\n  product   Product @relation(fields: [productId], references: [id])\n  sortOrder Int     @default(0)\n}\n\nmodel ProjectRequest {\n  id                 Int             @id @default(autoincrement())\n  educationField     EducationField?\n  title              String\n  description        String\n  minPrice           Decimal\n  maxPrice           Decimal\n  clientForename     String\n  clientSurname      String\n  clientEmail        String\n  clientPhone        String\n  organizationNumber String?\n  address            String\n\n  @@index([clientEmail])\n  @@index([clientPhone])\n  @@index([organizationNumber])\n}\n"
 }
 
-const fs = require('fs')
-
-config.dirname = __dirname
-if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
-  const alternativePaths = [
-    "generated/prisma",
-    "prisma",
-  ]
-  
-  const alternativePath = alternativePaths.find((altPath) => {
-    return fs.existsSync(path.join(process.cwd(), altPath, 'schema.prisma'))
-  }) ?? alternativePaths[0]
-
-  config.dirname = path.join(process.cwd(), alternativePath)
-  config.isBundled = true
-}
-
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Catorgory\":{\"dbName\":null,\"schema\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Int\",\"nativeType\":null,\"default\":{\"name\":\"autoincrement\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"name\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"products\",\"kind\":\"object\",\"isList\":true,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Product\",\"nativeType\":null,\"relationName\":\"CatorgoryToProduct\",\"relationFromFields\":[],\"relationToFields\":[],\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false},\"Product\":{\"dbName\":null,\"schema\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Int\",\"nativeType\":null,\"default\":{\"name\":\"autoincrement\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"title\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"description\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"specs\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"price\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Float\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"producer\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"className\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"amount\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"catogoryId\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":true,\"hasDefaultValue\":false,\"type\":\"Int\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"catorgory\",\"kind\":\"object\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Catorgory\",\"nativeType\":null,\"relationName\":\"CatorgoryToProduct\",\"relationFromFields\":[\"catogoryId\"],\"relationToFields\":[\"id\"],\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false},\"Request\":{\"dbName\":null,\"schema\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Int\",\"nativeType\":null,\"default\":{\"name\":\"autoincrement\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"title\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Product\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"educationField\",\"kind\":\"enum\",\"type\":\"EducationField\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"measures\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"amount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"publishedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"images\",\"kind\":\"object\",\"type\":\"ProductImage\",\"relationName\":\"ProductToProductImage\"}],\"dbName\":null},\"ProductImage\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"productId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"product\",\"kind\":\"object\",\"type\":\"Product\",\"relationName\":\"ProductToProductImage\"},{\"name\":\"sortOrder\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null},\"ProjectRequest\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"educationField\",\"kind\":\"enum\",\"type\":\"EducationField\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"minPrice\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"maxPrice\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"clientForename\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientSurname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientEmail\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"clientPhone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"organizationNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
-config.engineWasm = undefined
-config.compilerWasm = undefined
+config.parameterizationSchema = {
+  strings: JSON.parse("[\"where\",\"orderBy\",\"cursor\",\"product\",\"images\",\"_count\",\"Product.findUnique\",\"Product.findUniqueOrThrow\",\"Product.findFirst\",\"Product.findFirstOrThrow\",\"Product.findMany\",\"data\",\"Product.createOne\",\"Product.createMany\",\"Product.createManyAndReturn\",\"Product.updateOne\",\"Product.updateMany\",\"Product.updateManyAndReturn\",\"create\",\"update\",\"Product.upsertOne\",\"Product.deleteOne\",\"Product.deleteMany\",\"having\",\"_avg\",\"_sum\",\"_min\",\"_max\",\"Product.groupBy\",\"Product.aggregate\",\"ProductImage.findUnique\",\"ProductImage.findUniqueOrThrow\",\"ProductImage.findFirst\",\"ProductImage.findFirstOrThrow\",\"ProductImage.findMany\",\"ProductImage.createOne\",\"ProductImage.createMany\",\"ProductImage.createManyAndReturn\",\"ProductImage.updateOne\",\"ProductImage.updateMany\",\"ProductImage.updateManyAndReturn\",\"ProductImage.upsertOne\",\"ProductImage.deleteOne\",\"ProductImage.deleteMany\",\"ProductImage.groupBy\",\"ProductImage.aggregate\",\"ProjectRequest.findUnique\",\"ProjectRequest.findUniqueOrThrow\",\"ProjectRequest.findFirst\",\"ProjectRequest.findFirstOrThrow\",\"ProjectRequest.findMany\",\"ProjectRequest.createOne\",\"ProjectRequest.createMany\",\"ProjectRequest.createManyAndReturn\",\"ProjectRequest.updateOne\",\"ProjectRequest.updateMany\",\"ProjectRequest.updateManyAndReturn\",\"ProjectRequest.upsertOne\",\"ProjectRequest.deleteOne\",\"ProjectRequest.deleteMany\",\"ProjectRequest.groupBy\",\"ProjectRequest.aggregate\",\"AND\",\"OR\",\"NOT\",\"id\",\"EducationField\",\"educationField\",\"title\",\"description\",\"minPrice\",\"maxPrice\",\"clientForename\",\"clientSurname\",\"clientEmail\",\"clientPhone\",\"organizationNumber\",\"address\",\"equals\",\"in\",\"notIn\",\"lt\",\"lte\",\"gt\",\"gte\",\"contains\",\"startsWith\",\"endsWith\",\"not\",\"productId\",\"sortOrder\",\"price\",\"measures\",\"amount\",\"publishedAt\",\"string_contains\",\"string_starts_with\",\"string_ends_with\",\"array_starts_with\",\"array_ends_with\",\"every\",\"some\",\"none\",\"is\",\"isNot\",\"connectOrCreate\",\"upsert\",\"createMany\",\"set\",\"disconnect\",\"delete\",\"connect\",\"updateMany\",\"deleteMany\",\"increment\",\"decrement\",\"multiply\",\"divide\"]"),
+  graph: "pQEgMAwEAAB0ACA-AABwADA_AAAJABBAAABwADBBAgAAAAFDAABxQyJEAQBjACFFAQBjACFbEABkACFcAAByACBdAgBhACFeQABzACEBAAAAAQAgBwMAAHYAID4AAHUAMD8AAAMAEEAAAHUAMEEBAGMAIVkCAGEAIVoCAGEAIQEDAACfAQAgBwMAAHYAID4AAHUAMD8AAAMAEEAAAHUAMEEBAAAAAVkCAGEAIVoCAGEAIQMAAAADACABAAAEADACAAAFACABAAAAAwAgAQAAAAEAIAwEAAB0ACA-AABwADA_AAAJABBAAABwADBBAgBhACFDAABxQyJEAQBjACFFAQBjACFbEABkACFcAAByACBdAgBhACFeQABzACECBAAAngEAIFwAAHcAIAMAAAAJACABAAAKADACAAABACADAAAACQAgAQAACgAwAgAAAQAgAwAAAAkAIAEAAAoAMAIAAAEAIAkEAACdAQAgQQIAAAABQwAAAEMCRAEAAAABRQEAAAABWxAAAAABXIAAAAABXQIAAAABXkAAAAABAQsAAA4AIAhBAgAAAAFDAAAAQwJEAQAAAAFFAQAAAAFbEAAAAAFcgAAAAAFdAgAAAAFeQAAAAAEBCwAAEAAwAQsAABAAMAkEAACQAQAgQQIAgQEAIUMAAI4BQyJEAQB-ACFFAQB-ACFbEAB_ACFcgAAAAAFdAgCBAQAhXkAAjwEAIQIAAAABACALAAATACAIQQIAgQEAIUMAAI4BQyJEAQB-ACFFAQB-ACFbEAB_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-AAB1ADA_AAADABBAAAB1ADBBAQAAAAFZAgBhACFaAgBhACECAAAABQAgCwAAmwEAIAIAAACZAQAgCwAAmgEAIAY-AACYAQAwPwAAmQEAEEAAAJgBADBBAQBjACFZAgBhACFaAgBhACEGPgAAmAEAMD8AAJkBABBAAACYAQAwQQEAYwAhWQIAYQAhWgIAYQAhAkEBAH4AIVoCAIEBACECQQEAfgAhWgIAgQEAIQJBAQAAAAFaAgAAAAEEEgAAkQEAMGkAAJIBADBrAACUAQAgbwAAlQEAMAACBAAAngEAIFwAAHcAIAJBAQAAAAFaAgAAAAEIQQIAAAABQwAAAEMCRAEAAAABRQEAAAABWxAAAAABXIAAAAABXQIAAAABXkAAAAABAgAAAAEAIBIAAKEBACADAAAACQAgEgAAoQEAIBMAAKUBACAKAAAACQAgCwAApQEAIEECAIEBACFDAACOAUMiRAEAfgAhRQEAfgAhWxAAfwAhXIAAAAABXQIAgQEAIV5AAI8BACEIQQIAgQEAIUMAAI4BQyJEAQB-ACFFAQB-ACFbEAB_ACFcgAAAAAFdAgCBAQAhXkAAjwEAIQIEBgIFAAMBAwABAQQHAAAAAAUFAAgYAAkZAAoaAAsbAAwAAAAAAAUFAAgYAAkZAAoaAAsbAAwBAwABAQMAAQUFABEYABIZABMaABQbABUAAAAAAAUFABEYABIZABMaABQbABUAAAAFBQAbGAAcGQAdGgAeGwAfAAAAAAAFBQAbGAAcGQAdGgAeGwAfBgIBBwgBCAsBCQwBCg0BDA8BDREEDhIFDxQBEBYEERcGFBgBFRkBFhoEHB0HHR4NHh8CHyACICECISICIiMCIyUCJCcEJSgOJioCJywEKC0PKS4CKi8CKzAELDMQLTQWLjYXLzcXMDoXMTsXMjwXMz4XNEAENUEYNkMXN0UEOEYZOUcXOkgXO0kEPEwaPU0g"
+}
+config.compilerWasm = {
+      getRuntime: async () => require('./query_compiler_fast_bg.js'),
+      getQueryCompilerWasmModule: async () => {
+        const { Buffer } = require('node:buffer')
+        const { wasm } = require('./query_compiler_fast_bg.wasm-base64.js')
+        const queryCompilerWasmFileBytes = Buffer.from(wasm, 'base64')
 
-
-const { warnEnvConflicts } = require('./runtime/library.js')
-
-warnEnvConflicts({
-    rootEnvPath: config.relativeEnvPaths.rootEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.rootEnvPath),
-    schemaEnvPath: config.relativeEnvPaths.schemaEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.schemaEnvPath)
-})
+        return new WebAssembly.Module(queryCompilerWasmFileBytes)
+      },
+      importName: './query_compiler_fast_bg.js',
+    }
 
 const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
-
-// file annotations for bundling tools to include these files
-path.join(__dirname, "query_engine-windows.dll.node");
-path.join(process.cwd(), "generated/prisma/query_engine-windows.dll.node")
-// file annotations for bundling tools to include these files
-path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "generated/prisma/schema.prisma")

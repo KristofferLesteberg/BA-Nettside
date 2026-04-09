@@ -7,7 +7,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 const {
   Decimal,
-  objectEnumValues,
+  DbNull,
+  JsonNull,
+  AnyNull,
+  NullTypes,
   makeStrictEnum,
   Public,
   getRuntime,
@@ -21,12 +24,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.19.2
- * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
+ * Prisma Client JS version: 7.7.0
+ * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
  */
 Prisma.prismaVersion = {
-  client: "6.19.2",
-  engine: "c2990dca591cba766e3b7ef5d9e8a84796e47ab7"
+  client: "7.7.0",
+  engine: "75cbdc1eb7150937890ad5465d861175c6624711"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -98,15 +101,11 @@ In case this error is unexpected for you, please report it in https://pris.ly/pr
 /**
  * Shorthand utilities for JSON filtering
  */
-Prisma.DbNull = objectEnumValues.instances.DbNull
-Prisma.JsonNull = objectEnumValues.instances.JsonNull
-Prisma.AnyNull = objectEnumValues.instances.AnyNull
+Prisma.DbNull = DbNull
+Prisma.JsonNull = JsonNull
+Prisma.AnyNull = AnyNull
 
-Prisma.NullTypes = {
-  DbNull: objectEnumValues.classes.DbNull,
-  JsonNull: objectEnumValues.classes.JsonNull,
-  AnyNull: objectEnumValues.classes.AnyNull
-}
+Prisma.NullTypes = NullTypes
 
 
 
@@ -118,26 +117,36 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.CatorgoryScalarFieldEnum = {
-  id: 'id',
-  name: 'name'
-};
-
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
+  educationField: 'educationField',
   title: 'title',
   description: 'description',
-  specs: 'specs',
   price: 'price',
-  producer: 'producer',
-  className: 'className',
+  measures: 'measures',
   amount: 'amount',
-  catogoryId: 'catogoryId'
+  publishedAt: 'publishedAt'
 };
 
-exports.Prisma.RequestScalarFieldEnum = {
+exports.Prisma.ProductImageScalarFieldEnum = {
   id: 'id',
-  title: 'title'
+  productId: 'productId',
+  sortOrder: 'sortOrder'
+};
+
+exports.Prisma.ProjectRequestScalarFieldEnum = {
+  id: 'id',
+  educationField: 'educationField',
+  title: 'title',
+  description: 'description',
+  minPrice: 'minPrice',
+  maxPrice: 'maxPrice',
+  clientForename: 'clientForename',
+  clientSurname: 'clientSurname',
+  clientEmail: 'clientEmail',
+  clientPhone: 'clientPhone',
+  organizationNumber: 'organizationNumber',
+  address: 'address'
 };
 
 exports.Prisma.SortOrder = {
@@ -145,11 +154,35 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+exports.EducationField = exports.$Enums.EducationField = {
+  BUILDING: 'BUILDING',
+  CONSTRUCTION: 'CONSTRUCTION'
+};
 
 exports.Prisma.ModelName = {
-  Catorgory: 'Catorgory',
   Product: 'Product',
-  Request: 'Request'
+  ProductImage: 'ProductImage',
+  ProjectRequest: 'ProjectRequest'
 };
 
 /**
