@@ -1,8 +1,14 @@
+
 import React from 'react'
+import { LoginForm } from '../../components/admin/LoginForm'
+
+
 
 const page = () => {
   return (
-    <div>page</div>
+    <div>
+      <LoginForm />
+    </div>
   )
 }
 
