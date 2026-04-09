@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum EducationField {
+  BUILDING // Bygg
+  CONSTRUCTION // Annlegg
+}
+
+model Product {
+  id             Int            @id @default(autoincrement())
+  educationField EducationField
+  title          String
+  description    String
+  price          Decimal
+  measures       Json?
+  amount         Int
+  publishedAt    DateTime       @default(now())
+  images         ProductImage[]
+
+  @@index([educationField])
+}
+
+model ProductImage {
+  id        String  @id
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  sortOrder Int     @default(0)
+}
+
+model ProjectRequest {
+  id                 Int             @id @default(autoincrement())
+  educationField     EducationField?
+  title              String
+  description        String
+  minPrice           Decimal
+  maxPrice           Decimal
+  clientForename     String
+  clientSurname      String
+  clientEmail        String
+  clientPhone        String
+  organizationNumber String?
+  address            String
+
+  @@index([clientEmail])
+  @@index([clientPhone])
+  @@index([organizationNumber])
+}
