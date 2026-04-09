@@ -24,8 +24,16 @@ model Product {
   measures Json?
   amount Int
   publishedAt DateTime @default(now())
+  images         ProductImage[]
 
   @@index ([educationField])
+}
+
+model ProductImage {
+  id        String   @id
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  sortOrder Int      @default(0)
 }
 
 model ProjectRequest {
@@ -41,7 +49,6 @@ model ProjectRequest {
   clientPhone String
   organizationNumber String?
   address String
-
 
   @@index ([clientEmail])
   @@index ([clientPhone])
