@@ -42,10 +42,6 @@ next-env.d.ts
 
 /app/generated/prisma
 
-<<<<<<< HEAD
-/generated/prisma
-=======
 /public/images/*
 *.db
 dev.db
->>>>>>> database
