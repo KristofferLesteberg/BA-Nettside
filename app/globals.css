@@ -15,6 +15,7 @@
 @layer base {
   body {
     /* @apply bg-surface text-white font-sans; */
+    @apply bg-gray-600;
   }
 
   h1, h2, h3 {
