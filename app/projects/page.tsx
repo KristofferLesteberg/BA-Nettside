@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma";
+/*import { prisma } from "../lib/prisma";
 
 
 import React from 'react'
@@ -16,4 +16,4 @@ export const Test = () => {
   return (
     
   )
-}
+}*/
