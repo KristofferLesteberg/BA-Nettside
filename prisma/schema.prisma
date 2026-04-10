@@ -4,32 +4,6 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
-<<<<<<< HEAD
-}
-datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
-
-model Product {
-  id Int @id @default(autoincrement())
-  title String
-  description String
-  price Float
-  producer String
-  amount Int
-  
-}
-
-model Catorgory {
-  id Int @id @default(autoincrement())
-  name String
-}
-
-model Request {
-  id Int @id @default(autoincrement())
-  title String 
-=======
 }
 datasource db {
   provider = "sqlite"
@@ -78,5 +52,4 @@ model ProjectRequest {
   @@index ([clientEmail])
   @@index ([clientPhone])
   @@index ([organizationNumber])
->>>>>>> database
 }
