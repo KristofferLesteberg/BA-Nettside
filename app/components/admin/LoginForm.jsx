@@ -10,7 +10,7 @@ export const LoginForm = () => {
 
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const {error, setError} = useState("")
+  //const {error, setError} = useState("")
   
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -23,7 +23,7 @@ export const LoginForm = () => {
 
     if(result.error) {
       console.log("error")
-      setError("Feil passord eller brukernavn")
+      //setError("Feil passord eller brukernavn")
     } else {
       redirect('/admin')
 
@@ -45,9 +45,7 @@ export const LoginForm = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      {error && (
-        <p>{error}</p>
-      )}
+     
       <button type='submit'>log in</button>
     </form>
    
