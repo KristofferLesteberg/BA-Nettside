@@ -2,22 +2,21 @@
 import React from 'react'
 import { useSession } from 'next-auth/react'
 
-import { redirect } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 
 const page = () => {
-  const { status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      console.log("logged out!")
-      redirect('/admin/login')
-     
-    }
-  })
+
+  const { data: session, status} = useSession()
+
+  console.log(status)
+  console.log(session)
+  
+
       
   return (
     <div>
-      <button onClick={() => signOut()} ></button>
+      <button onClick={() => signOut({ callbackUrl: 'http://localhost:3000/admin/login' })} >Log out</button>
+    
     </div>
   )
 }

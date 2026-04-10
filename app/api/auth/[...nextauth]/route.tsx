@@ -12,7 +12,7 @@ const handler = NextAuth({
                 password: { label: "Password", type: "Password" }
             },
     async authorize(credentials) {
-            if(credentials?.username == process.env.ADMIN_USERNAME && credentials?.password == process.env.ADMIN_PASSWORD) {
+            if(credentials?.username === process.env.ADMIN_USERNAME && credentials?.password === process.env.ADMIN_PASSWORD) {
                 return { id: '1', name: 'Admin' }
             } else {
                 return null
@@ -24,7 +24,7 @@ const handler = NextAuth({
     pages: {
         signIn: '/admin/login'
     },
-    secret: process.env.NEXTAUTH_SECRET
+   
 })
 
 export { handler as GET, handler as POST }
