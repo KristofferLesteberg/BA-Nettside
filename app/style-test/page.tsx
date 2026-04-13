@@ -38,16 +38,16 @@ export default function StyleTestPage() {
         <p className="small-text">Surfaces</p>
         <div className="flex flex-wrap gap-3">
           <div className="w-16 h-16 rounded-lg bg-page border border-border"   title="--color-bg" />
-          <div className="w-16 h-16 rounded-lg bg-subtle"                      title="--color-surface" />
+          <div className="w-16 h-16 rounded-lg bg-subtle border border-border-strong" title="--color-surface" />
           <div className="w-16 h-16 rounded-lg bg-muted border border-border"  title="--color-surface-raised" />
         </div>
 
         <p className="small-text">Semantic</p>
         <div className="flex flex-wrap gap-3">
-          <div className="w-16 h-16 rounded-lg bg-success-bg"  title="--color-success-bg" />
-          <div className="w-16 h-16 rounded-lg bg-error-bg"    title="--color-error-bg" />
-          <div className="w-16 h-16 rounded-lg bg-warning-bg"  title="--color-warning-bg" />
-          <div className="w-16 h-16 rounded-lg bg-info-bg"     title="--color-info-bg" />
+          <div className="w-16 h-16 rounded-lg bg-success-bg border border-success"  title="--color-success-bg" />
+          <div className="w-16 h-16 rounded-lg bg-error-bg border border-error"    title="--color-error-bg" />
+          <div className="w-16 h-16 rounded-lg bg-warning-bg border border-warning"  title="--color-warning-bg" />
+          <div className="w-16 h-16 rounded-lg bg-info-bg border border-info"     title="--color-info-bg" />
         </div>
       </section>
 
