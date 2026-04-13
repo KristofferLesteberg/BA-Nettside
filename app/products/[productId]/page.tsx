@@ -17,11 +17,22 @@ export default async function ProductPage({
   if (!product) notFound()
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-5xl mx-auto px-4 py-8">
+    <div className="bg-page min-h-screen">
+      <div className="max-w-5xl mx-auto px-4 py-8 sm:px-6 sm:py-12">
 
-        {/* Main layout — stacks on mobile, side by side on desktop */}
-        <div className="flex flex-col lg:flex-row gap-8">
+        {/* Breadcrumb */}
+        <nav className="mb-6">
+          <span className="small-text">
+            <a href="/" className="hover:underline">Hjem</a>
+            <span className="text-faint mx-2">/</span>
+            <a href="/products" className="hover:underline">Produkter</a>
+            <span className="text-faint mx-2">/</span>
+            <span className="text-faint">{product.title}</span>
+          </span>
+        </nav>
+
+        {/* Main layout */}
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
 
           {/* Left — carousel */}
           <div className="w-full lg:w-1/2 lg:sticky lg:top-8 lg:self-start">
@@ -32,48 +43,60 @@ export default async function ProductPage({
           </div>
 
           {/* Right — product details */}
-          <div className="w-full lg:w-1/2 flex flex-col gap-4">
-            <div>
-              <span className="text-sm text-gray-500 uppercase tracking-wide">
+          <div className="w-full lg:w-1/2 flex flex-col gap-6">
+
+            {/* Title block */}
+            <div className="flex flex-col gap-2">
+              <span className="badge badge-neutral self-start">
                 {product.educationField}
               </span>
-              <h1 className="text-2xl font-bold text-gray-900 mt-1">
-                {product.title}
-              </h1>
-            </div>
-
-            <div className="text-3xl font-bold text-gray-900">
-              NOK {product.price.toFixed(2)}
-            </div>
-
-            <button className="w-full bg-black text-white py-3 rounded-xl text-sm font-medium hover:bg-gray-800 transition-colors">
-              Contact seller
-            </button>
-
-            <div className="pt-4">
-              <h2 className="text-sm font-medium text-gray-700 mb-2">Description</h2>
-              <p className="text-gray-600 leading-relaxed">
-                {product.description}
+              <h1 className="heading-2">{product.title}</h1>
+              <p className="heading-2" style={{ color: "var(--color-primary)" }}>
+                NOK {Number(product.price).toFixed(2)}
               </p>
             </div>
 
-            <div className="pt-4">
-              <h2 className="text-sm font-medium text-gray-700 mb-2">Details</h2>
-              <div className="flex flex-col gap-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Amount in stock</span>
-                  <span className="text-gray-900">{product.amount}</span>
+            {/* CTA */}
+            <button className="btn btn-primary w-full py-3 text-base">
+              Ta kontakt
+            </button>
+
+            <hr className="border-default" />
+
+            {/* Description */}
+            <div className="flex flex-col gap-2">
+              <p className="label">Beskrivelse</p>
+              <p className="body-text">{product.description}</p>
+            </div>
+
+            <hr className="border-default" />
+
+            {/* Details table */}
+            <div className="flex flex-col gap-2">
+              <p className="label">Detaljer</p>
+              <div className="card-subtle flex flex-col divide-y" style={{ borderRadius: "var(--radius-lg)" }}>
+                <div className="flex justify-between px-4 py-3">
+                  <span className="small-text">Antall på lager</span>
+                  <span className="small-text" style={{ color: "var(--color-text)" }}>
+                    {product.amount}
+                  </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Published</span>
-                  <span className="text-gray-900">
+                <div className="flex justify-between px-4 py-3">
+                  <span className="small-text">Publisert</span>
+                  <span className="small-text" style={{ color: "var(--color-text)" }}>
                     {new Date(product.publishedAt).toLocaleDateString("no-NO")}
+                  </span>
+                </div>
+                <div className="flex justify-between px-4 py-3">
+                  <span className="small-text">Fagfelt</span>
+                  <span className="small-text" style={{ color: "var(--color-text)" }}>
+                    {product.educationField === "BUILDING" ? "Bygg" : "Anlegg"}
                   </span>
                 </div>
               </div>
             </div>
-          </div>
 
+          </div>
         </div>
       </div>
     </div>
