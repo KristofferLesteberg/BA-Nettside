@@ -16,7 +16,7 @@ enum EducationField {
 
 model Product {
   id Int @id @default(autoincrement())
-  educationField EducationField
+  educationField EducationField?
   title String
   description String
   price Decimal
