@@ -13,9 +13,9 @@ import {
 
 export async function POST(req: NextRequest)  {
     const token = await getToken({ req })
-    /*if(!token) {
+    if(!token) {
         return NextResponse.json({ error: "No valid token" }, { status: 401 })
-    }*/
+    }
    
     try {
         const formData = await req.formData()
@@ -38,20 +38,15 @@ export async function POST(req: NextRequest)  {
                 amount
             }
         })
-
         if(image) {
             await uploadProductImage(image, product.id, 0)
         }
-        return NextResponse.json(product)
+        return NextResponse.json("Product: " + product)
 
 
     } catch(error: any) {
         console.error("SERVER ERROR:", error)
-
-        return NextResponse.json(
-            { error: error?.message || "Unknown error" },
-            { status: 500 }
-    )
+        return NextResponse.json(error)
     }
 
   

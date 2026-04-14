@@ -42,8 +42,8 @@ return (
     <form onSubmit={handleForm}>
         <select name='Klasse' onChange={(e) => setEducationField(e.target.value)}>
 
-            <option value="BYGG">Bygg</option>
-            <option value="ANNLEGG">Annlegg</option>
+            <option value="BUILDING">Bygg</option>
+            <option value="CONSTRUCTION">Annlegg</option>
             
         </select>
         {/*TITLE*/}

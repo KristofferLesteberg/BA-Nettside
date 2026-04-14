@@ -3,8 +3,9 @@ import React, { useState } from 'react'
 
 import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 
-import NewProduct from '../components/admin/NewProduct'
+
 
 const page = () => {      
   const [btn, setBtn] =  useState(false)
@@ -22,8 +23,10 @@ const page = () => {
       <button onClick={() => signOut({ callbackUrl: 'http://localhost:3000/admin/login' })} >Log out</button>
       <p>logged in as {session?.user?.name}</p>
 
-
-      <NewProduct />
+      <Link href={"/admin/newProduct"}>
+        <button>Nytt produkt</button>
+      </Link>
+      
     </div>
   )
 }
