@@ -10,7 +10,7 @@ export const LoginForm = () => {
   const [password, setPassword] = useState("")
   //const {error, setError} = useState("")
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: any) => {
     e.preventDefault()
 
     const result = await signIn("credentials", {
@@ -18,7 +18,7 @@ export const LoginForm = () => {
       password: password,
       redirect: false
     })
-    if(result.error) {
+    if(result?.error) {
       console.log("error")
       //setError("Feil passord eller brukernavn")
     } else {

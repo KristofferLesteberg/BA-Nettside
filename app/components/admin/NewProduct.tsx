@@ -1,9 +1,5 @@
 "use client"
 import React, { useState } from 'react'
-import { prisma } from "../lib/prisma"
-import { data } from 'autoprefixer'
-import { headers } from 'next/headers'
-
 
 const newProduct = () => {
 
@@ -18,7 +14,7 @@ const newProduct = () => {
     })
     const [amount, setAmount] = useState(null)
 
-    const handleForm = async (e) {
+    const handleForm = async (e: any) => {
         e.preventDefault()
 
         const postRequest = {
@@ -34,17 +30,34 @@ const newProduct = () => {
             })
         }
         const data = await fetch('/api/products', postRequest)
-      
     }
 
-
-  return (
+return (
     <form onSubmit={handleForm}>
+    
         <input
             type="text" 
             placeholder="Produkt navn"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
         />
-
+        <textarea 
+            placeholder='Beskriv produkt'
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            />
+        <input
+            type="number" 
+            placeholder="Pris"
+            value={price.toString()}
+            onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+            type="text" 
+            placeholder="Produkt navn"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+        />
     </form>
   )
 }

@@ -4,6 +4,8 @@ import React from 'react'
 import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 
+import NewProduct from '../components/admin/NewProduct'
+
 const page = () => {      
 
   const { data: session, status} = useSession()
@@ -16,6 +18,8 @@ const page = () => {
     <div>
       <button onClick={() => signOut({ callbackUrl: 'http://localhost:3000/admin/login' })} >Log out</button>
       <p>logged in as {session?.user?.name}</p>
+
+      <NewProduct />
     </div>
   )
 }
