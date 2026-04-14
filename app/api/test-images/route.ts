@@ -18,6 +18,11 @@ async function ensureTestProduct() {
       title: "Test Product",
       description: "Auto-created for image testing",
       price: 0,
+      measures: {
+        "Lengde": "0 cm",
+        "Bredde": "0 cm",
+        "Awesomeness": "100%"
+      },
       amount: 0,
       educationField: "BUILDING",
     },

@@ -1,6 +1,8 @@
-import { prisma } from "../../lib/prisma"
+import { prisma } from "@/app/lib/prisma"
 import { notFound } from "next/navigation"
-import Carousel from "../../components/shared/ImageCarousel"
+import Link from "next/link"
+import Carousel from "@/app/components/shared/ImageCarousel"
+import ProductTabs from "@/app/components/product/ProductTabs"
 
 export default async function ProductPage({
   params,
@@ -23,9 +25,9 @@ export default async function ProductPage({
         {/* Breadcrumb */}
         <nav className="mb-6">
           <span className="small-text">
-            <a href="/" className="hover:underline">Hjem</a>
+            <Link href="/" className="hover:underline">Hjem</Link>
             <span className="text-faint mx-2">/</span>
-            <a href="/products" className="hover:underline">Produkter</a>
+            <Link href="/products" className="hover:underline">Produkter</Link>
             <span className="text-faint mx-2">/</span>
             <span className="text-faint">{product.title}</span>
           </span>
@@ -72,30 +74,49 @@ export default async function ProductPage({
             <hr className="border-default" />
 
             {/* Details table */}
-            <div className="flex flex-col gap-2">
-              <p className="label">Detaljer</p>
-              <div className="card-subtle flex flex-col divide-y" style={{ borderRadius: "var(--radius-lg)" }}>
-                <div className="flex justify-between px-4 py-3">
-                  <span className="small-text">Antall på lager</span>
-                  <span className="small-text" style={{ color: "var(--color-text)" }}>
-                    {product.amount}
-                  </span>
+            <ProductTabs
+              details={
+                <div className="card-subtle flex flex-col divide-y" style={{ borderRadius: "var(--radius-lg)" }}>
+                  <div className="flex justify-between px-4 py-3">
+                    <span className="small-text">Antall på lager</span>
+                    <span className="small-text" style={{ color: "var(--color-text)" }}>{product.amount}</span>
+                  </div>
+                  <div className="flex justify-between px-4 py-3">
+                    <span className="small-text">Publisert</span>
+                    <span className="small-text" style={{ color: "var(--color-text)" }}>
+                      {new Date(product.publishedAt).toLocaleDateString("no-NO")}
+                    </span>
+                  </div>
+                  <div className="flex justify-between px-4 py-3">
+                    <span className="small-text">Fagfelt</span>
+                    <span className="small-text" style={{ color: "var(--color-text)" }}>
+                      {product.educationField === "BUILDING" ? "Bygg" : "Anlegg"}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex justify-between px-4 py-3">
-                  <span className="small-text">Publisert</span>
-                  <span className="small-text" style={{ color: "var(--color-text)" }}>
-                    {new Date(product.publishedAt).toLocaleDateString("no-NO")}
-                  </span>
+              }
+              measures={
+                <div
+                  className="card-subtle flex flex-col divide-y"
+                  style={{ borderRadius: "var(--radius-lg)" }}
+                >
+                  {product.measures && Object.keys(product.measures).length > 0 ? (
+                    Object.entries(product.measures).map(([key, value]) => (
+                      <div key={key} className="flex justify-between px-4 py-3">
+                        <span className="small-text">{key}</span>
+                        <span className="small-text" style={{ color: "var(--color-text)" }}>
+                          {value}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="px-4 py-3">
+                      <span className="small-text text-faint">Ingen mål tilgjengelig</span>
+                    </div>
+                  )}
                 </div>
-                <div className="flex justify-between px-4 py-3">
-                  <span className="small-text">Fagfelt</span>
-                  <span className="small-text" style={{ color: "var(--color-text)" }}>
-                    {product.educationField === "BUILDING" ? "Bygg" : "Anlegg"}
-                  </span>
-                </div>
-              </div>
-            </div>
-
+              }
+            />
           </div>
         </div>
       </div>
