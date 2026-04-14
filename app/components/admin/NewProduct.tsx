@@ -3,7 +3,6 @@
 import React, { useState } from 'react'
 
 const NewProduct = () => {
-
     const [educationField, setEducationField] =  useState("")
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
@@ -41,10 +40,8 @@ const NewProduct = () => {
 return (
     <form onSubmit={handleForm}>
         <select name='Klasse' onChange={(e) => setEducationField(e.target.value)}>
-
             <option value="BUILDING">Bygg</option>
             <option value="CONSTRUCTION">Annlegg</option>
-            
         </select>
         {/*TITLE*/}
         <p>Tittel</p>

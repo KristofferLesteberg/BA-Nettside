@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import DeleteProduct from '../components/admin/DeleteProduct'
 
 
 
@@ -26,6 +27,8 @@ const page = () => {
       <Link href={"/admin/newProduct"}>
         <button>Nytt produkt</button>
       </Link>
+
+      <DeleteProduct productID={"2"}/>
       
     </div>
   )
