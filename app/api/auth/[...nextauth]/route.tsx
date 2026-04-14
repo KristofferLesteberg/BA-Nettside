@@ -1,8 +1,6 @@
 import NextAuth, { Awaitable, RequestInternal, User } from "next-auth";
 
 import CredentialsProvider from "next-auth/providers/credentials";
-
-
 const handler = NextAuth({
     providers: [
         CredentialsProvider({
@@ -23,12 +21,13 @@ const handler = NextAuth({
         })
     ],
 
-
     session: {
         strategy: "jwt",
         maxAge: 60*60, //session experies in one hour
         updateAge: 60*60*24 //forced update after one day
-    }
+    },
+
+    //Overrides next-auth default login page with our own
     pages: {
         signIn: '/admin/login'
     },
