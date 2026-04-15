@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import Providers from './components/shared/providers';
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "BAT",
@@ -19,6 +20,7 @@ export default function RootLayout({
       <body>
         <Providers>
           {children}
+          <Toaster position="top-center" />
         </Providers>
       </body>
     </html>

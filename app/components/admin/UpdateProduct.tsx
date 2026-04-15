@@ -4,7 +4,11 @@ import React, { useEffect, useState } from 'react'
 //Prisma autogenerates interfaced for types
 import { Product, ProductImage, EducationField } from "@/generated/prisma"
 
+import Router, { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
+
 const UpdateProduct = ({ productId }: { productId: string}) => {
+    const router = useRouter()
     
     const [product, setProduct] = useState<Product | null>(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -63,6 +67,7 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
     const handleForm = async (e: any) => {
         e.preventDefault()
 
+
         const formData = new FormData()
         formData.append("educationField", educationField)
         formData.append("title", title)
@@ -81,6 +86,9 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
         if(!respons.ok) {
             console.log(`Updating dit not work: ${respons.status}`)
         }
+
+        toast.success("Produkt oppdatert")
+        router.push("/admin")
     }
 
 
@@ -91,7 +99,7 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
     <div className="max-w-2xl mx-auto mt-10">
       <form onSubmit={handleForm} className="card-accented space-y-6">
 
-        <h2 className="heading-2">Opprett produkt</h2>
+        <h2 className="heading-2">Oppdater {product.title}</h2>
 
         {/* Education Field */}
         <div className="space-y-1">
@@ -195,9 +203,10 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
         </div>
 
         {/* Submit */}
+        
         <div className="pt-4">
           <button type="submit" className="btn btn-primary w-full">
-            Opprett annonse
+            Oppdater annonse
           </button>
         </div>
 

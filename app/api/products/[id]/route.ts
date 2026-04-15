@@ -81,9 +81,10 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{id: st
                 price,
                 measures,
                 amount
-            }
-            
+            }   
         })
+
+        
 
         return NextResponse.json(updatedProduct)
     } catch(error) {
