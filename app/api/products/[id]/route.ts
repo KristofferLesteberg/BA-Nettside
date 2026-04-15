@@ -24,4 +24,4 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
         console.error(error)
         return NextResponse.json(error)
     }
-    
+}
