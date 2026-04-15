@@ -9,9 +9,6 @@ import DeleteProduct from '../components/admin/DeleteProduct'
 
 
 const page = () => {      
-  const [btn, setBtn] =  useState(false)
-  
-
   const { data: session, status} = useSession()
   
 
@@ -25,7 +22,10 @@ const page = () => {
       <p>logged in as {session?.user?.name}</p>
 
       <Link href={"/admin/newProduct"}>
-        <button>Nytt produkt</button>
+        <button
+          className='a'>
+          Nytt produkt
+        </button>
       </Link>
 
       <DeleteProduct productID={"2"}/>

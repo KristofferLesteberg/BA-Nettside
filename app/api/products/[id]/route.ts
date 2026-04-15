@@ -10,7 +10,6 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
         return NextResponse.json({ error: "No valid token" }, { status: 401 })
     }
     try {
-
         //extract the id form the paramters
         const { id } = await context.params
 
@@ -26,4 +25,3 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
         return NextResponse.json(error)
     }
     
-}

@@ -1,8 +1,8 @@
 import React from 'react'
 
-const updateProduct = ( {productId }) => {
+const UpdateProduct = ( {productId }) => {
 
     
 }
 
-export default updateProduct
+export default UpdateProduct
