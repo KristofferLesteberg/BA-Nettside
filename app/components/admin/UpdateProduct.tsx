@@ -6,6 +6,7 @@ import { Product, ProductImage, EducationField } from "@/generated/prisma"
 
 import Router, { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+import Measurement from './Measurement'
 
 const UpdateProduct = ({ productId }: { productId: string}) => {
     const router = useRouter()
@@ -162,6 +163,7 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
         </div>
 
         {/* Measures */}
+        <Measurement productId = {productId}/>
         <div>
           <label className="label">Mål (cm)</label>
           <div className="grid grid-cols-3 gap-3 mt-2">
