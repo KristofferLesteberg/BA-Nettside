@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from "../../../lib/prisma";
 import { getToken } from 'next-auth/jwt';
+import { EducationField } from '@/generated/prisma';
 
 
 
@@ -62,15 +63,29 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{id: st
     try {
         const { id } = await context.params
 
+        const formData = await req.formData()   
+        const educationField = formData.get("educationField") as EducationField
+        const title          = formData.get("title") as string
+        const description    = formData.get("description") as string
+        const price          = Number(formData.get("price"))
+        const measures       = JSON.parse(formData.get("measures") as string)
+        const amount         = Number(formData.get("amount"))
+        const image          = formData.get("image") as File
+
         const updatedProduct = await prisma.product.update({
             where: {id: Number(id)},
             data: {
-
-
+                educationField,
+                title,
+                description,
+                price,
+                measures,
+                amount
             }
-                
-        
+            
         })
+
+        return NextResponse.json(updatedProduct)
     } catch(error) {
         console.error(error)
         NextResponse.json(error)

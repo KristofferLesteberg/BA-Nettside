@@ -23,7 +23,6 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
     const [image, setImage] = useState<File | null>(null)
 
 
-
     useEffect(() => {
         const getSingelProduct = async () => {
         try {
@@ -33,8 +32,22 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
                 return
             }
             const data = await respons.json()
+            
+            setProduct(data)
+            
+            //Set the values to the product
+            setTitle(data.title)
+            setDescription(data.description)
+            setPrice(Number(data.price))
+            setAmount(data.amount)
+            setEducationField(data.educationField ?? "")
 
-            setProduct(data)             
+            //TODO: Tix this later
+            setMeasures({ ...data.measures, length: data.measures.length, height: data.measures.height })
+           
+            console.log(JSON.stringify(data.measures))
+            console.log(data.measures.length)
+
         } catch(error) {
             console.error(error)
 
@@ -47,7 +60,7 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
     }, [productId])
     
 
-    const handleForm = (e: any) => {
+    const handleForm = async (e: any) => {
         e.preventDefault()
 
         const formData = new FormData()
@@ -58,7 +71,18 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
         formData.append("measures", JSON.stringify(measures))
         formData.append("amount", amount.toString())
         formData.append("image", image as File)
+
+
+        const respons = await fetch(`/api/products/${productId}`, {
+            method: "PATCH",
+            body: formData
+        })
+
+        if(!respons.ok) {
+            console.log(`Updating dit not work: ${respons.status}`)
+        }
     }
+
 
     if(!isLoading) return <p>Laster...</p>
     if(!product) return <p>Ingen product funnet...</p>
@@ -73,6 +97,7 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
         <div className="space-y-1">
           <label className="label">Kategori</label>
           <select
+            value={educationField}
             className="input"
             onChange={(e) => setEducationField(e.target.value)}
           >
@@ -89,7 +114,7 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
             type="text"
             className="input"
             placeholder="Produkt navn"
-            value={!title ? product.title : title}
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
