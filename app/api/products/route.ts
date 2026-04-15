@@ -53,25 +53,5 @@ export async function POST(req: NextRequest)  {
 }
 
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
-    const token = await getToken({ req })
-    if(!token) {
-        return NextResponse.json({ error: "No valid token" }, { status: 401 })
-    }
-    try {
-        const deleteProduct = await prisma.product.delete({
-            where: {
-                id: Number(params.id)
-            }
-        })
-
-        return NextResponse.json(deleteProduct)
-
-    } catch(error: any) {
-        console.error(error)
-        return NextResponse.json(error)
-    }
-    
-}
 
 

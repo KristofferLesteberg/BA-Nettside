@@ -4,6 +4,35 @@ import { prisma } from "../../../lib/prisma";
 import { getToken } from 'next-auth/jwt';
 
 
+
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+    const token = await getToken({ req })
+    if(!token) {
+        return NextResponse.json({ error: "No valid token" }, { status: 401 })
+    }
+
+    try {
+        const { id } = await context.params     
+        
+        const product = await prisma.product.findUnique({
+            where: {id: Number(id)},
+            include: {images: true}
+        })
+
+        if(!product) {
+            return NextResponse.json({ error: "No product with the matchin id"}, { status: 404})
+        }
+
+        return NextResponse.json(product)
+
+    } catch(error) {
+        console.error(error)
+        return NextResponse.json(error)
+    }
+
+}
+
+
 export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     const token = await getToken({ req })
     if(!token) {
@@ -24,4 +53,30 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
         console.error(error)
         return NextResponse.json(error)
     }
-    
+}
+
+export async function PATCH(req: NextRequest, context: { params: Promise<{id: string }> }) {
+
+    const token = await getToken({ req })
+    if(!token) {
+        return NextResponse.json({ error: "No valid token" }, { status: 401 })
+    }
+
+    try {
+        const { id } = await context.params
+
+        const updatedProduct = await prisma.product.update({
+            where: {id: Number(id)},
+            data: {
+
+
+
+            }
+                
+        
+        })
+    } catch(error) {
+        console.error(error)
+        NextResponse.json(error)
+    }
+}
