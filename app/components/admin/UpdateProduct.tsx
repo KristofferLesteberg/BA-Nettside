@@ -4,7 +4,12 @@ import React, { useEffect, useState } from 'react'
 //Prisma autogenerates interfaced for types
 import { Product, ProductImage, EducationField } from "@/generated/prisma"
 
+import Router, { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
+import Measurement from './Measurement'
+
 const UpdateProduct = ({ productId }: { productId: string}) => {
+    const router = useRouter()
     
     const [product, setProduct] = useState<Product | null>(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -23,7 +28,6 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
     const [image, setImage] = useState<File | null>(null)
 
 
-
     useEffect(() => {
         const getSingelProduct = async () => {
         try {
@@ -33,8 +37,22 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
                 return
             }
             const data = await respons.json()
+            
+            setProduct(data)
+            
+            //Set the values to the product
+            setTitle(data.title)
+            setDescription(data.description)
+            setPrice(Number(data.price))
+            setAmount(data.amount)
+            setEducationField(data.educationField ?? "")
 
-            setProduct(data)             
+            //TODO: Tix this later
+            setMeasures({ ...data.measures, length: data.measures.length, height: data.measures.height })
+           
+            console.log(JSON.stringify(data.measures))
+            console.log(data.measures.length)
+
         } catch(error) {
             console.error(error)
 
@@ -47,8 +65,9 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
     }, [productId])
     
 
-    const handleForm = (e: any) => {
+    const handleForm = async (e: any) => {
         e.preventDefault()
+
 
         const formData = new FormData()
         formData.append("educationField", educationField)
@@ -58,7 +77,21 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
         formData.append("measures", JSON.stringify(measures))
         formData.append("amount", amount.toString())
         formData.append("image", image as File)
+
+
+        const respons = await fetch(`/api/products/${productId}`, {
+            method: "PATCH",
+            body: formData
+        })
+
+        if(!respons.ok) {
+            console.log(`Updating dit not work: ${respons.status}`)
+        }
+
+        toast.success("Produkt oppdatert")
+        router.push("/admin")
     }
+
 
     if(!isLoading) return <p>Laster...</p>
     if(!product) return <p>Ingen product funnet...</p>
@@ -67,12 +100,13 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
     <div className="max-w-2xl mx-auto mt-10">
       <form onSubmit={handleForm} className="card-accented space-y-6">
 
-        <h2 className="heading-2">Opprett produkt</h2>
+        <h2 className="heading-2">Oppdater {product.title}</h2>
 
         {/* Education Field */}
         <div className="space-y-1">
           <label className="label">Kategori</label>
           <select
+            value={educationField}
             className="input"
             onChange={(e) => setEducationField(e.target.value)}
           >
@@ -89,7 +123,7 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
             type="text"
             className="input"
             placeholder="Produkt navn"
-            value={!title ? product.title : title}
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
@@ -129,6 +163,7 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
         </div>
 
         {/* Measures */}
+        <Measurement productId = {productId}/>
         <div>
           <label className="label">Mål (cm)</label>
           <div className="grid grid-cols-3 gap-3 mt-2">
@@ -170,9 +205,10 @@ const UpdateProduct = ({ productId }: { productId: string}) => {
         </div>
 
         {/* Submit */}
+        
         <div className="pt-4">
           <button type="submit" className="btn btn-primary w-full">
-            Opprett annonse
+            Oppdater annonse
           </button>
         </div>
 

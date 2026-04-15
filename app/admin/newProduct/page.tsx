@@ -1,10 +1,15 @@
 "use client"
 
 import React, { useState } from 'react'
+import Router, { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 
 import ImageOrder from '@/app/components/admin/ImageOrder'
 
 export default function NewProduct() {
+  const router = useRouter()
+
+
   const [educationField, setEducationField] = useState("")
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
@@ -37,6 +42,8 @@ export default function NewProduct() {
     if (!response.ok) {
       console.error(await response.json())
     }
+    toast.success("Produkt lagt til")
+    router.push("/admin")
   }
 
   return (

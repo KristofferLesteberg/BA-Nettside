@@ -144,6 +144,8 @@
     transition:     border-color 150ms ease;
     line-height:    1.5;
   }
+
+
   .input::placeholder { color: var(--color-text-faint); }
   .input:focus        { border-color: var(--color-primary); }
   .input:disabled     { background: var(--color-surface); color: var(--color-text-faint); cursor: not-allowed; }
