@@ -64,7 +64,11 @@ function SortableItem({ img }: { img: ImageItem }) {
   )
 }
 
-export default function ImageOrder(props: any) {
+export default function ImageOrder({ 
+  onChange 
+}: { 
+  onChange?: (images: { id: string, file: File }[]) => void
+}) {
   const [images, setImages] = useState<ImageItem[]>([])
 
   const onDrop = (acceptedFiles: File[]) => {
@@ -76,6 +80,7 @@ export default function ImageOrder(props: any) {
 
     const updated = [...images, ...newImages]
     setImages(updated)
+    onChange?.(updated.map(({ id, file }) => ({ id, file })))
   }
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop })

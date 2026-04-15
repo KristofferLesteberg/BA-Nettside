@@ -9,7 +9,6 @@ import ImageOrder from '@/app/components/admin/ImageOrder'
 export default function NewProduct() {
   const router = useRouter()
 
-
   const [educationField, setEducationField] = useState("")
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
@@ -20,10 +19,12 @@ export default function NewProduct() {
     length: 0
   })
   const [amount, setAmount] = useState(0)
-  const [image, setImage] = useState<File | null>(null)
+  const [images, setImages] = useState<{ id: string, file: File }[]>([])
 
   const handleForm = async (e: any) => {
     e.preventDefault()
+
+    console.log("IMAGES BEFORE SUBMIT:", images)
 
     const formData = new FormData()
     formData.append("educationField", educationField)
@@ -32,7 +33,11 @@ export default function NewProduct() {
     formData.append("price", price.toString())
     formData.append("measures", JSON.stringify(measures))
     formData.append("amount", amount.toString())
-    formData.append("image", image as File)
+
+    images.forEach((img, index) => {
+      formData.append("files", img.file)
+      formData.append("ids", img.id)
+    })
 
     const response = await fetch("/api/products", {
       method: "POST",
@@ -143,7 +148,7 @@ export default function NewProduct() {
         </div>
 
         {/* Image */}
-        <ImageOrder />
+        <ImageOrder onChange={setImages}/>
 
         {/* Submit */}
         <div className="pt-4">

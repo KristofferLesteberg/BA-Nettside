@@ -1,13 +1,10 @@
-
-
-
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from "../../lib/prisma";
 import { getToken } from 'next-auth/jwt';
 import { EducationField } from '@/generated/prisma';
 
 import {
-    uploadProductImage
+    uploadProductImages
 } from '../../lib/images'
 
 
@@ -26,7 +23,8 @@ export async function POST(req: NextRequest)  {
         const price          = Number(formData.get("price"))
         const measures       = JSON.parse(formData.get("measures") as string)
         const amount         = Number(formData.get("amount"))
-        const image          = formData.get("image") as File
+        const files          = formData.getAll("files") as File[]
+        const ids            = formData.getAll("ids") as string[]
          
         const product = await prisma.product.create({
             data: {
@@ -38,9 +36,20 @@ export async function POST(req: NextRequest)  {
                 amount
             }
         })
-        if(image) {
-            await uploadProductImage(image, product.id, 0)
+
+        const images = files.map((file, index) => ({
+            file,
+            id: ids[index]
+        }))
+
+        
+        console.log("FILES:", files)
+        console.log("IDS:", ids)
+
+        if (images.length > 0) {
+            await uploadProductImages(images, product.id);
         }
+        
         return NextResponse.json("Product: " + product)
 
 
