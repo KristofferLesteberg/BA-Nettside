@@ -18,7 +18,7 @@ export async function POST(req: NextRequest)  {
     }
    
     try {
-        const formData = await req.formData()
+        const formData = await req.formData()   
 
         const educationField = formData.get("educationField") as EducationField
         const title          = formData.get("title") as string

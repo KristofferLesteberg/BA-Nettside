@@ -10,7 +10,6 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     if(!token) {
         return NextResponse.json({ error: "No valid token" }, { status: 401 })
     }
-
     try {
         const { id } = await context.params     
         
@@ -22,7 +21,6 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
         if(!product) {
             return NextResponse.json({ error: "No product with the matchin id"}, { status: 404})
         }
-
         return NextResponse.json(product)
 
     } catch(error) {
@@ -31,7 +29,6 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     }
 
 }
-
 
 export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
     const token = await getToken({ req })
@@ -68,7 +65,6 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{id: st
         const updatedProduct = await prisma.product.update({
             where: {id: Number(id)},
             data: {
-
 
 
             }

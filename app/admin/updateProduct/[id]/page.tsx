@@ -1,8 +1,12 @@
 import React from 'react'
 
+import UpdateProduct from '../../../components/admin/UpdateProduct'
+
+
+
 const page = () => {
   return (
-    <div>page</div>
+    <UpdateProduct productId={"7"} />
   )
 }
 

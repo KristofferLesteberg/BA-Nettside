@@ -14,11 +14,10 @@ const DeleteProduct = ({ productID }: { productID: string}) => {
         }
     }
     return (
-
         <button
             onClick={removeProduct}
             className='btn btn-outline'
-            >
+        >
             Fjern
         </button>
   )
