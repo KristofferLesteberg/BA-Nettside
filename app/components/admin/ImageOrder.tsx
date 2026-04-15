@@ -15,8 +15,10 @@ import {
   SortableContext,
   useSortable,
   arrayMove,
-  rectSortingStrategy,
+  horizontalListSortingStrategy,
 } from "@dnd-kit/sortable"
+
+import { restrictToHorizontalAxis, restrictToParentElement, } from "@dnd-kit/modifiers"
 
 import { CSS } from "@dnd-kit/utilities"
 
@@ -37,7 +39,7 @@ function SortableItem({ img }: { img: ImageItem }) {
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    transition: "transform 100ms cubic-bezier(0.25, 1, 0.5, 1)",
   }
 
   return (
@@ -94,9 +96,8 @@ export default function ImageOrder(props: any) {
   return (
     <section className="container">
       <div {...getRootProps({className: 'dropzone'})} className="
-        bg-surface hover:bg-surface-raised hover:border-primary
-        transition-colors duration-200
-        min-h-20 flex 
+        bg-surface hover:bg-surface-raised hover:border-primary transition-colors duration-200
+        min-h-20 flex
         items-center justify-center text-center
         border-3 border-dashed border-border 
         rounded-lg cursor-pointer mb-4">
@@ -104,12 +105,16 @@ export default function ImageOrder(props: any) {
         <p>Drag n drop some files here, or click to select files</p>
       </div>
       <aside>
-        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <DndContext 
+          collisionDetection={closestCenter} 
+          onDragEnd={handleDragEnd} 
+          modifiers={[restrictToHorizontalAxis, restrictToParentElement]}
+        >
           <SortableContext
             items={images.map(i => i.id)}
-            strategy={rectSortingStrategy}
+            strategy={horizontalListSortingStrategy}
           >
-            <div className="grid grid-cols-3 gap-4">
+            <div className="flex flex-row gap-4 overflow-x-auto py-2 w-full max-w-full pb-5">
               {images.map(img => (
                 <SortableItem key={img.id} img={img} />
               ))}
