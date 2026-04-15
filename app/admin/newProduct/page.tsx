@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react'
 
+import ImageOrder from '@/app/components/admin/ImageOrder'
+
 export default function NewProduct() {
   const [educationField, setEducationField] = useState("")
   const [title, setTitle] = useState("")
@@ -134,14 +136,7 @@ export default function NewProduct() {
         </div>
 
         {/* Image */}
-        <div className="space-y-1">
-          <label className="label">Bilde</label>
-          <input
-            type="file"
-            className="input"
-            onChange={(e) => setImage(e.target.files?.[0] || null)}
-          />
-        </div>
+        <ImageOrder />
 
         {/* Submit */}
         <div className="pt-4">

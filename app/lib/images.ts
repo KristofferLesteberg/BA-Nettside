@@ -17,13 +17,18 @@ function isSupportedType(type: string): type is SupportedMimeType {
   return SUPPORTED_TYPES.includes(type as SupportedMimeType)
 }
 
-export async function uploadProductImage(file: File, productId: number, sortOrder: number = 0) {
+export async function uploadProductImage(
+  file: File, 
+  productId: number, 
+  sortOrder: number = 0,
+  staticId?: string
+) {
   if (!isSupportedType(file.type)) {
     throw new Error(`Unsupported image type: ${file.type}. Supported types: ${SUPPORTED_TYPES.join(", ")}`)
   }
 
   const buffer = Buffer.from(await file.arrayBuffer())
-  const id = randomUUID()
+  const id = staticId ?? randomUUID()
   const outputPath = path.join(process.cwd(), "public", "images", `${id}.webp`)
 
   await fs.mkdir(path.dirname(outputPath), { recursive: true })
@@ -37,6 +42,22 @@ export async function uploadProductImage(file: File, productId: number, sortOrde
   })
 
   return id
+}
+
+export async function uploadProductImages(
+  images: { id: string, file: File }[],
+  productId: number
+) {
+  let sortOrder = 0;
+  for (const img of images) {
+    uploadProductImage(
+      img.file,
+      productId,
+      sortOrder,
+      img.id
+    );
+    sortOrder++;
+  }
 }
 
 export async function deleteProductImage(imageId: string) {
