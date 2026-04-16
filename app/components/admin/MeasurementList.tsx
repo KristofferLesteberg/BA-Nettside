@@ -30,11 +30,11 @@ export default function MeasurementList() {
     <div>
       <div className="flex flex-row gap-4">
         <label className="label">Mål</label>
-        <button type="button" className="btn btn-outline btn-icon self-center" onClick={addMeasure}>
+        <button type="button" className="btn btn-success btn-icon self-center" onClick={addMeasure}>
           <FaPlus />
         </button>
-        <button type="button" className="btn btn-outline btn-icon self-center" onClick={() => setShowMeasures(v => !v)}>
-          {showMeasures ? <FaAngleUp /> : <FaAngleDown />}
+        <button type="button" className="btn btn-info btn-icon self-center" onClick={() => setShowMeasures(v => !v)}>
+          {showMeasures ? <FaAngleDown /> : <FaAngleUp />}
         </button>
       </div>
       <div className="flex flex-col gap-4 mt-4">

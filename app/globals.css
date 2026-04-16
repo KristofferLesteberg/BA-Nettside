@@ -129,6 +129,14 @@
   .btn-outline:hover:not(:disabled){ background: var(--color-surface); }
   .btn-ghost                       { background: transparent; color: var(--color-text-muted); border-color: transparent; }
   .btn-ghost:hover:not(:disabled)  { color: var(--color-text); background: var(--color-surface); }
+  .btn-error                       { background: var(--color-error-bg);   color: var(--color-error);   border-color: var(--color-error); }
+  .btn-error:hover:not(:disabled)  { filter: brightness(0.94); }
+  .btn-success                     { background: var(--color-success-bg); color: var(--color-success); border-color: var(--color-success); }
+  .btn-success:hover:not(:disabled){ filter: brightness(0.94); }
+  .btn-warning                     { background: var(--color-warning-bg); color: var(--color-warning); border-color: var(--color-warning); }
+  .btn-warning:hover:not(:disabled){ filter: brightness(0.94); }
+  .btn-info                        { background: var(--color-info-bg);    color: var(--color-info);    border-color: var(--color-info); }
+  .btn-info:hover:not(:disabled)   { filter: brightness(0.94); }
   .btn-icon                        { padding: 0; width: 1.5rem; height: 1.5rem; }
  
   /* Inputs */

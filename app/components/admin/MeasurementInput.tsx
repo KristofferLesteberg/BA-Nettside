@@ -12,9 +12,7 @@ export default function MeasurementInput({ name, value, onChange, onDelete }: Pr
     <div className="flex flex-row gap-4">
       <input type="text" placeholder="Navn" className="input" value={name} onChange={e => onChange("name", e.target.value)} />
       <input type="text" placeholder="Verdi" className="input" value={value} onChange={e => onChange("value", e.target.value)} />
-      <button type="button" className="
-        btn btn-outline btn-icon self-center shrink-0 
-      " onClick={onDelete}>
+      <button type="button" className="btn btn-error btn-icon self-center shrink-0" onClick={onDelete}>
         <FaMinus />
       </button>
     </div>
