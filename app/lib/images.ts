@@ -60,6 +60,23 @@ export async function uploadProductImages(
   }
 }
 
+export async function changeProductImages(
+  images: { id: string, file: File }[],
+  productId: number
+) {
+  deleteAllProductImages(productId);
+  let sortOrder = 0;
+  for (const img of images) {
+    uploadProductImage(
+      img.file,
+      productId,
+      sortOrder,
+      img.id
+    );
+    sortOrder++;
+  }
+}
+
 export async function deleteProductImage(imageId: string) {
   const filePath = path.join(process.cwd(), "public", "images", `${imageId}.webp`)
   
