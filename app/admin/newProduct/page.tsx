@@ -24,8 +24,6 @@ export default function NewProduct() {
   const handleForm = async (e: any) => {
     e.preventDefault()
 
-    console.log("IMAGES BEFORE SUBMIT:", images)
-
     const formData = new FormData()
     formData.append("educationField", educationField)
     formData.append("title", title)
@@ -52,8 +50,8 @@ export default function NewProduct() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto mt-10">
-      <form onSubmit={handleForm} className="card-accented space-y-6">
+    <div className="w-4/5 min-w-120 max-w-230 mx-auto my-10">
+      <form onSubmit={handleForm} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
 
         <h2 className="heading-2">Opprett produkt</h2>
 
@@ -151,11 +149,9 @@ export default function NewProduct() {
         <ImageOrder onChange={setImages}/>
 
         {/* Submit */}
-        <div className="pt-4">
-          <button type="submit" className="btn btn-primary w-full">
-            Opprett annonse
-          </button>
-        </div>
+        <button type="submit" className="btn btn-primary w-full">
+          Opprett annonse
+        </button>
 
       </form>
     </div>
