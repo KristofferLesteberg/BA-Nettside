@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Product } from "@/generated/prisma"
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import Measurement from './Measurement'
+import Measurement from './MeasurementInput'
 import ImageOrder, { ImageItem } from './ImageOrder'
 
 export default function UpdateProductForm({ productId }: { productId: number }) {

@@ -5,6 +5,7 @@ import Router, { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 
 import ImageOrder from '@/app/components/admin/ImageOrder'
+import MeasurementList from '@/app/components/admin/MeasurementList'
 
 export default function NewProduct() {
   const router = useRouter()
@@ -115,37 +116,10 @@ export default function NewProduct() {
         </div>
 
         {/* Measures */}
-        <div>
-          <label className="label">Mål (cm)</label>
-          <div className="grid grid-cols-3 gap-3 mt-2">
-            <input
-              type="number"
-              className="input"
-              placeholder="Høyde"
-              onChange={(e) =>
-                setMeasures({ ...measures, height: Number(e.target.value) })
-              }
-            />
-            <input
-              type="number"
-              className="input"
-              placeholder="Bredde"
-              onChange={(e) =>
-                setMeasures({ ...measures, width: Number(e.target.value) })
-              }
-            />
-            <input
-              type="number"
-              className="input"
-              placeholder="Lengde"
-              onChange={(e) =>
-                setMeasures({ ...measures, length: Number(e.target.value) })
-              }
-            />
-          </div>
-        </div>
+        <MeasurementList onChange={setMeasures}/>
 
         {/* Image */}
+        <label className="label">Bilder</label>
         <ImageOrder onChange={setImages}/>
 
         {/* Submit */}
