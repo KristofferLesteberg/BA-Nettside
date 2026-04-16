@@ -35,11 +35,13 @@ function SortableItem({ img, onDelete }: { img: ImageItem, onDelete: (id: string
     setNodeRef,
     transform,
     transition,
+    isDragging,
   } = useSortable({ id: img.id })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition: "transform 100ms cubic-bezier(0.25, 1, 0.5, 1)",
+    zIndex: isDragging ? 50 : "auto",
   }
 
   return (
@@ -47,7 +49,10 @@ function SortableItem({ img, onDelete }: { img: ImageItem, onDelete: (id: string
       ref={setNodeRef}
       style={style}
       {...attributes}
-      className="cursor-grab relative group"
+      className={`
+        transform cursor-grab relative group transition-all duration-200
+        ${isDragging ? "shadow-xl z-50 cursor-grabbing" : ""}
+      `}
     >
       <button
         type="button"
@@ -66,7 +71,7 @@ function SortableItem({ img, onDelete }: { img: ImageItem, onDelete: (id: string
       <div {...listeners} className="w-[200px] h-[110px] 
         bg-gray-100 flex items-center 
         justify-center overflow-hidden rounded-md
-        border-[1.5px] border-border">
+        border-2 border-secondary shadow-md shadow-secondary/35">
         <img
           src={img.preview}
           className="max-w-full max-h-full object-contain"
@@ -82,12 +87,12 @@ export default function ImageOrder({
 }: { 
   onChange?: (images: { id: string, file: File }[]) => void
 }) {
-  const [images, setImages] = useState<ImageItem[]>([])
+  const [images, setImages] = useState<ImageItem[]>([]);
 
   const handleDelete = (id: string) => {
-    const updated = images.filter(img => img.id !== id)
-    setImages(updated)
-    onChange?.(updated.map(({ id, file }) => ({ id, file })))
+    const updated = images.filter(img => img.id !== id);
+    setImages(updated);
+    onChange?.(updated.map(({ id, file }) => ({ id, file })));
   }
 
   const onDrop = (acceptedFiles: File[]) => {
@@ -97,24 +102,32 @@ export default function ImageOrder({
       preview: URL.createObjectURL(file),
     }))
 
-    const updated = [...images, ...newImages]
-    setImages(updated)
-    onChange?.(updated.map(({ id, file }) => ({ id, file })))
+    const updated = [...images, ...newImages];
+    setImages(updated);
+    onChange?.(updated.map(({ id, file }) => ({ id, file })));
   }
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop })
+  const { getRootProps, getInputProps } = useDropzone({ 
+    onDrop,
+    accept: {
+      "image/jpeg": [".jpeg", ".jpg"],
+      "image/png": [".png"],
+      "image/webp": [".webp"],
+      "image/avif": [".avif"],
+    }
+  })
 
   function handleDragEnd(event: any) {
-    const { active, over } = event
-    if (!over || active.id === over.id) return
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
 
     const updated = arrayMove(
       images,
       images.findIndex(i => i.id === active.id),
       images.findIndex(i => i.id === over.id)
-    )
+    );
 
-    setImages(updated)
+    setImages(updated);
   }
 
   return (
@@ -128,24 +141,35 @@ export default function ImageOrder({
         <input {...getInputProps()} />
         <p>Drag n drop some files here, or click to select files</p>
       </div>
-      <aside>
-        <DndContext 
-          collisionDetection={closestCenter} 
-          onDragEnd={handleDragEnd} 
-          modifiers={[restrictToHorizontalAxis, restrictToParentElement]}
-        >
-          <SortableContext
-            items={images.map(i => i.id)}
-            strategy={horizontalListSortingStrategy}
+      {images.length > 0 && (
+        <aside className="bg-surface rounded-lg px-2 pt-2 border-4 border-border">
+          <DndContext 
+            collisionDetection={closestCenter} 
+            onDragEnd={handleDragEnd} 
+            modifiers={[restrictToHorizontalAxis, restrictToParentElement]}
           >
-            <div className="flex flex-row gap-2 overflow-x-auto pb-2 w-full max-w-full pb-5">
-              {images.map(img => (
-                <SortableItem key={img.id} img={img} onDelete={handleDelete} />
-              ))}
-            </div>
-          </SortableContext>
-        </DndContext>
-      </aside>
+            <SortableContext
+              items={images.map(i => i.id)}
+              strategy={horizontalListSortingStrategy}
+            >
+              <div 
+                className="flex flex-row gap-2 overflow-x-auto pb-2 w-full max-w-full pb-5"
+                onWheel={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.scrollBy({
+                    left: e.deltaY * 0.5,
+                    behavior: "smooth",
+                  });
+                }}
+              >
+                {images.map(img => (
+                  <SortableItem key={img.id} img={img} onDelete={handleDelete} />
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
+        </aside>
+      )}
     </section>
   );
 }
