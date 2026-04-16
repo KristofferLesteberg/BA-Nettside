@@ -133,13 +133,16 @@ export default function ImageOrder({
   return (
     <section className="container">
       <div {...getRootProps({className: 'dropzone'})} className="
-        bg-surface hover:bg-surface-raised hover:border-primary transition-colors duration-200
-        min-h-20 flex
+        bg-surface hover:bg-surface-raised hover:border-secondary transition-colors duration-200
+        min-h-20 flex group
         items-center justify-center text-center
         border-3 border-dashed border-border 
         rounded-lg cursor-pointer mb-4">
         <input {...getInputProps()} />
-        <p>Drag n drop some files here, or click to select files</p>
+        <div className="flex flex-col items-center gap-5 text-text-faint p-5 group-hover:text-secondary transition-colors duration-200">
+          <p>Drag and drop some files here, or click to select files</p>
+          <em>(Only *.jpeg, *.png, *.webp and *.avif images will be accepted)</em>
+        </div>
       </div>
       {images.length > 0 && (
         <aside className="bg-surface rounded-lg px-2 pt-2 border-4 border-border">
