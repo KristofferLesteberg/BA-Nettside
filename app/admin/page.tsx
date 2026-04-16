@@ -29,7 +29,6 @@ const page = () => {
       </Link>
 
       <DeleteProduct productID={"2"}/>
-      
     </div>
   )
 }

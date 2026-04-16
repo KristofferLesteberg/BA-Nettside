@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use state"
 import { useState } from 'react'
-import React from 'react'
+import { IoClose } from "react-icons/io5";
 import { useDropzone } from 'react-dropzone'
 
 import {
@@ -28,7 +28,7 @@ type ImageItem = {
   preview: string
 }
 
-function SortableItem({ img }: { img: ImageItem }) {
+function SortableItem({ img, onDelete }: { img: ImageItem, onDelete: (id: string) => void }) {
   const {
     attributes,
     listeners,
@@ -47,10 +47,23 @@ function SortableItem({ img }: { img: ImageItem }) {
       ref={setNodeRef}
       style={style}
       {...attributes}
-      {...listeners}
-      className="cursor-grab"
+      className="cursor-grab relative group"
     >
-      <div className="w-[200px] h-[110px] 
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation()
+          onDelete(img.id)
+        }} 
+        className="
+          absolute top-2 right-2 rounded-full cursor-pointer 
+          bg-error-bg w-5 h-5 flex items-center justify-center 
+          text-error opacity-0 group-hover:opacity-70
+          hover:opacity-100 transition-opacity duration-200
+      ">
+        <IoClose />
+      </button>
+      <div {...listeners} className="w-[200px] h-[110px] 
         bg-gray-100 flex items-center 
         justify-center overflow-hidden rounded-md
         border-[1.5px] border-border">
@@ -71,9 +84,15 @@ export default function ImageOrder({
 }) {
   const [images, setImages] = useState<ImageItem[]>([])
 
+  const handleDelete = (id: string) => {
+    const updated = images.filter(img => img.id !== id)
+    setImages(updated)
+    onChange?.(updated.map(({ id, file }) => ({ id, file })))
+  }
+
   const onDrop = (acceptedFiles: File[]) => {
     const newImages = acceptedFiles.map(file => ({
-      id: crypto.randomUUID(), // or randomUUID()
+      id: crypto.randomUUID(),
       file,
       preview: URL.createObjectURL(file),
     }))
@@ -119,9 +138,9 @@ export default function ImageOrder({
             items={images.map(i => i.id)}
             strategy={horizontalListSortingStrategy}
           >
-            <div className="flex flex-row gap-4 overflow-x-auto py-2 w-full max-w-full pb-5">
+            <div className="flex flex-row gap-2 overflow-x-auto pb-2 w-full max-w-full pb-5">
               {images.map(img => (
-                <SortableItem key={img.id} img={img} />
+                <SortableItem key={img.id} img={img} onDelete={handleDelete} />
               ))}
             </div>
           </SortableContext>
