@@ -11,7 +11,7 @@ interface Measure {
     }
 
 
-const Measurement = ({ productId }: { productId: string}) => {
+const Measurement = ({ productId }: { productId: number}) => {
 
     const [name, setName] = useState("")
     const [measure, setMeasure] = useState("")

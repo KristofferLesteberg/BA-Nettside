@@ -60,20 +60,35 @@ export async function uploadProductImages(
   }
 }
 
-export async function changeProductImages(
-  images: { id: string, file: File }[],
+export async function syncProductImages(
+  orderedIds: string[],
+  newFiles: File[],
   productId: number
 ) {
-  deleteAllProductImages(productId);
-  let sortOrder = 0;
-  for (const img of images) {
-    uploadProductImage(
-      img.file,
-      productId,
-      sortOrder,
-      img.id
-    );
-    sortOrder++;
+  const current = await prisma.productImage.findMany({ where: { productId } })
+  const currentIdSet = new Set(current.map(img => img.id))
+  const keepSet = new Set(orderedIds)
+
+  for (const img of current) {
+    if (!keepSet.has(img.id)) {
+      await deleteProductImage(img.id)
+    }
+  }
+
+  let fileIndex = 0
+  for (let i = 0; i < orderedIds.length; i++) {
+    const imgId = orderedIds[i]
+    if (currentIdSet.has(imgId)) {
+      await prisma.productImage.update({
+        where: { id: imgId },
+        data: { sortOrder: i }
+      })
+    } else {
+      const file = newFiles[fileIndex++]
+      if (file) {
+        await uploadProductImage(file, productId, i, imgId)
+      }
+    }
   }
 }
 

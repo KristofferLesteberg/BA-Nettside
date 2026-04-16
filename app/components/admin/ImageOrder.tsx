@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use state"
+"use client"
 import { useState } from 'react'
 import { IoClose } from "react-icons/io5";
 import { useDropzone } from 'react-dropzone'
@@ -18,96 +18,99 @@ import {
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable"
 
-import { restrictToHorizontalAxis, restrictToParentElement, } from "@dnd-kit/modifiers"
-
+import { restrictToHorizontalAxis, restrictToParentElement } from "@dnd-kit/modifiers"
 import { CSS } from "@dnd-kit/utilities"
 
-type ImageItem = {
-  id: string
-  file: File
-  preview: string
-}
+// An image is either:
+// - existing: has an id and a url, no file
+// - new: has an id, a file, and a preview url
+export type ImageItem =
+  | { id: string; type: "existing"; url: string }
+  | { id: string; type: "new"; file: File; preview: string }
 
-function SortableItem({ img, onDelete }: { img: ImageItem, onDelete: (id: string) => void }) {
+function SortableItem({ img, onDelete }: { img: ImageItem; onDelete: (id: string) => void }) {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
-    transition,
     isDragging,
   } = useSortable({ id: img.id })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition: "transform 100ms cubic-bezier(0.25, 1, 0.5, 1)",
-    zIndex: isDragging ? 50 : "auto",
+    zIndex: isDragging ? 50 : "auto" as any,
   }
+
+  const src = img.type === "existing" ? img.url : img.preview
 
   return (
     <div
       ref={setNodeRef}
       style={style}
       {...attributes}
-      className={`
-        transform cursor-grab relative group transition-all duration-200
-        ${isDragging ? "shadow-xl z-50 cursor-grabbing" : ""}
-      `}
+      className={`cursor-grab relative group transition-all duration-200 ${isDragging ? "shadow-xl cursor-grabbing" : ""}`}
     >
       <button
         type="button"
-        onClick={(e) => {
-          e.stopPropagation()
-          onDelete(img.id)
-        }} 
+        onClick={(e) => { e.stopPropagation(); onDelete(img.id) }}
         className="
-          absolute top-2 right-2 rounded-full cursor-pointer 
-          bg-error-bg w-5 h-5 flex items-center justify-center 
+          absolute top-2 right-2 rounded-full cursor-pointer
+          bg-error-bg w-5 h-5 flex items-center justify-center
           text-error opacity-0 group-hover:opacity-70
           hover:opacity-100 transition-opacity duration-200
-      ">
+        "
+      >
         <IoClose />
       </button>
-      <div {...listeners} className="w-[200px] h-[110px] 
-        bg-gray-100 flex items-center 
-        justify-center overflow-hidden rounded-md
-        border-2 border-secondary shadow-md shadow-secondary/35">
-        <img
-          src={img.preview}
-          className="max-w-full max-h-full object-contain"
-          alt=""
-        />
+      <div
+        {...listeners}
+        className="w-[200px] h-[110px] bg-gray-100 flex items-center
+          justify-center overflow-hidden rounded-md
+          border-2 border-secondary shadow-md shadow-secondary/35"
+      >
+        <img src={src} className="max-w-full max-h-full object-contain" alt="" />
       </div>
+      {/* Badge to distinguish existing vs new */}
+      <span className={`absolute bottom-2 left-2 text-[10px] px-1.5 py-0.5 rounded-full font-medium
+        ${img.type === "existing" ? "bg-info-bg text-info" : "bg-success-bg text-success"}`}>
+        {img.type === "existing" ? "Lagret" : "Ny"}
+      </span>
     </div>
   )
 }
 
-export default function ImageOrder({ 
-  onChange 
-}: { 
-  onChange?: (images: { id: string, file: File }[]) => void
+export default function ImageOrder({
+  initialImages = [],
+  onChange,
+}: {
+  initialImages?: { id: string; url: string }[]
+  onChange?: (images: ImageItem[]) => void
 }) {
-  const [images, setImages] = useState<ImageItem[]>([]);
+  const [images, setImages] = useState<ImageItem[]>(
+    initialImages.map(img => ({ id: img.id, type: "existing" as const, url: img.url }))
+  )
 
   const handleDelete = (id: string) => {
-    const updated = images.filter(img => img.id !== id);
-    setImages(updated);
-    onChange?.(updated.map(({ id, file }) => ({ id, file })));
+    const updated = images.filter(img => img.id !== id)
+    setImages(updated)
+    onChange?.(updated)
   }
 
   const onDrop = (acceptedFiles: File[]) => {
-    const newImages = acceptedFiles.map(file => ({
+    const newImages: ImageItem[] = acceptedFiles.map(file => ({
       id: crypto.randomUUID(),
+      type: "new" as const,
       file,
       preview: URL.createObjectURL(file),
     }))
-
-    const updated = [...images, ...newImages];
-    setImages(updated);
-    onChange?.(updated.map(({ id, file }) => ({ id, file })));
+    const updated = [...images, ...newImages]
+    setImages(updated)
+    onChange?.(updated)
   }
 
-  const { getRootProps, getInputProps } = useDropzone({ 
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {
       "image/jpeg": [".jpeg", ".jpg"],
@@ -118,51 +121,47 @@ export default function ImageOrder({
   })
 
   function handleDragEnd(event: any) {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-
+    const { active, over } = event
+    if (!over || active.id === over.id) return
     const updated = arrayMove(
       images,
       images.findIndex(i => i.id === active.id),
       images.findIndex(i => i.id === over.id)
-    );
-
-    setImages(updated);
+    )
+    setImages(updated)
+    onChange?.(updated)
   }
 
   return (
     <section className="container">
-      <div {...getRootProps({className: 'dropzone'})} className="
-        bg-surface hover:bg-surface-raised hover:border-secondary transition-colors duration-200
-        min-h-20 flex group
-        items-center justify-center text-center
-        border-3 border-dashed border-border 
-        rounded-lg cursor-pointer mb-4">
+      <div
+        {...getRootProps({ className: 'dropzone' })}
+        className="
+          bg-surface hover:bg-surface-raised hover:border-secondary transition-colors duration-200
+          min-h-20 flex group items-center justify-center text-center
+          border-3 border-dashed border-border rounded-lg cursor-pointer mb-4
+        "
+      >
         <input {...getInputProps()} />
         <div className="flex flex-col items-center gap-5 text-text-faint p-5 group-hover:text-secondary transition-colors duration-200">
           <p>Drag and drop some files here, or click to select files</p>
           <em>(Only *.jpeg, *.png, *.webp and *.avif images will be accepted)</em>
         </div>
       </div>
+
       {images.length > 0 && (
         <aside className="bg-surface rounded-lg px-2 pt-2 border-4 border-border">
-          <DndContext 
-            collisionDetection={closestCenter} 
-            onDragEnd={handleDragEnd} 
+          <DndContext
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
             modifiers={[restrictToHorizontalAxis, restrictToParentElement]}
           >
-            <SortableContext
-              items={images.map(i => i.id)}
-              strategy={horizontalListSortingStrategy}
-            >
-              <div 
-                className="flex flex-row gap-2 overflow-x-auto pb-2 w-full max-w-full pb-5"
+            <SortableContext items={images.map(i => i.id)} strategy={horizontalListSortingStrategy}>
+              <div
+                className="flex flex-row gap-2 overflow-x-auto w-full max-w-full pb-5"
                 onWheel={(e) => {
-                  e.preventDefault();
-                  e.currentTarget.scrollBy({
-                    left: e.deltaY * 0.5,
-                    behavior: "smooth",
-                  });
+                  e.preventDefault()
+                  e.currentTarget.scrollBy({ left: e.deltaY * 0.5, behavior: "smooth" })
                 }}
               >
                 {images.map(img => (
@@ -174,5 +173,5 @@ export default function ImageOrder({
         </aside>
       )}
     </section>
-  );
+  )
 }

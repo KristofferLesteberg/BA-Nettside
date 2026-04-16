@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from "../../../lib/prisma";
 import { getToken } from 'next-auth/jwt';
 import { EducationField } from '@/generated/prisma';
-import { changeProductImages, deleteAllProductImages } from '@/app/lib/images';
+import { syncProductImages, deleteAllProductImages } from '@/app/lib/images';
 
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const token = await getToken({ req })
@@ -15,7 +15,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     
     const product = await prisma.product.findUnique({
         where: {id: Number(id)},
-        include: {images: true}
+        include: { images: { orderBy: { sortOrder: "asc" } } }
     })
 
     if(!product) {
@@ -85,14 +85,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{id: st
       }   
     })
 
-    const images = imageFiles.map((file, id) => ({
-      file,
-      id: imageIds[id]
-    }))
-
-    if (images && images.length > 0) {
-      await changeProductImages(images, updatedProduct.id);
-    }
+    await syncProductImages(imageIds, imageFiles, updatedProduct.id)
 
     return NextResponse.json(updatedProduct)
   } catch(error) {

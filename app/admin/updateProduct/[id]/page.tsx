@@ -1,12 +1,13 @@
-import React from 'react'
+import { notFound } from "next/navigation"
+import UpdateProductForm from "@/app/components/admin/UpdateProductForm"
 
-import UpdateProduct from '../../../components/admin/UpdateProduct'
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const productId = parseInt((await params).id)
+  if (Number.isNaN(productId)) notFound()
 
-
-const page = () => {
-  return (
-    <UpdateProduct productId={"7"} />
-  )
+  return <UpdateProductForm productId={productId} />
 }
-
-export default page
