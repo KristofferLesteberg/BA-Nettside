@@ -28,7 +28,7 @@ const page = () => {
         </button>
       </Link>
 
-      <DeleteProduct productID={"2"}/>
+      <DeleteProduct productID={"1"}/>
     </div>
   )
 }

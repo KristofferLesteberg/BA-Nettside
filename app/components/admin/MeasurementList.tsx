@@ -4,14 +4,16 @@ import { FaPlus } from "react-icons/fa6";
 import { FaAngleDown } from "react-icons/fa6";
 import { FaAngleUp } from "react-icons/fa6";
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import MeasurementInput from './MeasurementInput'
 
-type Measure = { name: string; value: string }
+export type Measure = { name: string; value: string }
 
-export default function MeasurementList() {
+export default function MeasurementList({ onChange }: { onChange: (measures: Measure[]) => void }) {
   const [showMeasures, setShowMeasures] = useState(false)
   const [measures, setMeasures] = useState<Measure[]>([])
+
+  useEffect(() => onChange(measures), [measures])
 
   function addMeasure() {
     setMeasures(prev => [...prev, { name: "", value: "" }])
