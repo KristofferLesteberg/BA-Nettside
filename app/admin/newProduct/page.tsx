@@ -55,10 +55,11 @@ export default function NewProduct() {
       <form onSubmit={handleForm} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
 
         <h2 className="heading-2">Opprett produkt</h2>
+        <p className="text-text-faint italic -mt-4">Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette</p>
 
         {/* Education Field */}
         <div className="space-y-1">
-          <label className="label">Kategori</label>
+          <label className="label">Kategori *</label>
           <select
             className="input"
             onChange={(e) => setEducationField(e.target.value)}
@@ -71,7 +72,7 @@ export default function NewProduct() {
 
         {/* Title */}
         <div className="space-y-1">
-          <label className="label">Tittel</label>
+          <label className="label">Tittel *</label>
           <input
             type="text"
             className="input"
@@ -83,7 +84,7 @@ export default function NewProduct() {
 
         {/* Description */}
         <div className="space-y-1">
-          <label className="label">Beskrivelse</label>
+          <label className="label">Beskrivelse *</label>
           <textarea
             className="input min-h-[100px]"
             placeholder="Beskriv produkt"
