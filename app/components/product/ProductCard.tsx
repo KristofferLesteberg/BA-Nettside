@@ -16,20 +16,20 @@ const ProductCard = ({ product, isAdmin }: ProductCardProps ) => {
     
 
   return (
-    <div className="border w-100 h-full">
+    <div className="rounded w-100 h-full">
         {product.images[0] && (
-            <img src={`/images/${product.images[0].id}.webp`} className="w-full h-70" />
+            <img src={`/images/${product.images[0].id}.webp`} className="w-full h-70 rounded" />
         )}
-        {product.title}
+        <h1 className="heading-4 text-red-500 mt-5">{product.title}</h1>
         <br />
-        {Number(product.price)}
+        {`${Number(product.price)}kr`}
         <br />
         {product.publishedAt}
         {isAdmin && (
             <div>
                 <DeleteProduct productID={product.id}/>
                 <Link href={`/admin/updateProduct/${product.id}`}>
-                    <button>Edit</button>
+                    <button className="btn btn-outline">Edit</button>
                 </Link>
               
             </div>
