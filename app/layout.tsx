@@ -1,5 +1,8 @@
+
 import type { Metadata } from "next";
 import "./globals.css";
+
+import Providers from './components/shared/providers';
 
 export const metadata: Metadata = {
   title: "BAT",
@@ -14,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
