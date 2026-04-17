@@ -133,15 +133,11 @@ export default function ImageOrder({
   }
 
   return (
-    <section className="container">
+    <section className="container" suppressHydrationWarning>
       <div
-        {...getRootProps({ className: 'dropzone' })}
-        className="
-          bg-surface hover:bg-surface-raised hover:border-secondary transition-colors duration-200
-          min-h-20 flex group items-center justify-center text-center
-          border-3 border-dashed border-border rounded-lg cursor-pointer mb-4
-        "
-      >
+        {...getRootProps()}
+        
+        className="bg-surface hover:bg-surface-raised hover:border-secondary transition-colors duration-200 min-h-20 flex group items-center justify-center text-center border-3 border-dashed border-border rounded-lg cursor-pointer mb-4">
         <input {...getInputProps()} />
         <div className="flex flex-col items-center gap-5 text-text-faint p-5 group-hover:text-secondary transition-colors duration-200">
           <p>Drag and drop some files here, or click to select files</p>
