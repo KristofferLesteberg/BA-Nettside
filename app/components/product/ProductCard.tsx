@@ -28,7 +28,7 @@ const ProductCard = ({ product, isAdmin }: ProductCardProps ) => {
         {isAdmin && (
             <div>
                 <DeleteProduct productID={product.id}/>
-                <Link href={`/admin/newProduct/${product.id}`}>
+                <Link href={`/admin/updateProduct/${product.id}`}>
                     <button>Edit</button>
                 </Link>
               
