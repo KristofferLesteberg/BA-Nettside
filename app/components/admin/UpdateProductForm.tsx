@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Product } from "@/generated/prisma"
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import Measurement from './MeasurementInput'
+import MeasurementList, { Measure } from '@/app/components/admin/MeasurementList'
 import ImageOrder, { ImageItem } from './ImageOrder'
 
 export default function UpdateProductForm({ productId }: { productId: number }) {
@@ -19,7 +19,7 @@ export default function UpdateProductForm({ productId }: { productId: number }) 
   const [description, setDescription] = useState("")
   const [price, setPrice] = useState(0)
   const [amount, setAmount] = useState(0)
-  const [measures, setMeasures] = useState({ height: 0, width: 0, length: 0 })
+  const [measures, setMeasures] = useState<Measure[]>([])
 
   useEffect(() => {
     const getSingleProduct = async () => {
@@ -34,7 +34,7 @@ export default function UpdateProductForm({ productId }: { productId: number }) 
         setPrice(Number(data.price))
         setAmount(data.amount)
         setEducationField(data.educationField ?? "")
-        setMeasures(data.measures ?? { height: 0, width: 0, length: 0 })
+        setMeasures(Object.entries(data.measures ?? {}).map(([name, value]) => ({ name, value: String(value) })))
 
         // Populate existing images for ImageOrder
         if (data.images && data.images.length > 0) {
@@ -61,7 +61,7 @@ export default function UpdateProductForm({ productId }: { productId: number }) 
     formData.append("title", title)
     formData.append("description", description)
     formData.append("price", price.toString())
-    formData.append("measures", JSON.stringify(measures))
+    formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
     formData.append("amount", amount.toString())
 
     // Split images into existing (ids only) and new (files)
@@ -146,24 +146,7 @@ export default function UpdateProductForm({ productId }: { productId: number }) 
         </div>
 
         {/* Measures */}
-        <Measurement productId={productId} />
-        <div>
-          <label className="label">Mål (cm)</label>
-          <div className="grid grid-cols-3 gap-3 mt-2">
-            <input type="number" className="input" placeholder="Høyde"
-              value={measures.height || ""}
-              onChange={(e) => setMeasures({ ...measures, height: Number(e.target.value) })}
-            />
-            <input type="number" className="input" placeholder="Bredde"
-              value={measures.width || ""}
-              onChange={(e) => setMeasures({ ...measures, width: Number(e.target.value) })}
-            />
-            <input type="number" className="input" placeholder="Lengde"
-              value={measures.length || ""}
-              onChange={(e) => setMeasures({ ...measures, length: Number(e.target.value) })}
-            />
-          </div>
-        </div>
+        <MeasurementList initialMeasures={measures} onChange={setMeasures} />
 
         {/* Images */}
         <div className="space-y-1">

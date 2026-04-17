@@ -27,7 +27,6 @@ export default function NewProduct() {
     formData.append("description", description)
     formData.append("price", price.toString())
     formData.append("amount", amount.toString())
-
     formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
 
     images.forEach((img, index) => {

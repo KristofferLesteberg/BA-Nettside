@@ -9,9 +9,9 @@ import MeasurementInput from './MeasurementInput'
 
 export type Measure = { name: string; value: string }
 
-export default function MeasurementList({ onChange }: { onChange: (measures: Measure[]) => void }) {
-  const [showMeasures, setShowMeasures] = useState(false)
-  const [measures, setMeasures] = useState<Measure[]>([])
+export default function MeasurementList({ onChange, initialMeasures }: { onChange: (measures: Measure[]) => void; initialMeasures?: Measure[] }) {
+  const [showMeasures, setShowMeasures] = useState((initialMeasures?.length ?? 0) > 0)
+  const [measures, setMeasures] = useState<Measure[]>(initialMeasures || [])
 
   useEffect(() => onChange(measures), [measures])
 
