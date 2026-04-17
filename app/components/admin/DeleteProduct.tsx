@@ -1,6 +1,7 @@
+"use client"
 import React from 'react'
 
-const DeleteProduct = ({ productID }: { productID: string}) => {
+const DeleteProduct = ({ productID }: { productID: number}) => {
         const removeProduct = async () => {
         if(!window.confirm("Vil du slette produktet?")) return
 
