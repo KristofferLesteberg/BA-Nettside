@@ -7,7 +7,7 @@ export const MeasuresSchema = z.record(z.string(), z.string())
 export const ProductCreateSchema = z.object({
   educationField: z.preprocess(
     (val) => (val === '' ? undefined : val),
-    EducationFieldSchema.optional()
+    z.enum(['BUILDING', 'CONSTRUCTION'], { message: 'Kategori er påkrevd' })
   ),
   title: z.string().min(1, 'Tittel er påkrevd'),
   description: z.string().min(1, 'Beskrivelse er påkrevd'),
@@ -16,7 +16,13 @@ export const ProductCreateSchema = z.object({
   amount: z.coerce.number().int('Antall må være et heltall').min(0, 'Antall kan ikke være negativt'),
 })
 
-export const ProductUpdateSchema = ProductCreateSchema.partial()
+export const ProductUpdateSchema = ProductCreateSchema.partial({
+  title: true,
+  description: true,
+  price: true,
+  measures: true,
+  amount: true,
+})
 
 export type ProductCreate = z.infer<typeof ProductCreateSchema>
 export type ProductUpdate = z.infer<typeof ProductUpdateSchema>

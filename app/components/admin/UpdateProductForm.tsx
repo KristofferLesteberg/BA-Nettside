@@ -1,8 +1,9 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Product } from "@/generated/prisma"
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+import type { ApiResponse } from '@/app/lib/api-response'
 import MeasurementList, { Measure } from '@/app/components/admin/MeasurementList'
 import ImageOrder, { ImageItem } from './ImageOrder'
 
@@ -25,27 +26,31 @@ export default function UpdateProductForm({ productId }: { productId: number }) 
     const getSingleProduct = async () => {
       try {
         const res = await fetch(`/api/products/${productId}`)
-        if (!res.ok) { console.log(res.status); return }
+        const body: ApiResponse<Product & { images: { id: string }[] }> = await res.json()
 
-        const data = await res.json()
-        setProduct(data)
-        setTitle(data.title)
-        setDescription(data.description)
-        setPrice(Number(data.price))
-        setAmount(data.amount)
-        setEducationField(data.educationField ?? "")
-        setMeasures(Object.entries(data.measures ?? {}).map(([name, value]) => ({ name, value: String(value) })))
+        if (!body.success) {
+          toast.error(body.error)
+          return
+        }
 
-        // Populate existing images for ImageOrder
-        if (data.images && data.images.length > 0) {
-          const mapped = data.images.map((img: { id: string }) => ({
+        const product = body.data
+        setProduct(product)
+        setTitle(product.title)
+        setDescription(product.description)
+        setPrice(Number(product.price))
+        setAmount(product.amount)
+        setEducationField(product.educationField ?? "")
+        setMeasures(Object.entries(product.measures ?? {}).map(([name, value]) => ({ name, value: String(value) })))
+
+        if (product.images.length > 0) {
+          setExistingImages(product.images.map((img) => ({
             id: img.id,
             url: `/images/${img.id}.webp`,
-          }))
-          setExistingImages(mapped)
+          })))
         }
       } catch (error) {
         console.error(error)
+        toast.error("Kunne ikke laste produkt")
       } finally {
         setIsLoading(true)
       }
@@ -79,14 +84,18 @@ export default function UpdateProductForm({ productId }: { productId: number }) 
       method: "PATCH",
       body: formData,
     })
+    const body: ApiResponse<unknown> = await res.json()
 
-    if (!res.ok) {
-      toast.error("Noe gikk galt")
-      console.log(`Update failed: ${res.status}`)
+    if (!body.success) {
+      if (body.fields) {
+        Object.values(body.fields).flat().forEach(msg => toast.error(msg))
+      } else {
+        toast.error(body.error)
+      }
       return
     }
 
-    toast.success("Produkt oppdatert")
+    toast.success(body.message ?? "Produkt oppdatert")
     router.push("/admin")
   }
 

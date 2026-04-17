@@ -1,10 +1,10 @@
 "use client"
 
-import React, { useState } from 'react'
-import Router, { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-
-import ImageOrder from '@/app/components/admin/ImageOrder'
+import type { ApiResponse } from '@/app/lib/api-response'
+import ImageOrder, { ImageItem } from '@/app/components/admin/ImageOrder'
 import MeasurementList, { Measure } from '@/app/components/admin/MeasurementList'
 
 export default function NewProduct() {
@@ -16,9 +16,9 @@ export default function NewProduct() {
   const [price, setPrice] = useState(0)
   const [measures, setMeasures] = useState<Measure[]>([])
   const [amount, setAmount] = useState(0)
-  const [images, setImages] = useState<{ id: string, file: File }[]>([])
+  const [images, setImages] = useState<ImageItem[]>([])
 
-  const handleForm = async (e: any) => {
+  const handleForm = async (e: React.FormEvent) => {
     e.preventDefault()
 
     const formData = new FormData()
@@ -29,20 +29,24 @@ export default function NewProduct() {
     formData.append("amount", amount.toString())
     formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
 
-    images.forEach((img, index) => {
+    images.filter(img => img.type === 'new').forEach(img => {
       formData.append("files", img.file)
       formData.append("ids", img.id)
     })
 
-    const response = await fetch("/api/products", {
-      method: "POST",
-      body: formData
-    })
+    const res = await fetch("/api/products", { method: "POST", body: formData })
+    const body: ApiResponse<unknown> = await res.json()
 
-    if (!response.ok) {
-      console.error(await response.json())
+    if (!body.success) {
+      if (body.fields) {
+        Object.values(body.fields).flat().forEach(msg => toast.error(msg))
+      } else {
+        toast.error(body.error)
+      }
+      return
     }
-    toast.success("Produkt lagt til")
+
+    toast.success(body.message ?? "Produkt lagt til")
     router.push("/admin")
   }
 
