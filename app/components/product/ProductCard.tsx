@@ -10,18 +10,17 @@ interface ProductCardProps {
     isAdmin: boolean
 }
 
-
-
 const ProductCard = ({ product, isAdmin }: ProductCardProps ) => {
     
 
   return (
-        <div className="rounded w-100 h-full border shadow-sm transition-all duration-300 cursor-pointer hover:translate-y-1 hover:shadow-lg">
+        <div className="group rounded w-100 h-full border shadow-sm transition-all duration-300 cursor-pointer hover:bg-red-700 hover:text-white">
             <Link href={`/products/${product.id}`}>
-            {product.images[0] && (
-                <img src={`/images/${product.images[0].id}.webp`} className="w-full h-70 rounded" />
-            )}
-            <h1 className="heading-4 text-red-500 mt-5">{product.title}</h1>
+            {product.images[0] ? (
+                <img src={`/images/${product.images[0].id}.webp`} className="w-full h-70 rounded bg-grey-500" />
+            ) : 
+            <p className="w-full h-70 bg-grey-100 group-hover:text-white">Ingen bilder..</p>}
+            <h1 className="heading-4 text-red-500 mt-5 group-hover:text-white">{product.title}</h1>
             <br />
             {`${Number(product.price)}kr`}
             <br />
@@ -29,15 +28,14 @@ const ProductCard = ({ product, isAdmin }: ProductCardProps ) => {
             </Link>
             {isAdmin && (
                 <div className="">
-                    <DeleteProduct productID={product.id}/>
+                    <DeleteProduct  productID={product.id}/>
                     <Link href={`/admin/updateProduct/${product.id}`}>
-                        <button className="btn btn-outline">Edit</button>
+                        <button  className="btn btn-outline group-hover:text-white">Edit</button>
                     </Link>
                 
                 </div>
             )}
         </div>
-
   )
 }
 

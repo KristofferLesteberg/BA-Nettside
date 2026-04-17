@@ -20,7 +20,7 @@ export default async function Home() {
       <div>Hello World</div>
       <p className="text-primary">This is pink</p>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full'>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mt-50 place-items-center'>
             {convertedProducts.map((product) => (
               <ProductCard key={product.id} product={product} isAdmin={false}/>
             ))}

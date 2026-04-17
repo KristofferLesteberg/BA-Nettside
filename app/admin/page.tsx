@@ -34,13 +34,15 @@ const page = async () => {
       </Link>
       
       <DeleteProduct productID={8}/>
-      
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full'>
+      <div className="max-w-full mx-auto px-4">
+        <h1 className='heading-1 mt-50 mb-10'>Produkter:</h1>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center'>
             {convertedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} isAdmin={true}/>
+                <ProductCard key={product.id} product={product} isAdmin={true}/>
             ))}
         </div>
-    </div>
+     </div>
+</div>
   )
 }
 
