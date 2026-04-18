@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import ImageOrder, { ImageItem } from '@/app/components/admin/ImageOrder'
 import MeasurementList, { Measure } from '@/app/components/admin/MeasurementList'
 
@@ -38,20 +38,35 @@ export default function ProductForm({ heading, submitLabel, initialValues, onSub
   const [measures, setMeasures] = useState<Measure[]>(initialValues?.measures ?? [])
   const [images, setImages] = useState<ImageItem[]>([])
 
+  const educationFieldRef = useRef<HTMLDivElement>(null)
+  const titleRef = useRef<HTMLDivElement>(null)
+  const descriptionRef = useRef<HTMLDivElement>(null)
+
   const handleForm = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!educationField) {
+      educationFieldRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+    }
+    if (!title.trim()) {
+      titleRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+    }
+    if (!description.trim()) {
+      descriptionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+    }
+
     await onSubmit({ educationField, title, description, price, amount, measures, images })
   }
 
   return (
-    <div className="w-4/5 min-w-120 max-w-230 mx-auto my-10">
+    <div className="w-4/5 min-w-120 max-w-230 mx-auto my-10 mt-32">
       <form onSubmit={handleForm} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
 
         <h2 className="heading-2">{heading}</h2>
         <p className="text-text-faint italic -mt-4">Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette</p>
 
         {/* Education Field */}
-        <div className="space-y-1">
+        <div className="space-y-1" ref={educationFieldRef}>
           <label className="label">Kategori *</label>
           <select className="input" value={educationField} onChange={(e) => setEducationField(e.target.value)}>
             <option value="">Velg kategori</option>
@@ -61,7 +76,7 @@ export default function ProductForm({ heading, submitLabel, initialValues, onSub
         </div>
 
         {/* Title */}
-        <div className="space-y-1">
+        <div className="space-y-1" ref={titleRef}>
           <label className="label">Tittel *</label>
           <input
             type="text"
@@ -73,7 +88,7 @@ export default function ProductForm({ heading, submitLabel, initialValues, onSub
         </div>
 
         {/* Description */}
-        <div className="space-y-1">
+        <div className="space-y-1" ref={descriptionRef}>
           <label className="label">Beskrivelse *</label>
           <textarea
             className="input min-h-[100px]"
