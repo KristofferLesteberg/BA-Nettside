@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Router, { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 
-import ImageOrder from '@/app/components/admin/ImageOrder'
+import ImageOrder, { ImageItem } from '@/app/components/admin/ImageOrder'
 import MeasurementList, { Measure } from '@/app/components/admin/MeasurementList'
 
 export default function NewProduct() {
@@ -16,7 +16,7 @@ export default function NewProduct() {
   const [price, setPrice] = useState(0)
   const [measures, setMeasures] = useState<Measure[]>([])
   const [amount, setAmount] = useState(0)
-  const [images, setImages] = useState<{ id: string, file: File }[]>([])
+  const [images, setImages] = useState<ImageItem[]>([])
 
   const handleForm = async (e: any) => {
     e.preventDefault()
@@ -29,9 +29,11 @@ export default function NewProduct() {
     formData.append("amount", amount.toString())
     formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
 
-    images.forEach((img, index) => {
-      formData.append("files", img.file)
-      formData.append("ids", img.id)
+    images.forEach((img) => {
+      if (img.type === "new") {
+        formData.append("files", img.file)
+        formData.append("ids", img.id)
+      }
     })
 
     const response = await fetch("/api/products", {
