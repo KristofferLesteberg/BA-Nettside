@@ -35,7 +35,11 @@ export default function Header() {
             <Link
               key={href}
               href={href}
-              className={`header-link font-medium ${pathname === href ? 'text-primary border-b-2 border-primary pb-0.5' : ''}`}
+              className={`font-medium transition-colors duration-150 ${
+                pathname === href
+                  ? 'text-primary border-b-2 border-primary pb-0.5'
+                  : 'text-text hover:text-primary'
+              }`}
             >
               {label}
             </Link>
