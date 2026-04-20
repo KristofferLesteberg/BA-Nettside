@@ -10,7 +10,7 @@ const navLinks = [
   { href: '/products',        label: 'Våre Produkter' },
   { href: '/request-project', label: 'Prosjekter'     },
   { href: '/contact',         label: 'Kontakt Oss'    },
-  { href: '/admin',           label: 'Admin'          },
+  { href: '/admin',           label: 'For lærere'          },
 ];
 
 export default function Header() {
