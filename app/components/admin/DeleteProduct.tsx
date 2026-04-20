@@ -1,6 +1,8 @@
 "use client"
 import React from 'react'
 
+import { FaRegTrashCan } from "react-icons/fa6";
+
 const DeleteProduct = ({ productID }: { productID: number}) => {
         const removeProduct = async () => {
         if(!window.confirm("Vil du slette produktet?")) return
@@ -17,9 +19,9 @@ const DeleteProduct = ({ productID }: { productID: number}) => {
     return (
         <button
             onClick={removeProduct}
-            className='btn btn-outline'
+            className='cursor-pointers flex flex-row items-center gap-2'
         >
-            Fjern
+            <FaRegTrashCan />Fjern
         </button>
   )
   
