@@ -4,9 +4,9 @@ import UpdateProductForm from "@/app/components/admin/UpdateProductForm"
 export default async function Page({
   params,
 }: {
-  params: Promise<{ id: number }>
+  params: Promise<{ id: string }>
 }) {
-  const productId = (await params).id
+  const productId = parseInt((await params).id)
   if (Number.isNaN(productId)) notFound()
 
   return <UpdateProductForm productId={productId} />

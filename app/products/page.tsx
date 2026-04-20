@@ -1,10 +1,16 @@
-import { Prisma } from "@/generated/prisma"
-import { Product, ProductImage } from "@/generated/prisma"
-import { prisma } from "../lib/prisma"
 
-import ProductCard from "../components/product/ProductCard"
-export default async function Home() {
 
+import { signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
+import DeleteProduct from '../components/admin/DeleteProduct'
+import ProductCard from '../components/product/ProductCard'
+import { prisma } from '../lib/prisma'
+
+
+
+const page = async () => {      
+ 
   const products = await prisma.product.findMany({
     include: { images: true}
   })
@@ -14,17 +20,23 @@ export default async function Home() {
     price: product.price.toNumber(),
     publishedAt: product.publishedAt.toISOString()
   }))
-
+  
   return (
     <div>
-      <div>Hello World</div>
-      <p className="text-primary">This is pink</p>
-
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mt-50 place-items-center'>
+   
+      <div className="max-w-full mx-auto px-4">
+        <h1 className='heading-1 mt-50 mb-10'>Produkter:</h1>
+        <div>
+          <button>Filter</button>
+        </div>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center'>
             {convertedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} isAdmin={false}/>
+                <ProductCard key={product.id} product={product} isAdmin={true}/>
             ))}
         </div>
-    </div>
+     </div>
+</div>
   )
 }
+
+export default page

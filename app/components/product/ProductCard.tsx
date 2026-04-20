@@ -23,7 +23,8 @@ const ProductCard = ({ product, isAdmin }: ProductCardProps ) => {
     
 
   return (
-    <div className="group rounded w-100 h-full shadow-sm transition-all duration-300 cursor-pointer p-2 hover:card-accented">
+    <div className="group w-100 h-full shadow-sm transition-all duration-300 cursor-pointer p-2 border rounded border-transparent hover:border-primary">
+
         <Link href={`/products/${product.id}`}>
             {product.images[0] ? (
                 <img src={`/images/${product.images[0].id}.webp`} className="w-full h-70 rounded bg-grey-500" />
@@ -31,7 +32,7 @@ const ProductCard = ({ product, isAdmin }: ProductCardProps ) => {
             <p className="w-full h-70 bg-grey-100">Ingen bilder..</p>}
         </Link>
         <div className="flex flex-row relative mt-5">
-            <h1 className="heading-4 text-red-500">
+            <h1 className="heading-4">
                 {`${product.title} (${product.amount})`}
             </h1>
         
@@ -50,7 +51,7 @@ const ProductCard = ({ product, isAdmin }: ProductCardProps ) => {
                     <DeleteProduct productID={product.id}/>
                     <hr />
                     <Link href={`/admin/updateProduct/${product.id}`}>
-                        <button  className="cursor-pointer flex flex-row items-center gap-2"><MdOutlineModeEdit />Edit</button>
+                        <button className="cursor-pointer flex flex-row items-center gap-2"><MdOutlineModeEdit />Edit</button>
                         <hr />
                     </Link>      
                 </div>
