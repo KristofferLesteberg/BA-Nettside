@@ -106,12 +106,12 @@ export default function RequestProject() {
           className={`transition-all duration-300 ease-in-out ${slideClass}`}
         >
           {page === 0 ? (
-            <form onSubmit={handleNext} className="space-y-6">
+            <form onSubmit={handleNext} className={`${identityType ? 'space-y-6' : 'space-y-3'} overflow-hidden transition-all duration-500 ease-in-out `}>
               <div>
                 <h2 className="heading-2">Bestill et prosjekt</h2>
                 <p className="text-text-faint italic mt-1 text-sm">Steg 1 av 2 — Om deg</p>
               </div>
-              <p className="text-text-faint italic -mt-2">
+              <p className={`text-text-faint italic -mt-2 transition-all duration-500 ease-in-out ${identityType ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
                 Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette
               </p>
 
@@ -136,95 +136,100 @@ export default function RequestProject() {
                 </div>
               </div>
 
-              {/* Name */}
-              <div className="grid grid-cols-2 gap-4" ref={forenameRef}>
-                <div className="space-y-1">
-                  <label className="label">Fornavn *</label>
-                  <input
-                    type="text"
-                    className="input"
-                    placeholder="Ola"
-                    value={forename}
-                    onChange={(e) => setForename(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="label">Etternavn</label>
-                  <input
-                    type="text"
-                    className="input"
-                    placeholder="Nordmann"
-                    value={surname}
-                    onChange={(e) => setSurname(e.target.value)}
-                  />
-                </div>
-              </div>
+              {/* Revealed after identity is chosen */}
+              <div className={`space-y-6 overflow-hidden transition-all duration-500 ease-in-out ${identityType ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
 
-              {/* Contact */}
-              <div className="grid grid-cols-2 gap-4" ref={emailRef}>
-                <div className="space-y-1">
-                  <label className="label">E-post *</label>
-                  <input
-                    type="email"
-                    className="input"
-                    placeholder="ola@eksempel.no"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="label">Telefon</label>
-                  <input
-                    type="tel"
-                    className="input"
-                    placeholder="+47 000 00 000"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value.replace(/[^0-9+\s]/g, ""))}
-                  />
-                </div>
-              </div>
-
-              {/* Organization fields — only if org */}
-              {identityType === "organization" && (
-                <div className="grid grid-cols-2 gap-4">
+                {/* Name */}
+                <div className="grid grid-cols-2 gap-4" ref={forenameRef}>
                   <div className="space-y-1">
-                    <label className="label">Organisasjonsnavn</label>
+                    <label className="label">Fornavn *</label>
                     <input
                       type="text"
                       className="input"
-                      placeholder="Firma AS"
-                      value={orgName}
-                      onChange={(e) => setOrgName(e.target.value)}
+                      placeholder="Ola"
+                      value={forename}
+                      onChange={(e) => setForename(e.target.value)}
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="label">Organisasjonsnummer</label>
+                    <label className="label">Etternavn</label>
                     <input
                       type="text"
                       className="input"
-                      placeholder="123 456 789"
-                      value={orgNumber}
-                      onChange={(e) => setOrgNumber(e.target.value.replace(/\D/g, "").slice(0, 9))}
+                      placeholder="Nordmann"
+                      value={surname}
+                      onChange={(e) => setSurname(e.target.value)}
                     />
                   </div>
                 </div>
-              )}
 
-              {/* Address */}
-              <div className="space-y-1">
-                <label className="label">Adresse</label>
-                <input
-                  type="text"
-                  className="input"
-                  placeholder="Gateveien 1, 0001 Oslo"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                />
+                {/* Contact */}
+                <div className="grid grid-cols-2 gap-4" ref={emailRef}>
+                  <div className="space-y-1">
+                    <label className="label">E-post *</label>
+                    <input
+                      type="email"
+                      className="input"
+                      placeholder="ola@eksempel.no"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="label">Telefon</label>
+                    <input
+                      type="tel"
+                      className="input"
+                      placeholder="+47 000 00 000"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value.replace(/[^0-9+\s]/g, ""))}
+                    />
+                  </div>
+                </div>
+
+                {/* Address */}
+                <div className="space-y-1">
+                  <label className="label">Adresse</label>
+                  <input
+                    type="text"
+                    className="input"
+                    placeholder="Gateveien 1, 0001 Oslo"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                </div>
+
+                {/* Organization fields — only if org */}
+                <div className={`overflow-hidden transition-all duration-400 ease-in-out ${identityType === "organization" ? 'max-h-50 opacity-100' : 'max-h-0 opacity-0'}`}>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="label">Organisasjonsnavn</label>
+                      <input
+                        type="text"
+                        className="input"
+                        placeholder="Firma AS"
+                        value={orgName}
+                        onChange={(e) => setOrgName(e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="label">Organisasjonsnummer</label>
+                      <input
+                        type="text"
+                        className="input"
+                        placeholder="123 456 789"
+                        value={orgNumber}
+                        onChange={(e) => setOrgNumber(e.target.value.replace(/\D/g, "").slice(0, 9))}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" className="btn btn-primary w-full">
+                  Neste →
+                </button>
+
               </div>
-
-              <button type="submit" className="btn btn-primary w-full">
-                Neste →
-              </button>
             </form>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
