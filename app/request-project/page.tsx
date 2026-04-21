@@ -1,10 +1,12 @@
 "use client"
 
 import { useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 type IdentityType = "private" | "organization" | ""
 
 export default function RequestProject() {
+  const router = useRouter()
   const [page, setPage] = useState(0)
   const [sliding, setSliding] = useState(false)
   const [slideDir, setSlideDir] = useState<"left" | "right">("left")
@@ -82,21 +84,21 @@ export default function RequestProject() {
     <div className="w-4/5 min-w-120 max-w-230 mx-auto my-10 mt-32">
       <div className="card-accented shadow-xl space-y-6">
 
-        {/* Back button — only on page 2 */}
-        {page === 1 && (
+        <div className="flex items-center justify-between">
+          {/* Back button — only on page 2 */}
           <button
             type="button"
-            onClick={() => navigate(0)}
+            onClick={(page === 1) ? () => navigate(0) : () => router.back()}
             className="btn btn-ghost -ml-2 -mt-2 text-sm"
           >
             ← Tilbake
           </button>
-        )}
 
-        {/* Step indicator */}
-        <div className="flex items-center gap-2">
-          <span className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${page === 0 ? 'bg-primary' : 'bg-border-strong'}`} />
-          <span className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${page === 1 ? 'bg-primary' : 'bg-border-strong'}`} />
+          {/* Step indicator */}
+          <div className="flex items-center gap-2">
+            <span className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${page === 0 ? 'bg-primary' : 'bg-border-strong'}`} />
+            <span className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${page === 1 ? 'bg-primary' : 'bg-border-strong'}`} />
+          </div>
         </div>
 
         {/* Sliding content */}
