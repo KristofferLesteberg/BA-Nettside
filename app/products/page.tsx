@@ -10,7 +10,7 @@ import { prisma } from '../lib/prisma'
 
 
 const page = async () => {      
- 
+                
   const products = await prisma.product.findMany({
     include: { images: true}
   })
