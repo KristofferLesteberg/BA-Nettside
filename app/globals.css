@@ -9,16 +9,21 @@
   --color-secondary:        #1a5276;   /* Agder dark blue — replace with exact hex */
   --color-secondary-hover:  #154360;
  
-  /* --- Surfaces --- */
-  --color-bg:               #ffffff;
-  --color-surface:          #f7f7f7;
-  --color-surface-raised:   #f1f1f1;
+  /* --- Surfaces (elevation levels, lowest → highest) --- */
+  --color-bg:               #ffffff;   /* level 0: page background */
+  --color-surface-sunken:   #f0f0f0;   /* level -1: inset areas, input backgrounds */
+  --color-surface:          #f7f7f7;   /* level 1: cards, panels, header */
+  --color-surface-raised:   #e8e8e8;   /* level 2: hover states, slightly lifted */
+  --color-surface-float:    #ffffff;   /* level 3: dropdowns, popovers — white + shadow */
+  --color-surface-overlay:  #ffffff;   /* level 4: modals, dialogs — white + heavy shadow */
  
   /* --- Text --- */
   --color-text:             #1a1a1a;
   --color-text-muted:       #5f6368;
   --color-text-faint:       #9aa0a6;
   --color-text-on-primary:  #ffffff;
+  --color-link:             oklch(37.3% 0.034 259.733);
+  --color-link-hover:       oklch(21% 0.034 264.665);
  
   /* --- Border --- */
   --color-border:           #e0e0e0;
@@ -116,7 +121,7 @@
     text-decoration: none;
   }
   .btn:disabled {
-    background:   var(--color-surface);
+    background:   var(--color-surface-sunken);
     color:        var(--color-text-faint);
     cursor:       not-allowed;
     border-color: var(--color-border);
@@ -126,9 +131,9 @@
   .btn-secondary                     { background: var(--color-secondary); color: var(--color-text-on-primary); }
   .btn-secondary:hover:not(:disabled){ background: var(--color-secondary-hover); }
   .btn-outline                     { background: transparent; color: var(--color-text); border-color: var(--color-border-strong); }
-  .btn-outline:hover:not(:disabled){ background: var(--color-surface); }
+  .btn-outline:hover:not(:disabled){ background: var(--color-surface-raised); }
   .btn-ghost                       { background: transparent; color: var(--color-text-muted); border-color: transparent; }
-  .btn-ghost:hover:not(:disabled)  { color: var(--color-text); background: var(--color-surface); }
+  .btn-ghost:hover:not(:disabled)  { color: var(--color-text); background: var(--color-surface-raised); }
   .btn-error                       { background: var(--color-error-bg);   color: var(--color-error);   border-color: var(--color-error); }
   .btn-error:hover:not(:disabled)  { filter: brightness(0.94); }
   .btn-success                     { background: var(--color-success-bg); color: var(--color-success); border-color: var(--color-success); }
@@ -148,7 +153,7 @@
     font-size:      0.875rem;
     font-family:    var(--font-sans);
     color:          var(--color-text);
-    background:     var(--color-bg);
+    background:     var(--color-surface-sunken);
     outline:        none;
     transition:     border-color 150ms ease;
     line-height:    1.5;
@@ -157,7 +162,7 @@
 
   .input::placeholder { color: var(--color-text-faint); }
   .input:focus        { border-color: var(--color-primary); }
-  .input:disabled     { background: var(--color-surface); color: var(--color-text-faint); cursor: not-allowed; }
+  .input:disabled     { background: var(--color-surface); color: var(--color-text-faint); cursor: not-allowed; opacity: 0.6; }
  
   /* Cards */
   .card          { border-radius: var(--radius-lg); padding: var(--spacing-md); background: var(--color-bg);      border: 1px solid var(--color-border); }
@@ -182,10 +187,13 @@
   .badge-warning  { background: var(--color-warning-bg); color: var(--color-warning); }
   .badge-info     { background: var(--color-info-bg);    color: var(--color-info); }
  
-  /* Background helpers */
-  .bg-page   { background: var(--color-bg); }
-  .bg-subtle { background: var(--color-surface); }
-  .bg-muted  { background: var(--color-surface-raised); }
+  /* Background helpers (mirrors elevation scale) */
+  .bg-sunken { background: var(--color-surface-sunken); } /* level -1 */
+  .bg-page   { background: var(--color-bg); }             /* level 0 */
+  .bg-subtle { background: var(--color-surface); }        /* level 1 */
+  .bg-muted  { background: var(--color-surface-raised); } /* level 2 */
+  .bg-float  { background: var(--color-surface-float); }  /* level 3 */
+  .bg-overlay{ background: var(--color-surface-overlay); }/* level 4 */
  
   /* Text helpers */
   .text-muted { color: var(--color-text-muted); }
@@ -195,4 +203,12 @@
   .border-default { border-color: var(--color-border); }
   .border-strong  { border-color: var(--color-border-strong); }
   .border-primary { border-color: var(--color-primary); }
+
+  .header-link {
+    color: var(--color-link);
+    transition: color 0.2s ease;
+  }
+  .header-link:hover {
+    color: var(--color-link-hover);
+  }
 }
