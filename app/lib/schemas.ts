@@ -26,3 +26,25 @@ export const ProductUpdateSchema = ProductCreateSchema.partial({
 
 export type ProductCreate = z.infer<typeof ProductCreateSchema>
 export type ProductUpdate = z.infer<typeof ProductUpdateSchema>
+
+export const ProjectRequestCreateSchema = z.object({
+  educationField: z.preprocess(
+    (val) => (val === '' ? undefined : val),
+    z.enum(['BUILDING', 'CONSTRUCTION']).optional()
+  ),
+  title: z.string().min(1, 'Prosjekttittel er påkrevd'),
+  description: z.string().default(''),
+  minPrice: z.coerce.number().nonnegative('Minimumsbudsjett kan ikke være negativt').default(0),
+  maxPrice: z.coerce.number().nonnegative('Maksimumsbudsjett kan ikke være negativt').default(0),
+  clientForename: z.string().min(1, 'Fornavn er påkrevd'),
+  clientSurname: z.string().default(''),
+  clientEmail: z.email('Ugyldig e-postadresse'),
+  clientPhone: z.string().default(''),
+  organizationNumber: z.string().optional(),
+  address: z.string().default(''),
+})
+
+export const ProjectRequestUpdateSchema = ProjectRequestCreateSchema.partial()
+
+export type ProjectRequestCreate = z.infer<typeof ProjectRequestCreateSchema>
+export type ProjectRequestUpdate = z.infer<typeof ProjectRequestUpdateSchema>
