@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import PhoneInputWithCountrySelect from 'react-phone-number-input'
 import { parsePhoneNumberWithError } from 'libphonenumber-js'
 import type { E164Number, CountryCode } from 'libphonenumber-js'
+import AddressInput from '../components/input/address-input'
 import type { ApiResponse } from '@/app/lib/api-response'
 import { ProjectRequestPage1Schema, ProjectRequestPage2Schema } from '@/app/lib/schemas'
 
@@ -82,10 +83,6 @@ export default function RequestProject() {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
-      if (newErrors.clientForename || newErrors.clientSurname) forenameRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
-      else if (newErrors.clientEmail || newErrors.clientPhone) emailRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
-      else if (newErrors.address) addressRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
-      else if (newErrors.organizationName) orgNameRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
       return
     }
 
@@ -158,7 +155,7 @@ export default function RequestProject() {
 
   return (
     <div className="w-4/5 min-w-120 max-w-230 mx-auto my-10 mt-32">
-      <div className="card-accented shadow-xl space-y-6">
+      <div className="card-accented shadow-xl space-y-6 px-2">
 
         <div className="flex items-center justify-between">
           <button
@@ -178,16 +175,16 @@ export default function RequestProject() {
         <div className={`transition-all duration-300 ease-in-out ${slideClass}`}>
           {page === 0 ? (
             <form onSubmit={handleNext} className={`${identityType ? 'space-y-6' : 'space-y-3'} overflow-hidden transition-all duration-500 ease-in-out`}>
-              <div>
+              <div className="space-y-3 px-4">
                 <h2 className="heading-2">Bestill et prosjekt</h2>
                 <p className="text-text-faint italic mt-1 text-sm">Steg 1 av 2 — Om deg</p>
-              </div>
-              <p className={`text-text-faint italic -mt-2 transition-all duration-500 ease-in-out ${identityType ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <p className={`text-text-faint italic -mt-2 transition-all duration-500 ease-in-out ${identityType ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
                 Feltene merket med <span className="text-error">*</span> må fylles ut før du kan fortsette
               </p>
+              </div>
 
               {/* Identity type */}
-              <div className="space-y-2">
+              <div className="space-y-2 px-4">
                 <label className="label">Jeg er en</label>
                 <div className="flex gap-3">
                   <button
@@ -208,7 +205,7 @@ export default function RequestProject() {
               </div>
 
               {/* Revealed after identity is chosen */}
-              <div className={`space-y-6 overflow-hidden transition-all duration-500 ease-in-out ${identityType ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div className={`space-y-6 px-4 overflow-hidden transition-all duration-500 ease-in-out ${identityType ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
 
                 {/* Name */}
                 <div className="grid grid-cols-2 gap-4" ref={forenameRef}>
@@ -274,12 +271,10 @@ export default function RequestProject() {
                 {/* Address */}
                 <div className="space-y-1" ref={addressRef}>
                   <label className="label">Adresse <span className="text-error">*</span></label>
-                  <input
-                    type="text"
-                    className={inputClass("address")}
-                    placeholder="Gateveien 1, 0001 Oslo"
+                  <AddressInput
                     value={address}
-                    onChange={(e) => { setAddress(e.target.value); clearError("address") }}
+                    onChange={(value) => { setAddress(value); clearError("address") }}
+                    placeholder="Gateveien 1, 0001 Oslo"
                   />
                   {errors.address && <p className="text-error text-sm">{errors.address}</p>}
                 </div>

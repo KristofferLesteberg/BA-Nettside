@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "react-phone-number-input/style.css";
-
 /* Declare all the GLOBAL COLORS, FONTS, CLASSES, etc. */
 @theme {
  
@@ -59,6 +58,20 @@
   --radius-lg:    12px;
   --radius-xl:    20px;
   --radius-full:  9999px;
+}
+
+@utility shadow-t-md {
+  box-shadow: 0 -4px 6px -1px rgb(0 0 0 / 0.1), 0 -2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+@utility shadow-b-md {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+@utility shadow-y-md {
+  box-shadow:
+    0 -4px 6px -1px rgb(0 0 0 / 0.1), 0 -2px 4px -2px rgb(0 0 0 / 0.1),
+    0  4px 6px -1px rgb(0 0 0 / 0.1), 0  2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 /* Automatically apply a certain style to all the elements of given type */
