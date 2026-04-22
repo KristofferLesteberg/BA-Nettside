@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 
-import { ArrowRight, ArrowDown } from 'lucide-react'
+import Image from 'next/image'
 
 
 
@@ -22,8 +22,8 @@ const page = () => {
               </Link>
             </div>
           </div>
-          <div className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-muted flex items-center justify-center ml-auto'>
-            <p>Add picture</p>
+          <div style={{ backgroundImage: 'url("/static-images/fp-img1.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-muted flex items-center justify-center ml-auto'>
+          
           </div>
         </div>
         </section>
@@ -36,19 +36,19 @@ const page = () => {
           <div className='flex flex-col w-4/5 ml-auto mr-auto'>
             <h1 className='heading-1 p-6'>Bygg:</h1>
             <hr />
-            <div className='flex flex-col md:flex-row items-center'> 
-              <p className='max-w-1/2 text-center'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dicta, minima repudiandae. Hic recusandae quam suscipit quisquam totam ex beatae ad quibusdam natus aliquid corrupti inventore perferendis sit, sed enim dolor. lor</p>
-              <div className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-muted flex items-center justify-center m-6'>
-                <p>Add picture</p>
+            <div className='flex flex-col md:flex-row items-center mb-10'> 
+              <p className='max-w-1/2 text-center'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dicta, minima repudiandae. Hic recusandae quam suscipit quisquam totam ex beatae ad quibusdam natus aliquid corrupti inventore perferendis sit, sed enim dolor. Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt esse consectetur amet ex dolorem error natus accusantium quidem, sed nihil quibusdam delectus dolores rem eum, iure nulla dolor voluptates blanditiis.</p>
+              <div style={{ backgroundImage: 'url("/static-images/fp-img2.jpg")', backgroundSize: 'auto 95%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-yellow-100 flex items-center justify-center m-4'>
+              
               </div>
             </div>
             <h1 className='heading-1 p-6'>Annlegg:</h1>
             <hr />
             <div className='flex flex-col md:flex-row items-center '> 
-              <div className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-muted flex items-center justify-center m-6'>
-                <p>Add picture</p>
+              <div style={{ backgroundImage: 'url("/static-images/fp-img3.jpg")', backgroundSize: 'auto 95%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-red-100 flex items-center justify-center m-4'>
+              
               </div>
-              <p className='max-w-1/2 text-center'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dicta, minima repudiandae. Hic recusandae quam suscipit quisquam totam ex beatae ad quibusdam natus aliquid corrupti inventore perferendis sit, sed enim dolor. lor</p>
+              <p className='max-w-1/2 text-center'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dicta, minima repudiandae. Hic recusandae quam suscipit quisquam totam ex beatae ad quibusdam natus aliquid corrupti inventore perferendis sit, sed enim dolor. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quae quod assumenda necessitatibus, repellendus magni nam mollitia architecto, quis sapiente a, voluptates nesciunt sed delectus nostrum? Praesentium nam atque molestiae recusandae.</p>
             </div>
           </div>
         </section>
@@ -62,7 +62,16 @@ const page = () => {
             {/* ── ROW 1 ── */}
             <div className='grid grid-cols-1 lg:grid-cols-[minmax(180px,1fr)_auto_minmax(180px,1fr)_auto_minmax(180px,1fr)] gap-6'>
 
-              <div className='card border border-primary min-h-40 p-4'>Test</div>
+              <div className='card border border-primary min-h-40 p-4 flex flex-col items-center text-center hover:shadow-xl'>
+                <Image 
+                  src={'/static-images/img3.jpg'}
+                  width={500}
+                  height={500}
+                  className='rounded-(--radius-md)'
+                  alt='bilde'
+                />
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias molestias tempore quis voluptate consequuntur. Ad, dolor dolores, quae animi vero eum, cum assumenda incidunt eaque voluptatum provident quasi facilis! Explicabo.</p>
+              </div>
 
               {/* Desktop arrow */}
               <div className='hidden lg:flex justify-center items-center w-30 xl:w-40'>
@@ -81,7 +90,16 @@ const page = () => {
                 </svg>
               </div>
 
-              <div className='card border border-primary min-h-40 p-4'>Test</div>
+              <div className='card border border-primary min-h-40 p-4 flex flex-col items-center text-center hover:shadow-xl'>
+                <Image 
+                  src={'/static-images/img2.jpg'}
+                  width={500}
+                  height={500}
+                  className='rounded-(--radius-md)'
+                  alt='bilde'
+                />
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias molestias tempore quis voluptate consequuntur. Ad, dolor dolores, quae animi vero eum, cum assumenda incidunt eaque voluptatum provident quasi facilis! Explicabo.</p>
+              </div>
 
               {/* Desktop arrow */}
               <div className='hidden lg:flex justify-center items-center w-30 xl:w-40'>
@@ -100,7 +118,16 @@ const page = () => {
                 </svg>
               </div>
 
-              <div className='card border border-primary min-h-40 p-4'>TesT</div>
+              <div className='card border border-primary min-h-40 p-4 flex flex-col items-center text-center hover:shadow-xl'>
+                <Image 
+                  src={'/static-images/img3.jpg'}
+                  width={500}
+                  height={500}
+                  className='rounded-(--radius-md)'
+                  alt='bilde'
+                />
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias molestias tempore quis voluptate consequuntur. Ad, dolor dolores, quae animi vero eum, cum assumenda incidunt eaque voluptatum provident quasi facilis! Explicabo. lor</p>
+              </div>
             </div>
 
             {/* ── DOWN ARROW ── */}
@@ -118,7 +145,7 @@ const page = () => {
               </div>
             </div>
             {/* Mobile */}
-            <div className='flex lg:hidden justify-center'>
+            <div className='flex lg:hidden justify-center mt-6 mb-6'>
               <svg width="24" height="40" viewBox="0 0 24 40" fill="none"
                 stroke="#c0392b" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="12" y1="1" x2="12" y2="28" strokeDasharray="4 6"/>
@@ -129,7 +156,16 @@ const page = () => {
             {/* ── ROW 2 ── */}
             <div className='grid grid-cols-1 lg:grid-cols-[minmax(180px,1fr)_auto_minmax(180px,1fr)_auto_minmax(180px,1fr)] gap-6'>
 
-              <div className='card border border-primary min-h-40 p-4'>Test</div>
+              <div className='card border border-primary min-h-40 p-4 flex flex-col items-center text-center hover:shadow-xl'>
+                <Image 
+                  src={'/static-images/img4.jpg'}
+                  width={500}
+                  height={500}
+                  className='rounded-(--radius-md)'
+                  alt='bilde'
+                />
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias molestias tempore quis voluptate consequuntur. Ad, dolor dolores, quae animi vero eum, cum assumenda incidunt eaque voluptatum provident quasi facilis! Explicabo.</p>
+              </div>
 
               {/* Desktop arrow — pointing left */}
               <div className='hidden lg:flex justify-center items-center w-30 xl:w-40'>
@@ -148,7 +184,16 @@ const page = () => {
                 </svg>
               </div>
 
-              <div className='card border border-primary min-h-40 p-4'>test</div>
+              <div className='card border border-primary min-h-40 p-4 flex flex-col items-center text-center hover:shadow-xl'>
+                <Image 
+                  src={'/static-images/img5.jpg'}
+                  width={500}
+                  height={500}
+                  className='rounded-(--radius-md)'
+                  alt='bilde'
+                />
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias molestias tempore quis voluptate consequuntur. Ad, dolor dolores, quae animi vero eum, cum assumenda incidunt eaque voluptatum provident quasi facilis! Explicabo.</p>
+              </div>
 
               {/* Desktop arrow — pointing left */}
               <div className='hidden lg:flex justify-center items-center w-30 xl:w-40'>
@@ -167,9 +212,23 @@ const page = () => {
                 </svg>
               </div>
 
-              <div className='card border border-primary min-h-40 p-4'>TesT</div>
+              <div className='card border border-primary min-h-40 p-4 flex flex-col items-center text-center hover:shadow-xl'>
+                <Image 
+                  src={'/static-images/img6.jpg'}
+                  className='rounded-md'
+                  width={500}
+                  height={500}
+                  alt='bilde'
+                />
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias molestias tempore quis voluptate consequuntur. Ad, dolor dolores, quae animi vero eum, cum assumenda incidunt eaque voluptatum provident quasi facilis! Explicabo.</p>
+              </div>
             </div>
 
+
+
+            <section>
+              <h1>Anmeldelser?</h1>
+            </section>
           </div>
         </section>
       </div>
