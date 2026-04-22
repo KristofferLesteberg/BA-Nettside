@@ -10,7 +10,7 @@ interface PriceRangeProps {
   step?: number
 }
 
-export default function PriceRange({ min, max, onChange, maxValue = 500000, step = 5000 }: PriceRangeProps) {
+export default function PriceRange({ min, max, onChange, maxValue = 500000, step = 1000 }: PriceRangeProps) {
   const minVal = parseInt(min || '0')
   const maxVal = parseInt(max || '0')
 
@@ -19,7 +19,6 @@ export default function PriceRange({ min, max, onChange, maxValue = 500000, step
       <label className="label">Budsjettramme (NOK)</label>
       <div className="flex justify-between items-baseline">
         <span className="text-sm font-semibold">{minVal.toLocaleString('nb-NO')} kr</span>
-        <span className="text-xs text-text-faint">—</span>
         <span className="text-sm font-semibold">{maxVal.toLocaleString('nb-NO')} kr</span>
       </div>
       <div className="px-1 py-2">

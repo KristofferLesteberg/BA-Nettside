@@ -64,6 +64,8 @@ export default function RequestProject() {
 
   function handleNext(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    navigate(1)
+    return
     const newErrors: Record<string, string> = {}
 
     const result = ProjectRequestPage1Schema.safeParse({
