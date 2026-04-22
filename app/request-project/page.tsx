@@ -2,6 +2,9 @@
 
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
+import type { ApiResponse } from '@/app/lib/api-response'
+import { ProjectRequestPage1Schema, ProjectRequestPage2Schema } from '@/app/lib/schemas'
 
 type IdentityType = "private" | "organization" | ""
 
@@ -10,9 +13,10 @@ export default function RequestProject() {
   const [page, setPage] = useState(0)
   const [sliding, setSliding] = useState(false)
   const [slideDir, setSlideDir] = useState<"left" | "right">("left")
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   // Page 1 — contact info
-  const [identityType, setIdentityType] = useState<IdentityType>("") // Either private or org
+  const [identityType, setIdentityType] = useState<IdentityType>("")
   const [forename, setForename] = useState("")
   const [surname, setSurname] = useState("")
   const [email, setEmail] = useState("")
@@ -28,12 +32,19 @@ export default function RequestProject() {
   const [minBudget, setMinBudget] = useState("")
   const [maxBudget, setMaxBudget] = useState("")
 
-  // Validation refs
-  const identityRef = useRef<HTMLDivElement>(null)
+  // Scroll refs
   const forenameRef = useRef<HTMLDivElement>(null)
   const emailRef = useRef<HTMLDivElement>(null)
+  const addressRef = useRef<HTMLDivElement>(null)
+  const orgNameRef = useRef<HTMLDivElement>(null)
   const educationFieldRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
+
+  function clearError(field: string) {
+    setErrors(prev => { const next = { ...prev }; delete next[field]; return next })
+  }
+
+  const inputClass = (field: string) => errors[field] ? 'input border-error' : 'input'
 
   function navigate(to: number) {
     setSlideDir(to > page ? "left" : "right")
@@ -46,32 +57,95 @@ export default function RequestProject() {
 
   function handleNext(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (!identityType) {
-      identityRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+    const newErrors: Record<string, string> = {}
+
+    const result = ProjectRequestPage1Schema.safeParse({
+      clientForename: forename,
+      clientSurname: surname,
+      clientEmail: email,
+      clientPhone: phone,
+      address,
+      organizationNumber: orgNumber || undefined,
+    })
+    if (!result.success) {
+      for (const issue of result.error.issues) {
+        const field = String(issue.path[0])
+        if (!newErrors[field]) newErrors[field] = issue.message
+      }
+    }
+
+    // orgName is not in the DB schema — check it manually
+    if (identityType === "organization" && !orgName.trim()) {
+      newErrors.orgName = 'Organisasjonsnavn er påkrevd'
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors)
+      if (newErrors.clientForename || newErrors.clientSurname) forenameRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+      else if (newErrors.clientEmail || newErrors.clientPhone) emailRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+      else if (newErrors.address) addressRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+      else if (newErrors.orgName) orgNameRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
       return
     }
-    if (!forename.trim()) {
-      forenameRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
-      return
-    }
-    if (!email.trim()) {
-      emailRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
-      return
-    }
+
     navigate(1)
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (!educationField) {
-      educationFieldRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+    const newErrors: Record<string, string> = {}
+
+    const result = ProjectRequestPage2Schema.safeParse({
+      educationField,
+      title,
+      description,
+      minPrice: minBudget || '0',
+      maxPrice: maxBudget || '0',
+    })
+    if (!result.success) {
+      for (const issue of result.error.issues) {
+        const field = String(issue.path[0])
+        if (!newErrors[field]) newErrors[field] = issue.message
+      }
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors)
+      if (newErrors.educationField) educationFieldRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+      else if (newErrors.title) titleRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
       return
     }
-    if (!title.trim()) {
-      titleRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+
+    const res = await fetch('/api/projects', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        educationField,
+        title,
+        description,
+        minPrice: minBudget || '0',
+        maxPrice: maxBudget || '0',
+        clientForename: forename,
+        clientSurname: surname,
+        clientEmail: email,
+        clientPhone: phone,
+        organizationNumber: orgNumber || undefined,
+        address,
+      }),
+    })
+    const body: ApiResponse<unknown> = await res.json()
+
+    if (!body.success) {
+      if (body.fields) {
+        Object.values(body.fields).flat().forEach(msg => toast.error(msg))
+      } else {
+        toast.error(body.error)
+      }
       return
     }
-    // TODO: submit logic
+
+    toast.success(body.message ?? 'Forespørsel sendt!')
+    router.push('/')
   }
 
   const slideClass = sliding
@@ -85,7 +159,6 @@ export default function RequestProject() {
       <div className="card-accented shadow-xl space-y-6">
 
         <div className="flex items-center justify-between">
-          {/* Back button — only on page 2 */}
           <button
             type="button"
             onClick={(page === 1) ? () => navigate(0) : () => router.back()}
@@ -94,30 +167,26 @@ export default function RequestProject() {
             ← Tilbake
           </button>
 
-          {/* Step indicator */}
           <div className="flex items-center gap-2">
             <span className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${page === 0 ? 'bg-primary' : 'bg-border-strong'}`} />
             <span className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${page === 1 ? 'bg-primary' : 'bg-border-strong'}`} />
           </div>
         </div>
 
-        {/* Sliding content */}
-        <div
-          className={`transition-all duration-300 ease-in-out ${slideClass}`}
-        >
+        <div className={`transition-all duration-300 ease-in-out ${slideClass}`}>
           {page === 0 ? (
-            <form onSubmit={handleNext} className={`${identityType ? 'space-y-6' : 'space-y-3'} overflow-hidden transition-all duration-500 ease-in-out `}>
+            <form onSubmit={handleNext} className={`${identityType ? 'space-y-6' : 'space-y-3'} overflow-hidden transition-all duration-500 ease-in-out`}>
               <div>
                 <h2 className="heading-2">Bestill et prosjekt</h2>
                 <p className="text-text-faint italic mt-1 text-sm">Steg 1 av 2 — Om deg</p>
               </div>
               <p className={`text-text-faint italic -mt-2 transition-all duration-500 ease-in-out ${identityType ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
-                Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette
+                Feltene merket med <span className="text-error">*</span> må fylles ut før du kan fortsette
               </p>
 
               {/* Identity type */}
-              <div className="space-y-2" ref={identityRef}>
-                <label className="label">Jeg er en *</label>
+              <div className="space-y-2">
+                <label className="label">Jeg er en</label>
                 <div className="flex gap-3">
                   <button
                     type="button"
@@ -142,75 +211,81 @@ export default function RequestProject() {
                 {/* Name */}
                 <div className="grid grid-cols-2 gap-4" ref={forenameRef}>
                   <div className="space-y-1">
-                    <label className="label">Fornavn *</label>
+                    <label className="label">Fornavn <span className="text-error">*</span></label>
                     <input
                       type="text"
-                      className="input"
+                      className={inputClass("clientForename")}
                       placeholder="Ola"
                       value={forename}
-                      onChange={(e) => setForename(e.target.value)}
+                      onChange={(e) => { setForename(e.target.value); clearError("clientForename") }}
                     />
+                    {errors.clientForename && <p className="text-error text-sm">{errors.clientForename}</p>}
                   </div>
                   <div className="space-y-1">
-                    <label className="label">Etternavn</label>
+                    <label className="label">Etternavn <span className="text-error">*</span></label>
                     <input
                       type="text"
-                      className="input"
+                      className={inputClass("clientSurname")}
                       placeholder="Nordmann"
                       value={surname}
-                      onChange={(e) => setSurname(e.target.value)}
+                      onChange={(e) => { setSurname(e.target.value); clearError("clientSurname") }}
                     />
+                    {errors.clientSurname && <p className="text-error text-sm">{errors.clientSurname}</p>}
                   </div>
                 </div>
 
                 {/* Contact */}
                 <div className="grid grid-cols-2 gap-4" ref={emailRef}>
                   <div className="space-y-1">
-                    <label className="label">E-post *</label>
+                    <label className="label">E-post <span className="text-error">*</span></label>
                     <input
                       type="email"
-                      className="input"
+                      className={inputClass("clientEmail")}
                       placeholder="ola@eksempel.no"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => { setEmail(e.target.value); clearError("clientEmail") }}
                     />
+                    {errors.clientEmail && <p className="text-error text-sm">{errors.clientEmail}</p>}
                   </div>
                   <div className="space-y-1">
-                    <label className="label">Telefon</label>
+                    <label className="label">Telefon <span className="text-error">*</span></label>
                     <input
                       type="tel"
-                      className="input"
+                      className={inputClass("clientPhone")}
                       placeholder="+47 000 00 000"
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value.replace(/[^0-9+\s]/g, ""))}
+                      onChange={(e) => { setPhone(e.target.value.replace(/[^0-9+\s]/g, "")); clearError("clientPhone") }}
                     />
+                    {errors.clientPhone && <p className="text-error text-sm">{errors.clientPhone}</p>}
                   </div>
                 </div>
 
                 {/* Address */}
-                <div className="space-y-1">
-                  <label className="label">Adresse</label>
+                <div className="space-y-1" ref={addressRef}>
+                  <label className="label">Adresse <span className="text-error">*</span></label>
                   <input
                     type="text"
-                    className="input"
+                    className={inputClass("address")}
                     placeholder="Gateveien 1, 0001 Oslo"
                     value={address}
-                    onChange={(e) => setAddress(e.target.value)}
+                    onChange={(e) => { setAddress(e.target.value); clearError("address") }}
                   />
+                  {errors.address && <p className="text-error text-sm">{errors.address}</p>}
                 </div>
 
                 {/* Organization fields — only if org */}
                 <div className={`overflow-hidden transition-all duration-400 ease-in-out ${identityType === "organization" ? 'max-h-50 opacity-100' : 'max-h-0 opacity-0'}`}>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4" ref={orgNameRef}>
                     <div className="space-y-1">
-                      <label className="label">Organisasjonsnavn</label>
+                      <label className="label">Organisasjonsnavn <span className="text-error">*</span></label>
                       <input
                         type="text"
-                        className="input"
+                        className={inputClass("orgName")}
                         placeholder="Firma AS"
                         value={orgName}
-                        onChange={(e) => setOrgName(e.target.value)}
+                        onChange={(e) => { setOrgName(e.target.value); clearError("orgName") }}
                       />
+                      {errors.orgName && <p className="text-error text-sm">{errors.orgName}</p>}
                     </div>
                     <div className="space-y-1">
                       <label className="label">Organisasjonsnummer</label>
@@ -238,21 +313,22 @@ export default function RequestProject() {
                 <p className="text-text-faint italic mt-1 text-sm">Steg 2 av 2 — Om prosjektet</p>
               </div>
               <p className="text-text-faint italic -mt-2">
-                Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette
+                Feltene merket med <span className="text-error">*</span> må fylles ut før du kan fortsette
               </p>
 
               {/* Education field / category */}
               <div className="space-y-1" ref={educationFieldRef}>
                 <label className="label">Kategori *</label>
                 <select
-                  className="input"
+                  className={inputClass("educationField")}
                   value={educationField}
-                  onChange={(e) => setEducationField(e.target.value)}
+                  onChange={(e) => { setEducationField(e.target.value); clearError("educationField") }}
                 >
                   <option value="">Velg kategori</option>
                   <option value="BUILDING">Bygg</option>
                   <option value="CONSTRUCTION">Anlegg</option>
                 </select>
+                {errors.educationField && <p className="text-error text-sm">{errors.educationField}</p>}
               </div>
 
               {/* Title */}
@@ -260,11 +336,12 @@ export default function RequestProject() {
                 <label className="label">Prosjekttittel *</label>
                 <input
                   type="text"
-                  className="input"
+                  className={inputClass("title")}
                   placeholder="Kort beskrivende tittel"
                   value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(e) => { setTitle(e.target.value); clearError("title") }}
                 />
+                {errors.title && <p className="text-error text-sm">{errors.title}</p>}
               </div>
 
               {/* Description */}
