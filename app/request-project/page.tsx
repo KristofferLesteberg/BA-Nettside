@@ -166,7 +166,7 @@ export default function RequestProject() {
             ← Tilbake
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pr-2">
             <span className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${page === 0 ? 'bg-primary' : 'bg-border-strong'}`} />
             <span className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${page === 1 ? 'bg-primary' : 'bg-border-strong'}`} />
           </div>
@@ -205,7 +205,7 @@ export default function RequestProject() {
               </div>
 
               {/* Revealed after identity is chosen */}
-              <div className={`space-y-6 px-4 overflow-hidden transition-all duration-500 ease-in-out ${identityType ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div className={`space-y-6 px-4 transition-all duration-500 ease-in-out ${identityType ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
 
                 {/* Name */}
                 <div className="grid grid-cols-2 gap-4" ref={forenameRef}>

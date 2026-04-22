@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 type Props = {
   value: string,
@@ -6,6 +6,8 @@ type Props = {
   placeholder?: string,
 }
 
+// TODO: Introduce a fields for number and letter 
+// to widen the range of the possible stylistic options on the suggestion card
 type Suggestion = {
   address: string,
   city: string,
@@ -16,29 +18,50 @@ export default function AddressInput({ value, onChange, placeholder }: Props) {
   const [isFocused, setIsFocused] = useState(false)
   const [address, setAddress] = useState(value)
   const [suggestions, setSuggestions] = useState<Suggestion[]>([])
- // TODO: Implement real suggestions based on input
+
+  useEffect(() => {
+    async function fetchSuggestions(query: string) {
+      if (query.length < 3) {
+        setSuggestions([])
+        return
+      }
+      try {
+        const response = await fetch(`https://ws.geonorge.no/adresser/v1/sok?sok=${encodeURIComponent(query + '*')}&fuzzy=false&treffPerSide=5&side=0&asciiKompatibel=true`)
+        if (response.ok) {
+          const data = await response.json()
+          // The suggestions are capped at 5 on several levels
+          // to avoid overwhelming the user and to ensure we stay within API limits
+          // CURRENT SUGGESTIONS' AMOUNT: 5 (both API and slice() in UI)
+          setSuggestions(data.adresser.slice(0, 5).map((a: { adressetekst: string; poststed: string; postnummer: string }) => ({
+            address: a.adressetekst,
+            city: a.poststed,
+            postalCode: a.postnummer,
+          })))
+        } else {
+          console.error('Failed to fetch suggestions')
+          setSuggestions([])
+        }
+      }
+      catch (error) {
+        console.error('Error fetching suggestions:', error)
+        setSuggestions([])
+      }
+    }
+    const timeoutId = setTimeout(() => fetchSuggestions(address), 400)
+    return () => clearTimeout(timeoutId)
+  }, [address])
+
   return (
     <div className="flex flex-col-reverse relative overflow-visible">
 
-      <button onClick={() => setSuggestions([
-        { address: "Gateveien 1", city: "Oslo", postalCode: "0001" },
-        { address: "Gateveien 2", city: "Oslo", postalCode: "0002" },
-        { address: "Gateveien 3", city: "Oslo", postalCode: "0003" },
-        { address: "Gateveien 4", city: "Oslo", postalCode: "0004" },
-        { address: "Gateveien 5", city: "Oslo", postalCode: "0005" },
-        { address: "Gateveien 6", city: "Oslo", postalCode: "0006" },
-        { address: "Gateveien 7", city: "Oslo", postalCode: "0007" },
-        { address: "Gateveien 8", city: "Oslo", postalCode: "0008" },
-        { address: "Gateveien 9", city: "Oslo", postalCode: "0009" },
-        { address: "Gateveien 10", city: "Oslo", postalCode: "0010" },
-      ])}>Click me</button>
-
       <div className={`${ isFocused && suggestions.length > 0 ? 'block' : 'hidden' } flex flex-col-reverse bg-bg outline-border outline-2 shadow-y-md rounded-md mb-0.5 overflow-y-auto overflow-visible overscroll-none absolute bottom-full z-10 w-full max-h-60`}>
         {suggestions.map((suggestion, index) => (
-          <button key={index} onClick={() => {
-            setAddress(suggestion.address)
+          <button key={index} onMouseDown={(e) => {
+            e.preventDefault()
+            const formattedAddress = `${suggestion.address}, ${suggestion.postalCode} ${suggestion.city}`
+            setAddress(formattedAddress)
             setSuggestions([])
-            onChange(suggestion.address)
+            onChange(formattedAddress)
           }}
           className="text-left pl-4 py-1 hover:bg-surface">
 
