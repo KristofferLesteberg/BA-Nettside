@@ -35,8 +35,8 @@ export default function RequestProject() {
   const [educationField, setEducationField] = useState("")
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [minBudget, setMinBudget] = useState("")
-  const [maxBudget, setMaxBudget] = useState("")
+  const [minBudget, setMinBudget] = useState("0")
+  const [maxBudget, setMaxBudget] = useState("500000")
 
   // Scroll refs
   const forenameRef = useRef<HTMLDivElement>(null)
@@ -64,8 +64,7 @@ export default function RequestProject() {
 
   function handleNext(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    navigate(1)
-    return
+    
     const newErrors: Record<string, string> = {}
 
     const result = ProjectRequestPage1Schema.safeParse({

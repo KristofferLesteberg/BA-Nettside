@@ -23,7 +23,7 @@ export default function PriceRange({ min, max, onChange, maxValue = 500000, step
             type="text"
             inputMode="decimal"
             className="input pr-8"
-            placeholder="0.00"
+            placeholder="Minimumspris"
             value={min}
             onChange={(e) => {
               // 1. Strip non-numeric chars, limit to 2 decimals, remove leading zeros before digits
@@ -46,7 +46,7 @@ export default function PriceRange({ min, max, onChange, maxValue = 500000, step
             type="text"
             inputMode="decimal"
             className="input pr-8"
-            placeholder="0.00"
+            placeholder="Maximumspris"
             value={max}
             onChange={(e) => {
               // 1. Strip non-numeric chars, limit to 2 decimals, remove leading zeros before digits
