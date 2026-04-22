@@ -28,12 +28,19 @@ export type ProductCreate = z.infer<typeof ProductCreateSchema>
 export type ProductUpdate = z.infer<typeof ProductUpdateSchema>
 
 export const ProjectRequestPage1Schema = z.object({
-  clientForename: z.string().min(1, 'Fornavn er påkrevd'),
-  clientSurname: z.string().min(1, 'Etternavn er påkrevd'),
+  identityType: z.enum(['private', 'organization']),
+  clientForename: z.string().min(2, 'Fornavnet bør være minst to tegn langt'),
+  clientSurname: z.string().min(2, 'Etternavnet bør være minst to tegn langt'),
   clientEmail: z.email('Ugyldig e-postadresse'),
   clientPhone: z.string().min(1, 'Telefonnummer er påkrevd'),
   address: z.string().min(1, 'Adresse er påkrevd'),
+  organizationName: z.string().optional(),
   organizationNumber: z.string().optional(),
+}).superRefine((data, ctx) => {
+  if (data.identityType === 'organization' && !data.organizationName?.trim()) {
+    ctx.addIssue({ code: 'custom', path: ['organizationName'], message: 'Organisasjonsnavn er påkrevd' })
+    ctx.addIssue({ code: 'custom', path: ['organizationNumber'], message: 'Organisasjonsnummer er påkrevd' })
+  }
 })
 
 export const ProjectRequestPage2Schema = z.object({
@@ -60,6 +67,7 @@ export const ProjectRequestCreateSchema = z.object({
   clientSurname: z.string().default(''),
   clientEmail: z.email('Ugyldig e-postadresse'),
   clientPhone: z.string().default(''),
+  organizationName: z.string().optional(),
   organizationNumber: z.string().optional(),
   address: z.string().default(''),
 })

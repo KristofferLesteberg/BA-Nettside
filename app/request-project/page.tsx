@@ -60,11 +60,13 @@ export default function RequestProject() {
     const newErrors: Record<string, string> = {}
 
     const result = ProjectRequestPage1Schema.safeParse({
+      identityType,
       clientForename: forename,
       clientSurname: surname,
       clientEmail: email,
       clientPhone: phone,
       address,
+      organizationName: orgName || undefined,
       organizationNumber: orgNumber || undefined,
     })
     if (!result.success) {
@@ -74,17 +76,12 @@ export default function RequestProject() {
       }
     }
 
-    // orgName is not in the DB schema — check it manually
-    if (identityType === "organization" && !orgName.trim()) {
-      newErrors.orgName = 'Organisasjonsnavn er påkrevd'
-    }
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
       if (newErrors.clientForename || newErrors.clientSurname) forenameRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
       else if (newErrors.clientEmail || newErrors.clientPhone) emailRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
       else if (newErrors.address) addressRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
-      else if (newErrors.orgName) orgNameRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+      else if (newErrors.organizationName) orgNameRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
       return
     }
 
@@ -129,6 +126,7 @@ export default function RequestProject() {
         clientSurname: surname,
         clientEmail: email,
         clientPhone: phone,
+        organizationName: orgName || undefined,
         organizationNumber: orgNumber || undefined,
         address,
       }),
@@ -280,22 +278,23 @@ export default function RequestProject() {
                       <label className="label">Organisasjonsnavn <span className="text-error">*</span></label>
                       <input
                         type="text"
-                        className={inputClass("orgName")}
+                        className={inputClass("organizationName")}
                         placeholder="Firma AS"
                         value={orgName}
-                        onChange={(e) => { setOrgName(e.target.value); clearError("orgName") }}
+                        onChange={(e) => { setOrgName(e.target.value); clearError("organizationName") }}
                       />
-                      {errors.orgName && <p className="text-error text-sm">{errors.orgName}</p>}
+                      {errors.organizationName && <p className="text-error text-sm">{errors.organizationName}</p>}
                     </div>
                     <div className="space-y-1">
-                      <label className="label">Organisasjonsnummer</label>
+                      <label className="label">Organisasjonsnummer <span className="text-error">*</span></label>
                       <input
                         type="text"
-                        className="input"
+                        className={inputClass("organizationNumber")}
                         placeholder="123 456 789"
                         value={orgNumber}
-                        onChange={(e) => setOrgNumber(e.target.value.replace(/\D/g, "").slice(0, 9))}
+                        onChange={(e) => { setOrgNumber(e.target.value.replace(/\D/g, "").slice(0, 9)); clearError("organizationNumber") }}
                       />
+                      {errors.organizationNumber && <p className="text-error text-sm">{errors.organizationNumber}</p>}
                     </div>
                   </div>
                 </div>

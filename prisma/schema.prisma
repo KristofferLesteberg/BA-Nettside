@@ -46,6 +46,7 @@ model ProjectRequest {
   clientSurname String
   clientEmail String
   clientPhone String
+  organizationName   String?
   organizationNumber String?
   address String
 
