@@ -154,14 +154,14 @@ export default function RequestProject() {
     : "opacity-100 translate-x-0"
 
   return (
-    <div className="w-4/5 min-w-120 max-w-230 mx-auto my-10 mt-32">
-      <div className="card-accented shadow-xl space-y-6 px-2">
+    <div className="w-4/5 min-w-120 max-w-230 mx-auto my-10 mt-32 overflow-hidden">
+      <div className="card-accented shadow-xl space-y-6 px-8">
 
         <div className="flex items-center justify-between">
           <button
             type="button"
             onClick={(page === 1) ? () => navigate(0) : () => router.back()}
-            className="btn btn-ghost -ml-2 -mt-2 text-sm"
+            className="btn btn-outline px-3 text-sm"
           >
             ← Tilbake
           </button>
@@ -174,8 +174,8 @@ export default function RequestProject() {
 
         <div className={`transition-all duration-300 ease-in-out ${slideClass}`}>
           {page === 0 ? (
-            <form onSubmit={handleNext} className={`${identityType ? 'space-y-6' : 'space-y-3'} overflow-hidden transition-all duration-500 ease-in-out`}>
-              <div className="space-y-3 px-4">
+            <form onSubmit={handleNext} className={`${identityType ? 'space-y-6' : 'space-y-3'} transition-all duration-500 ease-in-out`}>
+              <div className="space-y-3">
                 <h2 className="heading-2">Bestill et prosjekt</h2>
                 <p className="text-text-faint italic mt-1 text-sm">Steg 1 av 2 — Om deg</p>
                 <p className={`text-text-faint italic -mt-2 transition-all duration-500 ease-in-out ${identityType ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
@@ -184,7 +184,7 @@ export default function RequestProject() {
               </div>
 
               {/* Identity type */}
-              <div className="space-y-2 px-4">
+              <div className="space-y-2">
                 <label className="label">Jeg er en</label>
                 <div className="flex gap-3">
                   <button
@@ -205,7 +205,7 @@ export default function RequestProject() {
               </div>
 
               {/* Revealed after identity is chosen */}
-              <div className={`space-y-6 px-4 transition-all duration-500 ease-in-out ${identityType ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div className={`space-y-6 transition-all duration-500 ease-in-out ${identityType ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
 
                 {/* Name */}
                 <div className="grid grid-cols-2 gap-4" ref={forenameRef}>
@@ -294,7 +294,7 @@ export default function RequestProject() {
                       {errors.organizationName && <p className="text-error text-sm">{errors.organizationName}</p>}
                     </div>
                     <div className="space-y-1">
-                      <label className="label">Organisasjonsnummer <span className="text-error">*</span></label>
+                      <label className="label">Organisasjonsnummer  </label>
                       <input
                         type="text"
                         className={inputClass("organizationNumber")}
@@ -325,13 +325,13 @@ export default function RequestProject() {
 
               {/* Education field / category */}
               <div className="space-y-1" ref={educationFieldRef}>
-                <label className="label">Kategori *</label>
+                <label className="label">Linje <span className="text-error">*</span></label>
                 <select
                   className={inputClass("educationField")}
                   value={educationField}
                   onChange={(e) => { setEducationField(e.target.value); clearError("educationField") }}
                 >
-                  <option value="">Velg kategori</option>
+                  <option value="" disabled className="text-text-muted">Velg linje</option>
                   <option value="BUILDING">Bygg</option>
                   <option value="CONSTRUCTION">Anlegg</option>
                 </select>
@@ -340,7 +340,7 @@ export default function RequestProject() {
 
               {/* Title */}
               <div className="space-y-1" ref={titleRef}>
-                <label className="label">Prosjekttittel *</label>
+                <label className="label">Prosjekttittel <span className="text-error">*</span></label>
                 <input
                   type="text"
                   className={inputClass("title")}
@@ -365,7 +365,7 @@ export default function RequestProject() {
               {/* Budget range */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="label">Budsjett fra (kr)</label>
+                  <label className="label">Budsjett fra (NOK)</label>
                   <input
                     type="text"
                     inputMode="decimal"
@@ -383,7 +383,7 @@ export default function RequestProject() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="label">Budsjett til (kr)</label>
+                  <label className="label">Budsjett til (NOK)</label>
                   <input
                     type="text"
                     inputMode="decimal"
