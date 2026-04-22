@@ -254,6 +254,14 @@
   border-color: var(--color-secondary);
 }
 
+/* Tailwind v4 preflight sets `img { height: auto }` which overrides the library's height: 100%,
+   causing the flag to render at natural image dimensions instead of the constrained icon size. */
+.PhoneInputCountryIcon img {
+  width: 100%;
+  height: 100%;
+  max-width: unset;
+}
+
 /* rc-slider theme overrides */
 .rc-slider-rail {
   background-color: var(--color-border);
