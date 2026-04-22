@@ -161,7 +161,8 @@
 
 
   .input::placeholder { color: var(--color-text-faint); }
-  .input:focus        { border-color: var(--color-primary); }
+  .input:focus        { border-color: var(--color-secondary); }
+  .input.border-error:focus { border-color: var(--color-error); }
   .input:disabled     { background: var(--color-surface); color: var(--color-text-faint); cursor: not-allowed; opacity: 0.6; }
  
   /* Cards */
