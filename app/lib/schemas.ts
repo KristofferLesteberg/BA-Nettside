@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { isValidPhoneNumber } from 'libphonenumber-js'
 
 export const EducationFieldSchema = z.enum(['BUILDING', 'CONSTRUCTION'])
 
@@ -32,7 +33,7 @@ export const ProjectRequestPage1Schema = z.object({
   clientForename: z.string().min(2, 'Fornavnet bør være minst to tegn langt'),
   clientSurname: z.string().min(2, 'Etternavnet bør være minst to tegn langt'),
   clientEmail: z.email('Ugyldig e-postadresse'),
-  clientPhone: z.string().min(1, 'Telefonnummer er påkrevd'),
+  clientPhone: z.string().min(1, 'Telefonnummer er påkrevd').refine(isValidPhoneNumber, 'Ugyldig telefonnummer'),
   address: z.string().min(1, 'Adresse er påkrevd'),
   organizationName: z.string().optional(),
   organizationNumber: z.string().regex(/^\d{9}$/, 'Organisasjonsnummer må bestå av nøyaktig 9 siffer').optional(),

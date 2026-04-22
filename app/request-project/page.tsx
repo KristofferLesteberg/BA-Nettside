@@ -3,6 +3,9 @@
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+import PhoneInputWithCountrySelect from 'react-phone-number-input'
+import { parsePhoneNumberWithError } from 'libphonenumber-js'
+import type { E164Number, CountryCode } from 'libphonenumber-js'
 import type { ApiResponse } from '@/app/lib/api-response'
 import { ProjectRequestPage1Schema, ProjectRequestPage2Schema } from '@/app/lib/schemas'
 
@@ -20,7 +23,8 @@ export default function RequestProject() {
   const [forename, setForename] = useState("")
   const [surname, setSurname] = useState("")
   const [email, setEmail] = useState("")
-  const [phone, setPhone] = useState("")
+  const [phone, setPhone] = useState<E164Number | undefined>()
+  const [phoneCountry, setPhoneCountry] = useState<CountryCode>("NO")
   const [orgName, setOrgName] = useState("")
   const [orgNumber, setOrgNumber] = useState("")
   const [address, setAddress] = useState("")
@@ -247,12 +251,21 @@ export default function RequestProject() {
                   </div>
                   <div className="space-y-1">
                     <label className="label">Telefon <span className="text-error">*</span></label>
-                    <input
-                      type="tel"
+                    <PhoneInputWithCountrySelect
                       className={inputClass("clientPhone")}
-                      placeholder="+47 000 00 000"
+                      international={true}
+                      defaultCountry='NO'
+                      country={phoneCountry}
+                      onCountryChange={(c) => setPhoneCountry(c ?? "NO")}
+                      placeholder="Telefonnummer"
                       value={phone}
-                      onChange={(e) => { setPhone(e.target.value.replace(/[^0-9+\s]/g, "")); clearError("clientPhone") }}
+                      onChange={(phoneNr) => {
+                        setPhone(phoneNr)
+                        if (phoneNr) {
+                          try { const p = parsePhoneNumberWithError(String(phoneNr)); if (p?.country) setPhoneCountry(p.country) } catch {}
+                        }
+                        clearError("clientPhone")
+                      }}
                     />
                     {errors.clientPhone && <p className="text-error text-sm">{errors.clientPhone}</p>}
                   </div>
