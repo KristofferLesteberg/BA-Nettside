@@ -35,10 +35,12 @@ export const ProjectRequestPage1Schema = z.object({
   clientPhone: z.string().min(1, 'Telefonnummer er påkrevd'),
   address: z.string().min(1, 'Adresse er påkrevd'),
   organizationName: z.string().optional(),
-  organizationNumber: z.string().optional(),
+  organizationNumber: z.string().regex(/^\d{9}$/, 'Organisasjonsnummer må bestå av nøyaktig 9 siffer').optional(),
 }).superRefine((data, ctx) => {
   if (data.identityType === 'organization' && !data.organizationName?.trim()) {
     ctx.addIssue({ code: 'custom', path: ['organizationName'], message: 'Organisasjonsnavn er påkrevd' })
+  }
+  if (data.identityType === 'organization' && !data.organizationNumber) {
     ctx.addIssue({ code: 'custom', path: ['organizationNumber'], message: 'Organisasjonsnummer er påkrevd' })
   }
 })
@@ -68,7 +70,7 @@ export const ProjectRequestCreateSchema = z.object({
   clientEmail: z.email('Ugyldig e-postadresse'),
   clientPhone: z.string().default(''),
   organizationName: z.string().optional(),
-  organizationNumber: z.string().optional(),
+  organizationNumber: z.string().regex(/^\d{9}$/, 'Organisasjonsnummer må bestå av nøyaktig 9 siffer').optional(),
   address: z.string().default(''),
 })
 
