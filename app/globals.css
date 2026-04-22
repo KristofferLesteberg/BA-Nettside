@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "react-phone-number-input/style.css";
+@import "rc-slider/assets/index.css";
 /* Declare all the GLOBAL COLORS, FONTS, CLASSES, etc. */
 @theme {
  
@@ -251,4 +252,29 @@
 /* Forward focus border to the outer wrapper (gets .PhoneInput--focus when input is focused) */
 .PhoneInput--focus {
   border-color: var(--color-secondary);
+}
+
+/* rc-slider theme overrides */
+.rc-slider-rail {
+  background-color: var(--color-border);
+  height: 6px;
+}
+.rc-slider-track {
+  background-color: var(--color-primary);
+  height: 6px;
+}
+.rc-slider-handle {
+  width: 18px;
+  height: 18px;
+  margin-top: -6px;
+  border: 2px solid var(--color-primary);
+  background-color: var(--color-bg);
+  opacity: 1;
+  box-shadow: none;
+}
+.rc-slider-handle:hover,
+.rc-slider-handle:focus,
+.rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
+  border-color: var(--color-primary-hover);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 20%, transparent);
 }

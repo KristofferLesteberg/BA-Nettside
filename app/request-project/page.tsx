@@ -7,6 +7,7 @@ import PhoneInputWithCountrySelect from 'react-phone-number-input'
 import { parsePhoneNumberWithError } from 'libphonenumber-js'
 import type { E164Number, CountryCode } from 'libphonenumber-js'
 import AddressInput from '../components/input/address-input'
+import PriceRange from '../components/input/price-range'
 import type { ApiResponse } from '@/app/lib/api-response'
 import { ProjectRequestPage1Schema, ProjectRequestPage2Schema } from '@/app/lib/schemas'
 
@@ -59,6 +60,7 @@ export default function RequestProject() {
       setSliding(false)
     }, 300)
   }
+
 
   function handleNext(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -363,44 +365,11 @@ export default function RequestProject() {
               </div>
 
               {/* Budget range */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="label">Budsjett fra (NOK)</label>
-                  <input
-                    type="text"
-                    inputMode="decimal"
-                    className="input"
-                    placeholder="0.00"
-                    value={minBudget}
-                    onChange={(e) => {
-                      const v = e.target.value.replace(/[^0-9.]/g, "").replace(/^(\d*\.?\d{0,2}).*/, "$1")
-                      setMinBudget(v)
-                    }}
-                    onBlur={() => {
-                      const v = parseFloat(minBudget)
-                      if (!isNaN(v)) setMinBudget(v.toFixed(2))
-                    }}
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="label">Budsjett til (NOK)</label>
-                  <input
-                    type="text"
-                    inputMode="decimal"
-                    className="input"
-                    placeholder="0.00"
-                    value={maxBudget}
-                    onChange={(e) => {
-                      const v = e.target.value.replace(/[^0-9.]/g, "").replace(/^(\d*\.?\d{0,2}).*/, "$1")
-                      setMaxBudget(v)
-                    }}
-                    onBlur={() => {
-                      const v = parseFloat(maxBudget)
-                      if (!isNaN(v)) setMaxBudget(v.toFixed(2))
-                    }}
-                  />
-                </div>
-              </div>
+              <PriceRange
+                min={minBudget}
+                max={maxBudget}
+                onChange={(lo, hi) => { setMinBudget(lo); setMaxBudget(hi) }}
+              />
 
               <button type="submit" className="btn btn-primary w-full">
                 Send forespørsel
