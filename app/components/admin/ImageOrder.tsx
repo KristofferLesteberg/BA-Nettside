@@ -81,6 +81,20 @@ function SortableItem({ img, onDelete }: { img: ImageItem; onDelete: (id: string
   )
 }
 
+// Use randomUUID() if running in a secure context(HTTPS)
+// Otherwise, use a custom replacement for it
+// Should be treated as a temporary patch, 
+// and get replaced by only UUID when server is moved to HTTPS, eventually
+function generateId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID()
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+  })
+}
+
 export default function ImageOrder({
   initialImages = [],
   onChange,
@@ -100,7 +114,7 @@ export default function ImageOrder({
 
   const onDrop = (acceptedFiles: File[]) => {
     const newImages: ImageItem[] = acceptedFiles.map(file => ({
-      id: crypto.randomUUID(),
+      id: generateId(),
       type: "new" as const,
       file,
       preview: URL.createObjectURL(file),
