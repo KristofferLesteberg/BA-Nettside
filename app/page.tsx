@@ -1,130 +1,239 @@
-import { prisma } from "./lib/prisma"
-import ProductCard from "./components/product/ProductCard"
+import React from 'react'
+import Link from 'next/link'
 
-export default async function Home() {
-  const products = await prisma.product.findMany({
-    include: { images: true },
-  })
+import Image from 'next/image'
 
-  const convertedProducts = products.map((product) => ({
-    ...product,
-    price: product.price.toNumber(),
-    publishedAt: product.publishedAt.toISOString(),
-  }))
 
+
+const page = () => {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-10 space-y-12">
-
-      {/* Prosjektoversikt */}
-      <section className="space-y-3">
-        <h1 className="text-3xl font-bold">BA-Nettside</h1>
-        <p className="text-secondary max-w-2xl">
-          Produktkatalog og administrasjonspanel for et bygg- og anleggsprogram.
-          Administratorer kan opprette, redigere og slette produkter med bilder og spesifikasjoner.
-          Besøkende kan bla gjennom produkter og se detaljer.
-        </p>
-      </section>
-
-      {/* Offentlige sider */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Offentlige sider</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {[
-            { href: "/", label: "/ — Forside", desc: "Produktgrid med alle varer fra databasen." },
-            { href: "/products/[id]", label: "/products/[id] — Produktside", desc: "Bildekarusell, pris, fagfelt-merke, beskrivelse, spesifikasjons-faner og kontakt-knapp." },
-            { href: "/style-test", label: "/style-test — Designsystem", desc: "Typografi, farger, knapper, inndatafelt, merker, kort, mellomrom og kantradier." },
-          ].map(({ href, label, desc }) => (
-            <a
-              key={href}
-              href={href.includes("[") ? undefined : href}
-              className="block border border-border rounded-lg p-4 hover:bg-surface transition-colors"
-            >
-              <div className="font-mono text-sm font-medium">{label}</div>
-              <div className="text-secondary text-sm mt-1">{desc}</div>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      {/* Adminsider */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Adminsider <span className="text-sm font-normal text-secondary">(krever innlogging)</span></h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {[
-            { href: "/admin/login", label: "/admin/login — Innlogging", desc: "Brukernavn og passord settes via ADMIN_USERNAME / ADMIN_PASSWORD i miljøvariabler." },
-            { href: "/admin", label: "/admin — Dashbord", desc: "Alle produkter med rediger- og slett-knapper. Lenke til å opprette nytt produkt." },
-            { href: "/admin/newProduct", label: "/admin/newProduct — Nytt produkt", desc: "Skjema: fagfelt (Bygg/Anlegg), tittel, beskrivelse, pris, antall, mål (nøkkel-verdi) og drag-and-drop bildeoppasting." },
-            { href: "/admin/updateProduct/[id]", label: "/admin/updateProduct/[id] — Rediger produkt", desc: "Samme skjema forhåndsutfylt med eksisterende data. Støtter omsortering, sletting og tillegg av bilder." },
-          ].map(({ href, label, desc }) => (
-            <a
-              key={href}
-              href={href.includes("[") ? undefined : href}
-              className="block border border-border rounded-lg p-4 hover:bg-surface transition-colors"
-            >
-              <div className="font-mono text-sm font-medium">{label}</div>
-              <div className="text-secondary text-sm mt-1">{desc}</div>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      {/* Datamodell */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Datamodell</h2>
-        <div className="border border-border rounded-lg divide-y divide-border text-sm">
-          {[
-            { model: "Product", fields: "id, educationField (BUILDING | CONSTRUCTION), title, description, price, measures (JSON), amount, publishedAt" },
-            { model: "ProductImage", fields: "id (UUID), productId (FK), sortOrder" },
-            { model: "ProjectRequest", fields: "id, educationField, title, description, minPrice, maxPrice, klientinfo, adresse — definert i schema, ikke tatt i bruk enda" },
-          ].map(({ model, fields }) => (
-            <div key={model} className="flex gap-4 px-4 py-3">
-              <span className="font-mono font-bold w-40 shrink-0">{model}</span>
-              <span className="text-secondary">{fields}</span>
+    <div className='mt-30 '>
+      <section className='border max-w-full ml-auto bg-subtle border'>
+        <div className='flex flex-col md:flex-row max-w-4/5 ml-auto mr-auto p-3 items-center gap-3'>
+          <div className='flex flex-col'>
+            <h1 className='heading-1'>Kjøp byggematerialer eller <br />få jobben gjort av <br />fagfolk</h1>
+          
+            <div className='flex flex-row flex-1 gap-3 mt-3'>
+              <Link href="/products">
+                <button className='btn btn-primary hover:bg-primary-hover'>Se på våre produkter!</button>
+              </Link>
+              <Link href="/projects">
+                <button className='btn btn-primary hover:bg-primary-hover'>Bestill en av våre Elever!</button>
+              </Link>
             </div>
-          ))}
-        </div>
-        <p className="text-secondary text-sm">Database: SQLite (utvikling) via Prisma. Bilder lagres som WebP i <code className="font-mono">/public/images/</code> og serveres statisk.</p>
-      </section>
-
-      {/* Under arbeid */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Under arbeid / ufullstendig</h2>
-        <ul className="space-y-2 text-sm text-secondary list-disc list-inside">
-          <li><strong className="text-foreground">ProjectRequest-flyt</strong> — modellen finnes i schema; ingen API-endepunkter eller sider er laget enda.</li>
-          <li><strong className="text-foreground">/projects-side</strong> — ruten eksisterer men innholdet er tomt.</li>
-          <li><strong className="text-foreground">&quot;Ta kontakt&quot;-knapp</strong> — vises på produktsider men har ingen handling koblet til.</li>
-          <li><strong className="text-foreground">DeleteProduct-omdirigering</strong> — siden oppdaterer seg ikke etter sletting.</li>
-          <li><strong className="text-foreground">UpdateProductForm lastestatus</strong> — setter <code className="font-mono">isLoading = true</code> etter at data er hentet; viser &quot;Laster...&quot; på ubestemt tid.</li>
-        </ul>
-      </section>
-
-      {/* Teknologistack */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Teknologistack</h2>
-        <div className="flex flex-wrap gap-2 text-sm">
-          {["Next.js 16 (App Router)", "React 19", "TypeScript 5", "Prisma 7 + SQLite", "NextAuth 4 (JWT)", "Tailwind CSS 4", "Swiper 12", "dnd-kit", "react-dropzone", "Sharp (WebP)"].map((t) => (
-            <span key={t} className="border border-border rounded-full px-3 py-1">{t}</span>
-          ))}
-        </div>
-      </section>
-
-      {/* Skillelinje */}
-      <hr className="border-border" />
-
-      {/* Produktliste */}
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Produkter ({convertedProducts.length})</h2>
-        {convertedProducts.length === 0 ? (
-          <p className="text-secondary text-sm">Ingen produkter enda. <a href="/admin/newProduct" className="underline">Legg til et i adminpanelet.</a></p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-            {convertedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} isAdmin={false} />
-            ))}
           </div>
-        )}
-      </section>
+          <div style={{ backgroundImage: 'url("/static-images/fp-img1.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-muted flex items-center justify-center ml-auto'>
+          
+          </div>
+        </div>
+        </section>
+        <section className='mt-30'>
+          <div className='text-center mb-20'>
+            <h1 className='heading-1'>Vi tilbyr prosjekter og produkter fra to Linjer</h1>
+            
+          </div>
+          {/*DESCRIPTION*/}
+          <div className='flex flex-col w-4/5 ml-auto mr-auto'>
+            <h1 className='heading-1 p-6'>Bygg:</h1>
+            <hr />
+            <div className='flex flex-col md:flex-row items-center mb-10'> 
+              <p className='max-w-1/2 text-center'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dicta, minima repudiandae. Hic recusandae quam suscipit quisquam totam ex beatae ad quibusdam natus aliquid corrupti inventore perferendis sit, sed enim dolor. Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt esse consectetur amet ex dolorem error natus accusantium quidem, sed nihil quibusdam delectus dolores rem eum, iure nulla dolor voluptates blanditiis.</p>
+              <div style={{ backgroundImage: 'url("/static-images/fp-img2.jpg")', backgroundSize: 'auto 95%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-yellow-100 flex items-center justify-center m-4'>
+              
+              </div>
+            </div>
+            <h1 className='heading-1 p-6'>Annlegg:</h1>
+            <hr />
+            <div className='flex flex-col md:flex-row items-center '> 
+              <div style={{ backgroundImage: 'url("/static-images/fp-img3.jpg")', backgroundSize: 'auto 95%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-red-100 flex items-center justify-center m-4'>
+              
+              </div>
+              <p className='max-w-1/2 text-center'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dicta, minima repudiandae. Hic recusandae quam suscipit quisquam totam ex beatae ad quibusdam natus aliquid corrupti inventore perferendis sit, sed enim dolor. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quae quod assumenda necessitatibus, repellendus magni nam mollitia architecto, quis sapiente a, voluptates nesciunt sed delectus nostrum? Praesentium nam atque molestiae recusandae.</p>
+            </div>
+          </div>
+        </section>
+        {/*PROCESS CARDS*/}
 
-    </div>
+        <section className='mt-20 mb-40'>
+          <h1 className='heading-1 text-center mb-20'>Hvordan går kjøps prosessen</h1>
+
+          <div className='max-w-400 mx-auto px-6'>
+
+            {/* ── ROW 1 ── */}
+            <div className='grid grid-cols-1 lg:grid-cols-[minmax(180px,1fr)_auto_minmax(180px,1fr)_auto_minmax(180px,1fr)] gap-6'>
+
+              <div className='card border border-primary min-h-40 p-4 flex flex-col items-center text-center hover:shadow-xl'>
+                <Image 
+                  src={'/static-images/img3.jpg'}
+                  width={500}
+                  height={500}
+                  className='rounded-(--radius-md)'
+                  alt='bilde'
+                />
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias molestias tempore quis voluptate consequuntur. Ad, dolor dolores, quae animi vero eum, cum assumenda incidunt eaque voluptatum provident quasi facilis! Explicabo.</p>
+              </div>
+
+              {/* Desktop arrow */}
+              <div className='hidden lg:flex justify-center items-center w-30 xl:w-40'>
+                <svg width="100%" height="24" viewBox="0 0 200 24" fill="none"
+                  stroke="#c0392b" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="1" y1="12" x2="188" y2="12" strokeDasharray="11 16"/>
+                  <polyline points="181 5 188 12 181 19"/>
+                </svg>
+              </div>
+              {/* Mobile arrow */}
+              <div className='flex lg:hidden justify-center'>
+                <svg width="24" height="40" viewBox="0 0 24 40" fill="none"
+                  stroke="#c0392b" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="1" x2="12" y2="28" strokeDasharray="4 6"/>
+                  <polyline points="5 21 12 28 19 21"/>
+                </svg>
+              </div>
+
+              <div className='card border border-primary min-h-40 p-4 flex flex-col items-center text-center hover:shadow-xl'>
+                <Image 
+                  src={'/static-images/img2.jpg'}
+                  width={500}
+                  height={500}
+                  className='rounded-(--radius-md)'
+                  alt='bilde'
+                />
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias molestias tempore quis voluptate consequuntur. Ad, dolor dolores, quae animi vero eum, cum assumenda incidunt eaque voluptatum provident quasi facilis! Explicabo.</p>
+              </div>
+
+              {/* Desktop arrow */}
+              <div className='hidden lg:flex justify-center items-center w-30 xl:w-40'>
+                <svg width="100%" height="24" viewBox="0 0 200 24" fill="none"
+                  stroke="#c0392b" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="1" y1="12" x2="188" y2="12" strokeDasharray="11 16"/>
+                  <polyline points="181 5 188 12 181 19"/>
+                </svg>
+              </div>
+              {/* Mobile arrow */}
+              <div className='flex lg:hidden justify-center'>
+                <svg width="24" height="40" viewBox="0 0 24 40" fill="none"
+                  stroke="#c0392b" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="1" x2="12" y2="28" strokeDasharray="4 6"/>
+                  <polyline points="5 21 12 28 19 21"/>
+                </svg>
+              </div>
+
+              <div className='card border border-primary min-h-40 p-4 flex flex-col items-center text-center hover:shadow-xl'>
+                <Image 
+                  src={'/static-images/img3.jpg'}
+                  width={500}
+                  height={500}
+                  className='rounded-(--radius-md)'
+                  alt='bilde'
+                />
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias molestias tempore quis voluptate consequuntur. Ad, dolor dolores, quae animi vero eum, cum assumenda incidunt eaque voluptatum provident quasi facilis! Explicabo. lor</p>
+              </div>
+            </div>
+
+            {/* ── DOWN ARROW ── */}
+            {/* Desktop — aligned to last column */}
+            <div className='hidden lg:grid grid-cols-[minmax(180px,1fr)_auto_minmax(180px,1fr)_auto_minmax(180px,1fr)] gap-6 mt-3'>
+              <div className=''/><div className='xl:w-40 w-16'/><div /><div className='xl:w-40 w-16'/>
+              <div className='flex justify-center p-4 h-30 xl:h-40'>
+               
+                  <svg width="24" height="100%" viewBox="0 0 24 100" fill="none"
+                    stroke="#c0392b" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="1" x2="12" y2="88" strokeDasharray="6 11"/>
+                    <polyline points="5 82 12 88 19 81"/>
+                  </svg>
+                
+              </div>
+            </div>
+            {/* Mobile */}
+            <div className='flex lg:hidden justify-center mt-6 mb-6'>
+              <svg width="24" height="40" viewBox="0 0 24 40" fill="none"
+                stroke="#c0392b" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="1" x2="12" y2="28" strokeDasharray="4 6"/>
+                <polyline points="5 21 12 28 19 21"/>
+              </svg>
+            </div>
+
+            {/* ── ROW 2 ── */}
+            <div className='grid grid-cols-1 lg:grid-cols-[minmax(180px,1fr)_auto_minmax(180px,1fr)_auto_minmax(180px,1fr)] gap-6'>
+
+              <div className='card border border-primary min-h-40 p-4 flex flex-col items-center text-center hover:shadow-xl'>
+                <Image 
+                  src={'/static-images/img4.jpg'}
+                  width={500}
+                  height={500}
+                  className='rounded-(--radius-md)'
+                  alt='bilde'
+                />
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias molestias tempore quis voluptate consequuntur. Ad, dolor dolores, quae animi vero eum, cum assumenda incidunt eaque voluptatum provident quasi facilis! Explicabo.</p>
+              </div>
+
+              {/* Desktop arrow — pointing left */}
+              <div className='hidden lg:flex justify-center items-center w-30 xl:w-40'>
+                <svg width="100%" height="24" viewBox="0 0 200 24" fill="none"
+                  stroke="#c0392b" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="199" y1="12" x2="12" y2="12" strokeDasharray="11 16"/>
+                  <polyline points="19 5 12 12 19 19"/>
+                </svg>
+              </div>
+              {/* Mobile arrow */}
+              <div className='flex lg:hidden justify-center'>
+                <svg width="24" height="40" viewBox="0 0 24 40" fill="none"
+                  stroke="#c0392b" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="1" x2="12" y2="28" strokeDasharray="4 6"/>
+                  <polyline points="5 21 12 28 19 21"/>
+                </svg>
+              </div>
+
+              <div className='card border border-primary min-h-40 p-4 flex flex-col items-center text-center hover:shadow-xl'>
+                <Image 
+                  src={'/static-images/img5.jpg'}
+                  width={500}
+                  height={500}
+                  className='rounded-(--radius-md)'
+                  alt='bilde'
+                />
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias molestias tempore quis voluptate consequuntur. Ad, dolor dolores, quae animi vero eum, cum assumenda incidunt eaque voluptatum provident quasi facilis! Explicabo.</p>
+              </div>
+
+              {/* Desktop arrow — pointing left */}
+              <div className='hidden lg:flex justify-center items-center w-30 xl:w-40'>
+                <svg width="100%" height="24" viewBox="0 0 200 24" fill="none"
+                  stroke="#c0392b" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="199" y1="12" x2="12" y2="12" strokeDasharray="11 16"/>
+                  <polyline points="19 5 12 12 19 19"/>
+                </svg>
+              </div>
+              {/* Mobile arrow */}
+              <div className='flex lg:hidden justify-center'>
+                <svg width="24" height="40" viewBox="0 0 24 40" fill="none"
+                  stroke="#c0392b" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="1" x2="12" y2="28" strokeDasharray="4 6"/>
+                  <polyline points="5 21 12 28 19 21"/>
+                </svg>
+              </div>
+
+              <div className='card border border-primary min-h-40 p-4 flex flex-col items-center text-center hover:shadow-xl'>
+                <Image 
+                  src={'/static-images/img6.jpg'}
+                  className='rounded-md'
+                  width={500}
+                  height={500}
+                  alt='bilde'
+                />
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias molestias tempore quis voluptate consequuntur. Ad, dolor dolores, quae animi vero eum, cum assumenda incidunt eaque voluptatum provident quasi facilis! Explicabo.</p>
+              </div>
+            </div>
+
+
+
+            <section>
+              <h1>Anmeldelser?</h1>
+            </section>
+          </div>
+        </section>
+      </div>
+   
   )
 }
+
+export default page

@@ -3,6 +3,8 @@
 import toast from 'react-hot-toast'
 import type { ApiResponse } from '@/app/lib/api-response'
 
+import { FaRegTrashCan } from "react-icons/fa6";
+
 const DeleteProduct = ({ productID }: { productID: string }) => {
   const removeProduct = async () => {
     if (!window.confirm("Vil du slette produktet?")) return
@@ -19,8 +21,8 @@ const DeleteProduct = ({ productID }: { productID: string }) => {
   }
 
   return (
-    <button onClick={removeProduct} className="btn btn-outline">
-      Fjern
+    <button onClick={removeProduct} className="cursor-pointers flex flex-row items-center gap-2">
+      <FaRegTrashCan />Fjern
     </button>
   )
 }
