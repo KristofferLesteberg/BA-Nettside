@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "@/app/globals.css";
 
 import Header from "./components/shared/Header";
+import Footer from "./components/shared/Footer";
 import Providers from '@/app/components/shared/providers';
 import { Toaster } from "react-hot-toast";
 
@@ -21,7 +22,10 @@ export default function RootLayout({
       <body>
         <Providers>
           <Header />
-          {children}
+          <main className="pt-20">
+            {children}
+          </main>
+          <Footer />
           <Toaster position="top-center" />
         </Providers>
       </body>

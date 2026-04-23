@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaBars, FaXmark } from 'react-icons/fa6';
 
 const navLinks = [
@@ -15,10 +15,29 @@ const navLinks = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [visible, setVisible] = useState(true);
   const pathname = usePathname();
 
+  let lastScrollY = 0;
+
+  const scrollHeader = () => {
+    const currentScrollY = window.scrollY;
+    setVisible(currentScrollY < lastScrollY || currentScrollY < 20);
+    lastScrollY = currentScrollY;
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', scrollHeader);
+
+    return () => {
+      window.removeEventListener('scroll', scrollHeader);
+    }
+  }, [])
+
   return (
-    <header className="w-full bg-subtle border-b border-border mb-10">
+    <header className={`w-full bg-subtle border-b border-border mb-10 fixed top-0 left-0 right-0 z-50
+    transition-transform duration-300
+    ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         <Link href="/" className="shrink-0 relative h-18 w-48" onClick={() => setOpen(false)}>
           <Image
