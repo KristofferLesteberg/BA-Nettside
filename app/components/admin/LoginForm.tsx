@@ -1,11 +1,12 @@
 "use client";
 import React from 'react'
 import { signIn } from 'next-auth/react'
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export const LoginForm = () => {
 
+  const router = useRouter()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   //const {error, setError} = useState("")
@@ -22,7 +23,7 @@ export const LoginForm = () => {
       console.log("error")
       //setError("Feil passord eller brukernavn")
     } else {
-      redirect('/admin')
+      router.push('/admin')
     }
   }
 
