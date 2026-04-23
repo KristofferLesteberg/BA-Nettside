@@ -1,13 +1,11 @@
 "use client"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 interface Prerequisite {
   label: string
   description: string
 }
-
-export default function Projects() {
-  const prerequisites : Prerequisite[] = [
+const prerequisites : Prerequisite[] = [
     {
       label: "Læreplan",
       description: "Oppdraget passer inn i vår læreplanmål"
@@ -31,17 +29,32 @@ export default function Projects() {
 
   ]
 
-  const [checked, setChecked] = useState<Boolean[]>(
+export default function Projects() {
+
+  const [checked, setChecked] = useState<boolean[]>(
     prerequisites.map(() => false)
   )
+  
+  const [allChecked, setAllChecked] = useState<boolean>(false)
 
-  const allChecked = checked.every(c => c === true)
+  useEffect(() => {
+    console.log(allChecked, checked)
+
+  }, [])
+  
+
+  useEffect(() => {
+    
+    setAllChecked(checked.length > 0 && checked.every(c => c === true))
+    console.log(allChecked, checked)
+
+  }, [checked])
+  
 
   const toggle = (index: number) => {
     const updated = [...checked]
     updated[index] = !updated[index]
     setChecked(updated)
-
   }
   return (
     <main>
@@ -101,8 +114,9 @@ export default function Projects() {
             {/*Prerequisites*/}
             <section>
               <h1 className='heading-1 text-center mt-5'>Hva vi ber om av dere:</h1>
-              <div className='max-w-4xl card mx-auto mt-5 mb-5'>
+              <div className='max-w-4xl card mx-auto mt-5 mb-[--spacing-section]'>
                 <div className='flex flex-col gap-4'>
+
                   {prerequisites.map((item: Prerequisite, index: number) => (
                     <ul key={index} className='w-full mb-3'>
                       <li>
@@ -112,8 +126,10 @@ export default function Projects() {
                           <input
                             type="checkbox" 
                             className='ml-auto'
+                            checked={checked[index]}
                             onChange={() => toggle(index)}
                           />
+                          <p>{checked[index] ? "t" : "f"}</p>
                         </div>
                       </li>
                     </ul>    
@@ -129,9 +145,17 @@ export default function Projects() {
                     <p className="body-text">
                         Send oss en forespørsel så hører du fra oss så snart som mulig.
                     </p>
-                    <Link href="/projects/request-project">
-                        <button disabled={!allChecked} className="btn btn-primary">Bestill prosjekt</button>
-                    </Link>
+                    
+                    {allChecked ? (
+                       <Link href="/projects/request-project">
+                        <button className="btn btn-primary">Bestill</button>
+                      </Link>
+
+                    ) : (
+                      <button disabled className="btn btn-primary">Bestill</button>
+
+                    )}
+                    
                 </div>
             </section>
 
