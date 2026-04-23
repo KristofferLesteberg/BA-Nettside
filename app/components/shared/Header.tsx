@@ -7,10 +7,10 @@ import { useState, useEffect } from 'react';
 import { FaBars, FaXmark } from 'react-icons/fa6';
 
 const navLinks = [
-  { href: '/products',        label: 'Våre Produkter' },
-  { href: '/request-project', label: 'Prosjekter'     },
-  { href: '/contact',         label: 'Kontakt Oss'    },
-  { href: '/admin',           label: 'For lærere'          },
+  { href: '/products',        label: 'Våre Produkter'     },
+  { href: '/request-project', label: 'Bestill et prosjekt'},
+  { href: '/contact',         label: 'Kontakt Oss'        },
+  { href: '/admin',           label: 'For lærere'         },
 ];
 
 export default function Header() {
@@ -23,6 +23,7 @@ export default function Header() {
   const scrollHeader = () => {
     const currentScrollY = window.scrollY;
     setVisible(currentScrollY < lastScrollY || currentScrollY < 20);
+    // eslint-disable-next-line react-hooks/immutability
     lastScrollY = currentScrollY;
   }
 
