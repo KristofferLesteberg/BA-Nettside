@@ -78,7 +78,6 @@
 /* Automatically apply a certain style to all the elements of given type */
 @layer base {
   html {
-    overflow-x:          hidden;
     overscroll-behavior: none;
     background-color: var(--color-secondary); /* fallback for Safari iOS rubber-band at bottom */
   }
