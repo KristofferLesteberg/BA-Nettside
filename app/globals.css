@@ -62,8 +62,15 @@
 
 /* Automatically apply a certain style to all the elements of given type */
 @layer base {
+  html {
+    overscroll-behavior: none;
+    background-color: var(--color-secondary); /* fallback for Safari iOS rubber-band at bottom */
+  }
+
   body {
-    font-family:  var(--font-sans);
+    overflow-x:          hidden;
+    overscroll-behavior: none;
+    font-family:         var(--font-sans);
     font-size:    1rem;
     color:        var(--color-text);
     background:   var(--color-bg);
