@@ -1,9 +1,48 @@
-import React from 'react'
+"use client"
+import { useState } from 'react'
 import Link from 'next/link'
-
-
+interface Prerequisite {
+  label: string
+  description: string
+}
 
 export default function Projects() {
+  const prerequisites : Prerequisite[] = [
+    {
+      label: "Læreplan",
+      description: "Oppdraget passer inn i vår læreplanmål"
+    },
+    {
+      label: "Tidsfrister",
+      description: "Prosjektet er uten tidsfrister"
+    },
+    {
+      label: "Fasiliteter",
+      description: "Stille med toalett, garderobe og pausefasiliteter"
+    },
+    {
+      label: "Sted",
+      description: "Oppdraget er ikke langs offentlig vei"
+    },
+    {
+      label: "Byggekonto",
+      description: "Må ha en byggkonto"
+    }
+
+  ]
+
+  const [checked, setChecked] = useState<Boolean[]>(
+    prerequisites.map(() => false)
+  )
+
+  const allChecked = checked.every(c => c === true)
+
+  const toggle = (index: number) => {
+    const updated = [...checked]
+    updated[index] = !updated[index]
+    setChecked(updated)
+
+  }
   return (
     <main>
 
@@ -29,14 +68,6 @@ export default function Projects() {
                 </div>
             </section>
 
-            {/*Prerequisites*/}
-            <section>
-              <div className='max-w-5xl card mx-auto mt-5'>
-                
-              </div>
-
-            </section>
-
             {/* How it works */}
             <section className="py-20 px-4">
                 <div className="max-w-5xl mx-auto">
@@ -50,7 +81,6 @@ export default function Projects() {
                                 Fyll ut skjemaet med informasjon om prosjektet ditt.
                             </p>
                         </div>
-
                         <div className="card flex flex-col gap-3">
                             <span className="text-3xl font-bold text-primary">02</span>
                             <h3 className="heading-3">Vi tar kontakt</h3>
@@ -58,7 +88,6 @@ export default function Projects() {
                                 Vi vurderer forespørselen og tar kontakt med et tilbud.
                             </p>
                         </div>
-
                         <div className="card flex flex-col gap-3">
                             <span className="text-3xl font-bold text-primary">03</span>
                             <h3 className="heading-3">Jobben utføres</h3>
@@ -66,9 +95,31 @@ export default function Projects() {
                                 Faglig dyktige elever utfører jobben under veiledning.
                             </p>
                         </div>
-
                     </div>
                 </div>
+            </section>
+            {/*Prerequisites*/}
+            <section>
+              <h1 className='heading-1 text-center mt-5'>Hva vi ber om av dere:</h1>
+              <div className='max-w-4xl card mx-auto mt-5 mb-5'>
+                <div className='flex flex-col gap-4'>
+                  {prerequisites.map((item: Prerequisite, index: number) => (
+                    <ul key={index} className='w-full mb-3'>
+                      <li>
+                        <b className='text-primary text-lg'>{item.label}</b>
+                        <div className='flex flex-row'>
+                          <p className='text-m'>{item.description}</p>
+                          <input
+                            type="checkbox" 
+                            className='ml-auto'
+                            onChange={() => toggle(index)}
+                          />
+                        </div>
+                      </li>
+                    </ul>    
+                  ))}
+                </div>
+              </div>
             </section>
 
             {/* Bottom CTA */}
@@ -79,7 +130,7 @@ export default function Projects() {
                         Send oss en forespørsel så hører du fra oss så snart som mulig.
                     </p>
                     <Link href="/projects/request-project">
-                        <button className="btn btn-primary">Bestill prosjekt</button>
+                        <button disabled={!allChecked} className="btn btn-primary">Bestill prosjekt</button>
                     </Link>
                 </div>
             </section>
