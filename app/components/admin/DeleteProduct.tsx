@@ -5,7 +5,7 @@ import type { ApiResponse } from '@/app/lib/api-response'
 
 import { FaRegTrashCan } from "react-icons/fa6";
 
-const DeleteProduct = ({ productID }: { productID: string }) => {
+const DeleteProduct = ({ productID }: { productID: number }) => {
   const removeProduct = async () => {
     if (!window.confirm("Vil du slette produktet?")) return
 
