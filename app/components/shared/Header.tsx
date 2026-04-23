@@ -8,7 +8,7 @@ import { FaBars, FaXmark } from 'react-icons/fa6';
 
 const navLinks = [
   { href: '/products',        label: 'Våre Produkter' },
-  { href: '/request-project', label: 'Prosjekter'     },
+  { href: '/projects', label: 'Prosjekter'     },
   { href: '/contact',         label: 'Kontakt Oss'    },
   { href: '/admin',           label: 'For lærere'          },
 ];
