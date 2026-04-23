@@ -49,7 +49,7 @@ const ProductCard = ({ product, isAdmin }: ProductCardProps ) => {
                 <div className="flex flex-col absolute right-0 bottom-full mb-2 rounded mr-5">
                     
                     <DeleteProduct productID={product.id}/>
-                    <hr />
+                <hr />
                     <Link href={`/admin/updateProduct/${product.id}`}>
                         <button className="cursor-pointer flex flex-row items-center gap-2"><MdOutlineModeEdit />Edit</button>
                         <hr />
