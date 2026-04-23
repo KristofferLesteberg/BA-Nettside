@@ -113,16 +113,15 @@ export default function Projects() {
             <section className='w-5xl mx-auto mb-40'>
               <h1 className='heading-1 text-center mt-5'>Hva vi ber om av dere:</h1>
               
-              <div className='max-w-5xl card mx-auto mt-5 '>
+              <div className='max-w-4xl card mx-auto mt-5 '>
                 <div className='flex flex-col gap-4'>
-
                   {prerequisites.map((item: Prerequisite, index: number) => (
                     <ul key={index} className='w-full mb-3'>
                       <li>
                         <b className='text-primary text-lg'>{item.label}</b>
-                        <div className='flex flex-row'>
+                        <div className='flex flex-row justify-center align-center'>
                           <p className='text-m'>{item.description}</p>
-                            <Checkbox checked={checked[index]} callback={() => toggle(index)}/>
+                            <Checkbox checked={checked[index]} callback={() => toggle(index)} />
                         </div>
                       </li>
                     </ul>    
@@ -131,7 +130,7 @@ export default function Projects() {
                 </div>
                 
               </div>
-              <p className='text-primary text-center italic mt-4'>Kryss av alle boksene for å gå videre til bestille et prosjekt</p>
+              <p className='text-primary text-center italic mt-4'>Krysser du av alle punktene ovenfor godkjenner du at prosjektet oppfyller kravene vi har satt</p>
               <div className=' mt-4 w-full flex flex-row justify-center' >
                 {allChecked ? (
 

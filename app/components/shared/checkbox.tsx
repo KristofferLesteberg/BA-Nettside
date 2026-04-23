@@ -6,8 +6,6 @@ import { useState } from "react"
 
 export default function Checkbox({ checked, callback }: {checked: boolean, callback: Function}) {
 
-  const [isActive, setIsActive] = useState(false)
-
   return (
     
     <div
