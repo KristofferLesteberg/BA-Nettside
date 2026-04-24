@@ -82,3 +82,7 @@ export const ProjectRequestUpdateSchema = ProjectRequestCreateSchema.partial()
 
 export type ProjectRequestCreate = z.infer<typeof ProjectRequestCreateSchema>
 export type ProjectRequestUpdate = z.infer<typeof ProjectRequestUpdateSchema>
+export const ProjectRequestStatusUpdateSchema = z.object({
+  status: z.enum(['NEW', 'IN_PROGRESS', "COMPLETE"])
+})
+export type ProjectRequestStatusUpdate = z.infer<typeof ProjectRequestStatusUpdateSchema>
