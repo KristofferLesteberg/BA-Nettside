@@ -6,6 +6,8 @@ import Header from "./components/shared/Header";
 import Footer from "./components/shared/Footer";
 import Providers from '@/app/components/shared/providers';
 import { Toaster } from "react-hot-toast";
+import "react-phone-number-input/style.css";
+import "rc-slider/assets/index.css";
 
 export const metadata: Metadata = {
   title: "BAT",
