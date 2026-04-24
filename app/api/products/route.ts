@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '../../lib/prisma'
 import { getToken } from 'next-auth/jwt'
 import { EducationField } from '@/generated/prisma'
@@ -44,6 +45,7 @@ export async function POST(req: NextRequest) {
       await uploadProductImages(images, product.id)
     }
 
+    revalidatePath('/admin')
     return ok(product, 'Produkt opprettet', 201)
   } catch (error) {
     console.error('POST /api/products:', error)

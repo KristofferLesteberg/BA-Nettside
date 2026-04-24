@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '../../../lib/prisma'
 import { getToken } from 'next-auth/jwt'
 import { EducationField } from '@/generated/prisma'
@@ -41,6 +42,7 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
     await deleteAllProductImages(productId)
     const deleted = await prisma.product.delete({ where: { id: productId } })
 
+    revalidatePath('/admin')
     return ok(deleted, 'Produkt slettet')
   } catch (error) {
     console.error('DELETE /api/products/[id]:', error)
@@ -90,6 +92,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
     const imageFiles = formData.getAll('imageFiles') as File[]
     await syncProductImages(imageIds, imageFiles, updatedProduct.id)
 
+    revalidatePath('/admin')
     return ok(updatedProduct, 'Produkt oppdatert')
   } catch (error) {
     console.error('PATCH /api/products/[id]:', error)
