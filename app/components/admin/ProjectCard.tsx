@@ -1,5 +1,7 @@
 "use client"
 import { ProjectRequest } from "@/generated/prisma"
+import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 type ConvertedProjectRequest = Omit<ProjectRequest, 'minPrice' | 'maxPrice' | 'createdAt'> & {
   minPrice: number
@@ -8,8 +10,23 @@ type ConvertedProjectRequest = Omit<ProjectRequest, 'minPrice' | 'maxPrice' | 'c
 }
 
 const ProjectCard = ({ project }: {project: ConvertedProjectRequest}) => {
+  const router = useRouter()
 
   const formatted = new Date(project.createdAt)
+
+
+  const deleteProject = async (id: number) => {
+    try {
+      const res = await fetch(`/api/projects/${id}`, { method: 'DELETE' })
+      if(!res.ok) {
+        toast.error("Kunne ikke slette prosjekt")
+      }
+      toast.success("Fjernet prosjekt!")
+      router.refresh()
+    } catch(error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className="border p-5 rounded-2xl">
@@ -29,7 +46,12 @@ const ProjectCard = ({ project }: {project: ConvertedProjectRequest}) => {
         </div>
         <div className="flex flex-row gap-3 ml-auto mt-auto mb-auto ">
           <button className="btn btn-outline">Endre status</button>
-          <button className="btn btn-outline bg-red-500 text-white">Fjern</button>
+          <button
+            className="btn btn-outline bg-red-500 text-white"
+            onClick={() => deleteProject(project.id)}
+            >
+              Fjern
+          </button>
         </div>
       </div>
       <div className="flex flex-row max-w-4/5 justify-between mt-5">
