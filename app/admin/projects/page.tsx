@@ -13,10 +13,6 @@ export default async function ProjectTest() {
    createdAt: project.createdAt.toISOString()
   }))
 
-  
-
-
-
   return (
     <main className="mt-50 w-6xl ml-auto mr-auto">
       <h1 className="heading-1 mb-10">Prosjekter - {convertedProject.length}</h1>
