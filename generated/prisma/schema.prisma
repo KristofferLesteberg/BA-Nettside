@@ -16,14 +16,14 @@ enum EducationField {
 }
 
 model Product {
-  id             Int            @id @default(autoincrement())
-  educationField EducationField
+  id             Int             @id @default(autoincrement())
+  educationField EducationField?
   title          String
   description    String
   price          Decimal
   measures       Json?
   amount         Int
-  publishedAt    DateTime       @default(now())
+  publishedAt    DateTime        @default(now())
   images         ProductImage[]
 
   @@index([educationField])
@@ -47,8 +47,10 @@ model ProjectRequest {
   clientSurname      String
   clientEmail        String
   clientPhone        String
+  organizationName   String?
   organizationNumber String?
   address            String
+  billingAddress     String
 
   @@index([clientEmail])
   @@index([clientPhone])

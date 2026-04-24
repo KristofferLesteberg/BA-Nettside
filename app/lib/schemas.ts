@@ -35,6 +35,8 @@ export const ProjectRequestPage1Schema = z.object({
   clientEmail: z.email('Ugyldig e-postadresse'),
   clientPhone: z.string({ error: 'Telefonnummer er påkrevd' }).min(1, 'Telefonnummer er påkrevd').refine(isValidPhoneNumber, 'Ugyldig telefonnummer'),
   address: z.string().min(1, 'Adresse er påkrevd'),
+  billingAddress: z.string().min(1, 'Fakturaaddresse er påkrevd'),
+  
   organizationName: z.string().optional(),
   organizationNumber: z.string().regex(/^\d{9}$/, 'Organisasjonsnummer må bestå av nøyaktig 9 siffer').optional(),
 }).superRefine((data, ctx) => {
@@ -73,6 +75,7 @@ export const ProjectRequestCreateSchema = z.object({
   organizationName: z.string().optional(),
   organizationNumber: z.string().regex(/^\d{9}$/, 'Organisasjonsnummer må bestå av nøyaktig 9 siffer').optional(),
   address: z.string().default(''),
+  billingAddress: z.string().default('')
 })
 
 export const ProjectRequestUpdateSchema = ProjectRequestCreateSchema.partial()

@@ -10,7 +10,7 @@ import AddressInput from '../../components/input/address-input'
 import PriceRange from '../../components/input/price-range'
 import type { ApiResponse } from '@/app/lib/api-response'
 import { ProjectRequestPage1Schema, ProjectRequestPage2Schema } from '@/app/lib/schemas'
-import { NextResponse } from 'next/server'
+import { IoSearch } from "react-icons/io5";
 
 type IdentityType = "private" | "organization" | ""
 
@@ -31,6 +31,7 @@ export default function RequestProject() {
   const [orgName, setOrgName] = useState("")
   const [orgNumber, setOrgNumber] = useState("")
   const [address, setAddress] = useState("")
+  const [billingAddress, setBillingAddress] = useState("")
 
   // Page 2 — project info
   const [educationField, setEducationField] = useState("")
@@ -53,25 +54,23 @@ export default function RequestProject() {
   const getOrgInfo = async (orgNumber: number) => {
     try {
       const res = await fetch(`https://data.brreg.no/enhetsregisteret/api/enheter/${orgNumber}`)
+      if(!res) {
+        toast.error("Fant ikke organisasjonen")
+        return
+      }
       const data = await res.json()
-    
+
       setEmail(data.epostadresse)
-      setPhone(data.telefon)
-      setPhoneCountry(data.forretningsadresse.land  )
+      const e164 = `+47${data.telefon.replace(/\s/g, "")}` as E164Number
+      setPhone(e164)
+      setPhoneCountry("NO")
       setOrgName(data.navn)
       setAddress(`${data.forretningsadresse.adresse[0]}, ${data.forretningsadresse.postnummer} ${data.forretningsadresse.poststed}`)
-
     } catch(error) {
       console.error(error)
-      NextResponse.json({ status: "something went wrong"})
     }
 
   }
-
-
-
-
-
   function clearError(field: string) {
     setErrors(prev => { const next = { ...prev }; delete next[field]; return next })
   }
@@ -100,6 +99,7 @@ export default function RequestProject() {
       clientEmail: email,
       clientPhone: phone,
       address,
+      billingAddress,
       organizationName: orgName || undefined,
       organizationNumber: orgNumber || undefined,
     })
@@ -159,6 +159,7 @@ export default function RequestProject() {
         organizationName: orgName || undefined,
         organizationNumber: orgNumber || undefined,
         address,
+        billingAddress
       }),
     })
     const body: ApiResponse<unknown> = await res.json()
@@ -263,18 +264,35 @@ export default function RequestProject() {
                     onChange={(e) => { setOrgNumber(e.target.value.replace(/\D/g, "").slice(0, 9)); clearError("organizationNumber") }}
                   />
                   <button
+                    type='button'
                     onClick={() => getOrgInfo(Number(orgNumber))}
                     className="absolute right-1 mt-auto mb-auto mr-3 h-full"
                   >
-                    hei
+                    <IoSearch className='cursor-pointer' />
                   </button>
                 </div>
                 {errors.organizationNumber && <p className="text-error text-sm">{errors.organizationNumber}</p>}
               </div>
 
               {/* Revealed after identity is chosen */}
-              <div className={`space-y-6 transition-all duration-500 ease-in-out ${identityType == "private" && educationField ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
-
+              <div className={`space-y-6 transition-all duration-500 ease-in-out ${identityType === "private" || (identityType === "organization" && orgName) && educationField ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
+                {/* Organization fields — only if org */}
+                <div className={`overflow-hidden transition-all duration-400 ease-in-out ${identityType === "organization" ? 'max-h-50 opacity-100' : 'max-h-0 opacity-0'}`}>
+                  
+                  <div className="grid grid-cols-1 gap-4" ref={orgNameRef}>
+                    <div className="space-y-1">
+                      <label className="label">Organisasjonsnavn <span className="text-error">*</span></label>
+                      <input
+                        type="text"
+                        className={inputClass("organizationName")}
+                        placeholder="Firma AS"
+                        value={orgName}
+                        onChange={(e) => { setOrgName(e.target.value); clearError("organizationName") }}
+                      />
+                      {errors.organizationName && <p className="text-error text-sm">{errors.organizationName}</p>}
+                    </div>
+                  </div>
+                </div>
                 {/* Name */}
                 <div className="grid grid-cols-2 gap-4" ref={forenameRef}>
                   <div className="space-y-1">
@@ -337,33 +355,26 @@ export default function RequestProject() {
                 </div>
 
                 {/* Address */}
-                <div className="space-y-1" ref={addressRef}>
-                  <label className="label">Adresse <span className="text-error">*</span></label>
-                  <AddressInput
-                    value={address}
-                    onChange={(value) => { setAddress(value); clearError("address") }}
-                    placeholder="Gateveien 1, 0001 Oslo"
-                  />
-                  {errors.address && <p className="text-error text-sm">{errors.address}</p>}
-                </div>
-
-                {/* Organization fields — only if org */}
-                <div className={`overflow-hidden transition-all duration-400 ease-in-out ${identityType === "organization" ? 'max-h-50 opacity-100' : 'max-h-0 opacity-0'}`}>
-                  <div className="grid grid-cols-2 gap-4" ref={orgNameRef}>
-                    <div className="space-y-1">
-                      <label className="label">Organisasjonsnavn <span className="text-error">*</span></label>
-                      <input
-                        type="text"
-                        className={inputClass("organizationName")}
-                        placeholder="Firma AS"
-                        value={orgName}
-                        onChange={(e) => { setOrgName(e.target.value); clearError("organizationName") }}
-                      />
-                      {errors.organizationName && <p className="text-error text-sm">{errors.organizationName}</p>}
-                    </div>
+                <div className="grid grid-cols-2 gap-4" ref={addressRef}>
+                  <div className="" >
+                    <label className="label">Adresse <span className="text-error">*</span></label>
+                    <AddressInput
+                      value={address}
+                      onChange={(value) => { setAddress(value); clearError("address") }}
+                      placeholder="Gateveien 1, 0001 Oslo"
+                    />
+                    {errors.address && <p className="text-error text-sm">{errors.address}</p>}
+                  </div>
+                  <div>
+                    <label className="label">Fakturaadresse <span className="text-error">*</span></label>
+                    <AddressInput
+                      value={billingAddress}
+                      onChange={(value) => { setBillingAddress(value); clearError("billingAddress") }}
+                      placeholder='Gateveien 1, 0001 Oslo'
+                    />
+                    
                   </div>
                 </div>
-
                 <button type="submit" className="btn btn-primary w-full">
                   Neste →
                 </button>

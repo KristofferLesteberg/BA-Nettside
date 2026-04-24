@@ -49,6 +49,7 @@ model ProjectRequest {
   organizationName   String?
   organizationNumber String?
   address String
+  billingAddress String
 
   @@index ([clientEmail])
   @@index ([clientPhone])

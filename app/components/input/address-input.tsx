@@ -18,6 +18,9 @@ export default function AddressInput({ value, onChange, placeholder }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [isFocused, setIsFocused] = useState(false)
   const [address, setAddress] = useState(value)
+  useEffect(() => {
+  setAddress(value)
+}, [value])
   const [suggestions, setSuggestions] = useState<Suggestion[]>([])
 
   useEffect(() => {

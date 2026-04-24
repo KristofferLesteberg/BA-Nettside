@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
     return ok(project, 'Prosjektforespørsel sendt', 201)
   } catch (error) {
     console.error('POST /api/projects:', error)
-    return err('Noe gikk galt på serveren', 500)
+    console.log(error)
+    return err(`Noe gikk galt på serveren ${error}`, 500)
   }
 }
