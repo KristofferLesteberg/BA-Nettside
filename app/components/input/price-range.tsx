@@ -38,7 +38,7 @@ export default function PriceRange({ min, max, onChange, maxValue = 500000, step
               onChange(isNaN(v) ? '0' : v.toFixed(2), max)
             }}
           />
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-text-faint pointer-events-none select-none">kr</span>
+          <span className="relative right-3 top-1/2 -translate-y-1/2 text-sm text-text-faint pointer-events-none select-none">kr</span>
         </div>
         <span className="text-xs text-text-faint shrink-0">—</span>
         <div className="relative flex-1">

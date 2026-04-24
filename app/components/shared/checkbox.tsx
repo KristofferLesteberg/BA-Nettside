@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+
 
 
 
@@ -10,7 +10,7 @@ export default function Checkbox({ checked, callback }: {checked: boolean, callb
     
     <div
       onClick={() => callback()}  
-      className={` flex flex-row ml-auto w-15 h-7 rounded-2xl border-2 cursor-pointer border-secondary
+      className={` flex flex-row ml-auto w-15 h-7 rounded-2xl border border-gray-400 cursor-pointer
         ${checked ? 'bg-green-500' : 'bg-gray-400'}
         transition delay-100 duration-300 ease-in-out
       `}

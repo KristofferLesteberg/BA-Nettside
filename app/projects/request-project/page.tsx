@@ -10,6 +10,7 @@ import AddressInput from '../../components/input/address-input'
 import PriceRange from '../../components/input/price-range'
 import type { ApiResponse } from '@/app/lib/api-response'
 import { ProjectRequestPage1Schema, ProjectRequestPage2Schema } from '@/app/lib/schemas'
+import { NextResponse } from 'next/server'
 
 type IdentityType = "private" | "organization" | ""
 
@@ -45,6 +46,31 @@ export default function RequestProject() {
   const orgNameRef = useRef<HTMLDivElement>(null)
   const educationFieldRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
+
+
+
+
+  const getOrgInfo = async (orgNumber: number) => {
+    try {
+      const res = await fetch(`https://data.brreg.no/enhetsregisteret/api/enheter/${orgNumber}`)
+      const data = await res.json()
+    
+      setEmail(data.epostadresse)
+      setPhone(data.telefon)
+      setPhoneCountry(data.forretningsadresse.land  )
+      setOrgName(data.navn)
+      setAddress(`${data.forretningsadresse.adresse[0]}, ${data.forretningsadresse.postnummer} ${data.forretningsadresse.poststed}`)
+
+    } catch(error) {
+      console.error(error)
+      NextResponse.json({ status: "something went wrong"})
+    }
+
+  }
+
+
+
+
 
   function clearError(field: string) {
     setErrors(prev => { const next = { ...prev }; delete next[field]; return next })
@@ -156,6 +182,11 @@ export default function RequestProject() {
       : "opacity-0 translate-x-8"
     : "opacity-100 translate-x-0"
 
+
+
+
+    
+
   return (
     <div className="w-4/5 min-w-120 max-w-230 mx-auto my-10 mt-32 overflow-hidden">
       <div className="card-accented shadow-xl space-y-6 px-8">
@@ -172,7 +203,7 @@ export default function RequestProject() {
           <div className="flex items-center gap-2 pr-2">
             <span className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${page === 0 ? 'bg-primary' : 'bg-border-strong'}`} />
             <span className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${page === 1 ? 'bg-primary' : 'bg-border-strong'}`} />
-          </div>
+          </div> 
         </div>
 
         <div className={`transition-all duration-300 ease-in-out ${slideClass}`}>
@@ -206,9 +237,43 @@ export default function RequestProject() {
                   </button>
                 </div>
               </div>
+              {/* Education field / category */}
+              <div className={`space-y-1 ${identityType ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`} ref={educationFieldRef}>
+                <label className="label">Linje <span className="text-error">*</span></label>
+                <select
+                  className={inputClass("educationField")}
+                  value={educationField}
+                  onChange={(e) => { setEducationField(e.target.value); clearError("educationField") }}
+                >
+                  <option value="" disabled className="text-text-muted">Velg linje</option>
+                  <option value="BUILDING">Bygg</option>
+                  <option value="CONSTRUCTION">Anlegg</option>
+                </select>
+                {errors.educationField && <p className="text-error text-sm">{errors.educationField}</p>}
+              </div>
+
+              <div className={`space-y-1 ${identityType == "organization" ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <label className="label">Organisasjonsnummer  </label>
+                <div className='relative flex-1 justify-center align-middle'>
+                  <input
+                    type="text"
+                    className={`${inputClass("organizationNumber")}`}
+                    placeholder="123 456 789"
+                    value={orgNumber}
+                    onChange={(e) => { setOrgNumber(e.target.value.replace(/\D/g, "").slice(0, 9)); clearError("organizationNumber") }}
+                  />
+                  <button
+                    onClick={() => getOrgInfo(Number(orgNumber))}
+                    className="absolute right-1 mt-auto mb-auto mr-3 h-full"
+                  >
+                    hei
+                  </button>
+                </div>
+                {errors.organizationNumber && <p className="text-error text-sm">{errors.organizationNumber}</p>}
+              </div>
 
               {/* Revealed after identity is chosen */}
-              <div className={`space-y-6 transition-all duration-500 ease-in-out ${identityType ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div className={`space-y-6 transition-all duration-500 ease-in-out ${identityType == "private" && educationField ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
 
                 {/* Name */}
                 <div className="grid grid-cols-2 gap-4" ref={forenameRef}>
@@ -296,17 +361,6 @@ export default function RequestProject() {
                       />
                       {errors.organizationName && <p className="text-error text-sm">{errors.organizationName}</p>}
                     </div>
-                    <div className="space-y-1">
-                      <label className="label">Organisasjonsnummer  </label>
-                      <input
-                        type="text"
-                        className={inputClass("organizationNumber")}
-                        placeholder="123 456 789"
-                        value={orgNumber}
-                        onChange={(e) => { setOrgNumber(e.target.value.replace(/\D/g, "").slice(0, 9)); clearError("organizationNumber") }}
-                      />
-                      {errors.organizationNumber && <p className="text-error text-sm">{errors.organizationNumber}</p>}
-                    </div>
                   </div>
                 </div>
 
@@ -326,20 +380,7 @@ export default function RequestProject() {
                 Feltene merket med <span className="text-error">*</span> må fylles ut før du kan fortsette
               </p>
 
-              {/* Education field / category */}
-              <div className="space-y-1" ref={educationFieldRef}>
-                <label className="label">Linje <span className="text-error">*</span></label>
-                <select
-                  className={inputClass("educationField")}
-                  value={educationField}
-                  onChange={(e) => { setEducationField(e.target.value); clearError("educationField") }}
-                >
-                  <option value="" disabled className="text-text-muted">Velg linje</option>
-                  <option value="BUILDING">Bygg</option>
-                  <option value="CONSTRUCTION">Anlegg</option>
-                </select>
-                {errors.educationField && <p className="text-error text-sm">{errors.educationField}</p>}
-              </div>
+          
 
               {/* Title */}
               <div className="space-y-1" ref={titleRef}>

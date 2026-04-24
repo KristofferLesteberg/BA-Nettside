@@ -1,7 +1,11 @@
 "use client"
-import { useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import Link from 'next/link'
 import Checkbox from '../components/shared/checkbox'
+
+import { FaExclamation } from "react-icons/fa";
+
+
 interface Prerequisite {
   label: string
   description: string
@@ -33,7 +37,7 @@ const prerequisites : Prerequisite[] = [
 export default function Projects() {
 
   const [checked, setChecked] = useState<boolean[]>(
-    prerequisites.map(() => false)
+    prerequisites.map(() => true)
   )
   
   const [allChecked, setAllChecked] = useState<boolean>(false)
@@ -118,6 +122,7 @@ export default function Projects() {
                   {prerequisites.map((item: Prerequisite, index: number) => (
                     <ul key={index} className='w-full mb-3'>
                       <li>
+                        
                         <b className='text-primary text-lg'>{item.label}</b>
                         <div className='flex flex-row justify-center align-center'>
                           <p className='text-m'>{item.description}</p>
@@ -137,7 +142,6 @@ export default function Projects() {
                         <Link className="btn btn-primary w-1/3 h-10 cursor-pointer" href="/projects/request-project">
                           <button className="cursor-pointer">Bestill et prosjekt!</button>
                         </Link>
-
                       ) : (
                         <button disabled className="btn btn-primary w-1/3 h-10">Bestill et prosjekt!</button>
 
