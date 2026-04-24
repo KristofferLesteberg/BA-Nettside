@@ -148,7 +148,9 @@ exports.Prisma.ProjectRequestScalarFieldEnum = {
   organizationName: 'organizationName',
   organizationNumber: 'organizationNumber',
   address: 'address',
-  billingAddress: 'billingAddress'
+  billingAddress: 'billingAddress',
+  status: 'status',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -179,6 +181,12 @@ exports.Prisma.NullsOrder = {
 exports.EducationField = exports.$Enums.EducationField = {
   BUILDING: 'BUILDING',
   CONSTRUCTION: 'CONSTRUCTION'
+};
+
+exports.Status = exports.$Enums.Status = {
+  NEW: 'NEW',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETE: 'COMPLETE'
 };
 
 exports.Prisma.ModelName = {

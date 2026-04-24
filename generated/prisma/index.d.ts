@@ -40,11 +40,24 @@ export namespace $Enums {
 
 export type EducationField = (typeof EducationField)[keyof typeof EducationField]
 
+
+export const Status: {
+  NEW: 'NEW',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETE: 'COMPLETE'
+};
+
+export type Status = (typeof Status)[keyof typeof Status]
+
 }
 
 export type EducationField = $Enums.EducationField
 
 export const EducationField: typeof $Enums.EducationField
+
+export type Status = $Enums.Status
+
+export const Status: typeof $Enums.Status
 
 /**
  * ##  Prisma Client ʲˢ
@@ -3357,6 +3370,8 @@ export namespace Prisma {
     organizationNumber: string | null
     address: string | null
     billingAddress: string | null
+    status: $Enums.Status | null
+    createdAt: Date | null
   }
 
   export type ProjectRequestMaxAggregateOutputType = {
@@ -3374,6 +3389,8 @@ export namespace Prisma {
     organizationNumber: string | null
     address: string | null
     billingAddress: string | null
+    status: $Enums.Status | null
+    createdAt: Date | null
   }
 
   export type ProjectRequestCountAggregateOutputType = {
@@ -3391,6 +3408,8 @@ export namespace Prisma {
     organizationNumber: number
     address: number
     billingAddress: number
+    status: number
+    createdAt: number
     _all: number
   }
 
@@ -3422,6 +3441,8 @@ export namespace Prisma {
     organizationNumber?: true
     address?: true
     billingAddress?: true
+    status?: true
+    createdAt?: true
   }
 
   export type ProjectRequestMaxAggregateInputType = {
@@ -3439,6 +3460,8 @@ export namespace Prisma {
     organizationNumber?: true
     address?: true
     billingAddress?: true
+    status?: true
+    createdAt?: true
   }
 
   export type ProjectRequestCountAggregateInputType = {
@@ -3456,6 +3479,8 @@ export namespace Prisma {
     organizationNumber?: true
     address?: true
     billingAddress?: true
+    status?: true
+    createdAt?: true
     _all?: true
   }
 
@@ -3560,6 +3585,8 @@ export namespace Prisma {
     organizationNumber: string | null
     address: string
     billingAddress: string
+    status: $Enums.Status
+    createdAt: Date
     _count: ProjectRequestCountAggregateOutputType | null
     _avg: ProjectRequestAvgAggregateOutputType | null
     _sum: ProjectRequestSumAggregateOutputType | null
@@ -3596,6 +3623,8 @@ export namespace Prisma {
     organizationNumber?: boolean
     address?: boolean
     billingAddress?: boolean
+    status?: boolean
+    createdAt?: boolean
   }, ExtArgs["result"]["projectRequest"]>
 
   export type ProjectRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3613,6 +3642,8 @@ export namespace Prisma {
     organizationNumber?: boolean
     address?: boolean
     billingAddress?: boolean
+    status?: boolean
+    createdAt?: boolean
   }, ExtArgs["result"]["projectRequest"]>
 
   export type ProjectRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3630,6 +3661,8 @@ export namespace Prisma {
     organizationNumber?: boolean
     address?: boolean
     billingAddress?: boolean
+    status?: boolean
+    createdAt?: boolean
   }, ExtArgs["result"]["projectRequest"]>
 
   export type ProjectRequestSelectScalar = {
@@ -3647,9 +3680,11 @@ export namespace Prisma {
     organizationNumber?: boolean
     address?: boolean
     billingAddress?: boolean
+    status?: boolean
+    createdAt?: boolean
   }
 
-  export type ProjectRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "educationField" | "title" | "description" | "minPrice" | "maxPrice" | "clientForename" | "clientSurname" | "clientEmail" | "clientPhone" | "organizationName" | "organizationNumber" | "address" | "billingAddress", ExtArgs["result"]["projectRequest"]>
+  export type ProjectRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "educationField" | "title" | "description" | "minPrice" | "maxPrice" | "clientForename" | "clientSurname" | "clientEmail" | "clientPhone" | "organizationName" | "organizationNumber" | "address" | "billingAddress" | "status" | "createdAt", ExtArgs["result"]["projectRequest"]>
 
   export type $ProjectRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ProjectRequest"
@@ -3669,6 +3704,8 @@ export namespace Prisma {
       organizationNumber: string | null
       address: string
       billingAddress: string
+      status: $Enums.Status
+      createdAt: Date
     }, ExtArgs["result"]["projectRequest"]>
     composites: {}
   }
@@ -4106,6 +4143,8 @@ export namespace Prisma {
     readonly organizationNumber: FieldRef<"ProjectRequest", 'String'>
     readonly address: FieldRef<"ProjectRequest", 'String'>
     readonly billingAddress: FieldRef<"ProjectRequest", 'String'>
+    readonly status: FieldRef<"ProjectRequest", 'Status'>
+    readonly createdAt: FieldRef<"ProjectRequest", 'DateTime'>
   }
     
 
@@ -4523,7 +4562,9 @@ export namespace Prisma {
     organizationName: 'organizationName',
     organizationNumber: 'organizationNumber',
     address: 'address',
-    billingAddress: 'billingAddress'
+    billingAddress: 'billingAddress',
+    status: 'status',
+    createdAt: 'createdAt'
   };
 
   export type ProjectRequestScalarFieldEnum = (typeof ProjectRequestScalarFieldEnum)[keyof typeof ProjectRequestScalarFieldEnum]
@@ -4621,6 +4662,13 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'Status'
+   */
+  export type EnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status'>
     
 
 
@@ -4771,6 +4819,8 @@ export namespace Prisma {
     organizationNumber?: StringNullableFilter<"ProjectRequest"> | string | null
     address?: StringFilter<"ProjectRequest"> | string
     billingAddress?: StringFilter<"ProjectRequest"> | string
+    status?: EnumStatusFilter<"ProjectRequest"> | $Enums.Status
+    createdAt?: DateTimeFilter<"ProjectRequest"> | Date | string
   }
 
   export type ProjectRequestOrderByWithRelationInput = {
@@ -4788,6 +4838,8 @@ export namespace Prisma {
     organizationNumber?: SortOrderInput | SortOrder
     address?: SortOrder
     billingAddress?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type ProjectRequestWhereUniqueInput = Prisma.AtLeast<{
@@ -4808,6 +4860,8 @@ export namespace Prisma {
     organizationNumber?: StringNullableFilter<"ProjectRequest"> | string | null
     address?: StringFilter<"ProjectRequest"> | string
     billingAddress?: StringFilter<"ProjectRequest"> | string
+    status?: EnumStatusFilter<"ProjectRequest"> | $Enums.Status
+    createdAt?: DateTimeFilter<"ProjectRequest"> | Date | string
   }, "id">
 
   export type ProjectRequestOrderByWithAggregationInput = {
@@ -4825,6 +4879,8 @@ export namespace Prisma {
     organizationNumber?: SortOrderInput | SortOrder
     address?: SortOrder
     billingAddress?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
     _count?: ProjectRequestCountOrderByAggregateInput
     _avg?: ProjectRequestAvgOrderByAggregateInput
     _max?: ProjectRequestMaxOrderByAggregateInput
@@ -4850,6 +4906,8 @@ export namespace Prisma {
     organizationNumber?: StringNullableWithAggregatesFilter<"ProjectRequest"> | string | null
     address?: StringWithAggregatesFilter<"ProjectRequest"> | string
     billingAddress?: StringWithAggregatesFilter<"ProjectRequest"> | string
+    status?: EnumStatusWithAggregatesFilter<"ProjectRequest"> | $Enums.Status
+    createdAt?: DateTimeWithAggregatesFilter<"ProjectRequest"> | Date | string
   }
 
   export type ProductCreateInput = {
@@ -4985,6 +5043,8 @@ export namespace Prisma {
     organizationNumber?: string | null
     address: string
     billingAddress: string
+    status: $Enums.Status
+    createdAt?: Date | string
   }
 
   export type ProjectRequestUncheckedCreateInput = {
@@ -5002,6 +5062,8 @@ export namespace Prisma {
     organizationNumber?: string | null
     address: string
     billingAddress: string
+    status: $Enums.Status
+    createdAt?: Date | string
   }
 
   export type ProjectRequestUpdateInput = {
@@ -5018,6 +5080,8 @@ export namespace Prisma {
     organizationNumber?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     billingAddress?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectRequestUncheckedUpdateInput = {
@@ -5035,6 +5099,8 @@ export namespace Prisma {
     organizationNumber?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     billingAddress?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectRequestCreateManyInput = {
@@ -5052,6 +5118,8 @@ export namespace Prisma {
     organizationNumber?: string | null
     address: string
     billingAddress: string
+    status: $Enums.Status
+    createdAt?: Date | string
   }
 
   export type ProjectRequestUpdateManyMutationInput = {
@@ -5068,6 +5136,8 @@ export namespace Prisma {
     organizationNumber?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     billingAddress?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectRequestUncheckedUpdateManyInput = {
@@ -5085,6 +5155,8 @@ export namespace Prisma {
     organizationNumber?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
     billingAddress?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -5358,6 +5430,13 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type EnumStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[]
+    notIn?: $Enums.Status[]
+    not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
+  }
+
   export type ProjectRequestCountOrderByAggregateInput = {
     id?: SortOrder
     educationField?: SortOrder
@@ -5373,6 +5452,8 @@ export namespace Prisma {
     organizationNumber?: SortOrder
     address?: SortOrder
     billingAddress?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type ProjectRequestAvgOrderByAggregateInput = {
@@ -5396,6 +5477,8 @@ export namespace Prisma {
     organizationNumber?: SortOrder
     address?: SortOrder
     billingAddress?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type ProjectRequestMinOrderByAggregateInput = {
@@ -5413,6 +5496,8 @@ export namespace Prisma {
     organizationNumber?: SortOrder
     address?: SortOrder
     billingAddress?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type ProjectRequestSumOrderByAggregateInput = {
@@ -5436,6 +5521,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type EnumStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[]
+    notIn?: $Enums.Status[]
+    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusFilter<$PrismaModel>
+    _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
   export type ProductImageCreateNestedManyWithoutProductInput = {
@@ -5524,6 +5619,10 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type EnumStatusFieldUpdateOperationsInput = {
+    set?: $Enums.Status
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -5707,6 +5806,13 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedEnumStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[]
+    notIn?: $Enums.Status[]
+    not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
+  }
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | null
@@ -5722,6 +5828,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[]
+    notIn?: $Enums.Status[]
+    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusFilter<$PrismaModel>
+    _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
   export type ProductImageCreateWithoutProductInput = {

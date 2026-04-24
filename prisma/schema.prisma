@@ -14,6 +14,12 @@ enum EducationField {
   CONSTRUCTION // Annlegg
 }
 
+enum Status {
+  NEW
+  IN_PROGRESS
+  COMPLETE
+}
+
 model Product {
   id Int @id @default(autoincrement())
   educationField EducationField?
@@ -50,6 +56,8 @@ model ProjectRequest {
   organizationNumber String?
   address String
   billingAddress String
+  status Status
+  createdAt DateTime @default(now())
 
   @@index ([clientEmail])
   @@index ([clientPhone])
