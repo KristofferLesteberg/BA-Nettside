@@ -59,13 +59,21 @@ export default function RequestProject() {
         return
       }
       const data = await res.json()
+      if(data.epostadresse) {
+        setEmail(data.epostadresse)
+      }
+      
+      if(data.telefon) {
+        setPhoneCountry("NO")
+        const e164 = `+47${data.telefon.replace(/\s/g, "")}` as E164Number
+        setPhone(e164)
+      }
 
-      setEmail(data.epostadresse)
-      const e164 = `+47${data.telefon.replace(/\s/g, "")}` as E164Number
-      setPhone(e164)
-      setPhoneCountry("NO")
       setOrgName(data.navn)
-      setAddress(`${data.forretningsadresse.adresse[0]}, ${data.forretningsadresse.postnummer} ${data.forretningsadresse.poststed}`)
+      if(data.forretningsadresse) {
+        setAddress(`${data.forretningsadresse.adresse[0]}, ${data.forretningsadresse.postnummer} ${data.forretningsadresse.poststed}`)
+      }
+      
     } catch(error) {
       console.error(error)
     }
