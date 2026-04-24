@@ -275,7 +275,7 @@ export default function RequestProject() {
               </div>
 
               {/* Revealed after identity is chosen */}
-              <div className={`space-y-6 transition-all duration-500 ease-in-out ${identityType === "private" || (identityType === "organization" && orgName) && educationField ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div className={`space-y-6 transition-all duration-500 ease-in-out ${(identityType === "private" && educationField) || (identityType === "organization" && orgName) ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
                 {/* Organization fields — only if org */}
                 <div className={`overflow-hidden transition-all duration-400 ease-in-out ${identityType === "organization" ? 'max-h-50 opacity-100' : 'max-h-0 opacity-0'}`}>
                   

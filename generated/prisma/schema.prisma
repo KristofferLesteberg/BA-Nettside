@@ -57,7 +57,7 @@ model ProjectRequest {
   organizationNumber String?
   address            String
   billingAddress     String
-  status             Status
+  status             Status          @default(NEW)
   createdAt          DateTime        @default(now())
 
   @@index([clientEmail])

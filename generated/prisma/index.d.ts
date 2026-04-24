@@ -5043,7 +5043,7 @@ export namespace Prisma {
     organizationNumber?: string | null
     address: string
     billingAddress: string
-    status: $Enums.Status
+    status?: $Enums.Status
     createdAt?: Date | string
   }
 
@@ -5062,7 +5062,7 @@ export namespace Prisma {
     organizationNumber?: string | null
     address: string
     billingAddress: string
-    status: $Enums.Status
+    status?: $Enums.Status
     createdAt?: Date | string
   }
 
@@ -5118,7 +5118,7 @@ export namespace Prisma {
     organizationNumber?: string | null
     address: string
     billingAddress: string
-    status: $Enums.Status
+    status?: $Enums.Status
     createdAt?: Date | string
   }
 
