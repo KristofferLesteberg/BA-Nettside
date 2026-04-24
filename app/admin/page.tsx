@@ -1,22 +1,20 @@
-
-import ProductCard from '../components/product/ProductCard'
-import { prisma } from '../lib/prisma'
+import { prisma } from '@/app/lib/prisma'
 import Link from 'next/link';
-
 import { HiOutlinePlusSm } from "react-icons/hi";
 
-
+import ProductsGrid from '../components/product/productCardGrid';
 
 const page = async () => {      
  
   const products = await prisma.product.findMany({
-    include: { images: true}
+    include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } }
   })
 
-  const convertedProducts = products.map((product) => ({
-    ...product, 
+  const convertedProducts = products.map(({ images, ...product }) => ({
+    ...product,
     price: product.price.toNumber(),
-    publishedAt: product.publishedAt.toISOString()
+    publishedAt: product.publishedAt.toISOString(),
+    image: images[0] ?? null,
   }))
   
   return (
@@ -33,11 +31,7 @@ const page = async () => {
             </Link>
           </div>
         </div>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 place-items-center border pt-4'>
-            {convertedProducts.map((product) => (
-                <ProductCard key={product.id} product={product} isAdmin={true}/>
-            ))}
-        </div>
+        <ProductsGrid products={convertedProducts} isAdmin={true} />
      </div>
 </div>
   )
