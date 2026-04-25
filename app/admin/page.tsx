@@ -1,11 +1,10 @@
 import { prisma } from '@/app/lib/prisma'
-import Link from 'next/link';
-import { HiOutlinePlusSm } from "react-icons/hi";
+import Link from 'next/link'
+import { HiOutlinePlusSm } from "react-icons/hi"
+import AdminProductsView from '@/app/components/admin/AdminProductsView'
 
-import ProductsGrid from '../components/product/productCardGrid';
+const page = async () => {
 
-const page = async () => {      
- 
   const products = await prisma.product.findMany({
     include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } }
   })
@@ -16,11 +15,9 @@ const page = async () => {
     publishedAt: product.publishedAt.toISOString(),
     image: images[0] ?? null,
   }))
-  
+
   return (
     <div>
-      {/*<button onClick={() => signOut({ callbackUrl: 'http://localhost:3000/admin/login' })} >Log out</button>
-      <p>logged in as {session?.user?.name}</p>*/}
       <div className="max-w-full mx-auto px-4">
         <div className='flex flex-row items-center mb-10 mt-50'>
           <h1 className='heading-1'>Produkter:</h1>
@@ -31,9 +28,9 @@ const page = async () => {
             </Link>
           </div>
         </div>
-        <ProductsGrid products={convertedProducts} isAdmin={true} />
-     </div>
-</div>
+        <AdminProductsView products={convertedProducts} />
+      </div>
+    </div>
   )
 }
 

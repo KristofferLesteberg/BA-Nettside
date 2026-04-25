@@ -1,7 +1,7 @@
 import { prisma } from '../lib/prisma'
-import ProductsGrid from '../components/product/productCardGrid'
+import FilteredProductsGrid from '../components/product/FilteredProductsGrid'
 
-export default async function ProductsPage () {      
+export default async function ProductsPage() {
   const products = await prisma.product.findMany({
     include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } }
   })
@@ -13,7 +13,5 @@ export default async function ProductsPage () {
     image: images[0] ?? null,
   }))
 
-  return (
-    <ProductsGrid products={convertedProducts} isAdmin={false}/>
-  )
+  return <FilteredProductsGrid products={convertedProducts} isAdmin={false} />
 }
