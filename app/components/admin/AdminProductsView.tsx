@@ -17,10 +17,10 @@ export default function AdminProductsView({ products }: { products: ProductCardD
     <FilteredProductsGrid
       products={products}
       isAdmin={true}
-      extraControls={
-        <Link href="/admin/newProduct" className="btn btn-primary ml-auto gap-1.5">
+      sidebarAction={
+        <Link href="/admin/newProduct" className="btn btn-primary w-full gap-1.5">
           <HiOutlinePlusSm className="text-base" />
-          Ny annonse
+          Ny produkt
         </Link>
       }
     />
