@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
     }
 
     revalidatePath('/admin')
+    revalidatePath('/products')
     return ok(product, 'Produkt opprettet', 201)
   } catch (error) {
     console.error('POST /api/products:', error)

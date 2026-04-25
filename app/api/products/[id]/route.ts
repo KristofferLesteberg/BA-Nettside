@@ -43,6 +43,7 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
     const deleted = await prisma.product.delete({ where: { id: productId } })
 
     revalidatePath('/admin')
+    revalidatePath('/products')
     return ok(deleted, 'Produkt slettet')
   } catch (error) {
     console.error('DELETE /api/products/[id]:', error)
@@ -93,6 +94,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
     await syncProductImages(imageIds, imageFiles, updatedProduct.id)
 
     revalidatePath('/admin')
+    revalidatePath('/products')
     return ok(updatedProduct, 'Produkt oppdatert')
   } catch (error) {
     console.error('PATCH /api/products/[id]:', error)
