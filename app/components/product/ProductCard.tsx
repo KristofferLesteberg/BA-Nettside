@@ -1,24 +1,23 @@
 "use client"
 
-import { Product, ProductImage } from "@/generated/prisma"
+import type { ProductCardData } from "@/app/lib/types"
 import DeleteProduct from "../admin/DeleteProduct"
 
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from "react"
 
-
 import { BsThreeDots } from "react-icons/bs";
 import { MdOutlineModeEdit } from "react-icons/md";
 
 interface ProductCardProps {
-    product: Omit<Product, 'price' | 'publishedAt'> & { price: number, publishedAt: string, image: ProductImage | null }
-    isAdmin: boolean
+  product: ProductCardData
+  isAdmin: boolean
 }
 
 const ProductCard = ({ product, isAdmin }: ProductCardProps ) => {
 
-    const [options, setOptions] = useState(false)
+  const [options, setOptions] = useState(false)
 
   return (
     <div className="group w-100 h-full shadow-sm transition-all duration-300 cursor-pointer p-2 border rounded border-transparent hover:border-primary">
@@ -38,9 +37,9 @@ const ProductCard = ({ product, isAdmin }: ProductCardProps ) => {
     
         {isAdmin && (
           <button
-              type="button"
-              onClick={() => setOptions(!options)}
-              className="ml-auto mr-3 w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:border-gray-500 cursor-pointer transition-colors"
+            type="button"
+            onClick={() => setOptions(!options)}
+            className="ml-auto mr-3 w-8 h-8 flex items-center justify-center border border-gray-300 rounded hover:border-gray-500 cursor-pointer transition-colors"
           >
             <BsThreeDots />
           </button>  

@@ -1,8 +1,8 @@
-import { Product, ProductImage } from "@/generated/prisma";
-import ProductCard from "./ProductCard";
+import type { ProductCardData } from "@/app/lib/types"
+import ProductCard from "./ProductCard"
 
-export interface ProductsGridProps {
-  products: (Omit<Product, 'price' | 'publishedAt'> & { price: number, publishedAt: string, image: ProductImage })[],
+interface ProductsGridProps {
+  products: ProductCardData[]
   isAdmin: boolean
 }
 
