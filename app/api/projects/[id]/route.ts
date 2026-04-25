@@ -5,6 +5,8 @@ import { EducationField } from '@/generated/prisma'
 import { ProjectRequestUpdateSchema } from '@/app/lib/schemas'
 import { ok, err, validationErr } from '@/app/lib/api-response'
 
+import { ProjectRequestStatusUpdateSchema } from '../../../lib/schemas'
+
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const token = await getToken({ req })
   if (!token) return err('Ikke autorisert', 401)
@@ -34,14 +36,12 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
     if (isNaN(projectId)) return err('Ugyldig prosjekt-ID', 400)
 
     const body = await req.json()
-    const parsed = ProjectRequestUpdateSchema.safeParse(body)
+    const parsed = ProjectRequestStatusUpdateSchema.safeParse(body)
     if (!parsed.success) return validationErr(parsed.error)
-
-    const { educationField, ...rest } = parsed.data
 
     const updated = await prisma.projectRequest.update({
       where: { id: projectId },
-      data: { ...rest, educationField: (educationField as EducationField) ?? null }
+      data: { status: parsed.data.status }
     })
 
     return ok(updated, 'Prosjekt oppdatert')

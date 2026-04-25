@@ -59,13 +59,21 @@ export default function RequestProject() {
         return
       }
       const data = await res.json()
+      if(data.epostadresse) {
+        setEmail(data.epostadresse)
+      }
+      
+      if(data.telefon) {
+        setPhoneCountry("NO")
+        const e164 = `+47${data.telefon.replace(/\s/g, "")}` as E164Number
+        setPhone(e164)
+      }
 
-      setEmail(data.epostadresse)
-      const e164 = `+47${data.telefon.replace(/\s/g, "")}` as E164Number
-      setPhone(e164)
-      setPhoneCountry("NO")
       setOrgName(data.navn)
-      setAddress(`${data.forretningsadresse.adresse[0]}, ${data.forretningsadresse.postnummer} ${data.forretningsadresse.poststed}`)
+      if(data.forretningsadresse) {
+        setAddress(`${data.forretningsadresse.adresse[0]}, ${data.forretningsadresse.postnummer} ${data.forretningsadresse.poststed}`)
+      }
+      
     } catch(error) {
       console.error(error)
     }
@@ -275,7 +283,7 @@ export default function RequestProject() {
               </div>
 
               {/* Revealed after identity is chosen */}
-              <div className={`space-y-6 transition-all duration-500 ease-in-out ${identityType === "private" || (identityType === "organization" && orgName) && educationField ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div className={`space-y-6 transition-all duration-500 ease-in-out ${(identityType === "private" && educationField) || (identityType === "organization" && orgName) ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
                 {/* Organization fields — only if org */}
                 <div className={`overflow-hidden transition-all duration-400 ease-in-out ${identityType === "organization" ? 'max-h-50 opacity-100' : 'max-h-0 opacity-0'}`}>
                   
