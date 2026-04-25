@@ -2,16 +2,18 @@
 
 import { useState, useMemo } from 'react'
 import type { ProductCardData } from '@/app/lib/types'
-import ProductsGrid from './productsGrid'
+import ProductsGrid from '@/app/components/product/ProductsGrid'
+
+import { EducationField } from '@/generated/prisma'
 
 export type SortOption = 'newest' | 'oldest' | 'price-asc' | 'price-desc'
-export type CategoryFilter = 'ALL' | 'BUILDING' | 'CONSTRUCTION'
+export type CategoryFilter = EducationField | 'ALL' // Allows for future changes in EducationFiled variations with no big tweaks
+
 
 interface Props {
   products: ProductCardData[]
   isAdmin: boolean
   extraControls?: React.ReactNode
-  // Memoize this array in the parent to avoid unnecessary re-filtering
   extraFilters?: ((p: ProductCardData) => boolean)[]
 }
 

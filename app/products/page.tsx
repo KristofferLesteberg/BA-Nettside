@@ -13,5 +13,12 @@ export default async function ProductsPage() {
     image: images[0] ?? null,
   }))
 
-  return <FilteredProductsGrid products={convertedProducts} isAdmin={false} />
+  return (
+    <section className="flex flex-col gap-10 mt-8 mb-8 ml-8">
+      <div className="">
+        <h1 className='heading-1'>Produkter:</h1>
+      </div>
+      <FilteredProductsGrid products={convertedProducts} isAdmin={false} />
+    </section>
+  )
 }
