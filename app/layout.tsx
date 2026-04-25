@@ -1,9 +1,13 @@
 
 import type { Metadata } from "next";
-import "./globals.css";
+import "@/app/globals.css";
 
-import Providers from './components/shared/providers';
+import Header from "./components/shared/Header";
+import Footer from "./components/shared/Footer";
+import Providers from '@/app/components/shared/providers';
 import { Toaster } from "react-hot-toast";
+import "react-phone-number-input/style.css";
+import "rc-slider/assets/index.css";
 
 export const metadata: Metadata = {
   title: "BAT",
@@ -19,7 +23,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>
-          {children}
+          <Header />
+          <main className="pt-20">
+            {children}
+          </main>
+          <Footer />
           <Toaster position="top-center" />
         </Providers>
       </body>

@@ -145,8 +145,10 @@ exports.Prisma.ProjectRequestScalarFieldEnum = {
   clientSurname: 'clientSurname',
   clientEmail: 'clientEmail',
   clientPhone: 'clientPhone',
+  organizationName: 'organizationName',
   organizationNumber: 'organizationNumber',
-  address: 'address'
+  address: 'address',
+  billingAddress: 'billingAddress'
 };
 
 exports.Prisma.SortOrder = {

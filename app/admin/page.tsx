@@ -1,5 +1,6 @@
 import { prisma } from '@/app/lib/prisma'
 import AdminTabManager, { type AdminTab } from '@/app/components/admin/AdminTabManager'
+import AdminProductsView from '@/app/components/admin/AdminProductsView'
 
 const page = async () => {
 
@@ -15,7 +16,12 @@ const page = async () => {
   }))
 
   const tabs: AdminTab[] = [
-  
+    {
+      label: "Produkter",
+      content: <AdminProductsView products={convertedProducts} />,
+    },
+    // Add more tabs here as admin sections are built out:
+    // { label: "Prosjekter", content: <AdminProjectsView /> },
   ]
 
   return (

@@ -1,5 +1,6 @@
 @import "tailwindcss";
-
+@import "react-phone-number-input/style.css";
+@import "rc-slider/assets/index.css";
 /* Declare all the GLOBAL COLORS, FONTS, CLASSES, etc. */
 @theme {
  
@@ -9,16 +10,21 @@
   --color-secondary:        #1a5276;   /* Agder dark blue — replace with exact hex */
   --color-secondary-hover:  #154360;
  
-  /* --- Surfaces --- */
-  --color-bg:               #ffffff;
-  --color-surface:          #f7f7f7;
-  --color-surface-raised:   #f1f1f1;
+  /* --- Surfaces (elevation levels, lowest → highest) --- */
+  --color-bg:               #ffffff;   /* level 0: page background */
+  --color-surface-sunken:   #f0f0f0;   /* level -1: inset areas, input backgrounds */
+  --color-surface:          #f7f7f7;   /* level 1: cards, panels, header */
+  --color-surface-raised:   #e8e8e8;   /* level 2: hover states, slightly lifted */
+  --color-surface-float:    #ffffff;   /* level 3: dropdowns, popovers — white + shadow */
+  --color-surface-overlay:  #ffffff;   /* level 4: modals, dialogs — white + heavy shadow */
  
   /* --- Text --- */
   --color-text:             #1a1a1a;
   --color-text-muted:       #5f6368;
   --color-text-faint:       #9aa0a6;
   --color-text-on-primary:  #ffffff;
+  --color-link:             oklch(37.3% 0.034 259.733);
+  --color-link-hover:       oklch(21% 0.034 264.665);
  
   /* --- Border --- */
   --color-border:           #e0e0e0;
@@ -55,10 +61,31 @@
   --radius-full:  9999px;
 }
 
+@utility shadow-t-md {
+  box-shadow: 0 -4px 6px -1px rgb(0 0 0 / 0.1), 0 -2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+@utility shadow-b-md {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+@utility shadow-y-md {
+  box-shadow:
+    0 -4px 6px -1px rgb(0 0 0 / 0.1), 0 -2px 4px -2px rgb(0 0 0 / 0.1),
+    0  4px 6px -1px rgb(0 0 0 / 0.1), 0  2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
 /* Automatically apply a certain style to all the elements of given type */
 @layer base {
+  html {
+    overscroll-behavior: none;
+    background-color: var(--color-secondary); /* fallback for Safari iOS rubber-band at bottom */
+  }
+
   body {
-    font-family:  var(--font-sans);
+    overflow-x:          hidden;
+    overscroll-behavior: none;
+    font-family:         var(--font-sans);
     font-size:    1rem;
     color:        var(--color-text);
     background:   var(--color-bg);
@@ -90,7 +117,7 @@
     font-size:      0.85rem;
     font-weight:    700;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
     color:          var(--color-text-faint);
   }
   .heading-1 { font-size: 2.25rem;  font-weight: 700; letter-spacing: -0.02em; font-family: var(--font-display); }
@@ -116,7 +143,7 @@
     text-decoration: none;
   }
   .btn:disabled {
-    background:   var(--color-surface);
+    background:   var(--color-surface-sunken);
     color:        var(--color-text-faint);
     cursor:       not-allowed;
     border-color: var(--color-border);
@@ -126,9 +153,9 @@
   .btn-secondary                     { background: var(--color-secondary); color: var(--color-text-on-primary); }
   .btn-secondary:hover:not(:disabled){ background: var(--color-secondary-hover); }
   .btn-outline                     { background: transparent; color: var(--color-text); border-color: var(--color-border-strong); }
-  .btn-outline:hover:not(:disabled){ background: var(--color-surface); }
+  .btn-outline:hover:not(:disabled){ background: var(--color-surface-raised); }
   .btn-ghost                       { background: transparent; color: var(--color-text-muted); border-color: transparent; }
-  .btn-ghost:hover:not(:disabled)  { color: var(--color-text); background: var(--color-surface); }
+  .btn-ghost:hover:not(:disabled)  { color: var(--color-text); background: var(--color-surface-raised); }
   .btn-error                       { background: var(--color-error-bg);   color: var(--color-error);   border-color: var(--color-error); }
   .btn-error:hover:not(:disabled)  { filter: brightness(0.94); }
   .btn-success                     { background: var(--color-success-bg); color: var(--color-success); border-color: var(--color-success); }
@@ -156,8 +183,9 @@
 
 
   .input::placeholder { color: var(--color-text-faint); }
-  .input:focus        { border-color: var(--color-primary); }
-  .input:disabled     { background: var(--color-surface); color: var(--color-text-faint); cursor: not-allowed; }
+  .input:focus        { border-color: var(--color-secondary); }
+  .input.border-error:focus { border-color: var(--color-error); }
+  .input:disabled     { background: var(--color-surface); color: var(--color-text-faint); cursor: not-allowed; opacity: 0.6; }
  
   /* Cards */
   .card          { border-radius: var(--radius-lg); padding: var(--spacing-md); background: var(--color-bg);      border: 1px solid var(--color-border); }
@@ -182,10 +210,13 @@
   .badge-warning  { background: var(--color-warning-bg); color: var(--color-warning); }
   .badge-info     { background: var(--color-info-bg);    color: var(--color-info); }
  
-  /* Background helpers */
-  .bg-page   { background: var(--color-bg); }
-  .bg-subtle { background: var(--color-surface); }
-  .bg-muted  { background: var(--color-surface-raised); }
+  /* Background helpers (mirrors elevation scale) */
+  .bg-sunken { background: var(--color-surface-sunken); } /* level -1 */
+  .bg-page   { background: var(--color-bg); }             /* level 0 */
+  .bg-subtle { background: var(--color-surface); }        /* level 1 */
+  .bg-muted  { background: var(--color-surface-raised); } /* level 2 */
+  .bg-float  { background: var(--color-surface-float); }  /* level 3 */
+  .bg-overlay{ background: var(--color-surface-overlay); }/* level 4 */
  
   /* Text helpers */
   .text-muted { color: var(--color-text-muted); }
@@ -195,4 +226,81 @@
   .border-default { border-color: var(--color-border); }
   .border-strong  { border-color: var(--color-border-strong); }
   .border-primary { border-color: var(--color-primary); }
+
+  .header-link {
+    color: var(--color-link);
+    transition: color 0.2s ease;
+  }
+  .header-link:hover {
+    color: var(--color-link-hover);
+  }
+}
+
+:root {
+  --PhoneInputCountrySelectArrow-color--focus: var(--color-secondary);
+  --PhoneInputCountryFlag-borderColor--focus: var(--color-secondary);
+}
+
+/* Strip inner input styles — border/focus is handled by the outer .input wrapper */
+.PhoneInputInput {
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  font-size: 0.875rem;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.PhoneInputInput::placeholder { color: var(--color-text-faint); }
+.PhoneInputInput:focus { outline: none; box-shadow: none; }
+
+/* Forward focus border to the outer wrapper (gets .PhoneInput--focus when input is focused) */
+.PhoneInput--focus {
+  border-color: var(--color-secondary);
+}
+
+/* Tailwind v4 preflight sets `img { height: auto }` which overrides the library's height: 100%,
+   causing the flag to render at natural image dimensions instead of the constrained icon size. */
+.PhoneInputCountryIcon img {
+  width: 100%;
+  height: 100%;
+  max-width: unset;
+}
+
+/* rc-slider theme overrides */
+.rc-slider-rail {
+  background-color: var(--color-border);
+  height: 6px;
+}
+.rc-slider-track {
+  background-color: var(--color-primary);
+  height: 6px;
+}
+.rc-slider-handle {
+  width: 18px;
+  height: 18px;
+  margin-top: -6px;
+  border: 2px solid var(--color-primary);
+  background-color: var(--color-bg);
+  opacity: 1;
+  box-shadow: none;
+}
+.rc-slider-handle:hover,
+.rc-slider-handle:focus,
+.rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
+  border-color: var(--color-primary-hover);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 20%, transparent);
+}
+
+/* Animation for the controls on ProductCard */
+@keyframes dropdown-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dropdown-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(6px); }
 }

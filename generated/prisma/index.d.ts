@@ -1284,7 +1284,7 @@ export namespace Prisma {
 
   export type ProductGroupByOutputType = {
     id: number
-    educationField: $Enums.EducationField
+    educationField: $Enums.EducationField | null
     title: string
     description: string
     price: Decimal
@@ -1373,7 +1373,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      educationField: $Enums.EducationField
+      educationField: $Enums.EducationField | null
       title: string
       description: string
       price: Prisma.Decimal
@@ -3353,8 +3353,10 @@ export namespace Prisma {
     clientSurname: string | null
     clientEmail: string | null
     clientPhone: string | null
+    organizationName: string | null
     organizationNumber: string | null
     address: string | null
+    billingAddress: string | null
   }
 
   export type ProjectRequestMaxAggregateOutputType = {
@@ -3368,8 +3370,10 @@ export namespace Prisma {
     clientSurname: string | null
     clientEmail: string | null
     clientPhone: string | null
+    organizationName: string | null
     organizationNumber: string | null
     address: string | null
+    billingAddress: string | null
   }
 
   export type ProjectRequestCountAggregateOutputType = {
@@ -3383,8 +3387,10 @@ export namespace Prisma {
     clientSurname: number
     clientEmail: number
     clientPhone: number
+    organizationName: number
     organizationNumber: number
     address: number
+    billingAddress: number
     _all: number
   }
 
@@ -3412,8 +3418,10 @@ export namespace Prisma {
     clientSurname?: true
     clientEmail?: true
     clientPhone?: true
+    organizationName?: true
     organizationNumber?: true
     address?: true
+    billingAddress?: true
   }
 
   export type ProjectRequestMaxAggregateInputType = {
@@ -3427,8 +3435,10 @@ export namespace Prisma {
     clientSurname?: true
     clientEmail?: true
     clientPhone?: true
+    organizationName?: true
     organizationNumber?: true
     address?: true
+    billingAddress?: true
   }
 
   export type ProjectRequestCountAggregateInputType = {
@@ -3442,8 +3452,10 @@ export namespace Prisma {
     clientSurname?: true
     clientEmail?: true
     clientPhone?: true
+    organizationName?: true
     organizationNumber?: true
     address?: true
+    billingAddress?: true
     _all?: true
   }
 
@@ -3544,8 +3556,10 @@ export namespace Prisma {
     clientSurname: string
     clientEmail: string
     clientPhone: string
+    organizationName: string | null
     organizationNumber: string | null
     address: string
+    billingAddress: string
     _count: ProjectRequestCountAggregateOutputType | null
     _avg: ProjectRequestAvgAggregateOutputType | null
     _sum: ProjectRequestSumAggregateOutputType | null
@@ -3578,8 +3592,10 @@ export namespace Prisma {
     clientSurname?: boolean
     clientEmail?: boolean
     clientPhone?: boolean
+    organizationName?: boolean
     organizationNumber?: boolean
     address?: boolean
+    billingAddress?: boolean
   }, ExtArgs["result"]["projectRequest"]>
 
   export type ProjectRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3593,8 +3609,10 @@ export namespace Prisma {
     clientSurname?: boolean
     clientEmail?: boolean
     clientPhone?: boolean
+    organizationName?: boolean
     organizationNumber?: boolean
     address?: boolean
+    billingAddress?: boolean
   }, ExtArgs["result"]["projectRequest"]>
 
   export type ProjectRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3608,8 +3626,10 @@ export namespace Prisma {
     clientSurname?: boolean
     clientEmail?: boolean
     clientPhone?: boolean
+    organizationName?: boolean
     organizationNumber?: boolean
     address?: boolean
+    billingAddress?: boolean
   }, ExtArgs["result"]["projectRequest"]>
 
   export type ProjectRequestSelectScalar = {
@@ -3623,11 +3643,13 @@ export namespace Prisma {
     clientSurname?: boolean
     clientEmail?: boolean
     clientPhone?: boolean
+    organizationName?: boolean
     organizationNumber?: boolean
     address?: boolean
+    billingAddress?: boolean
   }
 
-  export type ProjectRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "educationField" | "title" | "description" | "minPrice" | "maxPrice" | "clientForename" | "clientSurname" | "clientEmail" | "clientPhone" | "organizationNumber" | "address", ExtArgs["result"]["projectRequest"]>
+  export type ProjectRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "educationField" | "title" | "description" | "minPrice" | "maxPrice" | "clientForename" | "clientSurname" | "clientEmail" | "clientPhone" | "organizationName" | "organizationNumber" | "address" | "billingAddress", ExtArgs["result"]["projectRequest"]>
 
   export type $ProjectRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ProjectRequest"
@@ -3643,8 +3665,10 @@ export namespace Prisma {
       clientSurname: string
       clientEmail: string
       clientPhone: string
+      organizationName: string | null
       organizationNumber: string | null
       address: string
+      billingAddress: string
     }, ExtArgs["result"]["projectRequest"]>
     composites: {}
   }
@@ -4078,8 +4102,10 @@ export namespace Prisma {
     readonly clientSurname: FieldRef<"ProjectRequest", 'String'>
     readonly clientEmail: FieldRef<"ProjectRequest", 'String'>
     readonly clientPhone: FieldRef<"ProjectRequest", 'String'>
+    readonly organizationName: FieldRef<"ProjectRequest", 'String'>
     readonly organizationNumber: FieldRef<"ProjectRequest", 'String'>
     readonly address: FieldRef<"ProjectRequest", 'String'>
+    readonly billingAddress: FieldRef<"ProjectRequest", 'String'>
   }
     
 
@@ -4494,8 +4520,10 @@ export namespace Prisma {
     clientSurname: 'clientSurname',
     clientEmail: 'clientEmail',
     clientPhone: 'clientPhone',
+    organizationName: 'organizationName',
     organizationNumber: 'organizationNumber',
-    address: 'address'
+    address: 'address',
+    billingAddress: 'billingAddress'
   };
 
   export type ProjectRequestScalarFieldEnum = (typeof ProjectRequestScalarFieldEnum)[keyof typeof ProjectRequestScalarFieldEnum]
@@ -4611,7 +4639,7 @@ export namespace Prisma {
     OR?: ProductWhereInput[]
     NOT?: ProductWhereInput | ProductWhereInput[]
     id?: IntFilter<"Product"> | number
-    educationField?: EnumEducationFieldFilter<"Product"> | $Enums.EducationField
+    educationField?: EnumEducationFieldNullableFilter<"Product"> | $Enums.EducationField | null
     title?: StringFilter<"Product"> | string
     description?: StringFilter<"Product"> | string
     price?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
@@ -4623,7 +4651,7 @@ export namespace Prisma {
 
   export type ProductOrderByWithRelationInput = {
     id?: SortOrder
-    educationField?: SortOrder
+    educationField?: SortOrderInput | SortOrder
     title?: SortOrder
     description?: SortOrder
     price?: SortOrder
@@ -4638,7 +4666,7 @@ export namespace Prisma {
     AND?: ProductWhereInput | ProductWhereInput[]
     OR?: ProductWhereInput[]
     NOT?: ProductWhereInput | ProductWhereInput[]
-    educationField?: EnumEducationFieldFilter<"Product"> | $Enums.EducationField
+    educationField?: EnumEducationFieldNullableFilter<"Product"> | $Enums.EducationField | null
     title?: StringFilter<"Product"> | string
     description?: StringFilter<"Product"> | string
     price?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
@@ -4650,7 +4678,7 @@ export namespace Prisma {
 
   export type ProductOrderByWithAggregationInput = {
     id?: SortOrder
-    educationField?: SortOrder
+    educationField?: SortOrderInput | SortOrder
     title?: SortOrder
     description?: SortOrder
     price?: SortOrder
@@ -4669,7 +4697,7 @@ export namespace Prisma {
     OR?: ProductScalarWhereWithAggregatesInput[]
     NOT?: ProductScalarWhereWithAggregatesInput | ProductScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Product"> | number
-    educationField?: EnumEducationFieldWithAggregatesFilter<"Product"> | $Enums.EducationField
+    educationField?: EnumEducationFieldNullableWithAggregatesFilter<"Product"> | $Enums.EducationField | null
     title?: StringWithAggregatesFilter<"Product"> | string
     description?: StringWithAggregatesFilter<"Product"> | string
     price?: DecimalWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string
@@ -4739,8 +4767,10 @@ export namespace Prisma {
     clientSurname?: StringFilter<"ProjectRequest"> | string
     clientEmail?: StringFilter<"ProjectRequest"> | string
     clientPhone?: StringFilter<"ProjectRequest"> | string
+    organizationName?: StringNullableFilter<"ProjectRequest"> | string | null
     organizationNumber?: StringNullableFilter<"ProjectRequest"> | string | null
     address?: StringFilter<"ProjectRequest"> | string
+    billingAddress?: StringFilter<"ProjectRequest"> | string
   }
 
   export type ProjectRequestOrderByWithRelationInput = {
@@ -4754,8 +4784,10 @@ export namespace Prisma {
     clientSurname?: SortOrder
     clientEmail?: SortOrder
     clientPhone?: SortOrder
+    organizationName?: SortOrderInput | SortOrder
     organizationNumber?: SortOrderInput | SortOrder
     address?: SortOrder
+    billingAddress?: SortOrder
   }
 
   export type ProjectRequestWhereUniqueInput = Prisma.AtLeast<{
@@ -4772,8 +4804,10 @@ export namespace Prisma {
     clientSurname?: StringFilter<"ProjectRequest"> | string
     clientEmail?: StringFilter<"ProjectRequest"> | string
     clientPhone?: StringFilter<"ProjectRequest"> | string
+    organizationName?: StringNullableFilter<"ProjectRequest"> | string | null
     organizationNumber?: StringNullableFilter<"ProjectRequest"> | string | null
     address?: StringFilter<"ProjectRequest"> | string
+    billingAddress?: StringFilter<"ProjectRequest"> | string
   }, "id">
 
   export type ProjectRequestOrderByWithAggregationInput = {
@@ -4787,8 +4821,10 @@ export namespace Prisma {
     clientSurname?: SortOrder
     clientEmail?: SortOrder
     clientPhone?: SortOrder
+    organizationName?: SortOrderInput | SortOrder
     organizationNumber?: SortOrderInput | SortOrder
     address?: SortOrder
+    billingAddress?: SortOrder
     _count?: ProjectRequestCountOrderByAggregateInput
     _avg?: ProjectRequestAvgOrderByAggregateInput
     _max?: ProjectRequestMaxOrderByAggregateInput
@@ -4810,12 +4846,14 @@ export namespace Prisma {
     clientSurname?: StringWithAggregatesFilter<"ProjectRequest"> | string
     clientEmail?: StringWithAggregatesFilter<"ProjectRequest"> | string
     clientPhone?: StringWithAggregatesFilter<"ProjectRequest"> | string
+    organizationName?: StringNullableWithAggregatesFilter<"ProjectRequest"> | string | null
     organizationNumber?: StringNullableWithAggregatesFilter<"ProjectRequest"> | string | null
     address?: StringWithAggregatesFilter<"ProjectRequest"> | string
+    billingAddress?: StringWithAggregatesFilter<"ProjectRequest"> | string
   }
 
   export type ProductCreateInput = {
-    educationField: $Enums.EducationField
+    educationField?: $Enums.EducationField | null
     title: string
     description: string
     price: Decimal | DecimalJsLike | number | string
@@ -4827,7 +4865,7 @@ export namespace Prisma {
 
   export type ProductUncheckedCreateInput = {
     id?: number
-    educationField: $Enums.EducationField
+    educationField?: $Enums.EducationField | null
     title: string
     description: string
     price: Decimal | DecimalJsLike | number | string
@@ -4838,7 +4876,7 @@ export namespace Prisma {
   }
 
   export type ProductUpdateInput = {
-    educationField?: EnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField
+    educationField?: NullableEnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -4850,7 +4888,7 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    educationField?: EnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField
+    educationField?: NullableEnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -4862,7 +4900,7 @@ export namespace Prisma {
 
   export type ProductCreateManyInput = {
     id?: number
-    educationField: $Enums.EducationField
+    educationField?: $Enums.EducationField | null
     title: string
     description: string
     price: Decimal | DecimalJsLike | number | string
@@ -4872,7 +4910,7 @@ export namespace Prisma {
   }
 
   export type ProductUpdateManyMutationInput = {
-    educationField?: EnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField
+    educationField?: NullableEnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -4883,7 +4921,7 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    educationField?: EnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField
+    educationField?: NullableEnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -4943,8 +4981,10 @@ export namespace Prisma {
     clientSurname: string
     clientEmail: string
     clientPhone: string
+    organizationName?: string | null
     organizationNumber?: string | null
     address: string
+    billingAddress: string
   }
 
   export type ProjectRequestUncheckedCreateInput = {
@@ -4958,8 +4998,10 @@ export namespace Prisma {
     clientSurname: string
     clientEmail: string
     clientPhone: string
+    organizationName?: string | null
     organizationNumber?: string | null
     address: string
+    billingAddress: string
   }
 
   export type ProjectRequestUpdateInput = {
@@ -4972,8 +5014,10 @@ export namespace Prisma {
     clientSurname?: StringFieldUpdateOperationsInput | string
     clientEmail?: StringFieldUpdateOperationsInput | string
     clientPhone?: StringFieldUpdateOperationsInput | string
+    organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationNumber?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
+    billingAddress?: StringFieldUpdateOperationsInput | string
   }
 
   export type ProjectRequestUncheckedUpdateInput = {
@@ -4987,8 +5031,10 @@ export namespace Prisma {
     clientSurname?: StringFieldUpdateOperationsInput | string
     clientEmail?: StringFieldUpdateOperationsInput | string
     clientPhone?: StringFieldUpdateOperationsInput | string
+    organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationNumber?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
+    billingAddress?: StringFieldUpdateOperationsInput | string
   }
 
   export type ProjectRequestCreateManyInput = {
@@ -5002,8 +5048,10 @@ export namespace Prisma {
     clientSurname: string
     clientEmail: string
     clientPhone: string
+    organizationName?: string | null
     organizationNumber?: string | null
     address: string
+    billingAddress: string
   }
 
   export type ProjectRequestUpdateManyMutationInput = {
@@ -5016,8 +5064,10 @@ export namespace Prisma {
     clientSurname?: StringFieldUpdateOperationsInput | string
     clientEmail?: StringFieldUpdateOperationsInput | string
     clientPhone?: StringFieldUpdateOperationsInput | string
+    organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationNumber?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
+    billingAddress?: StringFieldUpdateOperationsInput | string
   }
 
   export type ProjectRequestUncheckedUpdateManyInput = {
@@ -5031,8 +5081,10 @@ export namespace Prisma {
     clientSurname?: StringFieldUpdateOperationsInput | string
     clientEmail?: StringFieldUpdateOperationsInput | string
     clientPhone?: StringFieldUpdateOperationsInput | string
+    organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationNumber?: NullableStringFieldUpdateOperationsInput | string | null
     address?: StringFieldUpdateOperationsInput | string
+    billingAddress?: StringFieldUpdateOperationsInput | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -5046,11 +5098,11 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type EnumEducationFieldFilter<$PrismaModel = never> = {
-    equals?: $Enums.EducationField | EnumEducationFieldFieldRefInput<$PrismaModel>
-    in?: $Enums.EducationField[]
-    notIn?: $Enums.EducationField[]
-    not?: NestedEnumEducationFieldFilter<$PrismaModel> | $Enums.EducationField
+  export type EnumEducationFieldNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.EducationField | EnumEducationFieldFieldRefInput<$PrismaModel> | null
+    in?: $Enums.EducationField[] | null
+    notIn?: $Enums.EducationField[] | null
+    not?: NestedEnumEducationFieldNullableFilter<$PrismaModel> | $Enums.EducationField | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -5181,14 +5233,14 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
-  export type EnumEducationFieldWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.EducationField | EnumEducationFieldFieldRefInput<$PrismaModel>
-    in?: $Enums.EducationField[]
-    notIn?: $Enums.EducationField[]
-    not?: NestedEnumEducationFieldWithAggregatesFilter<$PrismaModel> | $Enums.EducationField
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumEducationFieldFilter<$PrismaModel>
-    _max?: NestedEnumEducationFieldFilter<$PrismaModel>
+  export type EnumEducationFieldNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EducationField | EnumEducationFieldFieldRefInput<$PrismaModel> | null
+    in?: $Enums.EducationField[] | null
+    notIn?: $Enums.EducationField[] | null
+    not?: NestedEnumEducationFieldNullableWithAggregatesFilter<$PrismaModel> | $Enums.EducationField | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumEducationFieldNullableFilter<$PrismaModel>
+    _max?: NestedEnumEducationFieldNullableFilter<$PrismaModel>
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -5292,13 +5344,6 @@ export namespace Prisma {
     sortOrder?: SortOrder
   }
 
-  export type EnumEducationFieldNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.EducationField | EnumEducationFieldFieldRefInput<$PrismaModel> | null
-    in?: $Enums.EducationField[] | null
-    notIn?: $Enums.EducationField[] | null
-    not?: NestedEnumEducationFieldNullableFilter<$PrismaModel> | $Enums.EducationField | null
-  }
-
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | null
@@ -5324,8 +5369,10 @@ export namespace Prisma {
     clientSurname?: SortOrder
     clientEmail?: SortOrder
     clientPhone?: SortOrder
+    organizationName?: SortOrder
     organizationNumber?: SortOrder
     address?: SortOrder
+    billingAddress?: SortOrder
   }
 
   export type ProjectRequestAvgOrderByAggregateInput = {
@@ -5345,8 +5392,10 @@ export namespace Prisma {
     clientSurname?: SortOrder
     clientEmail?: SortOrder
     clientPhone?: SortOrder
+    organizationName?: SortOrder
     organizationNumber?: SortOrder
     address?: SortOrder
+    billingAddress?: SortOrder
   }
 
   export type ProjectRequestMinOrderByAggregateInput = {
@@ -5360,24 +5409,16 @@ export namespace Prisma {
     clientSurname?: SortOrder
     clientEmail?: SortOrder
     clientPhone?: SortOrder
+    organizationName?: SortOrder
     organizationNumber?: SortOrder
     address?: SortOrder
+    billingAddress?: SortOrder
   }
 
   export type ProjectRequestSumOrderByAggregateInput = {
     id?: SortOrder
     minPrice?: SortOrder
     maxPrice?: SortOrder
-  }
-
-  export type EnumEducationFieldNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.EducationField | EnumEducationFieldFieldRefInput<$PrismaModel> | null
-    in?: $Enums.EducationField[] | null
-    notIn?: $Enums.EducationField[] | null
-    not?: NestedEnumEducationFieldNullableWithAggregatesFilter<$PrismaModel> | $Enums.EducationField | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumEducationFieldNullableFilter<$PrismaModel>
-    _max?: NestedEnumEducationFieldNullableFilter<$PrismaModel>
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -5411,8 +5452,8 @@ export namespace Prisma {
     connect?: ProductImageWhereUniqueInput | ProductImageWhereUniqueInput[]
   }
 
-  export type EnumEducationFieldFieldUpdateOperationsInput = {
-    set?: $Enums.EducationField
+  export type NullableEnumEducationFieldFieldUpdateOperationsInput = {
+    set?: $Enums.EducationField | null
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -5481,10 +5522,6 @@ export namespace Prisma {
     update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutImagesInput, ProductUpdateWithoutImagesInput>, ProductUncheckedUpdateWithoutImagesInput>
   }
 
-  export type NullableEnumEducationFieldFieldUpdateOperationsInput = {
-    set?: $Enums.EducationField | null
-  }
-
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
   }
@@ -5500,11 +5537,11 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type NestedEnumEducationFieldFilter<$PrismaModel = never> = {
-    equals?: $Enums.EducationField | EnumEducationFieldFieldRefInput<$PrismaModel>
-    in?: $Enums.EducationField[]
-    notIn?: $Enums.EducationField[]
-    not?: NestedEnumEducationFieldFilter<$PrismaModel> | $Enums.EducationField
+  export type NestedEnumEducationFieldNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.EducationField | EnumEducationFieldFieldRefInput<$PrismaModel> | null
+    in?: $Enums.EducationField[] | null
+    notIn?: $Enums.EducationField[] | null
+    not?: NestedEnumEducationFieldNullableFilter<$PrismaModel> | $Enums.EducationField | null
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -5570,14 +5607,25 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type NestedEnumEducationFieldWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.EducationField | EnumEducationFieldFieldRefInput<$PrismaModel>
-    in?: $Enums.EducationField[]
-    notIn?: $Enums.EducationField[]
-    not?: NestedEnumEducationFieldWithAggregatesFilter<$PrismaModel> | $Enums.EducationField
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumEducationFieldFilter<$PrismaModel>
-    _max?: NestedEnumEducationFieldFilter<$PrismaModel>
+  export type NestedEnumEducationFieldNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EducationField | EnumEducationFieldFieldRefInput<$PrismaModel> | null
+    in?: $Enums.EducationField[] | null
+    notIn?: $Enums.EducationField[] | null
+    not?: NestedEnumEducationFieldNullableWithAggregatesFilter<$PrismaModel> | $Enums.EducationField | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumEducationFieldNullableFilter<$PrismaModel>
+    _max?: NestedEnumEducationFieldNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -5612,17 +5660,6 @@ export namespace Prisma {
     _min?: NestedDecimalFilter<$PrismaModel>
     _max?: NestedDecimalFilter<$PrismaModel>
   }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -5656,13 +5693,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedEnumEducationFieldNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.EducationField | EnumEducationFieldFieldRefInput<$PrismaModel> | null
-    in?: $Enums.EducationField[] | null
-    notIn?: $Enums.EducationField[] | null
-    not?: NestedEnumEducationFieldNullableFilter<$PrismaModel> | $Enums.EducationField | null
-  }
-
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | null
@@ -5675,16 +5705,6 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedEnumEducationFieldNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.EducationField | EnumEducationFieldFieldRefInput<$PrismaModel> | null
-    in?: $Enums.EducationField[] | null
-    notIn?: $Enums.EducationField[] | null
-    not?: NestedEnumEducationFieldNullableWithAggregatesFilter<$PrismaModel> | $Enums.EducationField | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumEducationFieldNullableFilter<$PrismaModel>
-    _max?: NestedEnumEducationFieldNullableFilter<$PrismaModel>
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -5749,7 +5769,7 @@ export namespace Prisma {
   }
 
   export type ProductCreateWithoutImagesInput = {
-    educationField: $Enums.EducationField
+    educationField?: $Enums.EducationField | null
     title: string
     description: string
     price: Decimal | DecimalJsLike | number | string
@@ -5760,7 +5780,7 @@ export namespace Prisma {
 
   export type ProductUncheckedCreateWithoutImagesInput = {
     id?: number
-    educationField: $Enums.EducationField
+    educationField?: $Enums.EducationField | null
     title: string
     description: string
     price: Decimal | DecimalJsLike | number | string
@@ -5786,7 +5806,7 @@ export namespace Prisma {
   }
 
   export type ProductUpdateWithoutImagesInput = {
-    educationField?: EnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField
+    educationField?: NullableEnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -5797,7 +5817,7 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateWithoutImagesInput = {
     id?: IntFieldUpdateOperationsInput | number
-    educationField?: EnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField
+    educationField?: NullableEnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
