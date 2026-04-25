@@ -4,7 +4,7 @@ import type { ProductCardData } from "@/app/lib/types"
 import DeleteProduct from "../admin/DeleteProduct"
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import { BsThreeDots } from "react-icons/bs"
 import { MdOutlineModeEdit } from "react-icons/md"
 
@@ -27,20 +27,32 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, isAdmin }: ProductCardProps) {
   const [open, setOpen] = useState(false)
+  const [closing, setClosing] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
+  const closeMenu = useCallback(() => { if (open && !closing) setClosing(true) }, [open, closing])
+  function handleAnimationEnd() { if (closing) { setClosing(false); setOpen(false) } }
+
   useEffect(() => {
-    if (!open) return
+    if (!open || closing) return
     function onClickOutside(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setOpen(false)
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) closeMenu()
     }
+    function onKeyDown(e: KeyboardEvent) { if (e.key === 'Escape') closeMenu() }
+    function onScroll() { closeMenu() }
     document.addEventListener('mousedown', onClickOutside)
-    return () => document.removeEventListener('mousedown', onClickOutside)
-  }, [open])
+    document.addEventListener('keydown', onKeyDown)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      document.removeEventListener('mousedown', onClickOutside)
+      document.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [open, closing, closeMenu])
 
   return (
     // No overflow-hidden here — it would clip the admin dropdown
-    <div className="card group flex flex-col p-0 hover:border-primary transition-colors duration-200 hover:shadow-md">
+    <div className="card group flex flex-col p-0 hover:border-primary transition-colors duration-200 hover:shadow-md" onMouseLeave={closeMenu}>
 
       {/* Image — overflow-hidden is scoped here so it doesn't clip the dropdown */}
       <Link href={`/products/${product.id}`} className="relative block w-full aspect-4/3 overflow-hidden rounded-t-lg bg-surface">
@@ -77,18 +89,21 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
             <div ref={menuRef} className="relative shrink-0">
               <button
                 type="button"
-                onClick={() => setOpen(prev => !prev)}
+                onClick={() => open ? closeMenu() : setOpen(true)}
                 className="btn btn-ghost w-8 h-8 p-0"
                 aria-label="Alternativer"
               >
                 <BsThreeDots />
               </button>
 
-              {open && (
-                <div className="card absolute right-0 bottom-full mb-1 z-20 flex flex-col p-1 min-w-24 shadow-md">
+              {(open || closing) && (
+                <div
+                  onAnimationEnd={handleAnimationEnd}
+                  className={`card absolute right-0 bottom-full mb-1 z-20 flex flex-col p-1 min-w-24 shadow-md ${closing ? 'animate-[dropdown-out_0.15s_ease_both]' : 'animate-[dropdown-in_0.15s_ease_both]'}`}
+                >
                   <Link
                     href={`/admin/updateProduct/${product.id}`}
-                    onClick={() => setOpen(false)}
+                    onClick={() => closeMenu()}
                     className="btn btn-ghost w-full justify-start gap-2 text-lg"
                   >
                     <MdOutlineModeEdit />
