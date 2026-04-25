@@ -1,14 +1,14 @@
-import React from 'react'
 import Link from 'next/link'
-
+import { prisma } from './lib/prisma'
+import ReviewsCarousel from './components/shared/ReviewsCarousel'
 import Image from 'next/image'
 
+const page = async () => {
+  const reviews = await prisma.clientReview.findMany({ orderBy: { createdAt: 'desc' } })
 
-
-const page = () => {
   return (
     <div className='mt-30 '>
-      <section className='border max-w-full ml-auto bg-subtle border'>
+      <section className='max-w-full ml-auto bg-subtle border'>
         <div className='flex flex-col md:flex-row max-w-4/5 ml-auto mr-auto p-3 items-center gap-3'>
           <div className='flex flex-col'>
             <h1 className='heading-1'>Kjøp byggematerialer eller <br />få jobben gjort av <br />fagfolk</h1>
@@ -224,13 +224,15 @@ const page = () => {
               </div>
             </div>
 
-
-
-            <section>
-              <h1>Anmeldelser?</h1>
-            </section>
           </div>
         </section>
+
+        {reviews.length > 0 && (
+          <section className="my-40 max-w-7xl mx-auto px-6">
+            <h1 className='heading-1 text-center mb-20'>Anmeldelser fra våre tidligere kunder</h1>
+            <ReviewsCarousel reviews={reviews} />
+          </section>
+        )}
       </div>
    
   )

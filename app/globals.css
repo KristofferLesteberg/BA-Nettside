@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "react-phone-number-input/style.css";
 @import "rc-slider/assets/index.css";
+@import "swiper/css";
+@import "swiper/css/pagination";
+@import "swiper/css/navigation";
 /* Declare all the GLOBAL COLORS, FONTS, CLASSES, etc. */
 @theme {
  
