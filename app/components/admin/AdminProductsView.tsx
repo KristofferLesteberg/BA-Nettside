@@ -1,8 +1,6 @@
-"use client"
-
 import Link from 'next/link'
 import { HiOutlinePlusSm } from 'react-icons/hi'
-import type { ProductCardData } from '@/app/lib/types'
+import { prisma } from '@/app/lib/prisma'
 import FilteredProductsGrid from '@/app/components/product/FilteredProductsGrid'
 
 // Admin-specific filter state lives here as the project grows.
@@ -12,10 +10,21 @@ import FilteredProductsGrid from '@/app/components/product/FilteredProductsGrid'
 //
 // Then pass extraFilters and extraControls to FilteredProductsGrid below.
 
-export default function AdminProductsView({ products }: { products: ProductCardData[] }) {
+export default async function AdminProductsView() {
+  const products = await prisma.product.findMany({
+    include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } }
+  })
+
+  const convertedProducts = products.map(({ images, ...product }) => ({
+    ...product,
+    price: product.price.toNumber(),
+    publishedAt: product.publishedAt.toISOString(),
+    image: images[0] ?? null,
+  }))
+
   return (
     <FilteredProductsGrid
-      products={products}
+      products={convertedProducts}
       isAdmin={true}
       sidebarAction={
         <Link href="/admin/newProduct" className="btn btn-primary w-full gap-1.5">

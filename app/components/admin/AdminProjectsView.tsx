@@ -2,7 +2,7 @@ import ProjectCard from "@/app/components/admin/ProjectCard"
 import { prisma } from "@/app/lib/prisma"
 
 
-export default async function ProjectTest() {
+export default async function AdminProjectsView() {
 
   const projects = await prisma.projectRequest.findMany()
 
@@ -10,18 +10,18 @@ export default async function ProjectTest() {
     ...project, 
    minPrice: project.minPrice.toNumber(),
    maxPrice: project.maxPrice.toNumber(),
-   createdAt: project.createdAt.toISOString()
+   createdAt: project.createdAt.toISOString() ?? null
   }))
 
   return (
-    <main className="mt-50 w-6xl ml-auto mr-auto">
-      <h1 className="heading-1 mb-10">Prosjekter - {convertedProject.length}</h1>
+    <>
+      <h1 className="heading-2 mb-10">Prosjekter - {convertedProject.length}</h1>
       <div className="w-6xl ml-auto mr-auto grid grid-cols-1 gap-5">
         {convertedProject.map((project) => (
           <ProjectCard project={project} key={project.id} />
         ))}
       </div>
-    </main>
+    </>
   )
   
 }

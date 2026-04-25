@@ -1,26 +1,20 @@
-import { prisma } from '@/app/lib/prisma'
+import AdminControlPanel from '@/app/components/admin/AdminControlPanel'
 import AdminTabManager, { type AdminTab } from '@/app/components/admin/AdminTabManager'
 import AdminProductsView from '@/app/components/admin/AdminProductsView'
-import AdminControlPanel from '@/app/components/admin/AdminControlPanel'
+import AdminProjectsView from '../components/admin/AdminProjectsView'
+
 
 const page = async () => {
-
-  const products = await prisma.product.findMany({
-    include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } }
-  })
-
-  const convertedProducts = products.map(({ images, ...product }) => ({
-    ...product,
-    price: product.price.toNumber(),
-    publishedAt: product.publishedAt.toISOString(),
-    image: images[0] ?? null,
-  }))
 
   const tabs: AdminTab[] = [
     {
       label: "Produkter",
-      content: <AdminProductsView products={convertedProducts} />,
+      content: <AdminProductsView />,
     },
+    {
+      label: "Prosjekter",
+      content: <AdminProjectsView />
+    }
     // Add more tabs here as admin sections are built out:
     // { label: "Prosjekter", content: <AdminProjectsView /> },
   ]

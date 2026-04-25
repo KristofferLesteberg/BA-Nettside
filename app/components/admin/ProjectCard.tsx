@@ -23,12 +23,8 @@ const STATUS_STYLES: Record<Status, string> = {
 }
 
 const ProjectCard = ({ project }: {project: ConvertedProjectRequest}) => {
-
   const router = useRouter()
- 
-
   const formatted = new Date(project.createdAt)
-
 
   const deleteProject = async () => {
     try {
