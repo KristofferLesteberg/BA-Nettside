@@ -153,6 +153,16 @@ exports.Prisma.ProjectRequestScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ClientReviewScalarFieldEnum = {
+  id: 'id',
+  Name: 'Name',
+  Role: 'Role',
+  orgName: 'orgName',
+  orgURL: 'orgURL',
+  ImageId: 'ImageId',
+  message: 'message'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -192,7 +202,8 @@ exports.Status = exports.$Enums.Status = {
 exports.Prisma.ModelName = {
   Product: 'Product',
   ProductImage: 'ProductImage',
-  ProjectRequest: 'ProjectRequest'
+  ProjectRequest: 'ProjectRequest',
+  ClientReview: 'ClientReview'
 };
 
 /**
