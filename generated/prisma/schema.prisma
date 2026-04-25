@@ -66,11 +66,12 @@ model ProjectRequest {
 }
 
 model ClientReview {
-  id      Int     @id @default(autoincrement())
-  Name    String
-  Role    String
-  orgName String
-  orgURL  String?
-  ImageId String
-  message String
+  id        Int      @id @default(autoincrement())
+  name      String
+  role      String?
+  orgName   String?
+  orgURL    String?
+  imageId   String?
+  message   String
+  createdAt DateTime @default(now())
 }

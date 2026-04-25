@@ -4627,32 +4627,35 @@ export namespace Prisma {
 
   export type ClientReviewMinAggregateOutputType = {
     id: number | null
-    Name: string | null
-    Role: string | null
+    name: string | null
+    role: string | null
     orgName: string | null
     orgURL: string | null
-    ImageId: string | null
+    imageId: string | null
     message: string | null
+    createdAt: Date | null
   }
 
   export type ClientReviewMaxAggregateOutputType = {
     id: number | null
-    Name: string | null
-    Role: string | null
+    name: string | null
+    role: string | null
     orgName: string | null
     orgURL: string | null
-    ImageId: string | null
+    imageId: string | null
     message: string | null
+    createdAt: Date | null
   }
 
   export type ClientReviewCountAggregateOutputType = {
     id: number
-    Name: number
-    Role: number
+    name: number
+    role: number
     orgName: number
     orgURL: number
-    ImageId: number
+    imageId: number
     message: number
+    createdAt: number
     _all: number
   }
 
@@ -4667,32 +4670,35 @@ export namespace Prisma {
 
   export type ClientReviewMinAggregateInputType = {
     id?: true
-    Name?: true
-    Role?: true
+    name?: true
+    role?: true
     orgName?: true
     orgURL?: true
-    ImageId?: true
+    imageId?: true
     message?: true
+    createdAt?: true
   }
 
   export type ClientReviewMaxAggregateInputType = {
     id?: true
-    Name?: true
-    Role?: true
+    name?: true
+    role?: true
     orgName?: true
     orgURL?: true
-    ImageId?: true
+    imageId?: true
     message?: true
+    createdAt?: true
   }
 
   export type ClientReviewCountAggregateInputType = {
     id?: true
-    Name?: true
-    Role?: true
+    name?: true
+    role?: true
     orgName?: true
     orgURL?: true
-    ImageId?: true
+    imageId?: true
     message?: true
+    createdAt?: true
     _all?: true
   }
 
@@ -4784,12 +4790,13 @@ export namespace Prisma {
 
   export type ClientReviewGroupByOutputType = {
     id: number
-    Name: string
-    Role: string
-    orgName: string
+    name: string
+    role: string | null
+    orgName: string | null
     orgURL: string | null
-    ImageId: string
+    imageId: string | null
     message: string
+    createdAt: Date
     _count: ClientReviewCountAggregateOutputType | null
     _avg: ClientReviewAvgAggregateOutputType | null
     _sum: ClientReviewSumAggregateOutputType | null
@@ -4813,57 +4820,62 @@ export namespace Prisma {
 
   export type ClientReviewSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    Name?: boolean
-    Role?: boolean
+    name?: boolean
+    role?: boolean
     orgName?: boolean
     orgURL?: boolean
-    ImageId?: boolean
+    imageId?: boolean
     message?: boolean
+    createdAt?: boolean
   }, ExtArgs["result"]["clientReview"]>
 
   export type ClientReviewSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    Name?: boolean
-    Role?: boolean
+    name?: boolean
+    role?: boolean
     orgName?: boolean
     orgURL?: boolean
-    ImageId?: boolean
+    imageId?: boolean
     message?: boolean
+    createdAt?: boolean
   }, ExtArgs["result"]["clientReview"]>
 
   export type ClientReviewSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    Name?: boolean
-    Role?: boolean
+    name?: boolean
+    role?: boolean
     orgName?: boolean
     orgURL?: boolean
-    ImageId?: boolean
+    imageId?: boolean
     message?: boolean
+    createdAt?: boolean
   }, ExtArgs["result"]["clientReview"]>
 
   export type ClientReviewSelectScalar = {
     id?: boolean
-    Name?: boolean
-    Role?: boolean
+    name?: boolean
+    role?: boolean
     orgName?: boolean
     orgURL?: boolean
-    ImageId?: boolean
+    imageId?: boolean
     message?: boolean
+    createdAt?: boolean
   }
 
-  export type ClientReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "Name" | "Role" | "orgName" | "orgURL" | "ImageId" | "message", ExtArgs["result"]["clientReview"]>
+  export type ClientReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "role" | "orgName" | "orgURL" | "imageId" | "message" | "createdAt", ExtArgs["result"]["clientReview"]>
 
   export type $ClientReviewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ClientReview"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      Name: string
-      Role: string
-      orgName: string
+      name: string
+      role: string | null
+      orgName: string | null
       orgURL: string | null
-      ImageId: string
+      imageId: string | null
       message: string
+      createdAt: Date
     }, ExtArgs["result"]["clientReview"]>
     composites: {}
   }
@@ -5288,12 +5300,13 @@ export namespace Prisma {
    */
   interface ClientReviewFieldRefs {
     readonly id: FieldRef<"ClientReview", 'Int'>
-    readonly Name: FieldRef<"ClientReview", 'String'>
-    readonly Role: FieldRef<"ClientReview", 'String'>
+    readonly name: FieldRef<"ClientReview", 'String'>
+    readonly role: FieldRef<"ClientReview", 'String'>
     readonly orgName: FieldRef<"ClientReview", 'String'>
     readonly orgURL: FieldRef<"ClientReview", 'String'>
-    readonly ImageId: FieldRef<"ClientReview", 'String'>
+    readonly imageId: FieldRef<"ClientReview", 'String'>
     readonly message: FieldRef<"ClientReview", 'String'>
+    readonly createdAt: FieldRef<"ClientReview", 'DateTime'>
   }
     
 
@@ -5721,12 +5734,13 @@ export namespace Prisma {
 
   export const ClientReviewScalarFieldEnum: {
     id: 'id',
-    Name: 'Name',
-    Role: 'Role',
+    name: 'name',
+    role: 'role',
     orgName: 'orgName',
     orgURL: 'orgURL',
-    ImageId: 'ImageId',
-    message: 'message'
+    imageId: 'imageId',
+    message: 'message',
+    createdAt: 'createdAt'
   };
 
   export type ClientReviewScalarFieldEnum = (typeof ClientReviewScalarFieldEnum)[keyof typeof ClientReviewScalarFieldEnum]
@@ -6077,22 +6091,24 @@ export namespace Prisma {
     OR?: ClientReviewWhereInput[]
     NOT?: ClientReviewWhereInput | ClientReviewWhereInput[]
     id?: IntFilter<"ClientReview"> | number
-    Name?: StringFilter<"ClientReview"> | string
-    Role?: StringFilter<"ClientReview"> | string
-    orgName?: StringFilter<"ClientReview"> | string
+    name?: StringFilter<"ClientReview"> | string
+    role?: StringNullableFilter<"ClientReview"> | string | null
+    orgName?: StringNullableFilter<"ClientReview"> | string | null
     orgURL?: StringNullableFilter<"ClientReview"> | string | null
-    ImageId?: StringFilter<"ClientReview"> | string
+    imageId?: StringNullableFilter<"ClientReview"> | string | null
     message?: StringFilter<"ClientReview"> | string
+    createdAt?: DateTimeFilter<"ClientReview"> | Date | string
   }
 
   export type ClientReviewOrderByWithRelationInput = {
     id?: SortOrder
-    Name?: SortOrder
-    Role?: SortOrder
-    orgName?: SortOrder
+    name?: SortOrder
+    role?: SortOrderInput | SortOrder
+    orgName?: SortOrderInput | SortOrder
     orgURL?: SortOrderInput | SortOrder
-    ImageId?: SortOrder
+    imageId?: SortOrderInput | SortOrder
     message?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type ClientReviewWhereUniqueInput = Prisma.AtLeast<{
@@ -6100,22 +6116,24 @@ export namespace Prisma {
     AND?: ClientReviewWhereInput | ClientReviewWhereInput[]
     OR?: ClientReviewWhereInput[]
     NOT?: ClientReviewWhereInput | ClientReviewWhereInput[]
-    Name?: StringFilter<"ClientReview"> | string
-    Role?: StringFilter<"ClientReview"> | string
-    orgName?: StringFilter<"ClientReview"> | string
+    name?: StringFilter<"ClientReview"> | string
+    role?: StringNullableFilter<"ClientReview"> | string | null
+    orgName?: StringNullableFilter<"ClientReview"> | string | null
     orgURL?: StringNullableFilter<"ClientReview"> | string | null
-    ImageId?: StringFilter<"ClientReview"> | string
+    imageId?: StringNullableFilter<"ClientReview"> | string | null
     message?: StringFilter<"ClientReview"> | string
+    createdAt?: DateTimeFilter<"ClientReview"> | Date | string
   }, "id">
 
   export type ClientReviewOrderByWithAggregationInput = {
     id?: SortOrder
-    Name?: SortOrder
-    Role?: SortOrder
-    orgName?: SortOrder
+    name?: SortOrder
+    role?: SortOrderInput | SortOrder
+    orgName?: SortOrderInput | SortOrder
     orgURL?: SortOrderInput | SortOrder
-    ImageId?: SortOrder
+    imageId?: SortOrderInput | SortOrder
     message?: SortOrder
+    createdAt?: SortOrder
     _count?: ClientReviewCountOrderByAggregateInput
     _avg?: ClientReviewAvgOrderByAggregateInput
     _max?: ClientReviewMaxOrderByAggregateInput
@@ -6128,12 +6146,13 @@ export namespace Prisma {
     OR?: ClientReviewScalarWhereWithAggregatesInput[]
     NOT?: ClientReviewScalarWhereWithAggregatesInput | ClientReviewScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"ClientReview"> | number
-    Name?: StringWithAggregatesFilter<"ClientReview"> | string
-    Role?: StringWithAggregatesFilter<"ClientReview"> | string
-    orgName?: StringWithAggregatesFilter<"ClientReview"> | string
+    name?: StringWithAggregatesFilter<"ClientReview"> | string
+    role?: StringNullableWithAggregatesFilter<"ClientReview"> | string | null
+    orgName?: StringNullableWithAggregatesFilter<"ClientReview"> | string | null
     orgURL?: StringNullableWithAggregatesFilter<"ClientReview"> | string | null
-    ImageId?: StringWithAggregatesFilter<"ClientReview"> | string
+    imageId?: StringNullableWithAggregatesFilter<"ClientReview"> | string | null
     message?: StringWithAggregatesFilter<"ClientReview"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ClientReview"> | Date | string
   }
 
   export type ProductCreateInput = {
@@ -6386,70 +6405,77 @@ export namespace Prisma {
   }
 
   export type ClientReviewCreateInput = {
-    Name: string
-    Role: string
-    orgName: string
+    name: string
+    role?: string | null
+    orgName?: string | null
     orgURL?: string | null
-    ImageId: string
+    imageId?: string | null
     message: string
+    createdAt?: Date | string
   }
 
   export type ClientReviewUncheckedCreateInput = {
     id?: number
-    Name: string
-    Role: string
-    orgName: string
+    name: string
+    role?: string | null
+    orgName?: string | null
     orgURL?: string | null
-    ImageId: string
+    imageId?: string | null
     message: string
+    createdAt?: Date | string
   }
 
   export type ClientReviewUpdateInput = {
-    Name?: StringFieldUpdateOperationsInput | string
-    Role?: StringFieldUpdateOperationsInput | string
-    orgName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    orgName?: NullableStringFieldUpdateOperationsInput | string | null
     orgURL?: NullableStringFieldUpdateOperationsInput | string | null
-    ImageId?: StringFieldUpdateOperationsInput | string
+    imageId?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ClientReviewUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    Name?: StringFieldUpdateOperationsInput | string
-    Role?: StringFieldUpdateOperationsInput | string
-    orgName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    orgName?: NullableStringFieldUpdateOperationsInput | string | null
     orgURL?: NullableStringFieldUpdateOperationsInput | string | null
-    ImageId?: StringFieldUpdateOperationsInput | string
+    imageId?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ClientReviewCreateManyInput = {
     id?: number
-    Name: string
-    Role: string
-    orgName: string
+    name: string
+    role?: string | null
+    orgName?: string | null
     orgURL?: string | null
-    ImageId: string
+    imageId?: string | null
     message: string
+    createdAt?: Date | string
   }
 
   export type ClientReviewUpdateManyMutationInput = {
-    Name?: StringFieldUpdateOperationsInput | string
-    Role?: StringFieldUpdateOperationsInput | string
-    orgName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    orgName?: NullableStringFieldUpdateOperationsInput | string | null
     orgURL?: NullableStringFieldUpdateOperationsInput | string | null
-    ImageId?: StringFieldUpdateOperationsInput | string
+    imageId?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ClientReviewUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    Name?: StringFieldUpdateOperationsInput | string
-    Role?: StringFieldUpdateOperationsInput | string
-    orgName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    orgName?: NullableStringFieldUpdateOperationsInput | string | null
     orgURL?: NullableStringFieldUpdateOperationsInput | string | null
-    ImageId?: StringFieldUpdateOperationsInput | string
+    imageId?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -6828,12 +6854,13 @@ export namespace Prisma {
 
   export type ClientReviewCountOrderByAggregateInput = {
     id?: SortOrder
-    Name?: SortOrder
-    Role?: SortOrder
+    name?: SortOrder
+    role?: SortOrder
     orgName?: SortOrder
     orgURL?: SortOrder
-    ImageId?: SortOrder
+    imageId?: SortOrder
     message?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type ClientReviewAvgOrderByAggregateInput = {
@@ -6842,22 +6869,24 @@ export namespace Prisma {
 
   export type ClientReviewMaxOrderByAggregateInput = {
     id?: SortOrder
-    Name?: SortOrder
-    Role?: SortOrder
+    name?: SortOrder
+    role?: SortOrder
     orgName?: SortOrder
     orgURL?: SortOrder
-    ImageId?: SortOrder
+    imageId?: SortOrder
     message?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type ClientReviewMinOrderByAggregateInput = {
     id?: SortOrder
-    Name?: SortOrder
-    Role?: SortOrder
+    name?: SortOrder
+    role?: SortOrder
     orgName?: SortOrder
     orgURL?: SortOrder
-    ImageId?: SortOrder
+    imageId?: SortOrder
     message?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type ClientReviewSumOrderByAggregateInput = {

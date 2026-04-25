@@ -91,7 +91,7 @@ export const ReviewCreateSchema = z.object({
   name:    z.string().min(1, 'Navn er påkrevd'),
   role:    z.string().optional(),
   orgName: z.string().optional(),
-  orgURL:  z.string().url('Ugyldig URL').optional().or(z.literal('')),
+  orgURL:  z.preprocess((val) => (val === '' ? undefined : val), z.url('Ugyldig URL').optional()),
   message: z.string().min(1, 'Anmeldelse er påkrevd'),
 })
 

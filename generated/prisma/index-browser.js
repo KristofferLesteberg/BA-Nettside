@@ -155,12 +155,13 @@ exports.Prisma.ProjectRequestScalarFieldEnum = {
 
 exports.Prisma.ClientReviewScalarFieldEnum = {
   id: 'id',
-  Name: 'Name',
-  Role: 'Role',
+  name: 'name',
+  role: 'role',
   orgName: 'orgName',
   orgURL: 'orgURL',
-  ImageId: 'ImageId',
-  message: 'message'
+  imageId: 'imageId',
+  message: 'message',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
