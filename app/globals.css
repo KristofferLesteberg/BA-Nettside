@@ -297,6 +297,10 @@
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 20%, transparent);
 }
 
+/* Equal-height slides for the reviews carousel */
+.reviews-swiper .swiper-wrapper { align-items: stretch; }
+.reviews-swiper .swiper-slide   { height: auto; }
+
 /* Animation for the controls on ProductCard */
 @keyframes dropdown-in {
   from { opacity: 0; transform: translateY(6px); }
