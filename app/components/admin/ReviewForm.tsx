@@ -43,11 +43,9 @@ export default function ReviewForm({ heading, submitLabel, initialValues, onSubm
 
     if (!name.trim()) {
       nameRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
-      return
     }
     if (!message.trim()) {
       messageRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
-      return
     }
 
     setLoading(true)
@@ -69,7 +67,7 @@ export default function ReviewForm({ heading, submitLabel, initialValues, onSubm
 
         {/* Name */}
         <div className="space-y-1" ref={nameRef}>
-          <label className="label">Navn *</label>
+          <label className="label">Navn <span className="text-red-500">*</span></label>
           <input
             type="text"
             className="input"
@@ -86,7 +84,7 @@ export default function ReviewForm({ heading, submitLabel, initialValues, onSubm
             <input
               type="text"
               className="input"
-              placeholder="f.eks. Elev, Bygg"
+              placeholder="f.eks. Kommunikasjonsansvarlig"
               value={role}
               onChange={(e) => setRole(e.target.value)}
             />
@@ -117,7 +115,7 @@ export default function ReviewForm({ heading, submitLabel, initialValues, onSubm
 
         {/* Message */}
         <div className="space-y-1" ref={messageRef}>
-          <label className="label">Anmeldelse *</label>
+          <label className="label">Anmeldelse <span className="text-red-500">*</span></label>
           <textarea
             className="input min-h-30"
             placeholder="Skriv anmeldelsen her"

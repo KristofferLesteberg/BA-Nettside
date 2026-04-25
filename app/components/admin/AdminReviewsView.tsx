@@ -50,7 +50,7 @@ export default async function AdminReviewsView() {
                   {review.role && review.orgName && <span>·</span>}
                   {review.orgName && (
                     review.orgURL ? (
-                      <a
+                      <a  
                         href={review.orgURL}
                         target="_blank"
                         rel="noopener noreferrer"
