@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { HiOutlinePlusSm } from 'react-icons/hi'
+import { FaExternalLinkAlt } from "react-icons/fa";
 import { prisma } from '@/app/lib/prisma'
 import DeleteReview from '@/app/components/admin/DeleteReview'
 
@@ -25,7 +26,7 @@ export default async function AdminReviewsView() {
           <div key={review.id} className="card flex items-center gap-4">
 
             {/* Avatar */}
-            <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-secondary flex-shrink-0 bg-surface-sunken">
+            <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-secondary shrink-0 bg-surface-sunken">
               {review.imageId ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -44,8 +45,24 @@ export default async function AdminReviewsView() {
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-text">{review.name}</p>
               {(review.role || review.orgName) && (
-                <p className="text-sm text-text-faint">
-                  {[review.role, review.orgName].filter(Boolean).join(' · ')}
+                <p className="text-sm text-text-faint flex items-center gap-1 flex-wrap">
+                  {review.role && <span>{review.role}</span>}
+                  {review.role && review.orgName && <span>·</span>}
+                  {review.orgName && (
+                    review.orgURL ? (
+                      <a
+                        href={review.orgURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="header-link inline-flex items-center gap-1"
+                      >
+                        {review.orgName}
+                        <FaExternalLinkAlt className="text-[10px] opacity-60" />
+                      </a>
+                    ) : (
+                      <span>{review.orgName}</span>
+                    )
+                  )}
                 </p>
               )}
               <p className="text-sm text-text-muted line-clamp-2 mt-0.5">{review.message}</p>
