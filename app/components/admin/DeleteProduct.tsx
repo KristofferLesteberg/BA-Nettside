@@ -21,8 +21,9 @@ const DeleteProduct = ({ productID }: { productID: number }) => {
   }
 
   return (
-    <button onClick={removeProduct} className="cursor-pointers flex flex-row items-center gap-2">
-      <FaRegTrashCan />Fjern
+    <button onClick={removeProduct} className="btn btn-ghost w-full justify-start gap-2 text-lg text-error hover:bg-error-bg">
+      <FaRegTrashCan />
+      Slett
     </button>
   )
 }

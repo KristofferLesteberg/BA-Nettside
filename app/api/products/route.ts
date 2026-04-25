@@ -52,3 +52,26 @@ export async function POST(req: NextRequest) {
     return err('Noe gikk galt på serveren', 500)
   }
 }
+
+export async function GET(req: NextRequest) {
+  const token = await getToken({ req })
+  if (!token) return err('Ikke autorisert', 401)
+
+  try {
+    const { id } = await context.params
+    const productId = parseInt(id)
+    if (isNaN(productId)) return err('Ugyldig produkt-ID', 400)
+
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+      include: { images: { orderBy: { sortOrder: 'asc' } } },
+    })
+
+    if (!product) return err('Produkt ikke funnet', 404)
+
+    return ok(product)
+  } catch (error) {
+    console.error('GET /api/products/[id]:', error)
+    return err('Noe gikk galt på serveren', 500)
+  }
+}
