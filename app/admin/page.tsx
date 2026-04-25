@@ -1,35 +1,28 @@
-"use client"
-import React, { useState } from 'react'
+import { prisma } from '@/app/lib/prisma'
+import AdminTabManager, { type AdminTab } from '@/app/components/admin/AdminTabManager'
 
-import { signOut } from 'next-auth/react'
-import { useSession } from 'next-auth/react'
-import Link from 'next/link'
-import DeleteProduct from '../components/admin/DeleteProduct'
+const page = async () => {
 
+  const products = await prisma.product.findMany({
+    include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } }
+  })
 
+  const convertedProducts = products.map(({ images, ...product }) => ({
+    ...product,
+    price: product.price.toNumber(),
+    publishedAt: product.publishedAt.toISOString(),
+    image: images[0] ?? null,
+  }))
 
-const page = () => {      
-  const { data: session, status} = useSession()
+  const tabs: AdminTab[] = [
   
-
-  console.log(session)
-  console.log(status)
-
+  ]
 
   return (
-    <div>
-      <button onClick={() => signOut({ callbackUrl: 'http://localhost:3000/admin/login' })} >Log out</button>
-      <p>logged in as {session?.user?.name}</p>
-
-      <Link href={"/admin/newProduct"}>
-        <button
-          className='a'>
-          Nytt produkt
-        </button>
-      </Link>
-
-      <DeleteProduct productID={"1"}/>
-    </div>
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-12 flex flex-col gap-6">
+      <h1 className="heading-1">Admin</h1>
+      <AdminTabManager tabs={tabs} />
+    </section>
   )
 }
 
