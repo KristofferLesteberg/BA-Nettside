@@ -36,7 +36,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-8">
 
         {/* Top: 3-column grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12 divide-x">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 mb-12">
 
           {/* Col 1 – About */}
           <div>
@@ -76,7 +76,7 @@ export default function Footer() {
           </div>
 
           {/* Col 2 – Navigation */}
-          <div>
+          <div className="border-t border-white/10 pt-6 md:border-t-0 md:pt-0 md:border-l md:border-white/10 md:pl-10">
             <SectionHeading>Navigasjon</SectionHeading>
             <ul className="flex flex-col gap-3">
               {navLinks.map(({ href, label }) => (
@@ -93,7 +93,7 @@ export default function Footer() {
           </div>
 
           {/* Col 3 – Contact */}
-          <div>
+          <div className="border-t border-white/10 pt-6 md:border-t-0 md:pt-0 md:border-l md:border-white/10 md:pl-10">
             <SectionHeading>Kontakt</SectionHeading>
             <ul className="flex flex-col gap-5">
               {contactEmails.map(({ name, role, email }) => (
@@ -163,9 +163,9 @@ export default function Footer() {
             </a>
           </div>
           <p>
-            Utvikling:{' '}
-            {/* <a href="https://samit.sevgs.no/" className="text-white/60 hover:text-white transition-colors duration-150">Sam-IT UB</a>
-            {' · '} */}
+            Utviklet av:{' '}
+            <a href="https://samit.sevgs.no/" className="text-white/60 hover:text-white transition-colors duration-150">Sam-IT UB</a>
+            {' · '}
             <a href="https://www.linkedin.com/in/kristoffer-lesteberg-724a6537a/" className="text-white/60 hover:text-white transition-colors duration-150">Kristoffer Lesteberg</a>
             {' · '}
             <a href="https://www.linkedin.com/in/yehor-maksiuchenko/" className="text-white/60 hover:text-white transition-colors duration-150">Yehor Maksiuchenko</a>
