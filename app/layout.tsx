@@ -8,6 +8,9 @@ import Providers from '@/app/components/shared/providers';
 import { Toaster } from "react-hot-toast";
 import "react-phone-number-input/style.css";
 import "rc-slider/assets/index.css";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 export const metadata: Metadata = {
   title: "BAT",
