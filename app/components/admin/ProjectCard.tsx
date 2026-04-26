@@ -18,8 +18,8 @@ const STATUS_LABELS: Record<Status, string> = {
 
 const STATUS_STYLES: Record<Status, string> = {
   NEW: 'badge badge-success',
-  IN_PROGRESS: 'badge badge-info',
-  COMPLETE: 'badge badge-error'
+  IN_PROGRESS: 'badge badge-warning',
+  COMPLETE: 'badge badge-info'
 }
 
 const EDUCATION_LABELS: Record<EducationField, string> = {
@@ -69,48 +69,65 @@ const ProjectCard = ({ project }: {project: ConvertedProjectRequest}) => {
   }
 }
   return (
-    <div className="p-5 card card-subtle hover:shadow-md">
-      <span className={`${STATUS_STYLES[project.status]} rounded p-1`}>{STATUS_LABELS[project.status]}</span>
-      <span className={`${project.educationField ? `${EDUCATION_STYLES[project.educationField]}` : 'bg-amber-50'}`}>{project.educationField ? EDUCATION_LABELS[project.educationField] : <></>}</span>
-      
-      <div className="flex flex-row">
-        <div className="flex flex-col">
-          <h1 className="  heading-2">{project.clientForename} {project.clientSurname} - {project.organizationName ? <i className="heading-4 label"> {project.organizationName}</i> : <i className="heading-4 text-text-muted">Privat</i>}</h1>
-          <span>sendt inn {formatted.toLocaleDateString()}</span>
+    <div className="card card-subtle flex flex-col gap-4">
+
+      {/* Badges + title + actions */}
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <span className={STATUS_STYLES[project.status]}>{STATUS_LABELS[project.status]}</span>
+          {project.educationField && (
+            <span className={`badge ${EDUCATION_STYLES[project.educationField]}`}>
+              {EDUCATION_LABELS[project.educationField]}
+            </span>
+          )}
         </div>
-        <div className="flex flex-row gap-3 ml-auto mt-auto mb-auto ">
-          <select className="cursor-pointerb btn btn-secondary" name="status" onChange={(e) => updateStatus(e.target.value as Status)}>
-            <option value="">Endre Status</option>
-            <option value="NEW">Nytt prosjekt</option>
-            <option value="IN_PROGRESS">Under byggin</option>
-            <option value="COMPLETE">Ferdig</option>
-          </select>
-          <button
-            className="btn btn-primary"
-            onClick={() => deleteProject()}
-            >
+
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="heading-3">
+              {project.clientForename} {project.clientSurname}
+              {project.organizationName
+                ? <span className="label ml-2">{project.organizationName}</span>
+                : <span className="small-text text-muted ml-2">Privat</span>
+              }
+            </h2>
+            <p className="small-text mt-0.5">Sendt inn {formatted.toLocaleDateString()}</p>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <select className="input w-auto cursor-pointer" name="status" onChange={(e) => updateStatus(e.target.value as Status)}>
+              <option value="">Endre Status</option>
+              <option value="NEW">Nytt prosjekt</option>
+              <option value="IN_PROGRESS">Under bygging</option>
+              <option value="COMPLETE">Ferdig</option>
+            </select>
+            <button className="btn btn-error" onClick={deleteProject}>
               Fjern
-          </button>
+            </button>
+          </div>
         </div>
       </div>
-      <div className="flex flex-row max-w-4/5 justify-between mt-5">
-        <div className="flex flex-col">
-          <span className="heading-4 label">Kontakt</span>
-          <p>Mail: {project.clientEmail}</p>
-          <p>Tlf: {project.clientPhone}</p>
-          <p>Adr. {project.address}</p>
+
+      <hr />
+
+      {/* Info grid */}
+      <div className="grid grid-cols-3 gap-6">
+        <div className="flex flex-col gap-1">
+          <span className="label">Kontakt</span>
+          <p className="small-text">Mail: {project.clientEmail}</p>
+          <p className="small-text">Tlf: {project.clientPhone}</p>
+          <p className="small-text">Adr. {project.address}</p>
         </div>
-        <div className="">
-          <span className="heading-4 label">Info</span>
-          <p>{project.description.slice(0, 4)}...</p>
+        <div className="flex flex-col gap-1">
+          <span className="label">Info</span>
+          <p className="small-text">{project.description.slice(0, 4)}...</p>
         </div>
-        <div>
-          <span className="heading-4 label">Pris</span>
-          <p>{project.minPrice}kr - {project.maxPrice}kr</p>
+        <div className="flex flex-col gap-1">
+          <span className="label">Pris</span>
+          <p className="small-text">{project.minPrice}kr – {project.maxPrice}kr</p>
         </div>
-       
       </div>
-      
+
     </div>
   )
 
