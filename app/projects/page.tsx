@@ -37,7 +37,7 @@ const prerequisites : Prerequisite[] = [
 export default function Projects() {
 
   const [checked, setChecked] = useState<boolean[]>(
-    prerequisites.map(() => true)
+    prerequisites.map(() => false)
   )
   
   const [allChecked, setAllChecked] = useState<boolean>(false)
