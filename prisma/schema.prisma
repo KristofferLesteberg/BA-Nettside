@@ -30,6 +30,9 @@ model Product {
   amount Int
   publishedAt DateTime @default(now())
   images         ProductImage[]
+  contactPersonId Int
+  contactPerson ContactPerson @relation(fields: [contactPersonId], references: [id])
+
 
   @@index ([educationField])
 }
@@ -73,4 +76,13 @@ model ClientReview {
   imageId   String?
   message   String
   createdAt DateTime @default(now())
+}
+
+model ContactPerson {
+  id Int @id @default(autoincrement())
+  name String
+  email String 
+  phone String
+  title String
+  product Product[]
 }
