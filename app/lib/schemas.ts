@@ -99,3 +99,14 @@ export const ReviewUpdateSchema = ReviewCreateSchema.partial()
 
 export type ReviewCreate = z.infer<typeof ReviewCreateSchema>
 export type ReviewUpdate = z.infer<typeof ReviewUpdateSchema>
+
+export const ContactPersonCreateSchema = z.object({
+  name: z.string().min(1, 'Navn er påkrevd'),
+  email: z.email('Ugyldig e-postadresse'),
+  phone: z.string().min(1, 'Telefon er påkrevd'),
+  title: z.string().min(1, 'Tittel er påkrevd')
+})
+export const ContactPersonUpdateSchema = ContactPersonCreateSchema.partial()
+
+export type ContactPersonCreate = z.infer<typeof ContactPersonCreateSchema>
+export type ContactPersonUpdate = z.infer<typeof ContactPersonUpdateSchema>

@@ -4,6 +4,7 @@ import AdminTabManager, { type AdminTab } from '@/app/components/admin/AdminTabM
 import AdminProductsView from '@/app/components/admin/AdminProductsView'
 import AdminProjectsView from '../components/admin/AdminProjectsView'
 import AdminReviewsView from '../components/admin/AdminReviewsView'
+import AdminContactPersonView from '../components/admin/AdminContactPersonView'
 
 const page = async () => {
   const tabs: AdminTab[] = [
@@ -19,6 +20,10 @@ const page = async () => {
       label: "Anmeldelser",
       content: <AdminReviewsView />
     },
+    {
+      label: "Kontakt personer",
+      content: <AdminContactPersonView />
+    }
   ]
 
   return (
