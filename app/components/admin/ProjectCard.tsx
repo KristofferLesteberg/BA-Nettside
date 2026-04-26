@@ -1,5 +1,5 @@
 "use client"
-import { ProjectRequest, Status } from "@/generated/prisma"
+import { EducationField, ProjectRequest, Status } from "@/generated/prisma"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 
@@ -11,15 +11,25 @@ type ConvertedProjectRequest = Omit<ProjectRequest, 'minPrice' | 'maxPrice' | 'c
 } 
 
 const STATUS_LABELS: Record<Status, string> = {
-  NEW: "Nytt prosjekt",
+  NEW: 'Nytt prosjekt',
   IN_PROGRESS: "Under bygging",
   COMPLETE: "Ferdig"
 }
 
 const STATUS_STYLES: Record<Status, string> = {
-  NEW: 'bg-green-400',
-  IN_PROGRESS: 'bg-amber-200',
-  COMPLETE: 'bg-blue-400'
+  NEW: 'badge badge-success',
+  IN_PROGRESS: 'badge badge-warning',
+  COMPLETE: 'badge badge-info'
+}
+
+const EDUCATION_LABELS: Record<EducationField, string> = {
+  BUILDING: "BYGG",
+  CONSTRUCTION: "ANNLEGG"
+}
+
+const EDUCATION_STYLES: Record<EducationField, string> = {
+  BUILDING:     'badge-secondary',
+  CONSTRUCTION: 'badge-primary',
 }
 
 const ProjectCard = ({ project }: {project: ConvertedProjectRequest}) => {
@@ -38,7 +48,6 @@ const ProjectCard = ({ project }: {project: ConvertedProjectRequest}) => {
       console.log(error)
     }
   }
-
   const updateStatus = async (status: Status) => {
     try {
       const res = await fetch(`/api/projects/${project.id}`, {
@@ -59,51 +68,66 @@ const ProjectCard = ({ project }: {project: ConvertedProjectRequest}) => {
       console.log(error)
   }
 }
-
   return (
-    <div className="border p-5 rounded-2xl">
-      <span className={`${STATUS_STYLES[project.status]} rounded p-1`}>{STATUS_LABELS[project.status]}</span>
-      
-      <div className="flex flex-row">
-        <div className="flex flex-col">
-          <h1 className="  heading-2">{project.clientForename} {project.clientSurname} - {project.organizationName ? <i className="heading-4 text-text-muted"> {project.organizationName}</i> : <i className="heading-4 text-text-muted">Privat</i>}</h1>
-          <span>sendt inn {formatted.toLocaleDateString()}</span>
-        </div>
-        <div className="flex flex-row gap-3 ml-auto mt-auto mb-auto ">
+    <div className="card card-subtle flex flex-col gap-4">
 
-          <select className="cursor-pointer" name="status" onChange={(e) => updateStatus(e.target.value as Status)}>
-            <option value="">Endre Status</option>
-            <option value="NEW">Nytt prosjekt</option>
-            <option value="IN_PROGRESS">Under byggin</option>
-            <option value="COMPLETE">Ferdig</option>
-          </select>
-          <button
-            className="btn btn-outline bg-red-500 text-white"
-            onClick={() => deleteProject()}
-            >
+      {/* Badges + title + actions */}
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <span className={STATUS_STYLES[project.status]}>{STATUS_LABELS[project.status]}</span>
+          {project.educationField && (
+            <span className={`badge ${EDUCATION_STYLES[project.educationField]}`}>
+              {EDUCATION_LABELS[project.educationField]}
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="heading-3">
+              {project.clientForename} {project.clientSurname}
+              {project.organizationName
+                ? <span className="label ml-2">{project.organizationName}</span>
+                : <span className="small-text text-muted ml-2">Privat</span>
+              }
+            </h2>
+            <p className="small-text mt-0.5">Sendt inn {formatted.toLocaleDateString()}</p>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <select className="input w-auto cursor-pointer" name="status" onChange={(e) => updateStatus(e.target.value as Status)}>
+              <option value="">Endre Status</option>
+              <option value="NEW">Nytt prosjekt</option>
+              <option value="IN_PROGRESS">Under bygging</option>
+              <option value="COMPLETE">Ferdig</option>
+            </select>
+            <button className="btn btn-error" onClick={deleteProject}>
               Fjern
-          </button>
+            </button>
+          </div>
         </div>
       </div>
-      <div className="flex flex-row max-w-4/5 justify-between mt-5">
-        <div className="flex flex-col">
-          <span className="heading-4 text-text-muted">Kontakt</span>
-          
-          <p>Mail: {project.clientEmail}</p>
-          <p>Tlf: {project.clientPhone}</p>
-          <p>Adr. {project.address}</p>
+
+      <hr />
+
+      {/* Info grid */}
+      <div className="grid grid-cols-3 gap-6">
+        <div className="flex flex-col gap-1">
+          <span className="label">Kontakt</span>
+          <p className="small-text">Mail: {project.clientEmail}</p>
+          <p className="small-text">Tlf: {project.clientPhone}</p>
+          <p className="small-text">Adr. {project.address}</p>
         </div>
-        <div className="">
-          <span className="heading-4 text-text-muted">Info</span>
-          <p>{project.description.slice(0, 4)}...</p>
+        <div className="flex flex-col gap-1">
+          <span className="label">Info</span>
+          <p className="small-text">{project.description.slice(0, 4)}...</p>
         </div>
-        <div>
-          <span className="heading-4 text-text-muted">Pris</span>
-          <p>{project.minPrice}kr - {project.maxPrice}kr</p>
+        <div className="flex flex-col gap-1">
+          <span className="label">Pris</span>
+          <p className="small-text">{project.minPrice}kr – {project.maxPrice}kr</p>
         </div>
-       
       </div>
-      
+
     </div>
   )
 
