@@ -25,7 +25,7 @@ export default function ContactForm({ exsitingContact, onSubmit, heading}: Props
   return (
     <div className="w-4/5 min-w-120 max-w-230 mx-auto my-10 mt-32">
           <form onSubmit={handleSubmit} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
-            <RegretBtn isAdmin={true} />
+            <RegretBtn />
             <h2 className="heading-2">{heading}</h2>
             <p className="text-text-faint italic -mt-4">
               Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette

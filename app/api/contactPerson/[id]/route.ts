@@ -53,3 +53,27 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
       return err("Noe gikk galt på serveren")
     }
 }
+
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const token = await getToken({ req })
+  if (!token) return err('Ikke autorisert', 401)
+
+  try {
+    const { id } = await context.params
+    const contactId = parseInt(id)
+    const contact = await prisma.contactPerson.findUnique({
+      where: {
+        id: contactId
+      }
+    })
+
+    if(!contact) return err("Ingen person funnet", 500)
+    return ok(contact)
+
+  } catch(error) {
+    console.error(error)
+    return err("Noe gikk galt på serveren", 500)
+  }
+
+  
+}

@@ -4,6 +4,7 @@ import ContactForm from "@/app/components/admin/ContactForm"
 import { ContactPerson } from "@/generated/prisma"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
+import type { ApiResponse } from '@/app/lib/api-response'
 
 type ContactFormData = Omit<ContactPerson, 'id' | 'products'>
 
@@ -17,6 +18,15 @@ export default function NewContact() {
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify(data)
     })
+    const body: ApiResponse<unknown> = await res.json()
+    if (!body.success) {
+      if (body.fields) {
+        Object.values(body.fields).flat().forEach(msg => toast.error(msg))
+      } else {
+        toast.error(body.error)
+      }
+      return
+    }
 
       if(!res.ok) {
         console.log(res.ok)
