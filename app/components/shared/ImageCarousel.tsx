@@ -1,14 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
-// Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-
-// import required modules
 import { Pagination, Navigation } from 'swiper/modules';
 
 export default function Carousel({ images, className }: { images: string[], className?: string}) {

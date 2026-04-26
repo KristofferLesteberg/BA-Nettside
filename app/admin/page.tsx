@@ -2,6 +2,7 @@ import AdminControlPanel from '@/app/components/admin/AdminControlPanel'
 import AdminTabManager, { type AdminTab } from '@/app/components/admin/AdminTabManager'
 import AdminProductsView from '@/app/components/admin/AdminProductsView'
 import AdminProjectsView from '../components/admin/AdminProjectsView'
+import AdminReviewsView from '../components/admin/AdminReviewsView'
 
 const page = async () => {
   const tabs: AdminTab[] = [
@@ -12,9 +13,11 @@ const page = async () => {
     {
       label: "Prosjekter",
       content: <AdminProjectsView />
-    }
-    // Add more tabs here as admin sections are built out:
-    // { label: "Prosjekter", content: <AdminProjectsView /> },
+    },
+    {
+      label: "Anmeldelser",
+      content: <AdminReviewsView />
+    },
   ]
 
   return (

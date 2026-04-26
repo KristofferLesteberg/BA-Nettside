@@ -64,3 +64,14 @@ model ProjectRequest {
   @@index([clientPhone])
   @@index([organizationNumber])
 }
+
+model ClientReview {
+  id        Int      @id @default(autoincrement())
+  name      String
+  role      String?
+  orgName   String?
+  orgURL    String?
+  imageId   String?
+  message   String
+  createdAt DateTime @default(now())
+}

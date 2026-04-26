@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "react-phone-number-input/style.css";
 @import "rc-slider/assets/index.css";
+@import "swiper/css";
+@import "swiper/css/pagination";
+@import "swiper/css/navigation";
 /* Declare all the GLOBAL COLORS, FONTS, CLASSES, etc. */
 @theme {
  
@@ -293,6 +296,10 @@
   border-color: var(--color-primary-hover);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 20%, transparent);
 }
+
+/* Equal-height slides for the reviews carousel */
+.reviews-swiper .swiper-wrapper { align-items: stretch; }
+.reviews-swiper .swiper-slide   { height: auto; }
 
 /* Animation for the controls on ProductCard */
 @keyframes dropdown-in {

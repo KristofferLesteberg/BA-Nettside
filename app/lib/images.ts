@@ -117,6 +117,30 @@ export async function deleteAllProductImages(productId: number) {
   })
 }
 
+export async function uploadReviewImage(file: File, staticId?: string): Promise<string> {
+  if (!isSupportedType(file.type)) {
+    throw new Error(`Unsupported image type: ${file.type}. Supported types: ${SUPPORTED_TYPES.join(", ")}`)
+  }
+
+  const buffer = Buffer.from(await file.arrayBuffer())
+  const id = staticId ?? randomUUID()
+  const outputPath = path.join(process.cwd(), "public", "images", `${id}.webp`)
+
+  await fs.mkdir(path.dirname(outputPath), { recursive: true })
+
+  await sharp(buffer)
+    .resize(400, 400, { fit: "cover", position: "center" })
+    .webp({ quality: 85 })
+    .toFile(outputPath)
+
+  return id
+}
+
+export async function deleteReviewImage(imageId: string) {
+  const filePath = path.join(process.cwd(), "public", "images", `${imageId}.webp`)
+  await fs.unlink(filePath).catch(() => {})
+}
+
 export async function getProductImages(productId: number) {
   const images = await prisma.productImage.findMany({
     where: { productId: productId },

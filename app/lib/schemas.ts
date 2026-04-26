@@ -86,3 +86,16 @@ export const ProjectRequestStatusUpdateSchema = z.object({
   status: z.enum(['NEW', 'IN_PROGRESS', "COMPLETE"])
 })
 export type ProjectRequestStatusUpdate = z.infer<typeof ProjectRequestStatusUpdateSchema>
+
+export const ReviewCreateSchema = z.object({
+  name:    z.string().min(1, 'Navn er påkrevd'),
+  role:    z.string().optional(),
+  orgName: z.string().optional(),
+  orgURL:  z.preprocess((val) => (val === '' ? undefined : val), z.url('Ugyldig URL').optional()),
+  message: z.string().min(1, 'Anmeldelse er påkrevd'),
+})
+
+export const ReviewUpdateSchema = ReviewCreateSchema.partial()
+
+export type ReviewCreate = z.infer<typeof ReviewCreateSchema>
+export type ReviewUpdate = z.infer<typeof ReviewUpdateSchema>
