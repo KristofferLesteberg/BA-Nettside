@@ -3,9 +3,7 @@ import AdminTabManager, { type AdminTab } from '@/app/components/admin/AdminTabM
 import AdminProductsView from '@/app/components/admin/AdminProductsView'
 import AdminProjectsView from '../components/admin/AdminProjectsView'
 
-
 const page = async () => {
-
   const tabs: AdminTab[] = [
     {
       label: "Produkter",

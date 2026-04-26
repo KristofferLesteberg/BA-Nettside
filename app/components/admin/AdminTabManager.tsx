@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import { useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 export type AdminTab = {
   label: string
@@ -8,11 +10,19 @@ export type AdminTab = {
 }
 
 export default function AdminTabManager({ tabs }: { tabs: AdminTab[] }) {
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [mounted, setMounted] = useState<Set<number>>(new Set([0]))
+  const searchParams = useSearchParams()
+  const tabLabel = searchParams.get('tab')
+  const router = useRouter()
+
+  // Either return the index from query or 0
+  const initialIndex = Math.max(0, tabs.findIndex((tab) => tab.label === tabLabel))
+
+  const [activeIndex, setActiveIndex] = useState(initialIndex)
+  const [mounted, setMounted] = useState<Set<number>>(new Set([initialIndex]))
 
   const handleTabChange = (index: number) => {
     setActiveIndex(index)
+    router.push(`/admin?tab=${tabs[index].label}`)
     setMounted(prev => new Set(prev).add(index))
   }
 
