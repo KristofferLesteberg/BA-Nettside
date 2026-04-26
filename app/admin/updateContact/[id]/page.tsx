@@ -10,7 +10,7 @@ export default function UpdateContact( {params }: { params: {id: number }}) {
 
   }
   return (
-    <></>
+    <>test</>
   )
 
 }

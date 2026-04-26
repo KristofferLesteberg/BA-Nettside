@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   const token = await getToken({ req })
   if (!token) return err('Ikke autorisert', 401)
   try {
-    const body = req.json()
+    const body = await req.json()
     const parsed = ContactPersonCreateSchema.safeParse(body)
     if(!parsed.success) return validationErr(parsed.error)
     
