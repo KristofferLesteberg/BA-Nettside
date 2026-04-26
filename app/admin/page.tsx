@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import AdminControlPanel from '@/app/components/admin/AdminControlPanel'
 import AdminTabManager, { type AdminTab } from '@/app/components/admin/AdminTabManager'
 import AdminProductsView from '@/app/components/admin/AdminProductsView'
@@ -26,7 +27,9 @@ const page = async () => {
         <h1 className="heading-1">Admin</h1>
         <AdminControlPanel />
       </div>
-      <AdminTabManager tabs={tabs} />
+      <Suspense>
+        <AdminTabManager tabs={tabs} />
+      </Suspense>
     </section>
   )
 }

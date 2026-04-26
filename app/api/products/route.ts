@@ -7,6 +7,7 @@ import { uploadProductImages } from '../../lib/images'
 import { ProductCreateSchema } from '../../lib/schemas'
 import { ok, err, validationErr } from '../../lib/api-response'
 
+
 export async function POST(req: NextRequest) {
   const token = await getToken({ req })
   if (!token) return err('Ikke autorisert', 401)
@@ -54,25 +55,16 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(req: NextRequest) {
-  const token = await getToken({ req })
-  if (!token) return err('Ikke autorisert', 401)
-
+export async function GET() {
   try {
-    const { id } = await context.params
-    const productId = parseInt(id)
-    if (isNaN(productId)) return err('Ugyldig produkt-ID', 400)
-
-    const product = await prisma.product.findUnique({
-      where: { id: productId },
+    const products = await prisma.product.findMany({
       include: { images: { orderBy: { sortOrder: 'asc' } } },
+      orderBy: { publishedAt: 'desc' },
     })
 
-    if (!product) return err('Produkt ikke funnet', 404)
-
-    return ok(product)
+    return ok(products)
   } catch (error) {
-    console.error('GET /api/products/[id]:', error)
+    console.error('GET /api/products:', error)
     return err('Noe gikk galt på serveren', 500)
   }
 }
