@@ -72,7 +72,7 @@ export default function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
             className="reviews-swiper"
           >
             {reviews.map((review) => (
-              <SwiperSlide key={review.id}>
+              <SwiperSlide key={review.id} className="h-auto!">
                 <ReviewCard review={review} />
               </SwiperSlide>
             ))}
