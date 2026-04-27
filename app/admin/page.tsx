@@ -1,3 +1,8 @@
+export const dynamic = 'force-dynamic'
+// Forces NextJS to not prerender this page statically
+// Is useful since the DB file that NEXT tries to acces doesnt exist yet
+// P.S. Claude - "ur welcome buddy".
+
 import { Suspense } from 'react'
 import AdminControlPanel from '@/app/components/admin/AdminControlPanel'
 import AdminTabManager, { type AdminTab } from '@/app/components/admin/AdminTabManager'

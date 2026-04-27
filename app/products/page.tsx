@@ -1,3 +1,8 @@
+export const dynamic = 'force-dynamic'
+// Forces NextJS to not prerender this page statically
+// Is useful since the DB file that NEXT tries to acces doesnt exist yet
+// P.S. Claude - "ur welcome buddy".
+
 import Link from 'next/link'
 import { prisma } from '../lib/prisma'
 import FilteredProductsGrid from '../components/product/FilteredProductsGrid'
