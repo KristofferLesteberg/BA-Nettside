@@ -33,6 +33,11 @@ export type ProjectRequest = $Result.DefaultSelection<Prisma.$ProjectRequestPayl
  * 
  */
 export type ClientReview = $Result.DefaultSelection<Prisma.$ClientReviewPayload>
+/**
+ * Model ContactPerson
+ * 
+ */
+export type ContactPerson = $Result.DefaultSelection<Prisma.$ContactPersonPayload>
 
 /**
  * Enums
@@ -224,6 +229,16 @@ export class PrismaClient<
     * ```
     */
   get clientReview(): Prisma.ClientReviewDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.contactPerson`: Exposes CRUD operations for the **ContactPerson** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ContactPeople
+    * const contactPeople = await prisma.contactPerson.findMany()
+    * ```
+    */
+  get contactPerson(): Prisma.ContactPersonDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -661,7 +676,8 @@ export namespace Prisma {
     Product: 'Product',
     ProductImage: 'ProductImage',
     ProjectRequest: 'ProjectRequest',
-    ClientReview: 'ClientReview'
+    ClientReview: 'ClientReview',
+    ContactPerson: 'ContactPerson'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -677,7 +693,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "product" | "productImage" | "projectRequest" | "clientReview"
+      modelProps: "product" | "productImage" | "projectRequest" | "clientReview" | "contactPerson"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -977,6 +993,80 @@ export namespace Prisma {
           }
         }
       }
+      ContactPerson: {
+        payload: Prisma.$ContactPersonPayload<ExtArgs>
+        fields: Prisma.ContactPersonFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ContactPersonFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactPersonPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ContactPersonFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactPersonPayload>
+          }
+          findFirst: {
+            args: Prisma.ContactPersonFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactPersonPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ContactPersonFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactPersonPayload>
+          }
+          findMany: {
+            args: Prisma.ContactPersonFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactPersonPayload>[]
+          }
+          create: {
+            args: Prisma.ContactPersonCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactPersonPayload>
+          }
+          createMany: {
+            args: Prisma.ContactPersonCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ContactPersonCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactPersonPayload>[]
+          }
+          delete: {
+            args: Prisma.ContactPersonDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactPersonPayload>
+          }
+          update: {
+            args: Prisma.ContactPersonUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactPersonPayload>
+          }
+          deleteMany: {
+            args: Prisma.ContactPersonDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ContactPersonUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ContactPersonUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactPersonPayload>[]
+          }
+          upsert: {
+            args: Prisma.ContactPersonUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContactPersonPayload>
+          }
+          aggregate: {
+            args: Prisma.ContactPersonAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateContactPerson>
+          }
+          groupBy: {
+            args: Prisma.ContactPersonGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ContactPersonGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ContactPersonCountArgs<ExtArgs>
+            result: $Utils.Optional<ContactPersonCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1089,6 +1179,7 @@ export namespace Prisma {
     productImage?: ProductImageOmit
     projectRequest?: ProjectRequestOmit
     clientReview?: ClientReviewOmit
+    contactPerson?: ContactPersonOmit
   }
 
   /* Types for Logging */
@@ -1196,6 +1287,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type ContactPersonCountOutputType
+   */
+
+  export type ContactPersonCountOutputType = {
+    product: number
+  }
+
+  export type ContactPersonCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ContactPersonCountOutputTypeCountProductArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ContactPersonCountOutputType without action
+   */
+  export type ContactPersonCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPersonCountOutputType
+     */
+    select?: ContactPersonCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ContactPersonCountOutputType without action
+   */
+  export type ContactPersonCountOutputTypeCountProductArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -1215,12 +1337,14 @@ export namespace Prisma {
     id: number | null
     price: Decimal | null
     amount: number | null
+    contactPersonId: number | null
   }
 
   export type ProductSumAggregateOutputType = {
     id: number | null
     price: Decimal | null
     amount: number | null
+    contactPersonId: number | null
   }
 
   export type ProductMinAggregateOutputType = {
@@ -1231,6 +1355,7 @@ export namespace Prisma {
     price: Decimal | null
     amount: number | null
     publishedAt: Date | null
+    contactPersonId: number | null
   }
 
   export type ProductMaxAggregateOutputType = {
@@ -1241,6 +1366,7 @@ export namespace Prisma {
     price: Decimal | null
     amount: number | null
     publishedAt: Date | null
+    contactPersonId: number | null
   }
 
   export type ProductCountAggregateOutputType = {
@@ -1252,6 +1378,7 @@ export namespace Prisma {
     measures: number
     amount: number
     publishedAt: number
+    contactPersonId: number
     _all: number
   }
 
@@ -1260,12 +1387,14 @@ export namespace Prisma {
     id?: true
     price?: true
     amount?: true
+    contactPersonId?: true
   }
 
   export type ProductSumAggregateInputType = {
     id?: true
     price?: true
     amount?: true
+    contactPersonId?: true
   }
 
   export type ProductMinAggregateInputType = {
@@ -1276,6 +1405,7 @@ export namespace Prisma {
     price?: true
     amount?: true
     publishedAt?: true
+    contactPersonId?: true
   }
 
   export type ProductMaxAggregateInputType = {
@@ -1286,6 +1416,7 @@ export namespace Prisma {
     price?: true
     amount?: true
     publishedAt?: true
+    contactPersonId?: true
   }
 
   export type ProductCountAggregateInputType = {
@@ -1297,6 +1428,7 @@ export namespace Prisma {
     measures?: true
     amount?: true
     publishedAt?: true
+    contactPersonId?: true
     _all?: true
   }
 
@@ -1395,6 +1527,7 @@ export namespace Prisma {
     measures: JsonValue | null
     amount: number
     publishedAt: Date
+    contactPersonId: number
     _count: ProductCountAggregateOutputType | null
     _avg: ProductAvgAggregateOutputType | null
     _sum: ProductSumAggregateOutputType | null
@@ -1425,7 +1558,9 @@ export namespace Prisma {
     measures?: boolean
     amount?: boolean
     publishedAt?: boolean
+    contactPersonId?: boolean
     images?: boolean | Product$imagesArgs<ExtArgs>
+    contactPerson?: boolean | ContactPersonDefaultArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
@@ -1438,6 +1573,8 @@ export namespace Prisma {
     measures?: boolean
     amount?: boolean
     publishedAt?: boolean
+    contactPersonId?: boolean
+    contactPerson?: boolean | ContactPersonDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
   export type ProductSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1449,6 +1586,8 @@ export namespace Prisma {
     measures?: boolean
     amount?: boolean
     publishedAt?: boolean
+    contactPersonId?: boolean
+    contactPerson?: boolean | ContactPersonDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
   export type ProductSelectScalar = {
@@ -1460,20 +1599,27 @@ export namespace Prisma {
     measures?: boolean
     amount?: boolean
     publishedAt?: boolean
+    contactPersonId?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "educationField" | "title" | "description" | "price" | "measures" | "amount" | "publishedAt", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "educationField" | "title" | "description" | "price" | "measures" | "amount" | "publishedAt" | "contactPersonId", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     images?: boolean | Product$imagesArgs<ExtArgs>
+    contactPerson?: boolean | ContactPersonDefaultArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type ProductIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contactPerson?: boolean | ContactPersonDefaultArgs<ExtArgs>
+  }
+  export type ProductIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contactPerson?: boolean | ContactPersonDefaultArgs<ExtArgs>
+  }
 
   export type $ProductPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Product"
     objects: {
       images: Prisma.$ProductImagePayload<ExtArgs>[]
+      contactPerson: Prisma.$ContactPersonPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -1484,6 +1630,7 @@ export namespace Prisma {
       measures: Prisma.JsonValue | null
       amount: number
       publishedAt: Date
+      contactPersonId: number
     }, ExtArgs["result"]["product"]>
     composites: {}
   }
@@ -1879,6 +2026,7 @@ export namespace Prisma {
   export interface Prisma__ProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     images<T extends Product$imagesArgs<ExtArgs> = {}>(args?: Subset<T, Product$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    contactPerson<T extends ContactPersonDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactPersonDefaultArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1916,6 +2064,7 @@ export namespace Prisma {
     readonly measures: FieldRef<"Product", 'Json'>
     readonly amount: FieldRef<"Product", 'Int'>
     readonly publishedAt: FieldRef<"Product", 'DateTime'>
+    readonly contactPersonId: FieldRef<"Product", 'Int'>
   }
     
 
@@ -2168,6 +2317,10 @@ export namespace Prisma {
      * The data used to create many Products.
      */
     data: ProductCreateManyInput | ProductCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2238,6 +2391,10 @@ export namespace Prisma {
      * Limit how many Products to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5677,6 +5834,1113 @@ export namespace Prisma {
 
 
   /**
+   * Model ContactPerson
+   */
+
+  export type AggregateContactPerson = {
+    _count: ContactPersonCountAggregateOutputType | null
+    _avg: ContactPersonAvgAggregateOutputType | null
+    _sum: ContactPersonSumAggregateOutputType | null
+    _min: ContactPersonMinAggregateOutputType | null
+    _max: ContactPersonMaxAggregateOutputType | null
+  }
+
+  export type ContactPersonAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ContactPersonSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ContactPersonMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    email: string | null
+    phone: string | null
+    title: string | null
+  }
+
+  export type ContactPersonMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    email: string | null
+    phone: string | null
+    title: string | null
+  }
+
+  export type ContactPersonCountAggregateOutputType = {
+    id: number
+    name: number
+    email: number
+    phone: number
+    title: number
+    _all: number
+  }
+
+
+  export type ContactPersonAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type ContactPersonSumAggregateInputType = {
+    id?: true
+  }
+
+  export type ContactPersonMinAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    phone?: true
+    title?: true
+  }
+
+  export type ContactPersonMaxAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    phone?: true
+    title?: true
+  }
+
+  export type ContactPersonCountAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    phone?: true
+    title?: true
+    _all?: true
+  }
+
+  export type ContactPersonAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ContactPerson to aggregate.
+     */
+    where?: ContactPersonWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactPeople to fetch.
+     */
+    orderBy?: ContactPersonOrderByWithRelationInput | ContactPersonOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ContactPersonWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactPeople from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactPeople.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ContactPeople
+    **/
+    _count?: true | ContactPersonCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ContactPersonAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ContactPersonSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ContactPersonMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ContactPersonMaxAggregateInputType
+  }
+
+  export type GetContactPersonAggregateType<T extends ContactPersonAggregateArgs> = {
+        [P in keyof T & keyof AggregateContactPerson]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateContactPerson[P]>
+      : GetScalarType<T[P], AggregateContactPerson[P]>
+  }
+
+
+
+
+  export type ContactPersonGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContactPersonWhereInput
+    orderBy?: ContactPersonOrderByWithAggregationInput | ContactPersonOrderByWithAggregationInput[]
+    by: ContactPersonScalarFieldEnum[] | ContactPersonScalarFieldEnum
+    having?: ContactPersonScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ContactPersonCountAggregateInputType | true
+    _avg?: ContactPersonAvgAggregateInputType
+    _sum?: ContactPersonSumAggregateInputType
+    _min?: ContactPersonMinAggregateInputType
+    _max?: ContactPersonMaxAggregateInputType
+  }
+
+  export type ContactPersonGroupByOutputType = {
+    id: number
+    name: string
+    email: string
+    phone: string
+    title: string
+    _count: ContactPersonCountAggregateOutputType | null
+    _avg: ContactPersonAvgAggregateOutputType | null
+    _sum: ContactPersonSumAggregateOutputType | null
+    _min: ContactPersonMinAggregateOutputType | null
+    _max: ContactPersonMaxAggregateOutputType | null
+  }
+
+  type GetContactPersonGroupByPayload<T extends ContactPersonGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ContactPersonGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ContactPersonGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ContactPersonGroupByOutputType[P]>
+            : GetScalarType<T[P], ContactPersonGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ContactPersonSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    title?: boolean
+    product?: boolean | ContactPerson$productArgs<ExtArgs>
+    _count?: boolean | ContactPersonCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["contactPerson"]>
+
+  export type ContactPersonSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    title?: boolean
+  }, ExtArgs["result"]["contactPerson"]>
+
+  export type ContactPersonSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    title?: boolean
+  }, ExtArgs["result"]["contactPerson"]>
+
+  export type ContactPersonSelectScalar = {
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    title?: boolean
+  }
+
+  export type ContactPersonOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "title", ExtArgs["result"]["contactPerson"]>
+  export type ContactPersonInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ContactPerson$productArgs<ExtArgs>
+    _count?: boolean | ContactPersonCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ContactPersonIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ContactPersonIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ContactPersonPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ContactPerson"
+    objects: {
+      product: Prisma.$ProductPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      email: string
+      phone: string
+      title: string
+    }, ExtArgs["result"]["contactPerson"]>
+    composites: {}
+  }
+
+  type ContactPersonGetPayload<S extends boolean | null | undefined | ContactPersonDefaultArgs> = $Result.GetResult<Prisma.$ContactPersonPayload, S>
+
+  type ContactPersonCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ContactPersonFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ContactPersonCountAggregateInputType | true
+    }
+
+  export interface ContactPersonDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ContactPerson'], meta: { name: 'ContactPerson' } }
+    /**
+     * Find zero or one ContactPerson that matches the filter.
+     * @param {ContactPersonFindUniqueArgs} args - Arguments to find a ContactPerson
+     * @example
+     * // Get one ContactPerson
+     * const contactPerson = await prisma.contactPerson.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ContactPersonFindUniqueArgs>(args: SelectSubset<T, ContactPersonFindUniqueArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ContactPerson that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ContactPersonFindUniqueOrThrowArgs} args - Arguments to find a ContactPerson
+     * @example
+     * // Get one ContactPerson
+     * const contactPerson = await prisma.contactPerson.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ContactPersonFindUniqueOrThrowArgs>(args: SelectSubset<T, ContactPersonFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ContactPerson that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactPersonFindFirstArgs} args - Arguments to find a ContactPerson
+     * @example
+     * // Get one ContactPerson
+     * const contactPerson = await prisma.contactPerson.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ContactPersonFindFirstArgs>(args?: SelectSubset<T, ContactPersonFindFirstArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ContactPerson that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactPersonFindFirstOrThrowArgs} args - Arguments to find a ContactPerson
+     * @example
+     * // Get one ContactPerson
+     * const contactPerson = await prisma.contactPerson.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ContactPersonFindFirstOrThrowArgs>(args?: SelectSubset<T, ContactPersonFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ContactPeople that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactPersonFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ContactPeople
+     * const contactPeople = await prisma.contactPerson.findMany()
+     * 
+     * // Get first 10 ContactPeople
+     * const contactPeople = await prisma.contactPerson.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const contactPersonWithIdOnly = await prisma.contactPerson.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ContactPersonFindManyArgs>(args?: SelectSubset<T, ContactPersonFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ContactPerson.
+     * @param {ContactPersonCreateArgs} args - Arguments to create a ContactPerson.
+     * @example
+     * // Create one ContactPerson
+     * const ContactPerson = await prisma.contactPerson.create({
+     *   data: {
+     *     // ... data to create a ContactPerson
+     *   }
+     * })
+     * 
+     */
+    create<T extends ContactPersonCreateArgs>(args: SelectSubset<T, ContactPersonCreateArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ContactPeople.
+     * @param {ContactPersonCreateManyArgs} args - Arguments to create many ContactPeople.
+     * @example
+     * // Create many ContactPeople
+     * const contactPerson = await prisma.contactPerson.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ContactPersonCreateManyArgs>(args?: SelectSubset<T, ContactPersonCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ContactPeople and returns the data saved in the database.
+     * @param {ContactPersonCreateManyAndReturnArgs} args - Arguments to create many ContactPeople.
+     * @example
+     * // Create many ContactPeople
+     * const contactPerson = await prisma.contactPerson.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ContactPeople and only return the `id`
+     * const contactPersonWithIdOnly = await prisma.contactPerson.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ContactPersonCreateManyAndReturnArgs>(args?: SelectSubset<T, ContactPersonCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ContactPerson.
+     * @param {ContactPersonDeleteArgs} args - Arguments to delete one ContactPerson.
+     * @example
+     * // Delete one ContactPerson
+     * const ContactPerson = await prisma.contactPerson.delete({
+     *   where: {
+     *     // ... filter to delete one ContactPerson
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ContactPersonDeleteArgs>(args: SelectSubset<T, ContactPersonDeleteArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ContactPerson.
+     * @param {ContactPersonUpdateArgs} args - Arguments to update one ContactPerson.
+     * @example
+     * // Update one ContactPerson
+     * const contactPerson = await prisma.contactPerson.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ContactPersonUpdateArgs>(args: SelectSubset<T, ContactPersonUpdateArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ContactPeople.
+     * @param {ContactPersonDeleteManyArgs} args - Arguments to filter ContactPeople to delete.
+     * @example
+     * // Delete a few ContactPeople
+     * const { count } = await prisma.contactPerson.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ContactPersonDeleteManyArgs>(args?: SelectSubset<T, ContactPersonDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ContactPeople.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactPersonUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ContactPeople
+     * const contactPerson = await prisma.contactPerson.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ContactPersonUpdateManyArgs>(args: SelectSubset<T, ContactPersonUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ContactPeople and returns the data updated in the database.
+     * @param {ContactPersonUpdateManyAndReturnArgs} args - Arguments to update many ContactPeople.
+     * @example
+     * // Update many ContactPeople
+     * const contactPerson = await prisma.contactPerson.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ContactPeople and only return the `id`
+     * const contactPersonWithIdOnly = await prisma.contactPerson.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ContactPersonUpdateManyAndReturnArgs>(args: SelectSubset<T, ContactPersonUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ContactPerson.
+     * @param {ContactPersonUpsertArgs} args - Arguments to update or create a ContactPerson.
+     * @example
+     * // Update or create a ContactPerson
+     * const contactPerson = await prisma.contactPerson.upsert({
+     *   create: {
+     *     // ... data to create a ContactPerson
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ContactPerson we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ContactPersonUpsertArgs>(args: SelectSubset<T, ContactPersonUpsertArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ContactPeople.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactPersonCountArgs} args - Arguments to filter ContactPeople to count.
+     * @example
+     * // Count the number of ContactPeople
+     * const count = await prisma.contactPerson.count({
+     *   where: {
+     *     // ... the filter for the ContactPeople we want to count
+     *   }
+     * })
+    **/
+    count<T extends ContactPersonCountArgs>(
+      args?: Subset<T, ContactPersonCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ContactPersonCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ContactPerson.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactPersonAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ContactPersonAggregateArgs>(args: Subset<T, ContactPersonAggregateArgs>): Prisma.PrismaPromise<GetContactPersonAggregateType<T>>
+
+    /**
+     * Group by ContactPerson.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ContactPersonGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ContactPersonGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ContactPersonGroupByArgs['orderBy'] }
+        : { orderBy?: ContactPersonGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ContactPersonGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetContactPersonGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ContactPerson model
+   */
+  readonly fields: ContactPersonFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ContactPerson.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ContactPersonClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    product<T extends ContactPerson$productArgs<ExtArgs> = {}>(args?: Subset<T, ContactPerson$productArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ContactPerson model
+   */
+  interface ContactPersonFieldRefs {
+    readonly id: FieldRef<"ContactPerson", 'Int'>
+    readonly name: FieldRef<"ContactPerson", 'String'>
+    readonly email: FieldRef<"ContactPerson", 'String'>
+    readonly phone: FieldRef<"ContactPerson", 'String'>
+    readonly title: FieldRef<"ContactPerson", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ContactPerson findUnique
+   */
+  export type ContactPersonFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactPerson to fetch.
+     */
+    where: ContactPersonWhereUniqueInput
+  }
+
+  /**
+   * ContactPerson findUniqueOrThrow
+   */
+  export type ContactPersonFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactPerson to fetch.
+     */
+    where: ContactPersonWhereUniqueInput
+  }
+
+  /**
+   * ContactPerson findFirst
+   */
+  export type ContactPersonFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactPerson to fetch.
+     */
+    where?: ContactPersonWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactPeople to fetch.
+     */
+    orderBy?: ContactPersonOrderByWithRelationInput | ContactPersonOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ContactPeople.
+     */
+    cursor?: ContactPersonWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactPeople from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactPeople.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContactPeople.
+     */
+    distinct?: ContactPersonScalarFieldEnum | ContactPersonScalarFieldEnum[]
+  }
+
+  /**
+   * ContactPerson findFirstOrThrow
+   */
+  export type ContactPersonFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactPerson to fetch.
+     */
+    where?: ContactPersonWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactPeople to fetch.
+     */
+    orderBy?: ContactPersonOrderByWithRelationInput | ContactPersonOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ContactPeople.
+     */
+    cursor?: ContactPersonWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactPeople from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactPeople.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContactPeople.
+     */
+    distinct?: ContactPersonScalarFieldEnum | ContactPersonScalarFieldEnum[]
+  }
+
+  /**
+   * ContactPerson findMany
+   */
+  export type ContactPersonFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * Filter, which ContactPeople to fetch.
+     */
+    where?: ContactPersonWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ContactPeople to fetch.
+     */
+    orderBy?: ContactPersonOrderByWithRelationInput | ContactPersonOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ContactPeople.
+     */
+    cursor?: ContactPersonWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ContactPeople from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ContactPeople.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ContactPeople.
+     */
+    distinct?: ContactPersonScalarFieldEnum | ContactPersonScalarFieldEnum[]
+  }
+
+  /**
+   * ContactPerson create
+   */
+  export type ContactPersonCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ContactPerson.
+     */
+    data: XOR<ContactPersonCreateInput, ContactPersonUncheckedCreateInput>
+  }
+
+  /**
+   * ContactPerson createMany
+   */
+  export type ContactPersonCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ContactPeople.
+     */
+    data: ContactPersonCreateManyInput | ContactPersonCreateManyInput[]
+  }
+
+  /**
+   * ContactPerson createManyAndReturn
+   */
+  export type ContactPersonCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * The data used to create many ContactPeople.
+     */
+    data: ContactPersonCreateManyInput | ContactPersonCreateManyInput[]
+  }
+
+  /**
+   * ContactPerson update
+   */
+  export type ContactPersonUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ContactPerson.
+     */
+    data: XOR<ContactPersonUpdateInput, ContactPersonUncheckedUpdateInput>
+    /**
+     * Choose, which ContactPerson to update.
+     */
+    where: ContactPersonWhereUniqueInput
+  }
+
+  /**
+   * ContactPerson updateMany
+   */
+  export type ContactPersonUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ContactPeople.
+     */
+    data: XOR<ContactPersonUpdateManyMutationInput, ContactPersonUncheckedUpdateManyInput>
+    /**
+     * Filter which ContactPeople to update
+     */
+    where?: ContactPersonWhereInput
+    /**
+     * Limit how many ContactPeople to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContactPerson updateManyAndReturn
+   */
+  export type ContactPersonUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * The data used to update ContactPeople.
+     */
+    data: XOR<ContactPersonUpdateManyMutationInput, ContactPersonUncheckedUpdateManyInput>
+    /**
+     * Filter which ContactPeople to update
+     */
+    where?: ContactPersonWhereInput
+    /**
+     * Limit how many ContactPeople to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContactPerson upsert
+   */
+  export type ContactPersonUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ContactPerson to update in case it exists.
+     */
+    where: ContactPersonWhereUniqueInput
+    /**
+     * In case the ContactPerson found by the `where` argument doesn't exist, create a new ContactPerson with this data.
+     */
+    create: XOR<ContactPersonCreateInput, ContactPersonUncheckedCreateInput>
+    /**
+     * In case the ContactPerson was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ContactPersonUpdateInput, ContactPersonUncheckedUpdateInput>
+  }
+
+  /**
+   * ContactPerson delete
+   */
+  export type ContactPersonDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    /**
+     * Filter which ContactPerson to delete.
+     */
+    where: ContactPersonWhereUniqueInput
+  }
+
+  /**
+   * ContactPerson deleteMany
+   */
+  export type ContactPersonDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ContactPeople to delete
+     */
+    where?: ContactPersonWhereInput
+    /**
+     * Limit how many ContactPeople to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ContactPerson.product
+   */
+  export type ContactPerson$productArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    where?: ProductWhereInput
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    cursor?: ProductWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
+  }
+
+  /**
+   * ContactPerson without action
+   */
+  export type ContactPersonDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -5695,7 +6959,8 @@ export namespace Prisma {
     price: 'price',
     measures: 'measures',
     amount: 'amount',
-    publishedAt: 'publishedAt'
+    publishedAt: 'publishedAt',
+    contactPersonId: 'contactPersonId'
   };
 
   export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
@@ -5744,6 +7009,17 @@ export namespace Prisma {
   };
 
   export type ClientReviewScalarFieldEnum = (typeof ClientReviewScalarFieldEnum)[keyof typeof ClientReviewScalarFieldEnum]
+
+
+  export const ContactPersonScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    email: 'email',
+    phone: 'phone',
+    title: 'title'
+  };
+
+  export type ContactPersonScalarFieldEnum = (typeof ContactPersonScalarFieldEnum)[keyof typeof ContactPersonScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -5870,7 +7146,9 @@ export namespace Prisma {
     measures?: JsonNullableFilter<"Product">
     amount?: IntFilter<"Product"> | number
     publishedAt?: DateTimeFilter<"Product"> | Date | string
+    contactPersonId?: IntFilter<"Product"> | number
     images?: ProductImageListRelationFilter
+    contactPerson?: XOR<ContactPersonScalarRelationFilter, ContactPersonWhereInput>
   }
 
   export type ProductOrderByWithRelationInput = {
@@ -5882,7 +7160,9 @@ export namespace Prisma {
     measures?: SortOrderInput | SortOrder
     amount?: SortOrder
     publishedAt?: SortOrder
+    contactPersonId?: SortOrder
     images?: ProductImageOrderByRelationAggregateInput
+    contactPerson?: ContactPersonOrderByWithRelationInput
   }
 
   export type ProductWhereUniqueInput = Prisma.AtLeast<{
@@ -5897,7 +7177,9 @@ export namespace Prisma {
     measures?: JsonNullableFilter<"Product">
     amount?: IntFilter<"Product"> | number
     publishedAt?: DateTimeFilter<"Product"> | Date | string
+    contactPersonId?: IntFilter<"Product"> | number
     images?: ProductImageListRelationFilter
+    contactPerson?: XOR<ContactPersonScalarRelationFilter, ContactPersonWhereInput>
   }, "id">
 
   export type ProductOrderByWithAggregationInput = {
@@ -5909,6 +7191,7 @@ export namespace Prisma {
     measures?: SortOrderInput | SortOrder
     amount?: SortOrder
     publishedAt?: SortOrder
+    contactPersonId?: SortOrder
     _count?: ProductCountOrderByAggregateInput
     _avg?: ProductAvgOrderByAggregateInput
     _max?: ProductMaxOrderByAggregateInput
@@ -5928,6 +7211,7 @@ export namespace Prisma {
     measures?: JsonNullableWithAggregatesFilter<"Product">
     amount?: IntWithAggregatesFilter<"Product"> | number
     publishedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
+    contactPersonId?: IntWithAggregatesFilter<"Product"> | number
   }
 
   export type ProductImageWhereInput = {
@@ -6155,6 +7439,63 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"ClientReview"> | Date | string
   }
 
+  export type ContactPersonWhereInput = {
+    AND?: ContactPersonWhereInput | ContactPersonWhereInput[]
+    OR?: ContactPersonWhereInput[]
+    NOT?: ContactPersonWhereInput | ContactPersonWhereInput[]
+    id?: IntFilter<"ContactPerson"> | number
+    name?: StringFilter<"ContactPerson"> | string
+    email?: StringFilter<"ContactPerson"> | string
+    phone?: StringFilter<"ContactPerson"> | string
+    title?: StringFilter<"ContactPerson"> | string
+    product?: ProductListRelationFilter
+  }
+
+  export type ContactPersonOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    title?: SortOrder
+    product?: ProductOrderByRelationAggregateInput
+  }
+
+  export type ContactPersonWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: ContactPersonWhereInput | ContactPersonWhereInput[]
+    OR?: ContactPersonWhereInput[]
+    NOT?: ContactPersonWhereInput | ContactPersonWhereInput[]
+    name?: StringFilter<"ContactPerson"> | string
+    email?: StringFilter<"ContactPerson"> | string
+    phone?: StringFilter<"ContactPerson"> | string
+    title?: StringFilter<"ContactPerson"> | string
+    product?: ProductListRelationFilter
+  }, "id">
+
+  export type ContactPersonOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    title?: SortOrder
+    _count?: ContactPersonCountOrderByAggregateInput
+    _avg?: ContactPersonAvgOrderByAggregateInput
+    _max?: ContactPersonMaxOrderByAggregateInput
+    _min?: ContactPersonMinOrderByAggregateInput
+    _sum?: ContactPersonSumOrderByAggregateInput
+  }
+
+  export type ContactPersonScalarWhereWithAggregatesInput = {
+    AND?: ContactPersonScalarWhereWithAggregatesInput | ContactPersonScalarWhereWithAggregatesInput[]
+    OR?: ContactPersonScalarWhereWithAggregatesInput[]
+    NOT?: ContactPersonScalarWhereWithAggregatesInput | ContactPersonScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"ContactPerson"> | number
+    name?: StringWithAggregatesFilter<"ContactPerson"> | string
+    email?: StringWithAggregatesFilter<"ContactPerson"> | string
+    phone?: StringWithAggregatesFilter<"ContactPerson"> | string
+    title?: StringWithAggregatesFilter<"ContactPerson"> | string
+  }
+
   export type ProductCreateInput = {
     educationField?: $Enums.EducationField | null
     title: string
@@ -6164,6 +7505,7 @@ export namespace Prisma {
     amount: number
     publishedAt?: Date | string
     images?: ProductImageCreateNestedManyWithoutProductInput
+    contactPerson: ContactPersonCreateNestedOneWithoutProductInput
   }
 
   export type ProductUncheckedCreateInput = {
@@ -6175,6 +7517,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
+    contactPersonId: number
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -6187,6 +7530,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     images?: ProductImageUpdateManyWithoutProductNestedInput
+    contactPerson?: ContactPersonUpdateOneRequiredWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateInput = {
@@ -6198,6 +7542,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contactPersonId?: IntFieldUpdateOperationsInput | number
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -6210,6 +7555,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
+    contactPersonId: number
   }
 
   export type ProductUpdateManyMutationInput = {
@@ -6231,6 +7577,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contactPersonId?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProductImageCreateInput = {
@@ -6478,6 +7825,63 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ContactPersonCreateInput = {
+    name: string
+    email: string
+    phone: string
+    title: string
+    product?: ProductCreateNestedManyWithoutContactPersonInput
+  }
+
+  export type ContactPersonUncheckedCreateInput = {
+    id?: number
+    name: string
+    email: string
+    phone: string
+    title: string
+    product?: ProductUncheckedCreateNestedManyWithoutContactPersonInput
+  }
+
+  export type ContactPersonUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    product?: ProductUpdateManyWithoutContactPersonNestedInput
+  }
+
+  export type ContactPersonUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    product?: ProductUncheckedUpdateManyWithoutContactPersonNestedInput
+  }
+
+  export type ContactPersonCreateManyInput = {
+    id?: number
+    name: string
+    email: string
+    phone: string
+    title: string
+  }
+
+  export type ContactPersonUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ContactPersonUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -6556,6 +7960,11 @@ export namespace Prisma {
     none?: ProductImageWhereInput
   }
 
+  export type ContactPersonScalarRelationFilter = {
+    is?: ContactPersonWhereInput
+    isNot?: ContactPersonWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -6574,12 +7983,14 @@ export namespace Prisma {
     measures?: SortOrder
     amount?: SortOrder
     publishedAt?: SortOrder
+    contactPersonId?: SortOrder
   }
 
   export type ProductAvgOrderByAggregateInput = {
     id?: SortOrder
     price?: SortOrder
     amount?: SortOrder
+    contactPersonId?: SortOrder
   }
 
   export type ProductMaxOrderByAggregateInput = {
@@ -6590,6 +8001,7 @@ export namespace Prisma {
     price?: SortOrder
     amount?: SortOrder
     publishedAt?: SortOrder
+    contactPersonId?: SortOrder
   }
 
   export type ProductMinOrderByAggregateInput = {
@@ -6600,12 +8012,14 @@ export namespace Prisma {
     price?: SortOrder
     amount?: SortOrder
     publishedAt?: SortOrder
+    contactPersonId?: SortOrder
   }
 
   export type ProductSumOrderByAggregateInput = {
     id?: SortOrder
     price?: SortOrder
     amount?: SortOrder
+    contactPersonId?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -6893,11 +8307,59 @@ export namespace Prisma {
     id?: SortOrder
   }
 
+  export type ProductListRelationFilter = {
+    every?: ProductWhereInput
+    some?: ProductWhereInput
+    none?: ProductWhereInput
+  }
+
+  export type ProductOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ContactPersonCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    title?: SortOrder
+  }
+
+  export type ContactPersonAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type ContactPersonMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    title?: SortOrder
+  }
+
+  export type ContactPersonMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    title?: SortOrder
+  }
+
+  export type ContactPersonSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
   export type ProductImageCreateNestedManyWithoutProductInput = {
     create?: XOR<ProductImageCreateWithoutProductInput, ProductImageUncheckedCreateWithoutProductInput> | ProductImageCreateWithoutProductInput[] | ProductImageUncheckedCreateWithoutProductInput[]
     connectOrCreate?: ProductImageCreateOrConnectWithoutProductInput | ProductImageCreateOrConnectWithoutProductInput[]
     createMany?: ProductImageCreateManyProductInputEnvelope
     connect?: ProductImageWhereUniqueInput | ProductImageWhereUniqueInput[]
+  }
+
+  export type ContactPersonCreateNestedOneWithoutProductInput = {
+    create?: XOR<ContactPersonCreateWithoutProductInput, ContactPersonUncheckedCreateWithoutProductInput>
+    connectOrCreate?: ContactPersonCreateOrConnectWithoutProductInput
+    connect?: ContactPersonWhereUniqueInput
   }
 
   export type ProductImageUncheckedCreateNestedManyWithoutProductInput = {
@@ -6949,6 +8411,14 @@ export namespace Prisma {
     deleteMany?: ProductImageScalarWhereInput | ProductImageScalarWhereInput[]
   }
 
+  export type ContactPersonUpdateOneRequiredWithoutProductNestedInput = {
+    create?: XOR<ContactPersonCreateWithoutProductInput, ContactPersonUncheckedCreateWithoutProductInput>
+    connectOrCreate?: ContactPersonCreateOrConnectWithoutProductInput
+    upsert?: ContactPersonUpsertWithoutProductInput
+    connect?: ContactPersonWhereUniqueInput
+    update?: XOR<XOR<ContactPersonUpdateToOneWithWhereWithoutProductInput, ContactPersonUpdateWithoutProductInput>, ContactPersonUncheckedUpdateWithoutProductInput>
+  }
+
   export type ProductImageUncheckedUpdateManyWithoutProductNestedInput = {
     create?: XOR<ProductImageCreateWithoutProductInput, ProductImageUncheckedCreateWithoutProductInput> | ProductImageCreateWithoutProductInput[] | ProductImageUncheckedCreateWithoutProductInput[]
     connectOrCreate?: ProductImageCreateOrConnectWithoutProductInput | ProductImageCreateOrConnectWithoutProductInput[]
@@ -6983,6 +8453,48 @@ export namespace Prisma {
 
   export type EnumStatusFieldUpdateOperationsInput = {
     set?: $Enums.Status
+  }
+
+  export type ProductCreateNestedManyWithoutContactPersonInput = {
+    create?: XOR<ProductCreateWithoutContactPersonInput, ProductUncheckedCreateWithoutContactPersonInput> | ProductCreateWithoutContactPersonInput[] | ProductUncheckedCreateWithoutContactPersonInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutContactPersonInput | ProductCreateOrConnectWithoutContactPersonInput[]
+    createMany?: ProductCreateManyContactPersonInputEnvelope
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+  }
+
+  export type ProductUncheckedCreateNestedManyWithoutContactPersonInput = {
+    create?: XOR<ProductCreateWithoutContactPersonInput, ProductUncheckedCreateWithoutContactPersonInput> | ProductCreateWithoutContactPersonInput[] | ProductUncheckedCreateWithoutContactPersonInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutContactPersonInput | ProductCreateOrConnectWithoutContactPersonInput[]
+    createMany?: ProductCreateManyContactPersonInputEnvelope
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+  }
+
+  export type ProductUpdateManyWithoutContactPersonNestedInput = {
+    create?: XOR<ProductCreateWithoutContactPersonInput, ProductUncheckedCreateWithoutContactPersonInput> | ProductCreateWithoutContactPersonInput[] | ProductUncheckedCreateWithoutContactPersonInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutContactPersonInput | ProductCreateOrConnectWithoutContactPersonInput[]
+    upsert?: ProductUpsertWithWhereUniqueWithoutContactPersonInput | ProductUpsertWithWhereUniqueWithoutContactPersonInput[]
+    createMany?: ProductCreateManyContactPersonInputEnvelope
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    update?: ProductUpdateWithWhereUniqueWithoutContactPersonInput | ProductUpdateWithWhereUniqueWithoutContactPersonInput[]
+    updateMany?: ProductUpdateManyWithWhereWithoutContactPersonInput | ProductUpdateManyWithWhereWithoutContactPersonInput[]
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
+  }
+
+  export type ProductUncheckedUpdateManyWithoutContactPersonNestedInput = {
+    create?: XOR<ProductCreateWithoutContactPersonInput, ProductUncheckedCreateWithoutContactPersonInput> | ProductCreateWithoutContactPersonInput[] | ProductUncheckedCreateWithoutContactPersonInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutContactPersonInput | ProductCreateOrConnectWithoutContactPersonInput[]
+    upsert?: ProductUpsertWithWhereUniqueWithoutContactPersonInput | ProductUpsertWithWhereUniqueWithoutContactPersonInput[]
+    createMany?: ProductCreateManyContactPersonInputEnvelope
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    update?: ProductUpdateWithWhereUniqueWithoutContactPersonInput | ProductUpdateWithWhereUniqueWithoutContactPersonInput[]
+    updateMany?: ProductUpdateManyWithWhereWithoutContactPersonInput | ProductUpdateManyWithWhereWithoutContactPersonInput[]
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -7219,6 +8731,26 @@ export namespace Prisma {
     data: ProductImageCreateManyProductInput | ProductImageCreateManyProductInput[]
   }
 
+  export type ContactPersonCreateWithoutProductInput = {
+    name: string
+    email: string
+    phone: string
+    title: string
+  }
+
+  export type ContactPersonUncheckedCreateWithoutProductInput = {
+    id?: number
+    name: string
+    email: string
+    phone: string
+    title: string
+  }
+
+  export type ContactPersonCreateOrConnectWithoutProductInput = {
+    where: ContactPersonWhereUniqueInput
+    create: XOR<ContactPersonCreateWithoutProductInput, ContactPersonUncheckedCreateWithoutProductInput>
+  }
+
   export type ProductImageUpsertWithWhereUniqueWithoutProductInput = {
     where: ProductImageWhereUniqueInput
     update: XOR<ProductImageUpdateWithoutProductInput, ProductImageUncheckedUpdateWithoutProductInput>
@@ -7244,6 +8776,32 @@ export namespace Prisma {
     sortOrder?: IntFilter<"ProductImage"> | number
   }
 
+  export type ContactPersonUpsertWithoutProductInput = {
+    update: XOR<ContactPersonUpdateWithoutProductInput, ContactPersonUncheckedUpdateWithoutProductInput>
+    create: XOR<ContactPersonCreateWithoutProductInput, ContactPersonUncheckedCreateWithoutProductInput>
+    where?: ContactPersonWhereInput
+  }
+
+  export type ContactPersonUpdateToOneWithWhereWithoutProductInput = {
+    where?: ContactPersonWhereInput
+    data: XOR<ContactPersonUpdateWithoutProductInput, ContactPersonUncheckedUpdateWithoutProductInput>
+  }
+
+  export type ContactPersonUpdateWithoutProductInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ContactPersonUncheckedUpdateWithoutProductInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+  }
+
   export type ProductCreateWithoutImagesInput = {
     educationField?: $Enums.EducationField | null
     title: string
@@ -7252,6 +8810,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
+    contactPerson: ContactPersonCreateNestedOneWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutImagesInput = {
@@ -7263,6 +8822,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
+    contactPersonId: number
   }
 
   export type ProductCreateOrConnectWithoutImagesInput = {
@@ -7289,6 +8849,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contactPerson?: ContactPersonUpdateOneRequiredWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutImagesInput = {
@@ -7300,6 +8861,70 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contactPersonId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ProductCreateWithoutContactPersonInput = {
+    educationField?: $Enums.EducationField | null
+    title: string
+    description: string
+    price: Decimal | DecimalJsLike | number | string
+    measures?: NullableJsonNullValueInput | InputJsonValue
+    amount: number
+    publishedAt?: Date | string
+    images?: ProductImageCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutContactPersonInput = {
+    id?: number
+    educationField?: $Enums.EducationField | null
+    title: string
+    description: string
+    price: Decimal | DecimalJsLike | number | string
+    measures?: NullableJsonNullValueInput | InputJsonValue
+    amount: number
+    publishedAt?: Date | string
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutContactPersonInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutContactPersonInput, ProductUncheckedCreateWithoutContactPersonInput>
+  }
+
+  export type ProductCreateManyContactPersonInputEnvelope = {
+    data: ProductCreateManyContactPersonInput | ProductCreateManyContactPersonInput[]
+  }
+
+  export type ProductUpsertWithWhereUniqueWithoutContactPersonInput = {
+    where: ProductWhereUniqueInput
+    update: XOR<ProductUpdateWithoutContactPersonInput, ProductUncheckedUpdateWithoutContactPersonInput>
+    create: XOR<ProductCreateWithoutContactPersonInput, ProductUncheckedCreateWithoutContactPersonInput>
+  }
+
+  export type ProductUpdateWithWhereUniqueWithoutContactPersonInput = {
+    where: ProductWhereUniqueInput
+    data: XOR<ProductUpdateWithoutContactPersonInput, ProductUncheckedUpdateWithoutContactPersonInput>
+  }
+
+  export type ProductUpdateManyWithWhereWithoutContactPersonInput = {
+    where: ProductScalarWhereInput
+    data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyWithoutContactPersonInput>
+  }
+
+  export type ProductScalarWhereInput = {
+    AND?: ProductScalarWhereInput | ProductScalarWhereInput[]
+    OR?: ProductScalarWhereInput[]
+    NOT?: ProductScalarWhereInput | ProductScalarWhereInput[]
+    id?: IntFilter<"Product"> | number
+    educationField?: EnumEducationFieldNullableFilter<"Product"> | $Enums.EducationField | null
+    title?: StringFilter<"Product"> | string
+    description?: StringFilter<"Product"> | string
+    price?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    measures?: JsonNullableFilter<"Product">
+    amount?: IntFilter<"Product"> | number
+    publishedAt?: DateTimeFilter<"Product"> | Date | string
+    contactPersonId?: IntFilter<"Product"> | number
   }
 
   export type ProductImageCreateManyProductInput = {
@@ -7320,6 +8945,51 @@ export namespace Prisma {
   export type ProductImageUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     sortOrder?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ProductCreateManyContactPersonInput = {
+    id?: number
+    educationField?: $Enums.EducationField | null
+    title: string
+    description: string
+    price: Decimal | DecimalJsLike | number | string
+    measures?: NullableJsonNullValueInput | InputJsonValue
+    amount: number
+    publishedAt?: Date | string
+  }
+
+  export type ProductUpdateWithoutContactPersonInput = {
+    educationField?: NullableEnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    measures?: NullableJsonNullValueInput | InputJsonValue
+    amount?: IntFieldUpdateOperationsInput | number
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutContactPersonInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    educationField?: NullableEnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    measures?: NullableJsonNullValueInput | InputJsonValue
+    amount?: IntFieldUpdateOperationsInput | number
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateManyWithoutContactPersonInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    educationField?: NullableEnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField | null
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    measures?: NullableJsonNullValueInput | InputJsonValue
+    amount?: IntFieldUpdateOperationsInput | number
+    publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
