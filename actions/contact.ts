@@ -17,7 +17,20 @@ const ContactPersonCreateSchema = z.object({
 
 const ContactPersonUpdateSchema = ContactPersonCreateSchema.partial()
 
+
+
 // ─── Actions ─────────────────────────────────────────────────────────────────
+
+
+export async function getContactById(id: number) {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+  const contact = await prisma.contactPerson.findUnique({
+    where: {id: id}
+  })
+  if(!contact) throw new Error("Kontakt person ikke funnet")
+  return contact
+}
 
 export async function createContactPerson(formData: FormData) {
   const session = await getServerSession(authOptions)

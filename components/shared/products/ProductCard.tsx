@@ -1,7 +1,7 @@
 "use client"
 
 import type { ProductCardData } from "@/app/lib/types"
-import DeleteProduct from "../admin/DeleteProduct"
+import DeleteProduct from "../../admin/DeleteProduct"
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useRef, useEffect, useCallback } from "react"

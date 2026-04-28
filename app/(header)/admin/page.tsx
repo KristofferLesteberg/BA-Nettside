@@ -4,12 +4,12 @@ export const dynamic = 'force-dynamic'
 // P.S. Claude - "ur welcome buddy".
 
 import { Suspense } from 'react'
-import AdminControlPanel from '@/app/components/admin/AdminControlPanel'
-import AdminTabManager, { type AdminTab } from '@/app/components/admin/AdminTabManager'
-import AdminProductsView from '@/app/components/admin/AdminProductsView'
-import AdminProjectsView from '../components/admin/AdminProjectsView'
-import AdminReviewsView from '../components/admin/AdminReviewsView'
-import AdminContactPersonView from '../components/admin/AdminContactPersonView'
+import AdminControlPanel from '@/components/admin/AdminControlPanel'
+import AdminTabManager, { type AdminTab } from '@/components/admin/AdminTabManager'
+import AdminProductsView from '@/components/admin/AdminProductsView'
+import AdminProjectsView from '@/components/admin/AdminProjectsView'
+import AdminReviewsView from '@/components/admin/AdminReviewsView'
+import AdminContactPersonView from '@/components/admin/AdminContactPersonView'
 
 const page = async () => {
   const tabs: AdminTab[] = [

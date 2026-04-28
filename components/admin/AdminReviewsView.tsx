@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { HiOutlinePlusSm } from 'react-icons/hi'
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { prisma } from '@/app/lib/prisma'
-import DeleteReview from '@/app/components/admin/DeleteReview'
+import DeleteReview from '@/components/admin/DeleteReview'
 
 export default async function AdminReviewsView() {
   const reviews = await prisma.clientReview.findMany({ orderBy: { createdAt: 'desc' } })

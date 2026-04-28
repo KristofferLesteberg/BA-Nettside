@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { HiOutlinePlusSm } from 'react-icons/hi'
 import { prisma } from '@/app/lib/prisma'
-import FilteredProductsGrid from '@/app/components/product/FilteredProductsGrid'
+import FilteredProductsGrid from '../shared/products/FilteredProductsGrid'
 
 // Admin-specific filter state lives here as the project grows.
 // Example of adding a filter:

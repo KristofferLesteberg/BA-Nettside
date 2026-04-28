@@ -1,5 +1,9 @@
 "use client"
-import ContactForm from "@/app/components/admin/ContactForm";
+import ContactForm from "@/components/admin/ContactForm";
+
+import { updateContactPerson } from "@/actions/contact";
+import { getContactById } from "@/actions/contact";
+
 import { ApiResponse } from "@/app/lib/api-response";
 import { ContactPerson } from "@/generated/prisma";
 import { useRouter } from "next/navigation";
@@ -20,55 +24,31 @@ export default function UpdateContact({ params }: { params: Promise<{ id: string
       
     const getContact = async () => {
       try {
-        const res = await fetch(`/api/contactPerson/${contactId}`)
-        const body: ApiResponse<ContactFormData> = await res.json()
-      
-        if (!body.success) {
-          if (body.fields) {
-          Object.values(body.fields).flat().forEach(msg => toast.error(msg))
-        } else {
-          toast.error(body.error)
-        }
-        return
-    }
-    setContact(body.data)
-     console.log(body.data)
+        const contact = await getContactById(contactId)
+        setContact(contact)
       } catch(error) {
-        console.log(error)
-        toast.error("Kunne ikke laste ned kontakt informasjonen")
+        toast.error("Kunne ikke laste kontaktperson")
       }
     }
 
     getContact()
   }, [contactId])
 
-  const handleUpdate = async (data: ContactFormData) => {
+  const handleUpdate = async ( {name, email, phone, title }: ContactFormData) => {
+    const formData = new FormData()
+    formData.append("name", name)
+    formData.append("email", email)
+    formData.append("phone", phone)
+    formData.append("title", title)
+
     try {
-      const res = await fetch(`/api/contactPerson/${contactId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      })
-      const body: ApiResponse<unknown> = await res.json()
-
-      if (!body.success) {
-      if (body.fields) {
-        Object.values(body.fields).flat().forEach(msg => toast.error(msg))
-      } else {
-        toast.error(body.error)
-      }
-      return
-    }
-
-    toast.success("Oppdaterte informasjonen")
-    router.push("/admin")
+      await updateContactPerson(contactId, formData)
+      toast.success("Oppdatert kontakt informasjonen")
+      router.push("/admin")
     } catch(error) {
-      console.log(error)
-      toast.error("Kunne ikke oppdatere informasjonen")
-
-
+      toast.error(error instanceof Error ? error.message : "Kunne ikke oppdatere kontakt informasjonen")
+    }
   }
-}
 
   if(!contact) return <p>Laster...</p>
   return (

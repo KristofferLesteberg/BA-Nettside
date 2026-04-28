@@ -1,4 +1,4 @@
-import ProjectCard from "@/app/components/admin/ProjectCard"
+import ProjectCard from "@/components/admin/ProjectCard"
 import { prisma } from "@/app/lib/prisma"
 
 

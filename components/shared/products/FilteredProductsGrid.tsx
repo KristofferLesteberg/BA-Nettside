@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import type { ProductCardData } from '@/app/lib/types'
-import ProductsGrid from '@/app/components/product/ProductsGrid'
+import ProductsGrid from './ProductsGrid'
 import { EducationField } from '@/generated/prisma'
 import { FaSliders, FaXmark } from 'react-icons/fa6'
 

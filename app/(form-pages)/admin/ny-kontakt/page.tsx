@@ -1,46 +1,35 @@
 "use client"
 
-import ContactForm from "@/app/components/admin/ContactForm"
+import ContactForm from "@/components/admin/ContactForm"
+import { createContactPerson } from "@/actions/contact"
 import { ContactPerson } from "@/generated/prisma"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
-import type { ApiResponse } from '@/app/lib/api-response'
 
 type ContactFormData = Omit<ContactPerson, 'id' | 'products'>
-
 
 export default function NewContact() {
   const router = useRouter()
 
-  const handleSubmit = async (data: ContactFormData) => {
-    const res = await fetch("/api/contactPerson", {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify(data)
-    })
-    const body: ApiResponse<unknown> = await res.json()
-    if (!body.success) {
-      if (body.fields) {
-        Object.values(body.fields).flat().forEach(msg => toast.error(msg))
-      } else {
-        toast.error(body.error)
-      }
-      return
-    }
+  const handleSubmit = async ({ name, email, phone, title }: ContactFormData) => {
+    const formData = new FormData()
+    formData.append('name', name)
+    formData.append('email', email)
+    formData.append('phone', phone)
+    formData.append('title', title)
 
-      if(!res.ok) {
-        console.log(res.ok)
-        toast.error("Kunne ikke opprette kontaktpersonen")
-        return
-      }
-      toast.success("Ny kontaktperson opprettet")
-      router.push("/admin")  
+    try {
+      await createContactPerson(formData)
+      toast.success('Ny kontaktperson opprettet')
+      router.push('/admin')
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Kunne ikke opprette kontaktpersonen')
     }
+  }
 
   return (
     <div>
-      <ContactForm onSubmit={handleSubmit} heading="Opprett en ny kontakt"/>
+      <ContactForm onSubmit={handleSubmit} heading="Opprett en ny kontakt" />
     </div>
-
   )
 }

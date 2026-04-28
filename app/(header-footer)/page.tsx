@@ -4,8 +4,8 @@ export const dynamic = 'force-dynamic'
 // P.S. Claude - "ur welcome buddy".
 
 import Link from 'next/link'
-import { prisma } from './lib/prisma'
-import ReviewsCarousel from './components/shared/ReviewsCarousel'
+import { prisma } from '@/app/lib/prisma'
+import ReviewsCarousel from '@/components/shared/ReviewsCarousel'
 import Image from 'next/image'
 
 const page = async () => {
