@@ -29,6 +29,15 @@ const ProductUpdateSchema = ProductCreateSchema.partial()
 
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
+export async function getProductById(id: number) {
+  const product = prisma.product.findUnique({
+    where: { id: id }, include: { images: true}
+  })
+
+  if(!product) throw new Error("Kunne ikke finne produkt")
+  return product
+}
+
 export async function createProduct(formData: FormData) {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')

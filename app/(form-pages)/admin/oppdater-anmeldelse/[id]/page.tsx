@@ -4,7 +4,7 @@ import { use, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import type { ApiResponse } from '@/app/lib/api-response'
-import ReviewForm, { type ReviewFormValues } from '@/app/components/admin/ReviewForm'
+import ReviewForm, { type ReviewFormValues } from '@/components/admin/ReviewForm'
 
 interface LoadedReview {
   name:     string

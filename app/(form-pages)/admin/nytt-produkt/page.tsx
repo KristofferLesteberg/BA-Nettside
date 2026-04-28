@@ -2,8 +2,10 @@
 
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import type { ApiResponse } from '@/app/lib/api-response'
-import ProductForm, { ProductFormValues } from '@/app/components/admin/ProductForm'
+import { createProduct } from '@/actions/products'
+
+import ProductForm, { ProductFormValues } from '@/components/admin/ProductForm'
+import { create } from 'node:domain'
 
 export default function NewProduct() {
   const router = useRouter()
@@ -21,21 +23,13 @@ export default function NewProduct() {
       formData.append("files", img.file)
       formData.append("ids", img.id)
     })
-
-    const res = await fetch("/api/products", { method: "POST", body: formData })
-    const body: ApiResponse<unknown> = await res.json()
-
-    if (!body.success) {
-      if (body.fields) {
-        Object.values(body.fields).flat().forEach(msg => toast.error(msg))
-      } else {
-        toast.error(body.error)
-      }
-      return
+    try {
+      await createProduct(formData)
+      toast.success("Produkt opprettet")
+      router.push("/admin")
+    } catch(error) {
+      toast.error("Kunne ikke opprette et nytt produkt")
     }
-
-    toast.success(body.message ?? "Produkt lagt til")
-    router.push("/admin")
   }
 
   return (
