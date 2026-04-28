@@ -5,6 +5,7 @@ import DeleteProduct from "../../admin/DeleteProduct"
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useRef, useEffect, useCallback } from "react"
+import { useRouter } from "next/navigation"
 import { BsThreeDots } from "react-icons/bs"
 import { MdOutlineModeEdit } from "react-icons/md"
 
@@ -26,6 +27,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, isAdmin }: ProductCardProps) {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const [closing, setClosing] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -52,10 +54,14 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
 
   return (
     // No overflow-hidden here — it would clip the admin dropdown
-    <div className="card group flex flex-col p-0 hover:border-primary transition-colors duration-200 hover:shadow-md" onMouseLeave={closeMenu}>
+    <div
+      className="card group flex flex-col p-0 hover:border-primary transition-colors duration-200 hover:shadow-md cursor-pointer"
+      onClick={() => router.push(`/produkter/${product.id}`)}
+      onMouseLeave={closeMenu}
+    >
 
       {/* Image — overflow-hidden is scoped here so it doesn't clip the dropdown */}
-      <Link href={`/products/${product.id}`} className="relative block w-full aspect-4/3 overflow-hidden rounded-t-lg bg-surface">
+      <div className="relative w-full aspect-4/3 overflow-hidden rounded-t-lg bg-surface">
         {product.image ? (
           <Image
             src={`/images/${product.image.id}.webp`}
@@ -74,19 +80,20 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
             {FIELD_LABEL[product.educationField]}
           </span>
         )}
-      </Link>
+      </div>
 
       {/* Content */}
       <div className="flex flex-col gap-3 p-4">
 
         {/* Title + admin menu */}
         <div className="flex items-start justify-between gap-2">
-          <Link href={`/products/${product.id}`} className="heading-4 hover:text-primary transition-colors duration-150 leading-snug">
+          <span className="heading-4 group-hover:text-primary transition-colors duration-150 leading-snug">
             {product.title}
-          </Link>
+          </span>
 
           {isAdmin && (
-            <div ref={menuRef} className="relative shrink-0">
+            // z-[2] keeps the admin menu above the stretched link
+            <div ref={menuRef} className="relative shrink-0" onClick={(e) => e.stopPropagation()}>
               <button
                 type="button"
                 onClick={() => open ? closeMenu() : setOpen(true)}
@@ -102,7 +109,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
                   className={`card absolute right-0 bottom-full mb-1 z-20 flex flex-col p-1 min-w-24 shadow-md ${closing ? 'animate-[dropdown-out_0.15s_ease_both]' : 'animate-[dropdown-in_0.15s_ease_both]'}`}
                 >
                   <Link
-                    href={`/admin/updateProduct/${product.id}`}
+                    href={`/admin/oppdater-produkt/${product.id}`}
                     onClick={() => closeMenu()}
                     className="btn btn-ghost w-full justify-start gap-2 text-lg"
                   >

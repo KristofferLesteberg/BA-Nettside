@@ -40,7 +40,7 @@ export default function ContactPersonCard( { person } : Props) {
         <h1 className="heading-1">{person.name}</h1>
   
         <div className="flex items-center gap-2 shrink-0">
-          <Link href={`/admin/updateContact/${person.id}`} className="btn btn-outline">
+          <Link href={`/admin/oppdater-kontakt/${person.id}`} className="btn btn-outline">
            <p>Redigere</p>
           </Link>
           <button className="btn btn-error" onClick={deletePerson}>Fjern</button>

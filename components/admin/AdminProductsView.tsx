@@ -27,7 +27,7 @@ export default async function AdminProductsView() {
       products={convertedProducts}
       isAdmin={true}
       sidebarAction={
-        <Link href="/admin/newProduct" className="btn btn-primary w-full gap-1.5">
+        <Link href="/admin/nytt-produkt" className="btn btn-primary w-full gap-1.5">
           <HiOutlinePlusSm className="text-base" />
           Ny produkt
         </Link>

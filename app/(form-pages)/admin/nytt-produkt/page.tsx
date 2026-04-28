@@ -26,7 +26,7 @@ export default function NewProduct() {
     try {
       await createProduct(formData)
       toast.success("Produkt opprettet")
-      router.push("/admin")
+      router.push("/admin?tab=produkter")
     } catch(error) {
       toast.error("Kunne ikke opprette et nytt produkt")
     }

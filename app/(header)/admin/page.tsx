@@ -14,19 +14,19 @@ import AdminContactPersonView from '@/components/admin/AdminContactPersonView'
 const page = async () => {
   const tabs: AdminTab[] = [
     {
-      label: "Produkter",
+      label: "produkter",
       content: <AdminProductsView />,
     },
     {
-      label: "Prosjekter",
+      label: "prosjekter",
       content: <AdminProjectsView />
     },
     {
-      label: "Anmeldelser",
+      label: "anmeldelser",
       content: <AdminReviewsView />
     },
     {
-      label: "Kontakt personer",
+      label: "kontakt personer",
       content: <AdminContactPersonView />
     }
   ]

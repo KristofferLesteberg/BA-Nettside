@@ -1,8 +1,8 @@
 import { prisma } from "@/app/lib/prisma"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import Carousel from "@/app/components/shared/ImageCarousel"
-import ProductTabs from "@/app/components/product/ProductTabs"
+import Carousel from "@/components/shared/ImageCarousel"
+import ProductTabs from "@/components/shared/products/ProductTabs"
 
 export default async function ProductPage({
   params,
@@ -27,7 +27,7 @@ export default async function ProductPage({
           <span className="small-text">
             <Link href="/" className="hover:underline">Hjem</Link>
             <span className="text-faint mx-2">/</span>
-            <Link href="/products" className="hover:underline">Produkter</Link>
+            <Link href="/produkter" className="hover:underline">Produkter</Link>
             <span className="text-faint mx-2">/</span>
             <span className="text-faint">{product.title}</span>
           </span>

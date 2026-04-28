@@ -57,6 +57,21 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       formData.append("imageIds", img.id)
       if (img.type === "new") formData.append("imageFiles", img.file)
     })
+
+    const res = await fetch(`/api/products/${productId}`, { method: "PATCH", body: formData })
+    const body: ApiResponse<unknown> = await res.json()
+
+    if (!body.success) {
+      if (body.fields) {
+        Object.values(body.fields).flat().forEach(msg => toast.error(msg))
+      } else {
+        toast.error(body.error)
+      }
+      return
+    }
+
+    toast.success(body.message ?? "Produkt oppdatert")
+    router.push("/admin?tab=produkter")
   }
 
   if (error) return <p>Ingen produkt funnet...</p>

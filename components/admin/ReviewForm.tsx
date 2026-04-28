@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
-import ReviewImageInput from "@/app/components/input/ReviewImageInput"
+import ReviewImageInput from "@/components/shared/input/ReviewImageInput"
 import RegretBtn from "../shared/RegretBtn"
 
 export interface ReviewFormValues {

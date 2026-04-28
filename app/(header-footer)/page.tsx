@@ -19,10 +19,10 @@ const page = async () => {
             <h1 className='heading-1'>Kjøp byggematerialer eller <br />få jobben gjort av <br />fagfolk</h1>
           
             <div className='flex flex-row flex-1 gap-3 mt-3'>
-              <Link href="/products">
+              <Link href="/produkter">
                 <button className='btn btn-primary hover:bg-primary-hover'>Se på våre produkter!</button>
               </Link>
-              <Link href="/projects">
+              <Link href="/prosjekter">
                 <button className='btn btn-primary hover:bg-primary-hover'>Bestill en av våre Elever!</button>
               </Link>
             </div>

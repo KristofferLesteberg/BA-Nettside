@@ -12,7 +12,7 @@ export default async function ContactPersonView() {
       <div className="flex flex-row justify-between">
         <h1 className="heading-1 mb-10">Kontakt personer - {contactPersons.length}</h1>
         <div className="">
-          <Link href={"/admin/newContact"} className="btn btn-primary gap-1.5">
+          <Link href={"/admin/ny-kontakt"} className="btn btn-primary gap-1.5">
             <HiOutlinePlusSm className="text-base" />
             Ny kontakt person
           </Link>

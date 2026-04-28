@@ -7,10 +7,10 @@ import { useState, useEffect } from 'react';
 import { FaBars, FaXmark } from 'react-icons/fa6';
 
 const navLinks = [
-  { href: '/products',        label: 'Våre Produkter' },
-  { href: '/projects', label: 'Bestill et prosjekt'     },
-  { href: '/contact',         label: 'Kontakt Oss'    },
-  { href: '/admin',           label: 'For lærere'          },
+  { href: '/produkter',    label: 'Våre Produkter'      },
+  { href: '/prosjekter',   label: 'Bestill et prosjekt' },
+  { href: '/kontakt-oss',  label: 'Kontakt Oss'         },
+  { href: '/admin',        label: 'For lærere'          },
 ];
 
 export default function Header() {

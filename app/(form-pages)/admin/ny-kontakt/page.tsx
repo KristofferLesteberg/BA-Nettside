@@ -21,7 +21,7 @@ export default function NewContact() {
     try {
       await createContactPerson(formData)
       toast.success('Ny kontaktperson opprettet')
-      router.push('/admin')
+      router.push('/admin?tab=kontakt personer')
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Kunne ikke opprette kontaktpersonen')
     }

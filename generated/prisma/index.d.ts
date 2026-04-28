@@ -1527,7 +1527,7 @@ export namespace Prisma {
     measures: JsonValue | null
     amount: number
     publishedAt: Date
-    contactPersonId: number
+    contactPersonId: number | null
     _count: ProductCountAggregateOutputType | null
     _avg: ProductAvgAggregateOutputType | null
     _sum: ProductSumAggregateOutputType | null
@@ -1560,7 +1560,7 @@ export namespace Prisma {
     publishedAt?: boolean
     contactPersonId?: boolean
     images?: boolean | Product$imagesArgs<ExtArgs>
-    contactPerson?: boolean | ContactPersonDefaultArgs<ExtArgs>
+    contactPerson?: boolean | Product$contactPersonArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
@@ -1574,7 +1574,7 @@ export namespace Prisma {
     amount?: boolean
     publishedAt?: boolean
     contactPersonId?: boolean
-    contactPerson?: boolean | ContactPersonDefaultArgs<ExtArgs>
+    contactPerson?: boolean | Product$contactPersonArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
   export type ProductSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1587,7 +1587,7 @@ export namespace Prisma {
     amount?: boolean
     publishedAt?: boolean
     contactPersonId?: boolean
-    contactPerson?: boolean | ContactPersonDefaultArgs<ExtArgs>
+    contactPerson?: boolean | Product$contactPersonArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
   export type ProductSelectScalar = {
@@ -1605,21 +1605,21 @@ export namespace Prisma {
   export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "educationField" | "title" | "description" | "price" | "measures" | "amount" | "publishedAt" | "contactPersonId", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     images?: boolean | Product$imagesArgs<ExtArgs>
-    contactPerson?: boolean | ContactPersonDefaultArgs<ExtArgs>
+    contactPerson?: boolean | Product$contactPersonArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    contactPerson?: boolean | ContactPersonDefaultArgs<ExtArgs>
+    contactPerson?: boolean | Product$contactPersonArgs<ExtArgs>
   }
   export type ProductIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    contactPerson?: boolean | ContactPersonDefaultArgs<ExtArgs>
+    contactPerson?: boolean | Product$contactPersonArgs<ExtArgs>
   }
 
   export type $ProductPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Product"
     objects: {
       images: Prisma.$ProductImagePayload<ExtArgs>[]
-      contactPerson: Prisma.$ContactPersonPayload<ExtArgs>
+      contactPerson: Prisma.$ContactPersonPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -1630,7 +1630,7 @@ export namespace Prisma {
       measures: Prisma.JsonValue | null
       amount: number
       publishedAt: Date
-      contactPersonId: number
+      contactPersonId: number | null
     }, ExtArgs["result"]["product"]>
     composites: {}
   }
@@ -2026,7 +2026,7 @@ export namespace Prisma {
   export interface Prisma__ProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     images<T extends Product$imagesArgs<ExtArgs> = {}>(args?: Subset<T, Product$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    contactPerson<T extends ContactPersonDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContactPersonDefaultArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    contactPerson<T extends Product$contactPersonArgs<ExtArgs> = {}>(args?: Subset<T, Product$contactPersonArgs<ExtArgs>>): Prisma__ContactPersonClient<$Result.GetResult<Prisma.$ContactPersonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2485,6 +2485,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProductImageScalarFieldEnum | ProductImageScalarFieldEnum[]
+  }
+
+  /**
+   * Product.contactPerson
+   */
+  export type Product$contactPersonArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContactPerson
+     */
+    select?: ContactPersonSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContactPerson
+     */
+    omit?: ContactPersonOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContactPersonInclude<ExtArgs> | null
+    where?: ContactPersonWhereInput
   }
 
   /**
@@ -7146,9 +7165,9 @@ export namespace Prisma {
     measures?: JsonNullableFilter<"Product">
     amount?: IntFilter<"Product"> | number
     publishedAt?: DateTimeFilter<"Product"> | Date | string
-    contactPersonId?: IntFilter<"Product"> | number
+    contactPersonId?: IntNullableFilter<"Product"> | number | null
     images?: ProductImageListRelationFilter
-    contactPerson?: XOR<ContactPersonScalarRelationFilter, ContactPersonWhereInput>
+    contactPerson?: XOR<ContactPersonNullableScalarRelationFilter, ContactPersonWhereInput> | null
   }
 
   export type ProductOrderByWithRelationInput = {
@@ -7160,7 +7179,7 @@ export namespace Prisma {
     measures?: SortOrderInput | SortOrder
     amount?: SortOrder
     publishedAt?: SortOrder
-    contactPersonId?: SortOrder
+    contactPersonId?: SortOrderInput | SortOrder
     images?: ProductImageOrderByRelationAggregateInput
     contactPerson?: ContactPersonOrderByWithRelationInput
   }
@@ -7177,9 +7196,9 @@ export namespace Prisma {
     measures?: JsonNullableFilter<"Product">
     amount?: IntFilter<"Product"> | number
     publishedAt?: DateTimeFilter<"Product"> | Date | string
-    contactPersonId?: IntFilter<"Product"> | number
+    contactPersonId?: IntNullableFilter<"Product"> | number | null
     images?: ProductImageListRelationFilter
-    contactPerson?: XOR<ContactPersonScalarRelationFilter, ContactPersonWhereInput>
+    contactPerson?: XOR<ContactPersonNullableScalarRelationFilter, ContactPersonWhereInput> | null
   }, "id">
 
   export type ProductOrderByWithAggregationInput = {
@@ -7191,7 +7210,7 @@ export namespace Prisma {
     measures?: SortOrderInput | SortOrder
     amount?: SortOrder
     publishedAt?: SortOrder
-    contactPersonId?: SortOrder
+    contactPersonId?: SortOrderInput | SortOrder
     _count?: ProductCountOrderByAggregateInput
     _avg?: ProductAvgOrderByAggregateInput
     _max?: ProductMaxOrderByAggregateInput
@@ -7211,7 +7230,7 @@ export namespace Prisma {
     measures?: JsonNullableWithAggregatesFilter<"Product">
     amount?: IntWithAggregatesFilter<"Product"> | number
     publishedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
-    contactPersonId?: IntWithAggregatesFilter<"Product"> | number
+    contactPersonId?: IntNullableWithAggregatesFilter<"Product"> | number | null
   }
 
   export type ProductImageWhereInput = {
@@ -7505,7 +7524,7 @@ export namespace Prisma {
     amount: number
     publishedAt?: Date | string
     images?: ProductImageCreateNestedManyWithoutProductInput
-    contactPerson: ContactPersonCreateNestedOneWithoutProductInput
+    contactPerson?: ContactPersonCreateNestedOneWithoutProductInput
   }
 
   export type ProductUncheckedCreateInput = {
@@ -7517,7 +7536,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
-    contactPersonId: number
+    contactPersonId?: number | null
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
   }
 
@@ -7530,7 +7549,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     images?: ProductImageUpdateManyWithoutProductNestedInput
-    contactPerson?: ContactPersonUpdateOneRequiredWithoutProductNestedInput
+    contactPerson?: ContactPersonUpdateOneWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateInput = {
@@ -7542,7 +7561,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    contactPersonId?: IntFieldUpdateOperationsInput | number
+    contactPersonId?: NullableIntFieldUpdateOperationsInput | number | null
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
   }
 
@@ -7555,7 +7574,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
-    contactPersonId: number
+    contactPersonId?: number | null
   }
 
   export type ProductUpdateManyMutationInput = {
@@ -7577,7 +7596,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    contactPersonId?: IntFieldUpdateOperationsInput | number
+    contactPersonId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ProductImageCreateInput = {
@@ -7954,15 +7973,26 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type ProductImageListRelationFilter = {
     every?: ProductImageWhereInput
     some?: ProductImageWhereInput
     none?: ProductImageWhereInput
   }
 
-  export type ContactPersonScalarRelationFilter = {
-    is?: ContactPersonWhereInput
-    isNot?: ContactPersonWhereInput
+  export type ContactPersonNullableScalarRelationFilter = {
+    is?: ContactPersonWhereInput | null
+    isNot?: ContactPersonWhereInput | null
   }
 
   export type SortOrderInput = {
@@ -8114,6 +8144,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type ProductScalarRelationFilter = {
@@ -8411,12 +8457,22 @@ export namespace Prisma {
     deleteMany?: ProductImageScalarWhereInput | ProductImageScalarWhereInput[]
   }
 
-  export type ContactPersonUpdateOneRequiredWithoutProductNestedInput = {
+  export type ContactPersonUpdateOneWithoutProductNestedInput = {
     create?: XOR<ContactPersonCreateWithoutProductInput, ContactPersonUncheckedCreateWithoutProductInput>
     connectOrCreate?: ContactPersonCreateOrConnectWithoutProductInput
     upsert?: ContactPersonUpsertWithoutProductInput
+    disconnect?: ContactPersonWhereInput | boolean
+    delete?: ContactPersonWhereInput | boolean
     connect?: ContactPersonWhereUniqueInput
     update?: XOR<XOR<ContactPersonUpdateToOneWithWhereWithoutProductInput, ContactPersonUpdateWithoutProductInput>, ContactPersonUncheckedUpdateWithoutProductInput>
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type ProductImageUncheckedUpdateManyWithoutProductNestedInput = {
@@ -8551,6 +8607,17 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -8586,17 +8653,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumEducationFieldNullableFilter<$PrismaModel>
     _max?: NestedEnumEducationFieldNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -8662,6 +8718,33 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
@@ -8810,7 +8893,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
-    contactPerson: ContactPersonCreateNestedOneWithoutProductInput
+    contactPerson?: ContactPersonCreateNestedOneWithoutProductInput
   }
 
   export type ProductUncheckedCreateWithoutImagesInput = {
@@ -8822,7 +8905,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
-    contactPersonId: number
+    contactPersonId?: number | null
   }
 
   export type ProductCreateOrConnectWithoutImagesInput = {
@@ -8849,7 +8932,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    contactPerson?: ContactPersonUpdateOneRequiredWithoutProductNestedInput
+    contactPerson?: ContactPersonUpdateOneWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutImagesInput = {
@@ -8861,7 +8944,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    contactPersonId?: IntFieldUpdateOperationsInput | number
+    contactPersonId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ProductCreateWithoutContactPersonInput = {
@@ -8924,7 +9007,7 @@ export namespace Prisma {
     measures?: JsonNullableFilter<"Product">
     amount?: IntFilter<"Product"> | number
     publishedAt?: DateTimeFilter<"Product"> | Date | string
-    contactPersonId?: IntFilter<"Product"> | number
+    contactPersonId?: IntNullableFilter<"Product"> | number | null
   }
 
   export type ProductImageCreateManyProductInput = {

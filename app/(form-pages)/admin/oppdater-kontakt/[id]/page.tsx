@@ -44,7 +44,7 @@ export default function UpdateContact({ params }: { params: Promise<{ id: string
     try {
       await updateContactPerson(contactId, formData)
       toast.success("Oppdatert kontakt informasjonen")
-      router.push("/admin")
+      router.push("/admin?tab=kontakt personer")
     } catch(error) {
       toast.error(error instanceof Error ? error.message : "Kunne ikke oppdatere kontakt informasjonen")
     }

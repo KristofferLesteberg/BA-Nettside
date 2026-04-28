@@ -80,7 +80,7 @@ export default function UpdateReviewPage({ params }: { params: Promise<{ id: str
     }
 
     toast.success(body.message ?? 'Anmeldelse oppdatert')
-    router.push('/admin')
+    router.push('/admin?tab=anmeldelser')
   }
 
   if (error)   return <p className="mt-32 text-center text-text-muted">Ingen anmeldelse funnet.</p>

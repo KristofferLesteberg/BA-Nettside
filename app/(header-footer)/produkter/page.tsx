@@ -4,8 +4,8 @@ export const dynamic = 'force-dynamic'
 // P.S. Claude - "ur welcome buddy".
 
 import Link from 'next/link'
-import { prisma } from '../lib/prisma'
-import FilteredProductsGrid from '../components/product/FilteredProductsGrid'
+import { prisma } from '@/app/lib/prisma'
+import FilteredProductsGrid from '@/components/shared/products/FilteredProductsGrid'
 
 export default async function ProductsPage() {
   const products = await prisma.product.findMany({
@@ -44,7 +44,7 @@ export default async function ProductsPage() {
             Du kan bestille et prosjekt eller en vare etter eget ønske.
           </p>
         </div>
-        <Link href="/projects" className="btn btn-primary shrink-0 whitespace-nowrap">
+        <Link href="/prosjekter" className="btn btn-primary shrink-0 whitespace-nowrap">
           Send en forespørsel
         </Link>
       </div>

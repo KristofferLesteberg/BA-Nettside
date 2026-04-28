@@ -1,8 +1,8 @@
 "use client"
 
 import { useRef, useState } from 'react'
-import ImageOrder, { ImageItem } from '@/app/components/admin/ImageOrder'
-import MeasurementList, { Measure } from '@/app/components/admin/MeasurementList'
+import ImageOrder, { ImageItem } from './ImageOrder'
+import MeasurementList, { Measure } from './MeasurementList'
 
 export interface ProductFormValues {
   educationField: string

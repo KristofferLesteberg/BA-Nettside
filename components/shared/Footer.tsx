@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { FaEnvelope, FaLocationDot, FaFacebook, FaGlobe } from 'react-icons/fa6';
 
 const navLinks = [
-  { href: '/products',        label: 'Våre Produkter'     },
-  { href: '/request-project', label: 'Bestill et prosjekt'},
-  { href: '/contact',         label: 'Kontakt Oss'        },
+  { href: '/produkter',   label: 'Våre Produkter'      },
+  { href: '/prosjekter',  label: 'Bestill et prosjekt' },
+  { href: '/kontakt-oss', label: 'Kontakt Oss'         },
 ];
 
 const contactEmails = [

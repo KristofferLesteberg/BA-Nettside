@@ -11,7 +11,7 @@ export default async function AdminReviewsView() {
     <>
       <div className="flex items-center justify-between mb-6">
         <h2 className="heading-2">Anmeldelser — {reviews.length}</h2>
-        <Link href="/admin/newReview" className="btn btn-primary gap-1.5">
+        <Link href="/admin/ny-anmeldelse" className="btn btn-primary gap-1.5">
           <HiOutlinePlusSm className="text-base" />
           Ny anmeldelse
         </Link>
@@ -70,7 +70,7 @@ export default async function AdminReviewsView() {
 
             {/* Actions */}
             <div className="flex items-center gap-2 flex-shrink-0">
-              <Link href={`/admin/updateReview/${review.id}`} className="btn btn-outline text-sm">
+              <Link href={`/admin/oppdater-anmeldelse/${review.id}`} className="btn btn-outline text-sm">
                 Rediger
               </Link>
               <DeleteReview reviewId={review.id} />
