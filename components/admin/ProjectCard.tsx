@@ -2,6 +2,7 @@
 import { EducationField, ProjectRequest, Status } from "@/generated/prisma"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
+import { deleteProject, updateProjectStatus } from "@/actions/projects"
 
 
 type ConvertedProjectRequest = Omit<ProjectRequest, 'minPrice' | 'maxPrice' | 'createdAt'> & {
@@ -36,38 +37,25 @@ const ProjectCard = ({ project }: {project: ConvertedProjectRequest}) => {
   const router = useRouter()
   const formatted = new Date(project.createdAt)
 
-  const deleteProject = async () => {
+  const handleDelete = async () => {
     try {
-      const res = await fetch(`/api/projects/${project.id}`, { method: 'DELETE' })
-      if(!res.ok) {
-        toast.error("Kunne ikke slette prosjekt")
-      }
+      await deleteProject(project.id)
       toast.success("Fjernet prosjekt!")
       router.refresh()
-    } catch(error) {
-      console.log(error)
+    } catch {
+      toast.error("Kunne ikke slette prosjekt")
     }
   }
+
   const updateStatus = async (status: Status) => {
     try {
-      const res = await fetch(`/api/projects/${project.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status })
-      })
-      if(!res.ok) {
-        toast.error("Kunne ikke endre status")
-        console.log(res)
-      }
+      await updateProjectStatus(project.id, status)
       toast.success("Oppdatert status")
       router.refresh()
-    
-    } catch(error) {
-      console.log(error)
+    } catch {
+      toast.error("Kunne ikke endre status")
+    }
   }
-}
   return (
     <div className="card card-subtle flex flex-col gap-4">
 
@@ -101,7 +89,7 @@ const ProjectCard = ({ project }: {project: ConvertedProjectRequest}) => {
               <option value="IN_PROGRESS">Under bygging</option>
               <option value="COMPLETE">Ferdig</option>
             </select>
-            <button className="btn btn-error" onClick={deleteProject}>
+            <button className="btn btn-error" onClick={handleDelete}>
               Fjern
             </button>
           </div>
