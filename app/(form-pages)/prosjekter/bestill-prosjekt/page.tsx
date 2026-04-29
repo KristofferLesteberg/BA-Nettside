@@ -11,6 +11,7 @@ import PriceRange from '@/components/shared/input/price-range'
 import type { ApiResponse } from '@/app/lib/api-response'
 import { ProjectRequestPage1Schema, ProjectRequestPage2Schema } from '@/app/lib/schemas'
 import { IoSearch } from "react-icons/io5";
+import BackBtn from '@/components/shared/BackBtn'
 
 type IdentityType = "private" | "organization" | ""
 
@@ -201,13 +202,7 @@ export default function RequestProject() {
       <div className="card-accented shadow-xl space-y-6 px-8">
 
         <div className="flex items-center justify-between">
-          <button
-            type="button"
-            onClick={(page === 1) ? () => navigate(0) : () => router.back()}
-            className="btn btn-outline px-3 text-sm"
-          >
-            ← Tilbake
-          </button>
+          <BackBtn handleOnClick={page === 1 ? () => navigate(0) : undefined} />
 
           <div className="flex items-center gap-2 pr-2">
             <span className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${page === 0 ? 'bg-primary' : 'bg-border-strong'}`} />

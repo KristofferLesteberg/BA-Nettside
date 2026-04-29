@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import ImageOrder, { ImageItem } from './ImageOrder'
 import MeasurementList, { Measure } from './MeasurementList'
+import BackBtn from '@/components/shared/BackBtn'
 
 export interface ProductFormValues {
   educationField: string
@@ -62,6 +63,9 @@ export default function ProductForm({ heading, submitLabel, initialValues, onSub
     <div className="w-4/5 min-w-120 max-w-230 mx-auto my-10 mt-32">
       <form onSubmit={handleForm} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
 
+        <div className="flex items-start">
+          <BackBtn />
+        </div>
         <h2 className="heading-2">{heading}</h2>
         <p className="text-text-faint italic -mt-4">Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette</p>
 

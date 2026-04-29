@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react"
 import ReviewImageInput from "@/components/shared/input/ReviewImageInput"
-import RegretBtn from "../shared/RegretBtn"
+import RegretBtn from "../shared/BackBtn"
 
 export interface ReviewFormValues {
   name:      string

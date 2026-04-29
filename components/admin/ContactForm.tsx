@@ -1,7 +1,7 @@
 "use client"
 import { ContactPerson } from "@/generated/prisma"
 import { useState } from "react"
-import RegretBtn from "../shared/RegretBtn"
+import RegretBtn from "../shared/BackBtn"
 
 type ContactFormData = Omit<ContactPerson, 'id' | 'products'>
 
