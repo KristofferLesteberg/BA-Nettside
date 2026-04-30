@@ -58,7 +58,7 @@ export default function ReviewForm({ heading, submitLabel, initialValues, onSubm
   }
 
   return (
-    <div className="w-4/5 min-w-120 max-w-230 mx-auto my-10 mt-32">
+    <div className="w-4/5 min-w-120 max-w-230 mx-auto py-10">
       <form onSubmit={handleSubmit} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
         <RegretBtn isAdmin={true} />
         <h2 className="heading-2">{heading}</h2>

@@ -60,7 +60,7 @@ export default function ProductForm({ heading, submitLabel, initialValues, onSub
   }
 
   return (
-    <div className="w-4/5 min-w-120 max-w-230 mx-auto my-10 mt-32">
+    <div className="w-4/5 min-w-120 max-w-230 mx-auto py-10">
       <form onSubmit={handleForm} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
 
         <div className="flex items-start">

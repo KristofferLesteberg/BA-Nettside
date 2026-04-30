@@ -43,10 +43,10 @@ const contactItems: ContactItem[] = [
 
 export default function ContactPage() {
   return (
-    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
 
       {/* Page header */}
-      <div className="mb-10">
+      <div className="py-10">
         <p className="label mb-2">Sam Eyde VGS</p>
         <h1 className="heading-1 mb-3">Kontakt oss</h1>
         <p className="body-text">
@@ -95,7 +95,7 @@ export default function ContactPage() {
 
       {/* Map */}
       <section>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2">
           <FaLocationDot className="text-primary text-lg" />
           <h2 className="heading-3">Finn oss</h2>
         </div>

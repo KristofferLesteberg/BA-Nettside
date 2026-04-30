@@ -83,8 +83,8 @@ export default function UpdateReviewPage({ params }: { params: Promise<{ id: str
     router.push('/admin?tab=anmeldelser')
   }
 
-  if (error)   return <p className="mt-32 text-center text-text-muted">Ingen anmeldelse funnet.</p>
-  if (!loaded) return <p className="mt-32 text-center text-text-muted">Laster...</p>
+  if (error)   return <p className="mt-10 text-center text-text-muted">Ingen anmeldelse funnet.</p>
+  if (!loaded) return <p className="mt-10 text-center text-text-muted">Laster...</p>
 
   return (
     <ReviewForm

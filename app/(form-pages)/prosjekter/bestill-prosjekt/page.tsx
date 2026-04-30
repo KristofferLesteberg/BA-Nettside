@@ -198,7 +198,7 @@ export default function RequestProject() {
     
 
   return (
-    <div className="w-4/5 min-w-120 max-w-230 mx-auto my-10 mt-32 overflow-hidden">
+    <div className="w-4/5 min-w-120 max-w-230 mx-auto py-10 overflow-hidden">
       <div className="card-accented shadow-xl space-y-6 px-8">
 
         <div className="flex items-center justify-between">

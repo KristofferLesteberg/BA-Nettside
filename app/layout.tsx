@@ -2,10 +2,7 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
 
-import Header from "@/components/shared/Header";
-import Footer from "@/components/shared/Footer";
 import Providers from '@/components/shared/providers';
-import { Toaster } from "react-hot-toast";
 import "react-phone-number-input/style.css";
 import "rc-slider/assets/index.css";
 import "swiper/css";
@@ -24,14 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="flex flex-col min-h-screen">
         <Providers>
-          <Header />
-          <main className="pt-20">
-            {children}
-          </main>
-          <Footer />
-          <Toaster position="top-center" />
+          {children}
         </Providers>
       </body>
     </html>

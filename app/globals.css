@@ -82,7 +82,6 @@
 @layer base {
   html {
     overscroll-behavior: none;
-    background-color: var(--color-secondary); /* fallback for Safari iOS rubber-band at bottom */
   }
 
   body {

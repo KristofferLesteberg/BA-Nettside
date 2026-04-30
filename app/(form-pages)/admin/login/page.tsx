@@ -35,7 +35,7 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-5rem)] flex items-center justify-center px-4 bg-sunken">
+    <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-sunken">
       <div className="w-full max-w-2xl card card-accented overflow-hidden p-0">
 
         <div className="bg-secondary px-6 py-5">
