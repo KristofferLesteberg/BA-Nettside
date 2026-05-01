@@ -3611,19 +3611,17 @@ export namespace Prisma {
   }
 
   export type ProjectRequestAvgAggregateOutputType = {
-    id: number | null
     minPrice: Decimal | null
     maxPrice: Decimal | null
   }
 
   export type ProjectRequestSumAggregateOutputType = {
-    id: number | null
     minPrice: Decimal | null
     maxPrice: Decimal | null
   }
 
   export type ProjectRequestMinAggregateOutputType = {
-    id: number | null
+    id: string | null
     educationField: $Enums.EducationField | null
     title: string | null
     description: string | null
@@ -3642,7 +3640,7 @@ export namespace Prisma {
   }
 
   export type ProjectRequestMaxAggregateOutputType = {
-    id: number | null
+    id: string | null
     educationField: $Enums.EducationField | null
     title: string | null
     description: string | null
@@ -3682,13 +3680,11 @@ export namespace Prisma {
 
 
   export type ProjectRequestAvgAggregateInputType = {
-    id?: true
     minPrice?: true
     maxPrice?: true
   }
 
   export type ProjectRequestSumAggregateInputType = {
-    id?: true
     minPrice?: true
     maxPrice?: true
   }
@@ -3838,7 +3834,7 @@ export namespace Prisma {
   }
 
   export type ProjectRequestGroupByOutputType = {
-    id: number
+    id: string
     educationField: $Enums.EducationField | null
     title: string
     description: string
@@ -3957,7 +3953,7 @@ export namespace Prisma {
     name: "ProjectRequest"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
-      id: number
+      id: string
       educationField: $Enums.EducationField | null
       title: string
       description: string
@@ -4396,7 +4392,7 @@ export namespace Prisma {
    * Fields of the ProjectRequest model
    */
   interface ProjectRequestFieldRefs {
-    readonly id: FieldRef<"ProjectRequest", 'Int'>
+    readonly id: FieldRef<"ProjectRequest", 'String'>
     readonly educationField: FieldRef<"ProjectRequest", 'EducationField'>
     readonly title: FieldRef<"ProjectRequest", 'String'>
     readonly description: FieldRef<"ProjectRequest", 'String'>
@@ -7284,7 +7280,7 @@ export namespace Prisma {
     AND?: ProjectRequestWhereInput | ProjectRequestWhereInput[]
     OR?: ProjectRequestWhereInput[]
     NOT?: ProjectRequestWhereInput | ProjectRequestWhereInput[]
-    id?: IntFilter<"ProjectRequest"> | number
+    id?: StringFilter<"ProjectRequest"> | string
     educationField?: EnumEducationFieldNullableFilter<"ProjectRequest"> | $Enums.EducationField | null
     title?: StringFilter<"ProjectRequest"> | string
     description?: StringFilter<"ProjectRequest"> | string
@@ -7322,7 +7318,7 @@ export namespace Prisma {
   }
 
   export type ProjectRequestWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
+    id?: string
     AND?: ProjectRequestWhereInput | ProjectRequestWhereInput[]
     OR?: ProjectRequestWhereInput[]
     NOT?: ProjectRequestWhereInput | ProjectRequestWhereInput[]
@@ -7371,7 +7367,7 @@ export namespace Prisma {
     AND?: ProjectRequestScalarWhereWithAggregatesInput | ProjectRequestScalarWhereWithAggregatesInput[]
     OR?: ProjectRequestScalarWhereWithAggregatesInput[]
     NOT?: ProjectRequestScalarWhereWithAggregatesInput | ProjectRequestScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"ProjectRequest"> | number
+    id?: StringWithAggregatesFilter<"ProjectRequest"> | string
     educationField?: EnumEducationFieldNullableWithAggregatesFilter<"ProjectRequest"> | $Enums.EducationField | null
     title?: StringWithAggregatesFilter<"ProjectRequest"> | string
     description?: StringWithAggregatesFilter<"ProjectRequest"> | string
@@ -7641,6 +7637,7 @@ export namespace Prisma {
   }
 
   export type ProjectRequestCreateInput = {
+    id: string
     educationField?: $Enums.EducationField | null
     title: string
     description: string
@@ -7659,7 +7656,7 @@ export namespace Prisma {
   }
 
   export type ProjectRequestUncheckedCreateInput = {
-    id?: number
+    id: string
     educationField?: $Enums.EducationField | null
     title: string
     description: string
@@ -7678,6 +7675,7 @@ export namespace Prisma {
   }
 
   export type ProjectRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
     educationField?: NullableEnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -7696,7 +7694,7 @@ export namespace Prisma {
   }
 
   export type ProjectRequestUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     educationField?: NullableEnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -7715,7 +7713,7 @@ export namespace Prisma {
   }
 
   export type ProjectRequestCreateManyInput = {
-    id?: number
+    id: string
     educationField?: $Enums.EducationField | null
     title: string
     description: string
@@ -7734,6 +7732,7 @@ export namespace Prisma {
   }
 
   export type ProjectRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
     educationField?: NullableEnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -7752,7 +7751,7 @@ export namespace Prisma {
   }
 
   export type ProjectRequestUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     educationField?: NullableEnumEducationFieldFieldUpdateOperationsInput | $Enums.EducationField | null
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
@@ -8236,7 +8235,6 @@ export namespace Prisma {
   }
 
   export type ProjectRequestAvgOrderByAggregateInput = {
-    id?: SortOrder
     minPrice?: SortOrder
     maxPrice?: SortOrder
   }
@@ -8280,7 +8278,6 @@ export namespace Prisma {
   }
 
   export type ProjectRequestSumOrderByAggregateInput = {
-    id?: SortOrder
     minPrice?: SortOrder
     maxPrice?: SortOrder
   }

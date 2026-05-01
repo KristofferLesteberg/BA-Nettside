@@ -46,7 +46,7 @@ export async function createProject(data: unknown) {
   const project = await prisma.projectRequest.create({
     data: { ...rest, educationField: (educationField as EducationField) ?? null },
   })
-  revalidatePath('/admin')
+  revalidatePath('/admin?tab=prosjekter')
   return { id: project.id }
 }
 
@@ -56,7 +56,7 @@ export async function updateProjectStatus(id: number, status: string) {
 
   const { status: validated } = ProjectRequestStatusUpdateSchema.parse({ status })
   await prisma.projectRequest.update({ where: { id }, data: { status: validated } })
-  revalidatePath('/admin')
+  revalidatePath('/admin?tab=prosjekter')
 }
 
 export async function deleteProject(id: number) {
@@ -64,5 +64,5 @@ export async function deleteProject(id: number) {
   if (!session) throw new Error('Ikke autorisert')
 
   await prisma.projectRequest.delete({ where: { id } })
-  revalidatePath('/admin')
+  revalidatePath('/admin?tab=prosjekter')
 }

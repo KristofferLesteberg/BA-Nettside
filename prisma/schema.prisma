@@ -45,7 +45,7 @@ model ProductImage {
 }
 
 model ProjectRequest {
-  id Int @id @default(autoincrement())
+  id String @id
   educationField EducationField?
   title String
   description String

@@ -31,8 +31,8 @@ model Product {
   amount          Int
   publishedAt     DateTime        @default(now())
   images          ProductImage[]
-  contactPersonId Int
-  contactPerson   ContactPerson   @relation(fields: [contactPersonId], references: [id])
+  contactPersonId Int?
+  contactPerson   ContactPerson?  @relation(fields: [contactPersonId], references: [id])
 
   @@index([educationField])
 }
@@ -45,7 +45,7 @@ model ProductImage {
 }
 
 model ProjectRequest {
-  id                 Int             @id @default(autoincrement())
+  id                 String          @id
   educationField     EducationField?
   title              String
   description        String
