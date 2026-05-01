@@ -3,8 +3,8 @@
 import { use, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import type { ApiResponse } from '@/app/lib/api-response'
 import ReviewForm, { type ReviewFormValues } from '@/components/admin/ReviewForm'
+import { getReviewById, updateReview } from '@/actions/reviews'
 
 interface LoadedReview {
   name:     string
@@ -27,30 +27,18 @@ export default function UpdateReviewPage({ params }: { params: Promise<{ id: str
 
     const load = async () => {
       try {
-        const res  = await fetch(`/api/reviews/${reviewId}`)
-        const body: ApiResponse<{
-          id: number; name: string; role: string | null; orgName: string | null
-          orgURL: string | null; message: string; imageId: string | null
-        }> = await res.json()
-
-        if (!body.success) {
-          toast.error(body.error)
-          setError(true)
-          return
-        }
-
-        const r = body.data
+        const review = await getReviewById(reviewId)
         setLoaded({
-          name:     r.name,
-          role:     r.role    ?? '',
-          orgName:  r.orgName ?? '',
-          orgURL:   r.orgURL  ?? '',
-          message:  r.message,
-          imageUrl: r.imageId ? `/images/${r.imageId}.webp` : undefined,
+          name:     review.name,
+          role:     review.role    ?? '',
+          orgName:  review.orgName ?? '',
+          orgURL:   review.orgURL  ?? '',
+          message:  review.message,
+          imageUrl: review.imageId ? `/images/${review.imageId}.webp` : undefined,
         })
       } catch (e) {
         console.error(e)
-        toast.error('Kunne ikke laste anmeldelse')
+        toast.error(e instanceof Error ? e.message : 'Kunne ikke laste anmeldelse')
         setError(true)
       }
     }
@@ -67,20 +55,13 @@ export default function UpdateReviewPage({ params }: { params: Promise<{ id: str
     formData.append('message', message)
     if (imageFile) formData.append('image', imageFile)
 
-    const res  = await fetch(`/api/reviews/${reviewId}`, { method: 'PATCH', body: formData })
-    const body: ApiResponse<unknown> = await res.json()
-
-    if (!body.success) {
-      if (body.fields) {
-        Object.values(body.fields).flat().forEach(msg => toast.error(msg))
-      } else {
-        toast.error(body.error)
-      }
-      return
+    try {
+      await updateReview(reviewId, formData)
+      toast.success('Anmeldelse oppdatert')
+      router.push('/admin?tab=anmeldelser')
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Noe gikk galt')
     }
-
-    toast.success(body.message ?? 'Anmeldelse oppdatert')
-    router.push('/admin?tab=anmeldelser')
   }
 
   if (error)   return <p className="mt-10 text-center text-text-muted">Ingen anmeldelse funnet.</p>

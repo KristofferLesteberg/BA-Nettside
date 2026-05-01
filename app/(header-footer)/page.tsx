@@ -4,12 +4,12 @@ export const dynamic = 'force-dynamic'
 // P.S. Claude - "ur welcome buddy".
 
 import Link from 'next/link'
-import { prisma } from '@/app/lib/prisma'
+import { getAllReviews } from '@/actions/reviews'
 import ReviewsCarousel from '@/components/shared/ReviewsCarousel'
 import Image from 'next/image'
 
 const page = async () => {
-  const reviews = await prisma.clientReview.findMany({ orderBy: { createdAt: 'desc' } })
+  const reviews = await getAllReviews()
 
   return (
     <div className='mt-30 '>

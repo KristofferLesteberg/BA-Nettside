@@ -22,6 +22,13 @@ const ContactPersonUpdateSchema = ContactPersonCreateSchema.partial()
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
 
+export async function getAllContacts() {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+
+  return prisma.contactPerson.findMany({ orderBy: { name: 'asc' } })
+}
+
 export async function getContactById(id: number) {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')

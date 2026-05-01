@@ -4,20 +4,11 @@ export const dynamic = 'force-dynamic'
 // P.S. Claude - "ur welcome buddy".
 
 import Link from 'next/link'
-import { prisma } from '@/app/lib/prisma'
+import { getAllProducts } from '@/actions/products'
 import FilteredProductsGrid from '@/components/shared/products/FilteredProductsGrid'
 
 export default async function ProductsPage() {
-  const products = await prisma.product.findMany({
-    include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } }
-  })
-
-  const convertedProducts = products.map(({ images, ...product }) => ({
-    ...product,
-    price: product.price.toNumber(),
-    publishedAt: product.publishedAt.toISOString(),
-    image: images[0] ?? null,
-  }))
+  const convertedProducts = await getAllProducts()
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-12 flex flex-col gap-6">

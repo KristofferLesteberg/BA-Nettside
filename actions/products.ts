@@ -29,13 +29,25 @@ const ProductUpdateSchema = ProductCreateSchema.partial()
 
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
-export async function getProductById(id: number) {
-  const product = prisma.product.findUnique({
-    where: { id: id }, include: { images: true}
+export async function getAllProducts() {
+  const products = await prisma.product.findMany({
+    include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } },
+    orderBy: { publishedAt: 'desc' },
   })
 
-  if(!product) throw new Error("Kunne ikke finne produkt")
-  return product
+  return products.map(({ images, ...product }) => ({
+    ...product,
+    price: product.price.toNumber(),
+    publishedAt: product.publishedAt.toISOString(),
+    image: images[0] ?? null,
+  }))
+}
+
+export async function getProductById(id: number) {
+  return prisma.product.findUnique({
+    where: { id },
+    include: { images: { orderBy: { sortOrder: 'asc' } } },
+  })
 }
 
 export async function createProduct(formData: FormData) {

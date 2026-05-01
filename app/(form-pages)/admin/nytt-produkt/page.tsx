@@ -3,9 +3,7 @@
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { createProduct } from '@/actions/products'
-
 import ProductForm, { ProductFormValues } from '@/components/admin/ProductForm'
-import { create } from 'node:domain'
 
 export default function NewProduct() {
   const router = useRouter()
@@ -19,16 +17,16 @@ export default function NewProduct() {
     formData.append("amount", amount || "0")
     formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
 
-    images.filter(img => img.type === 'new').forEach(img => {
-      formData.append("files", img.file)
-      formData.append("ids", img.id)
-    })
+    const newImages = images.filter(img => img.type === 'new')
+    formData.append("imageIds", JSON.stringify(newImages.map(img => img.id)))
+    newImages.forEach(img => formData.append("images", img.file))
+
     try {
       await createProduct(formData)
       toast.success("Produkt opprettet")
       router.push("/admin?tab=produkter")
-    } catch(error) {
-      toast.error("Kunne ikke opprette et nytt produkt")
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Kunne ikke opprette et nytt produkt")
     }
   }
 

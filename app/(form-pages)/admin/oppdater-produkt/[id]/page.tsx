@@ -2,14 +2,10 @@
 
 import { use, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Product } from "@/generated/prisma"
 import toast from 'react-hot-toast'
-import type { ApiResponse } from '@/app/lib/api-response'
 import { Measure } from '@/components/admin/MeasurementList'
 import ProductForm, { ProductFormValues } from '@/components/admin/ProductForm'
-
-import { getProductById } from '@/actions/products'
-import { prisma } from '@/app/lib/prisma'
+import { getProductById, updateProduct } from '@/actions/products'
 
 interface LoadedProduct {
   title: string
@@ -29,20 +25,30 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   useEffect(() => {
     if (Number.isNaN(productId)) { setError(true); return }
-    const getProduct = async () => {
+
+    const load = async () => {
       try {
         const product = await getProductById(productId)
-        setLoaded(product)
+        if (!product) { setError(true); return }
 
-      } catch(error) {
-        toast.error("Kunne ikke oppdatere produktet")
+        setLoaded({
+          title:          product.title,
+          educationField: product.educationField ?? '',
+          description:    product.description,
+          price:          Number(product.price).toString(),
+          amount:         String(product.amount),
+          measures:       Object.entries((product.measures ?? {}) as Record<string, string>)
+                            .map(([name, value]) => ({ name, value })),
+          existingImages: product.images.map(img => ({ id: img.id, url: `/images/${img.id}.webp` })),
+        })
+      } catch {
+        toast.error("Kunne ikke laste produktet")
+        setError(true)
       }
     }
 
-    getProduct()
+    load()
   }, [productId])
-
-
 
   const handleSubmit = async ({ educationField, title, description, price, amount, measures, images }: ProductFormValues) => {
     const formData = new FormData()
@@ -53,29 +59,20 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     formData.append("amount", amount || "0")
     formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
 
-    images.forEach((img) => {
-      formData.append("imageIds", img.id)
-      if (img.type === "new") formData.append("imageFiles", img.file)
-    })
+    formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
+    images.filter(img => img.type === "new").forEach(img => formData.append("newImages", img.file))
 
-    const res = await fetch(`/api/products/${productId}`, { method: "PATCH", body: formData })
-    const body: ApiResponse<unknown> = await res.json()
-
-    if (!body.success) {
-      if (body.fields) {
-        Object.values(body.fields).flat().forEach(msg => toast.error(msg))
-      } else {
-        toast.error(body.error)
-      }
-      return
+    try {
+      await updateProduct(productId, formData)
+      toast.success("Produkt oppdatert")
+      router.push("/admin?tab=produkter")
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Kunne ikke oppdatere produktet")
     }
-
-    toast.success(body.message ?? "Produkt oppdatert")
-    router.push("/admin?tab=produkter")
   }
 
-  if (error) return <p>Ingen produkt funnet...</p>
-  if (!loaded) return <p>Laster...</p>
+  if (error)   return <p className="mt-10 text-center text-text-muted">Ingen produkt funnet.</p>
+  if (!loaded) return <p className="mt-10 text-center text-text-muted">Laster...</p>
 
   return (
     <ProductForm

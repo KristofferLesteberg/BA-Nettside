@@ -21,6 +21,19 @@ const ReviewUpdateSchema = ReviewCreateSchema.partial()
 
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
+export async function getAllReviews() {
+  return prisma.clientReview.findMany({ orderBy: { createdAt: 'desc' } })
+}
+
+export async function getReviewById(id: number) {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+
+  const review = await prisma.clientReview.findUnique({ where: { id } })
+  if (!review) throw new Error('Anmeldelse ikke funnet')
+  return review
+}
+
 export async function createReview(formData: FormData) {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')

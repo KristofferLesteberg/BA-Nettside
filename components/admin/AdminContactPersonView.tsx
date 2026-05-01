@@ -1,11 +1,11 @@
-import { prisma } from "@/app/lib/prisma"
+import { getAllContacts } from "@/actions/contact"
 import Link from "next/link"
 import { HiOutlinePlusSm } from 'react-icons/hi'
 import ContactPersonCard from "./ContactPersonCard"
 
 
 export default async function ContactPersonView() {
-  const contactPersons = await prisma.contactPerson.findMany()
+  const contactPersons = await getAllContacts()
 
   return (
     <div>

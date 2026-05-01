@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { HiOutlinePlusSm } from 'react-icons/hi'
 import { FaExternalLinkAlt } from "react-icons/fa";
-import { prisma } from '@/app/lib/prisma'
+import { getAllReviews } from '@/actions/reviews'
 import DeleteReview from '@/components/admin/DeleteReview'
 
 export default async function AdminReviewsView() {
-  const reviews = await prisma.clientReview.findMany({ orderBy: { createdAt: 'desc' } })
+  const reviews = await getAllReviews()
 
   return (
     <>

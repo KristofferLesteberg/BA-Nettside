@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import type { ApiResponse } from '@/app/lib/api-response'
 import ReviewForm, { type ReviewFormValues } from '@/components/admin/ReviewForm'
+import { createReview } from '@/actions/reviews'
 
 export default function NewReviewPage() {
   const router = useRouter()
@@ -17,20 +17,13 @@ export default function NewReviewPage() {
     formData.append('message', message)
     if (imageFile) formData.append('image', imageFile)
 
-    const res  = await fetch('/api/reviews', { method: 'POST', body: formData })
-    const body: ApiResponse<unknown> = await res.json()
-
-    if (!body.success) {
-      if (body.fields) {
-        Object.values(body.fields).flat().forEach(msg => toast.error(msg))
-      } else {
-        toast.error(body.error)
-      }
-      return
+    try {
+      await createReview(formData)
+      toast.success('Anmeldelse opprettet')
+      router.push('/admin')
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Noe gikk galt')
     }
-
-    toast.success(body.message ?? 'Anmeldelse opprettet')
-    router.push('/admin')
   }
 
   return (

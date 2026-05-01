@@ -1,10 +1,10 @@
 import ProjectCard from "@/components/admin/ProjectCard"
-import { prisma } from "@/app/lib/prisma"
+import { getAllProjects } from "@/actions/projects"
 
 
 export default async function AdminProjectsView() {
 
-  const projects = await prisma.projectRequest.findMany()
+  const projects = await getAllProjects()
 
   const convertedProject = projects.map((project) => ({
     ...project, 

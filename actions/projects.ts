@@ -34,6 +34,13 @@ const ProjectRequestStatusUpdateSchema = z.object({
 
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
+export async function getAllProjects() {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+
+  return prisma.projectRequest.findMany({ orderBy: { createdAt: 'desc' } })
+}
+
 export async function createProject(data: unknown) {
   const { educationField, ...rest } = ProjectRequestCreateSchema.parse(data)
   const project = await prisma.projectRequest.create({

@@ -1,8 +1,8 @@
-import { prisma } from "@/app/lib/prisma"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import Carousel from "@/components/shared/ImageCarousel"
 import ProductTabs from "@/components/shared/products/ProductTabs"
+import { getProductById } from "@/actions/products"
 
 export default async function ProductPage({
   params,
@@ -12,10 +12,7 @@ export default async function ProductPage({
   const productId = parseInt((await params).productId)
   if (Number.isNaN(productId)) notFound()
 
-  const product = await prisma.product.findUnique({
-    where: { id: productId },
-    include: { images: { orderBy: { sortOrder: "asc" } } },
-  })
+  const product = await getProductById(productId)
   if (!product) notFound()
 
   return (

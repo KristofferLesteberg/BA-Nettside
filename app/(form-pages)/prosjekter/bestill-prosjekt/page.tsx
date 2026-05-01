@@ -3,12 +3,12 @@
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+import { createProject } from '@/actions/projects'
 import PhoneInputWithCountrySelect from 'react-phone-number-input'
 import { parsePhoneNumberWithError } from 'libphonenumber-js'
 import type { E164Number, CountryCode } from 'libphonenumber-js'
 import AddressInput from '@/components/shared/input/address-input'
 import PriceRange from '@/components/shared/input/price-range'
-import type { ApiResponse } from '@/app/lib/api-response'
 import { ProjectRequestPage1Schema, ProjectRequestPage2Schema } from '@/app/lib/schemas'
 import { IoSearch } from "react-icons/io5";
 import BackBtn from '@/components/shared/BackBtn'
@@ -152,10 +152,8 @@ export default function RequestProject() {
       return
     }
 
-    const res = await fetch('/api/projects', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    try {
+      await createProject({
         educationField,
         title,
         description,
@@ -168,22 +166,13 @@ export default function RequestProject() {
         organizationName: orgName || undefined,
         organizationNumber: orgNumber || undefined,
         address,
-        billingAddress
-      }),
-    })
-    const body: ApiResponse<unknown> = await res.json()
-
-    if (!body.success) {
-      if (body.fields) {
-        Object.values(body.fields).flat().forEach(msg => toast.error(msg))
-      } else {
-        toast.error(body.error)
-      }
-      return
+        billingAddress,
+      })
+      toast.success('Forespørsel sendt!')
+      router.push('/')
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Noe gikk galt')
     }
-
-    toast.success(body.message ?? 'Forespørsel sendt!')
-    router.push('/')
   }
 
   const slideClass = sliding
