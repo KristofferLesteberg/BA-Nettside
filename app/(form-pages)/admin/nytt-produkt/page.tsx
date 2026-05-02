@@ -3,12 +3,34 @@
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { createProduct } from '@/actions/products'
+import { getAllContacts  } from '@/actions/contact'
 import ProductForm, { ProductFormValues } from '@/components/admin/ProductForm'
+import { useEffect, useState } from 'react'
+import { ContactPerson } from '@/generated/prisma'
 
 export default function NewProduct() {
   const router = useRouter()
+  const [contactPersons, setContactPersons] = useState<ContactPerson[]>([])
 
-  const handleSubmit = async ({ educationField, title, description, price, amount, measures, images }: ProductFormValues) => {
+  useEffect(() => {
+
+    const getContacts = async () => {
+      try {
+        const contactPersons = await getAllContacts()
+        setContactPersons(contactPersons)
+
+      } catch(error) {
+        toast.error("Kunne ikke hente kontakt personer")
+
+      }
+    }
+
+    getContacts()
+
+  }, [])
+
+
+  const handleSubmit = async ({ educationField, title, description, price, amount, measures, images, contactId }: ProductFormValues) => {
     const formData = new FormData()
     formData.append("educationField", educationField)
     formData.append("title", title)
@@ -16,6 +38,7 @@ export default function NewProduct() {
     formData.append("price", price || "0")
     formData.append("amount", amount || "0")
     formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
+    formData.append("contactId", contactId)
 
     const newImages = images.filter(img => img.type === 'new')
     formData.append("imageIds", JSON.stringify(newImages.map(img => img.id)))
@@ -35,6 +58,7 @@ export default function NewProduct() {
       heading="Opprett produkt"
       submitLabel="Opprett annonse"
       onSubmit={handleSubmit}
+      contactPersons={contactPersons}
     />
   )
 }
