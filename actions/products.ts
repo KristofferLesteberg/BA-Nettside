@@ -30,6 +30,8 @@ const ProductUpdateSchema = ProductCreateSchema.partial()
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
 export async function getAllProducts() {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
   const products = await prisma.product.findMany({
     include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } },
     orderBy: { publishedAt: 'desc' },
@@ -44,6 +46,8 @@ export async function getAllProducts() {
 }
 
 export async function getProductById(id: number) {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
   return prisma.product.findUnique({
     where: { id },
     include: { images: { orderBy: { sortOrder: 'asc' } } },
