@@ -22,7 +22,10 @@ const ProductCreateSchema = z.object({
   price:           z.coerce.number().nonnegative('Pris kan ikke være negativ'),
   measures:        MeasuresSchema.optional(),
   amount:          z.coerce.number().int('Antall må være et heltall').min(0, 'Antall kan ikke være negativt'),
-  contactPersonId: z.coerce.number().int('Kontaktperson-ID må være et heltall'),
+  contactPersonId: z.preprocess(
+    (val) => (val === '' || val === null || val === undefined ? undefined : val),
+    z.coerce.number().int('Kontaktperson-ID må være et heltall').optional()
+  ),
 })
 
 const ProductUpdateSchema = ProductCreateSchema.partial()
@@ -67,7 +70,7 @@ export async function createProduct(formData: FormData) {
     price:           formData.get('price'),
     measures:        measuresRaw ? JSON.parse(measuresRaw as string) : undefined,
     amount:          formData.get('amount'),
-    contactPersonId: formData.get('contactPersonId'),
+    contactPersonId: formData.get('contactId'),
   })
 
   const product = await prisma.product.create({

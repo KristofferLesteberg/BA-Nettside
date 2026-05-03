@@ -38,7 +38,7 @@ export default function NewProduct() {
     formData.append("price", price || "0")
     formData.append("amount", amount || "0")
     formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
-    formData.append("contactId", contactId)
+    if (contactId) formData.append("contactId", String(contactId))
 
     const newImages = images.filter(img => img.type === 'new')
     formData.append("imageIds", JSON.stringify(newImages.map(img => img.id)))

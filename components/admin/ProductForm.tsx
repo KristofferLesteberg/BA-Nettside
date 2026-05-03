@@ -104,11 +104,12 @@ export default function ProductForm({ heading, submitLabel, contactPersons, init
           />
         </div>
         <div className='space-y-1'>
-          <select name="hei" id="">
+          <label className='label'>Kontakt person</label>
+          <select className='input' value={contactId} onChange={(e) => setContactId(Number(e.target.value))}>
+            <option value="">Velg kontakt person</option>
             {contactPersons.map((contactPerson, index) => (
               <option key={index} value={contactPerson.id}>{contactPerson.name}</option>
             ))}
-
           </select>
         </div>
         {/* Description */}
