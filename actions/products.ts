@@ -53,7 +53,10 @@ export async function getProductById(id: number) {
   if (!session) throw new Error('Ikke autorisert')
   return prisma.product.findUnique({
     where: { id },
-    include: { images: { orderBy: { sortOrder: 'asc' } } },
+    include: {
+      images: { orderBy: { sortOrder: 'asc' } },
+      contactPerson: true,
+    },
   })
 }
 

@@ -15,6 +15,7 @@ export default async function ProductPage({
   const product = await getProductById(productId)
   if (!product) notFound()
 
+
   return (
     <div className="bg-page min-h-screen">
       <div className="max-w-5xl mx-auto px-4 py-8 sm:px-6 sm:py-12">
@@ -112,6 +113,34 @@ export default async function ProductPage({
                     </div>
                   )}
                 </div>
+              }
+              contactInfo={
+                <div className="card-subtle flex flex-col divide-y" style={{ borderRadius: "var(--radius-lg)" }}>
+                  <div className="flex justify-between px-4 py-3">
+                    <span className="small-text">Navn</span>
+                    <span className="small-text" style={{ color: "var(--color-text)" }}>{product.contactPerson?.name || ""}</span>
+                  </div>
+                  <div className="flex justify-between px-4 py-3">
+                    <span className="small-text">Mail</span>
+                    <span className="small-text" style={{ color: "var(--color-text)" }}>
+                      {product.contactPerson?.email}
+                    </span>
+                  </div>
+                  <div className="flex justify-between px-4 py-3">
+                    <span className="small-text">Telefon</span>
+                    <span className="small-text" style={{ color: "var(--color-text)" }}>
+                      {product.contactPerson?.phone}
+                    </span>
+                  </div>
+                  <div className="flex justify-between px-4 py-3">
+                    <span className="small-text">Tittel</span>
+                    <span className="small-text" style={{ color: "var(--color-text)" }}>
+                      {product.contactPerson?.title}
+                    </span>
+                  </div>
+                </div>
+                
+
               }
             />
           </div>
