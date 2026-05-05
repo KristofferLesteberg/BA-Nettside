@@ -1,6 +1,6 @@
 'use server'
 
-import { z } from 'zod'
+import { email, z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth'
 import { prisma } from '@/app/lib/prisma'
@@ -28,12 +28,14 @@ const ProductCreateSchema = z.object({
   ),
 })
 
+
+
 const ProductUpdateSchema = ProductCreateSchema.partial()
 
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
+
 export async function getAllProducts() {
-  
   const products = await prisma.product.findMany({
     include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } },
     orderBy: { publishedAt: 'desc' },
