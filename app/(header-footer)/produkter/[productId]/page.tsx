@@ -3,7 +3,7 @@ import Link from "next/link"
 import Carousel from "@/components/shared/ImageCarousel"
 import ProductTabs from "@/components/shared/products/ProductTabs"
 import { getProductById } from "@/actions/products"
-import OrderProduct from "@/components/shared/products/OrderProduct"
+
 
 export default async function ProductPage({
   params,
@@ -59,7 +59,9 @@ export default async function ProductPage({
             </div>
 
             {/* CTA */}
-            <OrderProduct />
+            <Link className="btn btn-primary" href={"/OrderProduct"}>
+              <button>Bestill!</button>
+            </Link>
 
             <hr className="border-default" />
 
