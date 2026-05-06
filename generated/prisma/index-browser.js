@@ -173,6 +173,15 @@ exports.Prisma.ContactPersonScalarFieldEnum = {
   title: 'title'
 };
 
+exports.Prisma.ProductOrderScalarFieldEnum = {
+  id: 'id',
+  clientName: 'clientName',
+  clientEmail: 'clientEmail',
+  clientPhone: 'clientPhone',
+  amount: 'amount',
+  extraDetails: 'extraDetails'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -214,7 +223,8 @@ exports.Prisma.ModelName = {
   ProductImage: 'ProductImage',
   ProjectRequest: 'ProjectRequest',
   ClientReview: 'ClientReview',
-  ContactPerson: 'ContactPerson'
+  ContactPerson: 'ContactPerson',
+  ProductOrder: 'ProductOrder'
 };
 
 /**

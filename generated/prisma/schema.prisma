@@ -86,3 +86,12 @@ model ContactPerson {
   title   String
   product Product[]
 }
+
+model ProductOrder {
+  id           Int     @id @default(autoincrement())
+  clientName   String
+  clientEmail  String
+  clientPhone  String
+  amount       Int
+  extraDetails String?
+}
