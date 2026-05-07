@@ -17,8 +17,6 @@ export default function OrderProduct() {
   const [amount, setAmount] = useState("")
   const [extraDetails, setExtraDetails] = useState("")
 
-
-
   async function handleSubmit(e: any) {
     e.preventDefault()
 
@@ -31,6 +29,7 @@ export default function OrderProduct() {
         amount,
         extraDetails: extraDetails || undefined,
       })
+
       toast.success('Bestilling sendt!')
       router.push('/')
     } catch (error: unknown) {

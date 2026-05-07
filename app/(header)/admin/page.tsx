@@ -10,8 +10,14 @@ import AdminProductsView from '@/components/admin/AdminProductsView'
 import AdminProjectsView from '@/components/admin/AdminProjectsView'
 import AdminReviewsView from '@/components/admin/AdminReviewsView'
 import AdminContactPersonView from '@/components/admin/AdminContactPersonView'
+import AdminOrderView from '@/components/admin/AdminOrderView'
+import { getAllOrders } from '@/actions/orderProduct'
+import { getAllProjects } from '@/actions/projects'
 
 const page = async () => {
+  const orders = (await getAllOrders()).length
+  const projects = (await getAllProjects()).length
+  
   const tabs: AdminTab[] = [
     {
       label: "produkter",
@@ -19,7 +25,8 @@ const page = async () => {
     },
     {
       label: "prosjekter",
-      content: <AdminProjectsView />
+      content: <AdminProjectsView />,
+      count: projects
     },
     {
       label: "anmeldelser",
@@ -28,6 +35,11 @@ const page = async () => {
     {
       label: "kontakt personer",
       content: <AdminContactPersonView />
+    },
+    {
+      label: "Bestillinger",
+      content: <AdminOrderView />,
+      count: orders
     }
   ]
 
