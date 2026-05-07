@@ -78,6 +78,15 @@
     0  4px 6px -1px rgb(0 0 0 / 0.1), 0  2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
+@keyframes fade-scale-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@utility animate-fade-in {
+  animation: fade-scale-in 150ms ease;
+}
+
 /* Automatically apply a certain style to all the elements of given type */
 @layer base {
   html {
@@ -188,6 +197,7 @@
   .input:focus        { border-color: var(--color-secondary); }
   .input.border-error:focus { border-color: var(--color-error); }
   .input:disabled     { background: var(--color-surface); color: var(--color-text-faint); cursor: not-allowed; opacity: 0.6; }
+  .input.view-only    { background: var(--color-surface-sunken); color: var(--color-text-muted); cursor: default; pointer-events: none; }
  
   /* Cards */
   .card          { border-radius: var(--radius-lg); padding: var(--spacing-md); background: var(--color-bg);      border: 1px solid var(--color-border); }
