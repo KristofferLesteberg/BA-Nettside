@@ -7,6 +7,7 @@ import PhoneInputWithCountrySelect from 'react-phone-number-input'
 import { parsePhoneNumberWithError } from 'libphonenumber-js'
 import type { E164Number, CountryCode } from 'libphonenumber-js'
 import PriceRange from '@/components/shared/input/price-range'
+import AddressInput from '../shared/input/address-input'
 import BackBtn from '@/components/shared/BackBtn'
 import { updateProject } from '@/actions/projects'
 import { FaEdit } from "react-icons/fa"
@@ -87,6 +88,9 @@ export default function UpdateProjectForm({ id, initialValues }: { id: string; i
     }
   })
   const [submitting, setSubmitting] = useState(false)
+  const [sameAsAddress, setSameAsAddress] = useState(
+    () => !!initialValues.billingAddress && initialValues.billingAddress === initialValues.address
+  )
 
   const set = (key: keyof FormValues) => (val: string) =>
     setValues(prev => ({ ...prev, [key]: val }))
@@ -116,7 +120,7 @@ export default function UpdateProjectForm({ id, initialValues }: { id: string; i
         organizationName:   values.organizationName   || undefined,
         organizationNumber: values.organizationNumber || undefined,
         address:            values.address,
-        billingAddress:     values.billingAddress,
+        billingAddress:     sameAsAddress ? values.address : values.billingAddress,
       })
       toast.success('Prosjekt oppdatert')
       router.push('/admin?tab=prosjekter')
@@ -321,7 +325,7 @@ export default function UpdateProjectForm({ id, initialValues }: { id: string; i
                 <EditBtn field="address" {...editProps} />
               </div>
               {activeField === 'address' ? (
-                <input type="text" className="input" value={values.address} onChange={(e) => set('address')(e.target.value)} />
+                <AddressInput value={values.address} onChange={set('address')} />
               ) : (
                 <p className="body-text">{values.address}</p>
               )}
@@ -329,14 +333,38 @@ export default function UpdateProjectForm({ id, initialValues }: { id: string; i
 
             {/* Fakturaadresse */}
             <div className="py-3 space-y-2">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="label">Fakturaadresse</span>
-                <EditBtn field="billingAddress" {...editProps} />
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="label">Fakturaadresse</span>
+                  <EditBtn
+                    field="billingAddress"
+                    active={activeField}
+                    onUnlock={(f) => { setSameAsAddress(false); editProps.onUnlock(f) }}
+                    onLock={editProps.onLock}
+                    onCancel={editProps.onCancel}
+                  />
+                </div>
+                {activeField === 'billingAddress' && (
+                  <label className="flex items-center gap-1.5 cursor-pointer select-none animate-fade-in">
+                    <input
+                      type="checkbox"
+                      checked={sameAsAddress}
+                      onChange={(e) => setSameAsAddress(e.target.checked)}
+                      className="w-3.5 h-3.5 accent-primary cursor-pointer"
+                    />
+                    <span className="small-text">Samme som adresse</span>
+                  </label>
+                )}
               </div>
               {activeField === 'billingAddress' ? (
-                <input type="text" className="input" value={values.billingAddress} onChange={(e) => set('billingAddress')(e.target.value)} />
+                <div onInput={() => setSameAsAddress(false)}>
+                  <AddressInput
+                    value={sameAsAddress ? values.address : values.billingAddress}
+                    onChange={(val) => { setSameAsAddress(false); set('billingAddress')(val) }}
+                  />
+                </div>
               ) : (
-                <p className="body-text">{values.billingAddress}</p>
+                <p className="body-text">{sameAsAddress ? values.address : values.billingAddress}</p>
               )}
             </div>
 

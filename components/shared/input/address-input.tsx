@@ -81,7 +81,7 @@ export default function AddressInput({ value, onChange, placeholder }: Props) {
         type="text"
         placeholder={placeholder || "Gateveien 1, 0001 Oslo"}
         value={address}
-        onChange={(e) => setAddress(e.target.value)}
+        onChange={(e) => { setAddress(e.target.value); onChange(e.target.value) }}
         onFocus={() => {setIsFocused(true)}}
         onBlur={() => {setIsFocused(false)}}
         className="input"
