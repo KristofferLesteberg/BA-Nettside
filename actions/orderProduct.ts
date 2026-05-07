@@ -43,4 +43,15 @@ export async function createProuctOrder(data: unknown) {
   return ProductOrder
 }
 
+export async function deleteOrder(id: number) {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+
+  const order = await prisma.productOrder.findUnique({ where: { id: id } })
+  if(!order) throw new Error("Fant ikke bestilling")
+
+  const deleted = await prisma.productOrder.delete({ where: { id: id } })
+  revalidatePath('/admin')
+}
+
 

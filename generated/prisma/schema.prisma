@@ -33,6 +33,7 @@ model Product {
   images          ProductImage[]
   contactPersonId Int?
   contactPerson   ContactPerson?  @relation(fields: [contactPersonId], references: [id])
+  orders          ProductOrder[]
 
   @@index([educationField])
 }
@@ -88,10 +89,12 @@ model ContactPerson {
 }
 
 model ProductOrder {
-  id           Int     @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   clientName   String
   clientEmail  String
   clientPhone  String
   amount       Int
   extraDetails String?
+  productId    Int?
+  product      Product? @relation(fields: [productId], references: [id])
 }
