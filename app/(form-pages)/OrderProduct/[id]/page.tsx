@@ -20,7 +20,6 @@ export default function OrderProduct() {
   const [extraDetails, setExtraDetails] = useState("")
 
   async function handleSubmit(e: any) {
-    
     e.preventDefault()
     
     setLoading(true)

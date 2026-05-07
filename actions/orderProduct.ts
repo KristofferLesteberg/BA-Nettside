@@ -20,7 +20,9 @@ export async function getAllOrders() {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
 
-  return await prisma.productOrder.findMany()
+  return await prisma.productOrder.findMany({
+    include: { product: { include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } } } }
+  })
 }
 
 export async function getOrderById(id: number) {
