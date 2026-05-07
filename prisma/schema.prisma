@@ -20,6 +20,12 @@ enum Status {
   COMPLETE
 }
 
+enum OrderStatus {
+  NEW
+  IN_CONTACT
+  COMPLETED
+}
+
 model Product {
   id Int @id @default(autoincrement())
   educationField EducationField?
@@ -94,6 +100,7 @@ model ProductOrder {
   clientPhone String
   amount Int
   extraDetails String?
+  status OrderStatus @default(NEW)
   productId Int?
   product Product? @relation(fields: [productId], references: [id])
 

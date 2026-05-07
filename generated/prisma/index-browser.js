@@ -180,6 +180,7 @@ exports.Prisma.ProductOrderScalarFieldEnum = {
   clientPhone: 'clientPhone',
   amount: 'amount',
   extraDetails: 'extraDetails',
+  status: 'status',
   productId: 'productId'
 };
 
@@ -217,6 +218,12 @@ exports.Status = exports.$Enums.Status = {
   NEW: 'NEW',
   IN_PROGRESS: 'IN_PROGRESS',
   COMPLETE: 'COMPLETE'
+};
+
+exports.OrderStatus = exports.$Enums.OrderStatus = {
+  NEW: 'NEW',
+  IN_CONTACT: 'IN_CONTACT',
+  COMPLETED: 'COMPLETED'
 };
 
 exports.Prisma.ModelName = {

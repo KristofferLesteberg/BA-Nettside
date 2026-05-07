@@ -18,7 +18,6 @@ export default async function Orders() {
           <OrderProductCard order={order} key={key}/>
         ))}
       </div>
-
       </div>
     </div>
 

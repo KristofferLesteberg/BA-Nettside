@@ -64,6 +64,15 @@ export const Status: {
 
 export type Status = (typeof Status)[keyof typeof Status]
 
+
+export const OrderStatus: {
+  NEW: 'NEW',
+  IN_CONTACT: 'IN_CONTACT',
+  COMPLETED: 'COMPLETED'
+};
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
 }
 
 export type EducationField = $Enums.EducationField
@@ -73,6 +82,10 @@ export const EducationField: typeof $Enums.EducationField
 export type Status = $Enums.Status
 
 export const Status: typeof $Enums.Status
+
+export type OrderStatus = $Enums.OrderStatus
+
+export const OrderStatus: typeof $Enums.OrderStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -7118,6 +7131,7 @@ export namespace Prisma {
     clientPhone: string | null
     amount: number | null
     extraDetails: string | null
+    status: $Enums.OrderStatus | null
     productId: number | null
   }
 
@@ -7128,6 +7142,7 @@ export namespace Prisma {
     clientPhone: string | null
     amount: number | null
     extraDetails: string | null
+    status: $Enums.OrderStatus | null
     productId: number | null
   }
 
@@ -7138,6 +7153,7 @@ export namespace Prisma {
     clientPhone: number
     amount: number
     extraDetails: number
+    status: number
     productId: number
     _all: number
   }
@@ -7162,6 +7178,7 @@ export namespace Prisma {
     clientPhone?: true
     amount?: true
     extraDetails?: true
+    status?: true
     productId?: true
   }
 
@@ -7172,6 +7189,7 @@ export namespace Prisma {
     clientPhone?: true
     amount?: true
     extraDetails?: true
+    status?: true
     productId?: true
   }
 
@@ -7182,6 +7200,7 @@ export namespace Prisma {
     clientPhone?: true
     amount?: true
     extraDetails?: true
+    status?: true
     productId?: true
     _all?: true
   }
@@ -7279,6 +7298,7 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails: string | null
+    status: $Enums.OrderStatus
     productId: number | null
     _count: ProductOrderCountAggregateOutputType | null
     _avg: ProductOrderAvgAggregateOutputType | null
@@ -7308,6 +7328,7 @@ export namespace Prisma {
     clientPhone?: boolean
     amount?: boolean
     extraDetails?: boolean
+    status?: boolean
     productId?: boolean
     product?: boolean | ProductOrder$productArgs<ExtArgs>
   }, ExtArgs["result"]["productOrder"]>
@@ -7319,6 +7340,7 @@ export namespace Prisma {
     clientPhone?: boolean
     amount?: boolean
     extraDetails?: boolean
+    status?: boolean
     productId?: boolean
     product?: boolean | ProductOrder$productArgs<ExtArgs>
   }, ExtArgs["result"]["productOrder"]>
@@ -7330,6 +7352,7 @@ export namespace Prisma {
     clientPhone?: boolean
     amount?: boolean
     extraDetails?: boolean
+    status?: boolean
     productId?: boolean
     product?: boolean | ProductOrder$productArgs<ExtArgs>
   }, ExtArgs["result"]["productOrder"]>
@@ -7341,10 +7364,11 @@ export namespace Prisma {
     clientPhone?: boolean
     amount?: boolean
     extraDetails?: boolean
+    status?: boolean
     productId?: boolean
   }
 
-  export type ProductOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientName" | "clientEmail" | "clientPhone" | "amount" | "extraDetails" | "productId", ExtArgs["result"]["productOrder"]>
+  export type ProductOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientName" | "clientEmail" | "clientPhone" | "amount" | "extraDetails" | "status" | "productId", ExtArgs["result"]["productOrder"]>
   export type ProductOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductOrder$productArgs<ExtArgs>
   }
@@ -7367,6 +7391,7 @@ export namespace Prisma {
       clientPhone: string
       amount: number
       extraDetails: string | null
+      status: $Enums.OrderStatus
       productId: number | null
     }, ExtArgs["result"]["productOrder"]>
     composites: {}
@@ -7798,6 +7823,7 @@ export namespace Prisma {
     readonly clientPhone: FieldRef<"ProductOrder", 'String'>
     readonly amount: FieldRef<"ProductOrder", 'Int'>
     readonly extraDetails: FieldRef<"ProductOrder", 'String'>
+    readonly status: FieldRef<"ProductOrder", 'OrderStatus'>
     readonly productId: FieldRef<"ProductOrder", 'Int'>
   }
     
@@ -8324,6 +8350,7 @@ export namespace Prisma {
     clientPhone: 'clientPhone',
     amount: 'amount',
     extraDetails: 'extraDetails',
+    status: 'status',
     productId: 'productId'
   };
 
@@ -8429,6 +8456,13 @@ export namespace Prisma {
    * Reference to a field of type 'Status'
    */
   export type EnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status'>
+    
+
+
+  /**
+   * Reference to a field of type 'OrderStatus'
+   */
+  export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus'>
     
 
 
@@ -8817,6 +8851,7 @@ export namespace Prisma {
     clientPhone?: StringFilter<"ProductOrder"> | string
     amount?: IntFilter<"ProductOrder"> | number
     extraDetails?: StringNullableFilter<"ProductOrder"> | string | null
+    status?: EnumOrderStatusFilter<"ProductOrder"> | $Enums.OrderStatus
     productId?: IntNullableFilter<"ProductOrder"> | number | null
     product?: XOR<ProductNullableScalarRelationFilter, ProductWhereInput> | null
   }
@@ -8828,6 +8863,7 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrderInput | SortOrder
+    status?: SortOrder
     productId?: SortOrderInput | SortOrder
     product?: ProductOrderByWithRelationInput
   }
@@ -8842,6 +8878,7 @@ export namespace Prisma {
     clientPhone?: StringFilter<"ProductOrder"> | string
     amount?: IntFilter<"ProductOrder"> | number
     extraDetails?: StringNullableFilter<"ProductOrder"> | string | null
+    status?: EnumOrderStatusFilter<"ProductOrder"> | $Enums.OrderStatus
     productId?: IntNullableFilter<"ProductOrder"> | number | null
     product?: XOR<ProductNullableScalarRelationFilter, ProductWhereInput> | null
   }, "id">
@@ -8853,6 +8890,7 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrderInput | SortOrder
+    status?: SortOrder
     productId?: SortOrderInput | SortOrder
     _count?: ProductOrderCountOrderByAggregateInput
     _avg?: ProductOrderAvgOrderByAggregateInput
@@ -8871,6 +8909,7 @@ export namespace Prisma {
     clientPhone?: StringWithAggregatesFilter<"ProductOrder"> | string
     amount?: IntWithAggregatesFilter<"ProductOrder"> | number
     extraDetails?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
+    status?: EnumOrderStatusWithAggregatesFilter<"ProductOrder"> | $Enums.OrderStatus
     productId?: IntNullableWithAggregatesFilter<"ProductOrder"> | number | null
   }
 
@@ -9270,6 +9309,7 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
+    status?: $Enums.OrderStatus
     product?: ProductCreateNestedOneWithoutOrdersInput
   }
 
@@ -9280,6 +9320,7 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
+    status?: $Enums.OrderStatus
     productId?: number | null
   }
 
@@ -9289,6 +9330,7 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     product?: ProductUpdateOneWithoutOrdersNestedInput
   }
 
@@ -9299,6 +9341,7 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     productId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -9309,6 +9352,7 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
+    status?: $Enums.OrderStatus
     productId?: number | null
   }
 
@@ -9318,6 +9362,7 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   }
 
   export type ProductOrderUncheckedUpdateManyInput = {
@@ -9327,6 +9372,7 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     productId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -9834,6 +9880,13 @@ export namespace Prisma {
     id?: SortOrder
   }
 
+  export type EnumOrderStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[]
+    notIn?: $Enums.OrderStatus[]
+    not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
+  }
+
   export type ProductNullableScalarRelationFilter = {
     is?: ProductWhereInput | null
     isNot?: ProductWhereInput | null
@@ -9846,6 +9899,7 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrder
+    status?: SortOrder
     productId?: SortOrder
   }
 
@@ -9862,6 +9916,7 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrder
+    status?: SortOrder
     productId?: SortOrder
   }
 
@@ -9872,6 +9927,7 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrder
+    status?: SortOrder
     productId?: SortOrder
   }
 
@@ -9879,6 +9935,16 @@ export namespace Prisma {
     id?: SortOrder
     amount?: SortOrder
     productId?: SortOrder
+  }
+
+  export type EnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[]
+    notIn?: $Enums.OrderStatus[]
+    not?: NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel> | $Enums.OrderStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOrderStatusFilter<$PrismaModel>
+    _max?: NestedEnumOrderStatusFilter<$PrismaModel>
   }
 
   export type ProductImageCreateNestedManyWithoutProductInput = {
@@ -10085,6 +10151,10 @@ export namespace Prisma {
     create?: XOR<ProductCreateWithoutOrdersInput, ProductUncheckedCreateWithoutOrdersInput>
     connectOrCreate?: ProductCreateOrConnectWithoutOrdersInput
     connect?: ProductWhereUniqueInput
+  }
+
+  export type EnumOrderStatusFieldUpdateOperationsInput = {
+    set?: $Enums.OrderStatus
   }
 
   export type ProductUpdateOneWithoutOrdersNestedInput = {
@@ -10339,6 +10409,23 @@ export namespace Prisma {
     _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumOrderStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[]
+    notIn?: $Enums.OrderStatus[]
+    not?: NestedEnumOrderStatusFilter<$PrismaModel> | $Enums.OrderStatus
+  }
+
+  export type NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrderStatus | EnumOrderStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrderStatus[]
+    notIn?: $Enums.OrderStatus[]
+    not?: NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel> | $Enums.OrderStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOrderStatusFilter<$PrismaModel>
+    _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
   export type ProductImageCreateWithoutProductInput = {
     id: string
     sortOrder?: number
@@ -10384,6 +10471,7 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
+    status?: $Enums.OrderStatus
   }
 
   export type ProductOrderUncheckedCreateWithoutProductInput = {
@@ -10393,6 +10481,7 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
+    status?: $Enums.OrderStatus
   }
 
   export type ProductOrderCreateOrConnectWithoutProductInput = {
@@ -10481,6 +10570,7 @@ export namespace Prisma {
     clientPhone?: StringFilter<"ProductOrder"> | string
     amount?: IntFilter<"ProductOrder"> | number
     extraDetails?: StringNullableFilter<"ProductOrder"> | string | null
+    status?: EnumOrderStatusFilter<"ProductOrder"> | $Enums.OrderStatus
     productId?: IntNullableFilter<"ProductOrder"> | number | null
   }
 
@@ -10693,6 +10783,7 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
+    status?: $Enums.OrderStatus
   }
 
   export type ProductImageUpdateWithoutProductInput = {
@@ -10716,6 +10807,7 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   }
 
   export type ProductOrderUncheckedUpdateWithoutProductInput = {
@@ -10725,6 +10817,7 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   }
 
   export type ProductOrderUncheckedUpdateManyWithoutProductInput = {
@@ -10734,6 +10827,7 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   }
 
   export type ProductCreateManyContactPersonInput = {
