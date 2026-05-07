@@ -59,7 +59,7 @@ export default async function ProductPage({
             </div>
 
             {/* CTA */}
-            <Link className="btn btn-primary" href={"/OrderProduct"}>
+            <Link className="btn btn-primary" href={`/OrderProduct/${product.id}`}>
               <button>Bestill!</button>
             </Link>
 

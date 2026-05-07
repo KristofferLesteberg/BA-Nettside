@@ -1,13 +1,15 @@
 "use client"
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { createProuctOrder } from '@/actions/orderProduct'
 import BackBtn from '@/components/shared/BackBtn'
 
 export default function OrderProduct() {
   const router = useRouter()
+  const params = useParams()
+  const productId = Number(params.id) || undefined
 
   const [loading, setLoading] = useState(false)
 
@@ -18,16 +20,18 @@ export default function OrderProduct() {
   const [extraDetails, setExtraDetails] = useState("")
 
   async function handleSubmit(e: any) {
+    
     e.preventDefault()
-
+    
     setLoading(true)
     try {
-      const result = await createProuctOrder({
+      await createProuctOrder({
         clientName,
         clientEmail,
         clientPhone,
         amount,
         extraDetails: extraDetails || undefined,
+        productId,
       })
 
       toast.success('Bestilling sendt!')

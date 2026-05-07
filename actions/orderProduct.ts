@@ -12,7 +12,8 @@ const OrderProductCreateSchema = z.object({
   clientEmail: z.email("Ugyldig e-postadresse"),
   clientPhone: z.string().min(1, "Telefon nummer er påkrevd"),
   amount: z.coerce.number().min(1, "Du må minst bestille en av produktet"),
-  extraDetails: z.string().optional()
+  extraDetails: z.string().optional(),
+  productId: z.number()
 })
 
 export async function getAllOrders() {

@@ -32,6 +32,7 @@ export default function OrderCard({ order }: Props) {
           <button className="btn btn-error" onClick={orderDelete}>Fjern</button>
         </div>
       </div>
+      <p>{order.productId} qdqqdqw</p>
 
       <div className="grid grid-cols-3">
         <div>
