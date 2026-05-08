@@ -36,6 +36,7 @@ export default async function ProductsPage() {
           </p>
         </div>
         <Link href="/prosjekter" className="btn btn-primary shrink-0 whitespace-nowrap">
+        <Link href="/prosjekter" className="btn btn-primary shrink-0 whitespace-nowrap">
           Send en forespørsel
         </Link>
       </div>
