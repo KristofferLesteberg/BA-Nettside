@@ -58,7 +58,7 @@ deploy:
         echo '$CI_REGISTRY_PASSWORD' | docker login -u '$CI_REGISTRY_USER' --password-stdin '$CI_REGISTRY' &&
         docker pull '$IMAGE' &&
         docker rm -f ba-nettside || true &&
-        docker run -d --name ba-nettside -p 9050:3000 --restart unless-stopped '$IMAGE'
+        docker run -d --name ba-nettside -p 9050:3000 --restart unless-stopped -e DATABASE_URL='$DATABASE_URL' -e ADMIN_PASSWORD='$ADMIN_PASSWORD' -e ADMIN_USERNAME='$ADMIN_USERNAME' -e NEXTAUTH_SECRET='$NEXTAUTH_SECRET' -e NEXTAUTH_URL='$NEXTAUTH_URL' '$IMAGE'
       "
   only:
     - main
