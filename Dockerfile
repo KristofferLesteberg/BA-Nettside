@@ -30,5 +30,6 @@ ENV HOSTNAME="0.0.0.0"
 
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./
+COPY --from=builder /app/node_modules/dotenv ./node_modules/dotenv
 
 CMD ["sh", "-c", "npx prisma migrate deploy && node server.js"]
