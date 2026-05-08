@@ -28,6 +28,7 @@ export default async function ProductPage({
             <Link href="/" className="hover:underline">Hjem</Link>
             <span className="text-faint mx-2">/</span>
             <Link href="/produkter" className="hover:underline">Produkter</Link>
+            <Link href="/produkter" className="hover:underline">Produkter</Link>
             <span className="text-faint mx-2">/</span>
             <span className="text-faint">{product.title}</span>
           </span>
