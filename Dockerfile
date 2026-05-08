@@ -29,5 +29,6 @@ ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.ts ./
 
 CMD ["sh", "-c", "npx prisma migrate deploy && node server.js"]
