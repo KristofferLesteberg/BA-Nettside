@@ -35,7 +35,7 @@ export default async function ProductsPage() {
             Du kan bestille et prosjekt eller en vare etter eget ønske.
           </p>
         </div>
-        <Link href="/prosjekter" className="btn btn-primary shrink-0 whitespace-nowrap">
+       
         <Link href="/prosjekter" className="btn btn-primary shrink-0 whitespace-nowrap">
           Send en forespørsel
         </Link>
