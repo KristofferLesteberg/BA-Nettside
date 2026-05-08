@@ -7,10 +7,10 @@ import { createProject } from '@/actions/projects'
 import PhoneInputWithCountrySelect from 'react-phone-number-input'
 import { parsePhoneNumberWithError } from 'libphonenumber-js'
 import type { E164Number, CountryCode } from 'libphonenumber-js'
+import OrgNumberInput from '@/components/shared/input/orgNumberInput'
 import AddressInput from '@/components/shared/input/address-input'
 import PriceRange from '@/components/shared/input/price-range'
 import { ProjectRequestPage1Schema, ProjectRequestPage2Schema } from '@/app/lib/schemas'
-import { IoSearch } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
 import BackBtn from '@/components/shared/BackBtn'
 
@@ -51,37 +51,6 @@ export default function RequestProject() {
   const educationFieldRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
 
-
-
-
-  const getOrgInfo = async (orgNumber: number) => {
-    try {
-      const res = await fetch(`https://data.brreg.no/enhetsregisteret/api/enheter/${orgNumber}`)
-      if(!res) {
-        toast.error("Fant ikke organisasjonen")
-        return
-      }
-      const data = await res.json()
-      if(data.epostadresse) {
-        setEmail(data.epostadresse)
-      }
-      
-      if(data.telefon) {
-        setPhoneCountry("NO")
-        const e164 = `+47${data.telefon.replace(/\s/g, "")}` as E164Number
-        setPhone(e164)
-      }
-
-      setOrgName(data.navn)
-      if(data.forretningsadresse) {
-        setAddress(`${data.forretningsadresse.adresse[0]}, ${data.forretningsadresse.postnummer} ${data.forretningsadresse.poststed}`)
-      }
-      
-    } catch(error) {
-      console.error(error)
-    }
-
-  }
   function clearError(field: string) {
     setErrors(prev => { const next = { ...prev }; delete next[field]; return next })
   }
@@ -249,22 +218,16 @@ export default function RequestProject() {
 
               <div className={`space-y-1 ${identityType == "organization" ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
                 <label className="label">Organisasjonsnummer  </label>
-                <div className='relative flex-1 justify-center align-middle'>
-                  <input
-                    type="text"
-                    className={`${inputClass("organizationNumber")}`}
-                    placeholder="123 456 789"
-                    value={orgNumber}
-                    onChange={(e) => { setOrgNumber(e.target.value.replace(/\D/g, "").slice(0, 9)); clearError("organizationNumber") }}
-                  />
-                  <button
-                    type='button'
-                    onClick={() => getOrgInfo(Number(orgNumber))}
-                    className="absolute right-1 mt-auto mb-auto mr-3 h-full"
-                  >
-                    <IoSearch className='cursor-pointer' />
-                  </button>
-                </div>
+                <OrgNumberInput 
+                  inputClassName={`${inputClass("organizationNumber")}`}
+                  value={orgNumber}
+                  onChange={(e) => { setOrgNumber(e.target.value.replace(/\D/g, "").slice(0, 9)); clearError("organizationNumber") }}
+                  setEmail={setEmail}
+                  setPhoneCountry={setPhoneCountry}
+                  setPhone={setPhone}
+                  setOrgName={setOrgName}
+                  setAddress={setAddress}
+                />
                 {errors.organizationNumber && <p className="text-error text-sm">{errors.organizationNumber}</p>}
               </div>
 

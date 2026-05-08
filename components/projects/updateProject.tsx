@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+import OrgNumberInput from '../shared/input/orgNumberInput'
 import PhoneInputWithCountrySelect from 'react-phone-number-input'
 import { parsePhoneNumberWithError } from 'libphonenumber-js'
 import type { E164Number, CountryCode } from 'libphonenumber-js'
@@ -298,12 +299,16 @@ export default function UpdateProjectForm({ id, initialValues }: { id: string; i
                     </div>
                     <div className="space-y-1">
                       <label className="label">Org.nummer</label>
-                      <input
-                        type="text"
-                        className="input"
-                        placeholder="123456789"
+                      <OrgNumberInput
+                        inputClassName="input"
                         value={values.organizationNumber}
                         onChange={(e) => set('organizationNumber')(e.target.value.replace(/\D/g, '').slice(0, 9))}
+                        setEmail={set('clientEmail')}
+                        setPhoneCountry={setPhoneCountry}
+                        setPhone={(v) => set('clientPhone')(v)}
+                        setOrgName={set('organizationName')}
+                        setAddress={set('address')}
+                        onSuccess={editProps.onLock}
                       />
                     </div>
                   </div>

@@ -47,7 +47,7 @@ export async function getAllProjects() {
 
 export async function createProject(data: unknown) {
   const { educationField, ...rest } = ProjectRequestCreateSchema.parse(data)
-  const id = crypto.randomUUID().replace(/-/g, '').slice(0, 12)
+  const id = crypto.randomUUID()
   const project = await prisma.projectRequest.create({
     data: { id, ...rest, educationField: (educationField as EducationField) ?? null },
   })
