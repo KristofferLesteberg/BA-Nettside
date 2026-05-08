@@ -58,7 +58,7 @@ deploy:
         echo '$CI_REGISTRY_PASSWORD' | docker login -u '$CI_REGISTRY_USER' --password-stdin '$CI_REGISTRY' &&
         docker pull '$IMAGE' &&
         docker rm -f ba-nettside || true &&
-        docker run -d --name ba-nettside -p 9050:80 --restart unless-stopped '$IMAGE'
+        docker run -d --name ba-nettside -p 9050:3000 --restart unless-stopped '$IMAGE'
       "
   only:
     - main
