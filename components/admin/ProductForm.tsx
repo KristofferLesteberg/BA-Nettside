@@ -14,13 +14,13 @@ export interface ProductFormValues {
   amount: string
   measures: Measure[]
   images: ImageItem[]
-  contactId: number
+  contactId: string
 }
 
 interface ProductFormProps {
   heading: string
   submitLabel: string
-  contactPersons: ContactPerson[]
+  contactPersons?: ContactPerson[]
   initialValues?: {
     educationField?: string
     title?: string
@@ -29,9 +29,8 @@ interface ProductFormProps {
     amount?: string
     measures?: Measure[]
     existingImages?: { id: string; url: string }[]
-    contactId: number
-    
-
+    contactId?: string
+  
   }
   onSubmit: (values: ProductFormValues) => Promise<void>
 }
@@ -44,7 +43,7 @@ export default function ProductForm({ heading, submitLabel, contactPersons, init
   const [amount, setAmount] = useState(initialValues?.amount ?? "")
   const [measures, setMeasures] = useState<Measure[]>(initialValues?.measures ?? [])
   const [images, setImages] = useState<ImageItem[]>([])
-  const [contactId, setContactId] = useState(initialValues?.contactId ?? 0)
+  const [contactId, setContactId] = useState(initialValues?.contactId ?? "")
 
   const educationFieldRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
@@ -105,9 +104,9 @@ export default function ProductForm({ heading, submitLabel, contactPersons, init
         </div>
         <div className='space-y-1'>
           <label className='label'>Kontakt person</label>
-          <select className='input' value={contactId} onChange={(e) => setContactId(Number(e.target.value))}>
+          <select className='input' value={contactId} onChange={(e) => setContactId(e.target.value)}>
             <option value="">Velg kontakt person</option>
-            {contactPersons.map((contactPerson, index) => (
+            {contactPersons?.map((contactPerson, index) => (
               <option key={index} value={contactPerson.id}>{contactPerson.name}</option>
             ))}
           </select>
@@ -116,7 +115,7 @@ export default function ProductForm({ heading, submitLabel, contactPersons, init
         <div className="space-y-1" ref={descriptionRef}>
           <label className="label">Beskrivelse *</label>
           <textarea
-            className="input min-h-[100px]"
+            className="input min-h-25"
             placeholder="Beskriv produkt"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
