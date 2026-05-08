@@ -12,6 +12,7 @@ interface Props {
 
 export default function ContactPersonCard({ person }: Props) {
   const router = useRouter()
+  
 
   const deletePerson = async () => {
     if (!window.confirm('Vil du slette kontaktpersonen?')) return

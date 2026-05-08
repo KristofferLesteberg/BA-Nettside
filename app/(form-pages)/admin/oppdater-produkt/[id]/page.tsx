@@ -15,6 +15,7 @@ interface LoadedProduct {
   amount: string
   measures: Measure[]
   existingImages: { id: string; url: string }[]
+  contactId: string
 }
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -40,6 +41,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           measures:       Object.entries((product.measures ?? {}) as Record<string, string>)
                             .map(([name, value]) => ({ name, value })),
           existingImages: product.images.map(img => ({ id: img.id, url: `/images/${img.id}.webp` })),
+          contactId: Number(product.id).toString()
         })
       } catch {
         toast.error("Kunne ikke laste produktet")
@@ -50,7 +52,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     load()
   }, [productId])
 
-  const handleSubmit = async ({ educationField, title, description, price, amount, measures, images }: ProductFormValues) => {
+  const handleSubmit = async ({ educationField, title, description, price, amount, measures, images, contactId }: ProductFormValues) => {
     const formData = new FormData()
     formData.append("educationField", educationField)
     formData.append("title", title)
@@ -58,6 +60,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     formData.append("price", price || "0")
     formData.append("amount", amount || "0")
     formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
+    formData.append("contactId", contactId || "0")
 
     formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
     images.filter(img => img.type === "new").forEach(img => formData.append("newImages", img.file))

@@ -4,6 +4,7 @@ import Carousel from "@/components/shared/ImageCarousel"
 import ProductTabs from "@/components/shared/products/ProductTabs"
 import { getProductById } from "@/actions/products"
 
+
 export default async function ProductPage({
   params,
 }: {
@@ -15,6 +16,7 @@ export default async function ProductPage({
   const product = await getProductById(productId)
   if (!product) notFound()
 
+  
 
   return (
     <div className="bg-page min-h-screen">
@@ -58,9 +60,9 @@ export default async function ProductPage({
             </div>
 
             {/* CTA */}
-            <button className="btn btn-primary w-full py-3 text-base">
-              Ta kontakt
-            </button>
+            <Link className="btn btn-primary" href={`/OrderProduct/${product.id}`}>
+              <button>Bestill!</button>
+            </Link>
 
             <hr className="border-default" />
 
