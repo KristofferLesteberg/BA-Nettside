@@ -5,11 +5,14 @@ import ProductTabs from "@/components/shared/products/ProductTabs"
 import { getProductById } from "@/actions/products"
 
 
+
 export default async function ProductPage({
+ 
   params,
 }: {
   params: Promise<{ productId: string }>
 }) {
+  
   const productId = parseInt((await params).productId)
   if (Number.isNaN(productId)) notFound()
 
@@ -60,9 +63,15 @@ export default async function ProductPage({
             </div>
 
             {/* CTA */}
-            <Link className="btn btn-primary" href={`/OrderProduct/${product.id}`}>
-              <button>Bestill!</button>
-            </Link>
+            {product.amount > 0 ? (
+              <Link className="btn btn-primary" href={`/OrderProduct/${product.id}`}>
+                Bestill!
+              </Link>
+            ) : (
+              <button disabled className="btn btn-primary opacity-50 cursor-not-allowed">
+                Utsolgt
+              </button>
+            )}
 
             <hr className="border-default" />
 
