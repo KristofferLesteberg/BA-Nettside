@@ -6,6 +6,7 @@ import { prisma } from '@/app/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/lib/auth'
+import { sendOrderEmail } from '@/actions/email'
 
 const OrderProductCreateSchema = z.object({
   clientName: z.string().min(1, "Navn er påkrev"),
@@ -46,6 +47,7 @@ export async function createProuctOrder(data: unknown) {
   const ProductOrder = await prisma.productOrder.create({ 
     data: parsed
   })
+  await sendOrderEmail(parsed)
   revalidatePath("/admin")
   return ProductOrder
 }

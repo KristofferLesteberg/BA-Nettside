@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import { createProuctOrder } from '@/actions/orderProduct'
 import BackBtn from '@/components/shared/BackBtn'
 
+
 export default function OrderProduct() {
   const router = useRouter()
   const params = useParams()
@@ -32,6 +33,7 @@ export default function OrderProduct() {
         extraDetails: extraDetails || undefined,
         productId,
       })
+     
 
       toast.success('Bestilling sendt!')
       router.push('/')

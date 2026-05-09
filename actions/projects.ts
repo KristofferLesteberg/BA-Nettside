@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth'
 import { prisma } from '@/app/lib/prisma'
 import { authOptions } from '@/app/lib/auth'
 import type { EducationField } from '@/generated/prisma'
+import { sendProjectEmail } from '@/actions/email'
 
 // ─── Schemas ─────────────────────────────────────────────────────────────────
 
@@ -46,6 +47,7 @@ export async function createProject(data: unknown) {
   const project = await prisma.projectRequest.create({
     data: { ...rest, educationField: (educationField as EducationField) ?? null },
   })
+  await sendProjectEmail(rest)
   revalidatePath('/admin')
   return { id: project.id }
 }
