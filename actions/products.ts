@@ -133,8 +133,9 @@ export async function updateProduct(id: number, formData: FormData) {
 }
 
 export async function updateProductAmount(id: number, amount: number) {
-    const product = await prisma.product.findUnique({ where: { id: id} })
+  const product = await prisma.product.findUnique({ where: { id: id} })
   if(!product) throw new Error("Kunne ikke finne produktet!")
+  if(amount > product.amount) throw new Error("Kan ikke bestille mer enn antallet")
 
   await prisma.product.update({where: {id: id}, data: {amount: product.amount - amount}})
   revalidatePath("/admin")

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import Image from 'next/image'
 import toast from 'react-hot-toast'
 import { createProductOrder } from '@/actions/orderProduct'
 import BackBtn from '@/components/shared/BackBtn'
@@ -37,7 +38,7 @@ export default function OrderProduct() {
       toast.error(`Det er ikke mulig å bestille mer enn ${product?.amount}`)
       return
     }
-    
+  
     setLoading(true)
     try {
       await createProductOrder({
@@ -58,14 +59,32 @@ export default function OrderProduct() {
       setLoading(false)
     }
   }
-
-
   return (
     <div className="w-4/5 min-w-120 max-w-160 mx-auto py-10">
       <div className="card-accented shadow-xl space-y-6 px-8 pb-8">
         <div className="flex items-center justify-between">
           <BackBtn />
         </div>
+
+        {product && (
+          <div className="flex gap-4 items-center border rounded-lg p-4">
+            {product.images[0] && (
+              <div className="relative w-24 h-24 shrink-0 rounded overflow-hidden">
+                <Image
+                  src={`/images/${product.images[0].id}.webp`}
+                  alt={product.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
+            <div>
+              <h3 className="font-semibold text-lg">{product.title}</h3>
+              <p className="text-text-faint text-sm">kr {Number(product.price).toLocaleString('nb-NO')}</p>
+              <p className="text-text-faint text-sm">På lager: {product.amount} stk</p>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-1">
