@@ -8,7 +8,9 @@ variables:
 
 mirror-to-github:
   stage: mirror
-  image: alpine/git
+  image:
+    name: alpine/git
+    entrypoint: [""]
   script:
     - git remote add github https://$GITHUB_TOKEN@github.com/$GITHUB_REPO.git
     - git push github HEAD:main
