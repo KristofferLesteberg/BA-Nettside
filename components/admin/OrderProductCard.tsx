@@ -52,7 +52,6 @@ export default function OrderCard({ order }: Props) {
       toast.error("Kunne ikke endre status")
     }
   }
-
   const thumbnail = order.product?.images?.[0]?.id
 
   return (

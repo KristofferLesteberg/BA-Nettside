@@ -7,6 +7,7 @@ import { prisma } from '@/app/lib/prisma'
 import { authOptions } from '@/app/lib/auth'
 import { uploadProductImages, syncProductImages, deleteAllProductImages } from '@/app/lib/images'
 import type { EducationField } from '@/generated/prisma'
+import { err } from '@/app/lib/api-response'
 
 // ─── Schemas ─────────────────────────────────────────────────────────────────
 
@@ -130,6 +131,16 @@ export async function updateProduct(id: number, formData: FormData) {
   revalidatePath('/admin')
   revalidatePath('/')
 }
+
+export async function updateProductAmount(id: number, amount: number) {
+    const product = await prisma.product.findUnique({ where: { id: id} })
+  if(!product) throw new Error("Kunne ikke finne produktet!")
+
+  await prisma.product.update({where: {id: id}, data: {amount: product.amount - amount}})
+  revalidatePath("/admin")
+  revalidatePath("/")
+}
+
 
 export async function deleteProduct(id: number) {
   const session = await getServerSession(authOptions)

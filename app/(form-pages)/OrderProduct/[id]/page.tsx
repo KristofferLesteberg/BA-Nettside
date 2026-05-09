@@ -1,16 +1,20 @@
 "use client"
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { createProductOrder } from '@/actions/orderProduct'
 import BackBtn from '@/components/shared/BackBtn'
+import { getProductById, updateProductAmount } from '@/actions/products'
 
 
 export default function OrderProduct() {
+
+ 
   const router = useRouter()
   const params = useParams()
   const productId = Number(params.id) || undefined
+
 
   const [loading, setLoading] = useState(false)
 
@@ -19,9 +23,20 @@ export default function OrderProduct() {
   const [clientPhone, setClientPhone] = useState("")
   const [amount, setAmount] = useState("")
   const [extraDetails, setExtraDetails] = useState("")
+  
+  const [product, setProduct] = useState<Awaited<ReturnType<typeof getProductById>>>(null)
+
+  useEffect(() => {
+    if (productId) getProductById(productId).then(setProduct)
+  }, [productId])
 
   async function handleSubmit(e: any) {
     e.preventDefault()
+
+    if(Number(amount) > Number(product?.amount)) {
+      toast.error(`Det er ikke mulig å bestille mer enn ${product?.amount}`)
+      return
+    }
     
     setLoading(true)
     try {
@@ -33,18 +48,17 @@ export default function OrderProduct() {
         extraDetails: extraDetails || undefined,
         productId,
       })
-     
+      await updateProductAmount(Number(productId), Number(amount))
 
       toast.success('Bestilling sendt!')
       router.push('/')
     } catch (error: unknown) {
-      
       toast.error(error instanceof Error ? error.message : "Kunne ikke opprette et nytt produkt")
-        
     } finally {
       setLoading(false)
     }
   }
+
 
   return (
     <div className="w-4/5 min-w-120 max-w-160 mx-auto py-10">
