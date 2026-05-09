@@ -13,9 +13,7 @@ mirror-to-github:
     entrypoint: [""]
   script:
     - git remote add github https://$GITHUB_TOKEN@github.com/$GITHUB_REPO.git
-    - git push github HEAD:main
-  only:
-    - main
+    - git push github HEAD:$CI_COMMIT_REF_NAME
 
 build:
   stage: build
