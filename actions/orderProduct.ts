@@ -16,6 +16,10 @@ const OrderProductCreateSchema = z.object({
   productId: z.number()
 })
 
+const OrderProductStatusUpdateCreate = z.object({
+  status: z.enum(["NEW", "IN_CONTACT", "COMPLETED"])
+})
+
 export async function getAllOrders() {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
@@ -55,6 +59,16 @@ export async function deleteOrder(id: number) {
 
   const deleted = await prisma.productOrder.delete({ where: { id: id } })
   revalidatePath('/admin')
+}
+
+export async function UpdateOrder(id: number, status: string) {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+  const { status: parsed } = OrderProductStatusUpdateCreate.parse({ status })
+  await prisma.productOrder.update({
+    where: { id: id}, data: { status: parsed}
+  })
+  revalidatePath("/admin")
 }
 
 

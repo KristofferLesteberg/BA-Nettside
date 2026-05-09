@@ -1,10 +1,11 @@
 "use client"
-import { deleteOrder } from "@/actions/orderProduct"
+import { deleteOrder, UpdateOrder } from "@/actions/orderProduct"
 import { Prisma, OrderStatus } from "@/generated/prisma"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import toast from "react-hot-toast"
+
 
 type OrderWithProduct = Prisma.ProductOrderGetPayload<{
   include: { product: { include: { images: true } } }
@@ -30,6 +31,7 @@ export default function OrderCard({ order }: Props) {
   const router = useRouter()
   const [showProduct, setShowProduct] = useState(false)
 
+
   const orderDelete = async () => {
     if (!window.confirm('Vil du slette bestillingen?')) return
     try {
@@ -41,10 +43,20 @@ export default function OrderCard({ order }: Props) {
     }
   }
 
+  const updateStatus = async (status: OrderStatus) => {
+    try {
+      await UpdateOrder(order.id, status)
+      toast.success("Status oppdatert")
+      router.refresh()
+    } catch(error) {
+      toast.error("Kunne ikke endre status")
+    }
+  }
+
   const thumbnail = order.product?.images?.[0]?.id
 
   return (
-    <div className="card-subtle flex flex-col gap-0 overflow-hidden">
+    <div className="card-subtle flex flex-col gap-0 overflow-hidden border">
 
       {/* Header */}
       <div className="flex items-start justify-between gap-4 px-6 pt-5 pb-4">
@@ -60,11 +72,8 @@ export default function OrderCard({ order }: Props) {
           <select
             className="input w-auto cursor-pointer text-sm"
             defaultValue=""
-            onChange={() => {
-              // TODO: wire to updateOrderStatus action
-              router.refresh()
-            }}
-          >
+            onChange={(e) => updateStatus(e.target.value as OrderStatus)}
+            >
             <option value="" disabled>Endre status</option>
             <option value="NEW">Ny bestilling</option>
             <option value="IN_CONTACT">I kontakt</option>
