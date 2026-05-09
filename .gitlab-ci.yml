@@ -1,9 +1,19 @@
 stages:
+  - mirror
   - build
   - deploy
 
 variables:
   IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+
+mirror-to-github:
+  stage: mirror
+  image: alpine/git
+  script:
+    - git remote add github https://$GITHUB_TOKEN@github.com/$GITHUB_REPO.git
+    - git push github HEAD:main
+  only:
+    - main
 
 build:
   stage: build
