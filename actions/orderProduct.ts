@@ -1,7 +1,6 @@
 'use server'
 
 import { z } from 'zod'
-import { ProductOrder } from '@/generated/prisma'
 import { prisma } from '@/app/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth'
@@ -42,7 +41,7 @@ export async function getOrderById(id: number) {
   return order
 }
 
-export async function createProuctOrder(data: unknown) {
+export async function createProductOrder(data: unknown) {
   const parsed = OrderProductCreateSchema.parse(data)
   const ProductOrder = await prisma.productOrder.create({ 
     data: parsed

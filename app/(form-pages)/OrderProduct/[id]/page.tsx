@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { createProuctOrder } from '@/actions/orderProduct'
+import { createProductOrder } from '@/actions/orderProduct'
 import BackBtn from '@/components/shared/BackBtn'
 
 
@@ -25,7 +25,7 @@ export default function OrderProduct() {
     
     setLoading(true)
     try {
-      await createProuctOrder({
+      await createProductOrder({
         clientName,
         clientEmail,
         clientPhone,

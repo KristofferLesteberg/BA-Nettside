@@ -30,7 +30,7 @@ export async function sendOrderEmail(order: sendOrderEmailProps) {
 
   //To admins
   await sendMail({
-    email: String(getProduct?.contactPerson?.email),
+    email: String(getProduct?.contactPerson?.email || adminEmail),
     subject: `Ny produktbestilling – ${order.clientName}`,
     body: `
   Du har mottatt en ny produktbestilling.
@@ -66,7 +66,7 @@ export async function sendOrderEmail(order: sendOrderEmailProps) {
 
   Har du spørsmål i mellomtiden, er du velkommen til å kontakte oss.
 
-  Med vennlig hilsen 
+  Med vennlig hilsen${getProduct?.contactPerson?.email || adminEmail}
     `.trim(),
   })
 }
@@ -112,7 +112,7 @@ export async function sendProjectEmail(project: sendProjectEmailProps) {
 
       Har du spørsmål i mellomtiden, er du velkommen til å kontakte oss.
 
-    Med vennlig hilsen
+    Med vennlig hilsen ${adminEmail}
     `.trim(),
   })
 }
