@@ -1,7 +1,7 @@
 'use server'
 
 import { sendMail } from '@/app/lib/mail'
-import { email } from 'zod'
+import { prisma } from '@/app/lib/prisma'
 
 const adminEmail = 'kristoffer.ihme.lesteberg@gmail.com'
 
@@ -25,67 +25,94 @@ interface sendProjectEmailProps {
   maxPrice: number
 }
 
+export async function sendOrderEmail(order: sendOrderEmailProps) {
+  const getProduct = await prisma.product.findUnique({ where: { id: order.productId }, include: { contactPerson: true }})
 
-
-export async function sendOrderEmail(order: sendOrderEmailProps){
-  //To Admin
+  //To admins
   await sendMail({
-    email: adminEmail,
-    subject: 'Ny produktbestilling',
+    email: String(getProduct?.contactPerson?.email),
+    subject: `Ny produktbestilling – ${order.clientName}`,
     body: `
-      Ny bestilling mottatt:
-      Navn: ${order.clientName}
-      E-post: ${order.clientEmail}
-      Telefon: ${order.clientPhone}
-      Produkt ID: ${order.productId}
-      Antall: ${order.amount}
-      ${order.extraDetails ? `Ekstra detaljer: ${order.extraDetails}` : ''}
+  Du har mottatt en ny produktbestilling.
+
+  Kundeinformasjon:
+    Navn:     ${order.clientName}
+    E-post:   ${order.clientEmail}
+    Telefon:  ${order.clientPhone}
+
+  Bestillingsdetaljer:
+    Antall:      ${order.amount}
+  ${order.extraDetails ? `  Tilleggsinfo: ${order.extraDetails}` : ''}
+
+  Logg inn i administrasjonspanelet for å følge opp bestillingen.
     `.trim(),
   })
-  //To client
+
+  //To Clents
   await sendMail({
-    email: `${order.clientEmail}`,
-    subject: "Takk for din bestilling!",
+    email: order.clientEmail,
+    subject: 'Bekreftelse på din bestilling',
     body: `
-      Bekreft din bestilling:
-      Navn: ${order.clientName}
-      E-post: ${order.clientEmail}
-      Telefon: ${order.clientPhone}
-      Produkt ID: ${order.productId}
-      Antall: ${order.amount}
-      ${order.extraDetails ? `Ekstra detaljer: ${order.extraDetails}` : ''}
+  Hei ${order.clientName},
+
+  Takk for din bestilling! Vi har mottatt forespørselen din og vil ta kontakt med deg så snart som mulig.
+
+  Dine opplysninger:
+      Navn:     ${order.clientName}
+      E-post:   ${order.clientEmail}
+      Telefon:  ${order.clientPhone}
+      Antall:   ${order.amount}
+    ${order.extraDetails ? `  Tilleggsinfo: ${order.extraDetails}` : ''}
+
+  Har du spørsmål i mellomtiden, er du velkommen til å kontakte oss.
+
+  Med vennlig hilsen 
     `.trim(),
   })
 }
 
-
 export async function sendProjectEmail(project: sendProjectEmailProps) {
-  console.log("test")
+  //To admins
   await sendMail({
     email: adminEmail,
-    subject: 'Ny prosjektforespørsel',
+    subject: `Ny prosjektforespørsel – ${project.title}`,
     body: `
-      Ny prosjektforespørsel mottatt:
+  Du har mottatt en ny prosjektforespørsel.
 
-      Navn: ${project.clientForename} ${project.clientSurname}
-      E-post: ${project.clientEmail}
-      Telefon: ${project.clientPhone}
-      Tittel: ${project.title}
+  Kundeinformasjon:
+    Navn:     ${project.clientForename} ${project.clientSurname}
+    E-post:   ${project.clientEmail}
+    Telefon:  ${project.clientPhone}
+
+    Prosjektdetaljer:
+      Tittel:      ${project.title}
       Beskrivelse: ${project.description}
-      Budsjett: ${project.minPrice} - ${project.maxPrice} kr
-    `.trim()
+      Budsjett:    ${project.minPrice} – ${project.maxPrice} kr
+
+    Logg inn i administrasjonspanelet for å følge opp forespørselen.
+    `.trim(),
   })
+
+  //to clients
   await sendMail({
     email: project.clientEmail,
-    subject: "Takk for ditt bestilling!",
+    subject: 'Vi har mottatt din prosjektforespørsel',
     body: `
-      Bekreft din informasjon her:
-      Navn: ${project.clientForename} ${project.clientSurname}
-      E-post: ${project.clientEmail}
-      Telefon: ${project.clientPhone}
-      Tittel: ${project.title}
-      Beskrivelse: ${project.description}
-      Budsjett: ${project.minPrice} - ${project.maxPrice} kr
-    `.trim()
+      Hei ${project.clientForename},
+
+      Takk for at du tok kontakt! Vi har mottatt din prosjektforespørsel og vil se nærmere på den og komme tilbake til deg så snart som mulig.
+
+      Dine opplysninger:
+        Navn:        ${project.clientForename} ${project.clientSurname}
+        E-post:      ${project.clientEmail}
+        Telefon:     ${project.clientPhone}
+        Tittel:      ${project.title}
+        Beskrivelse: ${project.description}
+        Budsjett:    ${project.minPrice} – ${project.maxPrice} kr
+
+      Har du spørsmål i mellomtiden, er du velkommen til å kontakte oss.
+
+    Med vennlig hilsen
+    `.trim(),
   })
 }

@@ -30,6 +30,3 @@ try {
   throw new Error("Kunne ikke sende mail")
 }
 }
-
-
-
