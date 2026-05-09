@@ -28,9 +28,10 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 ba-group && \
+RUN apk add --no-cache su-exec && \
+    addgroup --system --gid 1001 ba-group && \
     adduser --system --uid 1001 ba-user && \
-    mkdir -p /app/data && chown ba-user:ba-group /app/data
+    mkdir -p /app/data
 
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=ba-user:ba-group /app/.next/standalone ./
@@ -42,10 +43,12 @@ COPY --from=builder /app/prisma ./prisma
 # bundled by standalone, which doesn't include Prisma or its dependencies)
 COPY --from=deps /app/node_modules ./node_modules
 
-USER ba-user
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["sh", "-c", "npx prisma migrate deploy && node server.js"]
