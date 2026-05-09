@@ -137,7 +137,7 @@ export async function updateProductAmount(id: number, amount: number) {
   if(!product) throw new Error("Kunne ikke finne produktet!")
   if(amount > product.amount) throw new Error("Kan ikke bestille mer enn antallet")
 
-  await prisma.product.update({where: {id: id}, data: {amount: product.amount - amount}})
+  await prisma.product.update({where: {id: id, amount: {gte: amount }}, data: {amount: { decrement: amount }}})
   revalidatePath("/admin")
   revalidatePath("/")
 }
