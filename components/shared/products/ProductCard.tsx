@@ -54,12 +54,15 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
   }, [open, closing, closeMenu])
 
   return (
-    // No overflow-hidden here — it would clip the admin dropdown
+ // No overflow-hidden here — it would clip the admin dropdown
+  <>
+   
     <div
-      className="card group flex flex-col p-0 hover:border-primary transition-colors duration-200 hover:shadow-md cursor-pointer"
+      className={` card group flex flex-col p-0 hover:border-primary transition-colors duration-200 hover:shadow-md cursor-pointer`}
       onClick={() => router.push(`/produkter/${product.id}`)}
       onMouseLeave={closeMenu}
     >
+     
 
       {/* Image — overflow-hidden is scoped here so it doesn't clip the dropdown */}
       <div className="relative w-full aspect-4/3 overflow-hidden rounded-t-lg bg-surface">
@@ -142,5 +145,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
 
       </div>
     </div>
+    </>
   )
 }
+

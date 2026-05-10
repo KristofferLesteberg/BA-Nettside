@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { Measure } from '@/components/admin/MeasurementList'
 import ProductForm, { ProductFormValues } from '@/components/admin/ProductForm'
-import { getProductById, updateProduct, addImageToProduct } from '@/actions/products'
+import { getProductById, updateProduct, addImageToProduct, createProduct } from '@/actions/products'
 
 interface LoadedProduct {
   title: string
@@ -61,11 +61,10 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     formData.append("amount", amount || "0")
     formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
     formData.append("contactId", contactId || "0")
-
     formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
 
     try {
-      await updateProduct(productId, formData)
+      await createProduct(formData)
       toast.success("Produkt oppdatert")
       router.push("/admin?tab=produkter")
     } catch (error) {
