@@ -152,7 +152,8 @@ export async function addImageToProduct(id: number, formdata: FormData) {
   if (!session) throw new Error('Ikke autorisert')
 
   const file = formdata.get("image") as File
-  await uploadProductImage(file, id)
+  const imageId = await uploadProductImage(file, id)
+  return { id: imageId }
 }
 
 export async function updateProductAmount(id: number, amount: number) {

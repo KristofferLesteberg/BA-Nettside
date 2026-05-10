@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { Measure } from '@/components/admin/MeasurementList'
 import ProductForm, { ProductFormValues } from '@/components/admin/ProductForm'
-import { getProductById, updateProduct } from '@/actions/products'
+import { getProductById, updateProduct, addImageToProduct } from '@/actions/products'
 
 interface LoadedProduct {
   title: string
@@ -63,7 +63,6 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     formData.append("contactId", contactId || "0")
 
     formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
-    images.filter(img => img.type === "new").forEach(img => formData.append("newImages", img.file))
 
     try {
       await updateProduct(productId, formData)
@@ -83,6 +82,11 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       submitLabel="Oppdater annonse"
       initialValues={loaded}
       onSubmit={handleSubmit}
+      onNewImage={async (file) => {
+        const formData = new FormData()
+        formData.append('image', file)
+        return addImageToProduct(productId, formData)
+      }}
     />
   )
 }

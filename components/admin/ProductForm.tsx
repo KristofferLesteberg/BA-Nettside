@@ -30,12 +30,12 @@ interface ProductFormProps {
     measures?: Measure[]
     existingImages?: { id: string; url: string }[]
     contactId?: string
-  
   }
+  onNewImage?: (file: File) => Promise<{ id: string }>
   onSubmit: (values: ProductFormValues) => Promise<void>
 }
 
-export default function ProductForm({ heading, submitLabel, contactPersons, initialValues, onSubmit }: ProductFormProps) {
+export default function ProductForm({ heading, submitLabel, contactPersons, initialValues, onNewImage, onSubmit }: ProductFormProps) {
   const [educationField, setEducationField] = useState(initialValues?.educationField ?? "")
   const [title, setTitle] = useState(initialValues?.title ?? "")
   const [description, setDescription] = useState(initialValues?.description ?? "")
@@ -160,7 +160,7 @@ export default function ProductForm({ heading, submitLabel, contactPersons, init
 
         {/* Images */}
         <label className="label">Bilder</label>
-        <ImageOrder initialImages={initialValues?.existingImages} onChange={setImages} />
+        <ImageOrder initialImages={initialValues?.existingImages} onChange={setImages} onNewImage={onNewImage} />
 
         {/* Submit */}
         <button type="submit" className="btn btn-primary w-full">
