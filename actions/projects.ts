@@ -52,6 +52,16 @@ export async function createProject(data: unknown) {
   const project = await prisma.projectRequest.create({
     data: { id, ...rest, educationField: (educationField as EducationField) ?? null },
   })
+  await sendProjectEmail({
+    clientForename: rest.clientForename,
+    clientSurname: rest.clientSurname,
+    clientEmail: rest.clientEmail,
+    clientPhone: rest.clientPhone,
+    title: rest.title,
+    description: rest.description,
+    minPrice: rest.minPrice,
+    maxPrice: rest.maxPrice,
+  })
   revalidatePath('/admin?tab=prosjekter')
   return { id: project.id }
 }
