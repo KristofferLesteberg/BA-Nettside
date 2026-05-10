@@ -108,6 +108,7 @@ export async function createDraftProduct() {
       amount: 0,
     }
   })
+  revalidatePath("/admin")
   return { id: draftProduct.id}
 }
 
@@ -177,6 +178,7 @@ export async function deleteProduct(id: number) {
   await deleteAllProductImages(id)
   await prisma.product.delete({ where: { id } })
 
+  
   revalidatePath('/admin')
   revalidatePath('/')
 }

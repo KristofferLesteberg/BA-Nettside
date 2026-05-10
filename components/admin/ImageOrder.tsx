@@ -162,6 +162,7 @@ export default function ImageOrder({
                   e.currentTarget.scrollBy({ left: e.deltaY * 0.5, behavior: "smooth" })
                 }}
               >
+                
                 {images.map(img => (
                   <SortableItem key={img.id} img={img} onDelete={handleDelete} />
                 ))}
