@@ -1,20 +1,34 @@
-import Link from 'next/link'
+"use client"
 import { HiOutlinePlusSm } from 'react-icons/hi'
-import { getAllProducts } from '@/actions/products'
+import { createDraftProduct, getAllProducts } from '@/actions/products'
 import FilteredProductsGrid from '../shared/products/FilteredProductsGrid'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
-export default async function AdminProductsView() {
-  const convertedProducts = await getAllProducts()
+type Products = Awaited<ReturnType<typeof getAllProducts>>
+
+export default function AdminProductsView() {
+  const router = useRouter()
+  const [products, setProducts] = useState<Products>([])
+
+  useEffect(() => {
+    getAllProducts().then(setProducts)
+  }, [])
+
+  const handleNewProduct = async () => {
+    const { id } = await createDraftProduct()
+    router.push(`/admin/oppdater-produkt/${id}`)
+  }
 
   return (
     <FilteredProductsGrid
-      products={convertedProducts}
+      products={products}
       isAdmin={true}
       sidebarAction={
-        <Link href="/admin/nytt-produkt" className="btn btn-primary w-full gap-1.5">
+        <button onClick={handleNewProduct} className="btn btn-primary w-full gap-1.5">
           <HiOutlinePlusSm className="text-base" />
           Ny produkt
-        </Link>
+        </button>
       }
     />
   )

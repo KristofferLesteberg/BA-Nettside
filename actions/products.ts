@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth'
 import { prisma } from '@/app/lib/prisma'
 import { authOptions } from '@/app/lib/auth'
-import { uploadProductImages, syncProductImages, deleteAllProductImages } from '@/app/lib/images'
+import { uploadProductImages, syncProductImages, deleteAllProductImages, uploadProductImage } from '@/app/lib/images'
 import type { EducationField } from '@/generated/prisma'
 import { err } from '@/app/lib/api-response'
 
@@ -96,6 +96,21 @@ export async function createProduct(formData: FormData) {
   return { id: product.id }
 }
 
+export async function createDraftProduct() {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+
+  const draftProduct = await prisma.product.create({
+    data: {
+      title: "",
+      description: "",
+      price: 0,
+      amount: 0,
+    }
+  })
+  return { id: draftProduct.id}
+}
+
 export async function updateProduct(id: number, formData: FormData) {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
@@ -132,12 +147,20 @@ export async function updateProduct(id: number, formData: FormData) {
   revalidatePath('/')
 }
 
+export async function addImageToProduct(id: number, formdata: FormData) {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+
+  const file = formdata.get("image") as File
+  await uploadProductImage(file, id)
+}
+
 export async function updateProductAmount(id: number, amount: number) {
   const product = await prisma.product.findUnique({ where: { id: id} })
   if(!product) throw new Error("Kunne ikke finne produktet!")
   if(amount > product.amount) throw new Error("Kan ikke bestille mer enn antallet")
 
-  await prisma.product.update({where: {id: id, amount: {gte: amount }}, data: {amount: { decrement: amount }}})
+  await prisma.product.update({where: { id: id, amount: { gte: amount } }, data: {amount: { decrement: amount } } })
   revalidatePath("/admin")
   revalidatePath("/")
 }

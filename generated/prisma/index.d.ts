@@ -1468,6 +1468,7 @@ export namespace Prisma {
     price: Decimal | null
     amount: number | null
     publishedAt: Date | null
+    draft: boolean | null
     contactPersonId: number | null
   }
 
@@ -1479,6 +1480,7 @@ export namespace Prisma {
     price: Decimal | null
     amount: number | null
     publishedAt: Date | null
+    draft: boolean | null
     contactPersonId: number | null
   }
 
@@ -1491,6 +1493,7 @@ export namespace Prisma {
     measures: number
     amount: number
     publishedAt: number
+    draft: number
     contactPersonId: number
     _all: number
   }
@@ -1518,6 +1521,7 @@ export namespace Prisma {
     price?: true
     amount?: true
     publishedAt?: true
+    draft?: true
     contactPersonId?: true
   }
 
@@ -1529,6 +1533,7 @@ export namespace Prisma {
     price?: true
     amount?: true
     publishedAt?: true
+    draft?: true
     contactPersonId?: true
   }
 
@@ -1541,6 +1546,7 @@ export namespace Prisma {
     measures?: true
     amount?: true
     publishedAt?: true
+    draft?: true
     contactPersonId?: true
     _all?: true
   }
@@ -1640,6 +1646,7 @@ export namespace Prisma {
     measures: JsonValue | null
     amount: number
     publishedAt: Date
+    draft: boolean
     contactPersonId: number | null
     _count: ProductCountAggregateOutputType | null
     _avg: ProductAvgAggregateOutputType | null
@@ -1671,6 +1678,7 @@ export namespace Prisma {
     measures?: boolean
     amount?: boolean
     publishedAt?: boolean
+    draft?: boolean
     contactPersonId?: boolean
     images?: boolean | Product$imagesArgs<ExtArgs>
     contactPerson?: boolean | Product$contactPersonArgs<ExtArgs>
@@ -1687,6 +1695,7 @@ export namespace Prisma {
     measures?: boolean
     amount?: boolean
     publishedAt?: boolean
+    draft?: boolean
     contactPersonId?: boolean
     contactPerson?: boolean | Product$contactPersonArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
@@ -1700,6 +1709,7 @@ export namespace Prisma {
     measures?: boolean
     amount?: boolean
     publishedAt?: boolean
+    draft?: boolean
     contactPersonId?: boolean
     contactPerson?: boolean | Product$contactPersonArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
@@ -1713,10 +1723,11 @@ export namespace Prisma {
     measures?: boolean
     amount?: boolean
     publishedAt?: boolean
+    draft?: boolean
     contactPersonId?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "educationField" | "title" | "description" | "price" | "measures" | "amount" | "publishedAt" | "contactPersonId", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "educationField" | "title" | "description" | "price" | "measures" | "amount" | "publishedAt" | "draft" | "contactPersonId", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     images?: boolean | Product$imagesArgs<ExtArgs>
     contactPerson?: boolean | Product$contactPersonArgs<ExtArgs>
@@ -1746,6 +1757,7 @@ export namespace Prisma {
       measures: Prisma.JsonValue | null
       amount: number
       publishedAt: Date
+      draft: boolean
       contactPersonId: number | null
     }, ExtArgs["result"]["product"]>
     composites: {}
@@ -2181,6 +2193,7 @@ export namespace Prisma {
     readonly measures: FieldRef<"Product", 'Json'>
     readonly amount: FieldRef<"Product", 'Int'>
     readonly publishedAt: FieldRef<"Product", 'DateTime'>
+    readonly draft: FieldRef<"Product", 'Boolean'>
     readonly contactPersonId: FieldRef<"Product", 'Int'>
   }
     
@@ -8281,6 +8294,7 @@ export namespace Prisma {
     measures: 'measures',
     amount: 'amount',
     publishedAt: 'publishedAt',
+    draft: 'draft',
     contactPersonId: 'contactPersonId'
   };
 
@@ -8453,6 +8467,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Status'
    */
   export type EnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status'>
@@ -8488,6 +8509,7 @@ export namespace Prisma {
     measures?: JsonNullableFilter<"Product">
     amount?: IntFilter<"Product"> | number
     publishedAt?: DateTimeFilter<"Product"> | Date | string
+    draft?: BoolFilter<"Product"> | boolean
     contactPersonId?: IntNullableFilter<"Product"> | number | null
     images?: ProductImageListRelationFilter
     contactPerson?: XOR<ContactPersonNullableScalarRelationFilter, ContactPersonWhereInput> | null
@@ -8503,6 +8525,7 @@ export namespace Prisma {
     measures?: SortOrderInput | SortOrder
     amount?: SortOrder
     publishedAt?: SortOrder
+    draft?: SortOrder
     contactPersonId?: SortOrderInput | SortOrder
     images?: ProductImageOrderByRelationAggregateInput
     contactPerson?: ContactPersonOrderByWithRelationInput
@@ -8521,6 +8544,7 @@ export namespace Prisma {
     measures?: JsonNullableFilter<"Product">
     amount?: IntFilter<"Product"> | number
     publishedAt?: DateTimeFilter<"Product"> | Date | string
+    draft?: BoolFilter<"Product"> | boolean
     contactPersonId?: IntNullableFilter<"Product"> | number | null
     images?: ProductImageListRelationFilter
     contactPerson?: XOR<ContactPersonNullableScalarRelationFilter, ContactPersonWhereInput> | null
@@ -8536,6 +8560,7 @@ export namespace Prisma {
     measures?: SortOrderInput | SortOrder
     amount?: SortOrder
     publishedAt?: SortOrder
+    draft?: SortOrder
     contactPersonId?: SortOrderInput | SortOrder
     _count?: ProductCountOrderByAggregateInput
     _avg?: ProductAvgOrderByAggregateInput
@@ -8556,6 +8581,7 @@ export namespace Prisma {
     measures?: JsonNullableWithAggregatesFilter<"Product">
     amount?: IntWithAggregatesFilter<"Product"> | number
     publishedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
+    draft?: BoolWithAggregatesFilter<"Product"> | boolean
     contactPersonId?: IntNullableWithAggregatesFilter<"Product"> | number | null
   }
 
@@ -8921,6 +8947,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
+    draft?: boolean
     images?: ProductImageCreateNestedManyWithoutProductInput
     contactPerson?: ContactPersonCreateNestedOneWithoutProductInput
     orders?: ProductOrderCreateNestedManyWithoutProductInput
@@ -8935,6 +8962,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
+    draft?: boolean
     contactPersonId?: number | null
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     orders?: ProductOrderUncheckedCreateNestedManyWithoutProductInput
@@ -8948,6 +8976,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    draft?: BoolFieldUpdateOperationsInput | boolean
     images?: ProductImageUpdateManyWithoutProductNestedInput
     contactPerson?: ContactPersonUpdateOneWithoutProductNestedInput
     orders?: ProductOrderUpdateManyWithoutProductNestedInput
@@ -8962,6 +8991,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    draft?: BoolFieldUpdateOperationsInput | boolean
     contactPersonId?: NullableIntFieldUpdateOperationsInput | number | null
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     orders?: ProductOrderUncheckedUpdateManyWithoutProductNestedInput
@@ -8976,6 +9006,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
+    draft?: boolean
     contactPersonId?: number | null
   }
 
@@ -8987,6 +9018,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    draft?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProductUncheckedUpdateManyInput = {
@@ -8998,6 +9030,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    draft?: BoolFieldUpdateOperationsInput | boolean
     contactPersonId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -9448,6 +9481,11 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -9498,6 +9536,7 @@ export namespace Prisma {
     measures?: SortOrder
     amount?: SortOrder
     publishedAt?: SortOrder
+    draft?: SortOrder
     contactPersonId?: SortOrder
   }
 
@@ -9516,6 +9555,7 @@ export namespace Prisma {
     price?: SortOrder
     amount?: SortOrder
     publishedAt?: SortOrder
+    draft?: SortOrder
     contactPersonId?: SortOrder
   }
 
@@ -9527,6 +9567,7 @@ export namespace Prisma {
     price?: SortOrder
     amount?: SortOrder
     publishedAt?: SortOrder
+    draft?: SortOrder
     contactPersonId?: SortOrder
   }
 
@@ -9629,6 +9670,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -10009,6 +10058,10 @@ export namespace Prisma {
     set?: Date | string
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type ProductImageUpdateManyWithoutProductNestedInput = {
     create?: XOR<ProductImageCreateWithoutProductInput, ProductImageUncheckedCreateWithoutProductInput> | ProductImageCreateWithoutProductInput[] | ProductImageUncheckedCreateWithoutProductInput[]
     connectOrCreate?: ProductImageCreateOrConnectWithoutProductInput | ProductImageCreateOrConnectWithoutProductInput[]
@@ -10221,6 +10274,11 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedIntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -10332,6 +10390,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -10582,6 +10648,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
+    draft?: boolean
     contactPerson?: ContactPersonCreateNestedOneWithoutProductInput
     orders?: ProductOrderCreateNestedManyWithoutProductInput
   }
@@ -10595,6 +10662,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
+    draft?: boolean
     contactPersonId?: number | null
     orders?: ProductOrderUncheckedCreateNestedManyWithoutProductInput
   }
@@ -10623,6 +10691,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    draft?: BoolFieldUpdateOperationsInput | boolean
     contactPerson?: ContactPersonUpdateOneWithoutProductNestedInput
     orders?: ProductOrderUpdateManyWithoutProductNestedInput
   }
@@ -10636,6 +10705,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    draft?: BoolFieldUpdateOperationsInput | boolean
     contactPersonId?: NullableIntFieldUpdateOperationsInput | number | null
     orders?: ProductOrderUncheckedUpdateManyWithoutProductNestedInput
   }
@@ -10648,6 +10718,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
+    draft?: boolean
     images?: ProductImageCreateNestedManyWithoutProductInput
     orders?: ProductOrderCreateNestedManyWithoutProductInput
   }
@@ -10661,6 +10732,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
+    draft?: boolean
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     orders?: ProductOrderUncheckedCreateNestedManyWithoutProductInput
   }
@@ -10702,6 +10774,7 @@ export namespace Prisma {
     measures?: JsonNullableFilter<"Product">
     amount?: IntFilter<"Product"> | number
     publishedAt?: DateTimeFilter<"Product"> | Date | string
+    draft?: BoolFilter<"Product"> | boolean
     contactPersonId?: IntNullableFilter<"Product"> | number | null
   }
 
@@ -10713,6 +10786,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
+    draft?: boolean
     images?: ProductImageCreateNestedManyWithoutProductInput
     contactPerson?: ContactPersonCreateNestedOneWithoutProductInput
   }
@@ -10726,6 +10800,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
+    draft?: boolean
     contactPersonId?: number | null
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
   }
@@ -10754,6 +10829,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    draft?: BoolFieldUpdateOperationsInput | boolean
     images?: ProductImageUpdateManyWithoutProductNestedInput
     contactPerson?: ContactPersonUpdateOneWithoutProductNestedInput
   }
@@ -10767,6 +10843,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    draft?: BoolFieldUpdateOperationsInput | boolean
     contactPersonId?: NullableIntFieldUpdateOperationsInput | number | null
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
   }
@@ -10839,6 +10916,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount: number
     publishedAt?: Date | string
+    draft?: boolean
   }
 
   export type ProductUpdateWithoutContactPersonInput = {
@@ -10849,6 +10927,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    draft?: BoolFieldUpdateOperationsInput | boolean
     images?: ProductImageUpdateManyWithoutProductNestedInput
     orders?: ProductOrderUpdateManyWithoutProductNestedInput
   }
@@ -10862,6 +10941,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    draft?: BoolFieldUpdateOperationsInput | boolean
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     orders?: ProductOrderUncheckedUpdateManyWithoutProductNestedInput
   }
@@ -10875,6 +10955,7 @@ export namespace Prisma {
     measures?: NullableJsonNullValueInput | InputJsonValue
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    draft?: BoolFieldUpdateOperationsInput | boolean
   }
 
 

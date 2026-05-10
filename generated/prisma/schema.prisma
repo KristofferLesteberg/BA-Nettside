@@ -36,6 +36,7 @@ model Product {
   measures        Json?
   amount          Int
   publishedAt     DateTime        @default(now())
+  draft           Boolean         @default(true)
   images          ProductImage[]
   contactPersonId Int?
   contactPerson   ContactPerson?  @relation(fields: [contactPersonId], references: [id])
