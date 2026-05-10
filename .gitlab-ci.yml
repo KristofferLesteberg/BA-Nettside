@@ -1,0 +1,74 @@
+stages:
+  - mirror
+  - build
+  - deploy
+
+variables:
+  IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+
+mirror-to-github:
+  stage: mirror
+  image:
+    name: alpine/git
+    entrypoint: [""]
+  script:
+    - git remote add github https://$GITHUB_TOKEN@github.com/$GITHUB_REPO.git
+    - git push github HEAD:$CI_COMMIT_REF_NAME
+
+build:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - |
+      cat > /kaniko/.docker/config.json <<EOF
+      {
+        "auths": {
+          "$CI_REGISTRY": {
+            "username": "$CI_REGISTRY_USER",
+            "password": "$CI_REGISTRY_PASSWORD"
+          }
+        }
+      }
+      EOF
+    - >-
+      /kaniko/executor
+      --context "$CI_PROJECT_DIR"
+      --dockerfile "$CI_PROJECT_DIR/Dockerfile"
+      --destination "$IMAGE"
+
+deploy:
+  stage: deploy
+  image: alpine
+  before_script:
+    - |
+      missing=""
+      [ -z "$DEPLOY_USER" ] && missing="$missing DEPLOY_USER"
+      [ -z "$DEPLOY_HOST" ] && missing="$missing DEPLOY_HOST"
+      [ -z "$SSH_PRIVATE_KEY" ] && missing="$missing SSH_PRIVATE_KEY"
+      if [ -n "$missing" ]; then
+        echo "Mangler obligatoriske variabler:$missing" >&2
+        exit 1
+      fi
+    - apk add --no-cache openssh-client
+    - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+    - |
+      if [ -f "$SSH_PRIVATE_KEY" ]; then
+        tr -d '\r' < "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+      else
+        printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_ed25519
+      fi
+      chmod 600 ~/.ssh/id_ed25519
+    - ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+  script:
+    - |
+      ssh "$DEPLOY_USER@$DEPLOY_HOST" "
+        echo '$CI_REGISTRY_PASSWORD' | docker login -u '$CI_REGISTRY_USER' --password-stdin '$CI_REGISTRY' &&
+        docker pull '$IMAGE' &&
+        docker rm -f ba-nettside || true &&
+        docker run -d --name ba-nettside -p 9050:3000 --restart unless-stopped -v /var/data/ba-nettside:/app/data -e DATABASE_URL='$DATABASE_URL' -e ADMIN_PASSWORD='$ADMIN_PASSWORD' -e ADMIN_USERNAME='$ADMIN_USERNAME' -e NEXTAUTH_SECRET='$NEXTAUTH_SECRET' -e NEXTAUTH_URL='$NEXTAUTH_URL' '$IMAGE'
+      "
+  only:
+    - main

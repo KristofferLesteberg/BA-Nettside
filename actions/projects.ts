@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth'
 import { prisma } from '@/app/lib/prisma'
 import { authOptions } from '@/app/lib/auth'
 import type { EducationField } from '@/generated/prisma'
+import { sendProjectEmail } from '@/actions/email'
 
 // ─── Schemas ─────────────────────────────────────────────────────────────────
 
@@ -64,6 +65,7 @@ export async function updateProject(id: string, data: unknown) {
     where: { id },
     data: { ...rest, educationField: (educationField as EducationField) ?? null },
   })
+  await sendProjectEmail(rest)
   revalidatePath('/admin?tab=prosjekter')
 }
 

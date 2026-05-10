@@ -1,9 +1,10 @@
 "use client"
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ImageOrder, { ImageItem } from './ImageOrder'
 import MeasurementList, { Measure } from './MeasurementList'
 import BackBtn from '@/components/shared/BackBtn'
+import { ContactPerson } from '@/generated/prisma'
 
 export interface ProductFormValues {
   educationField: string
@@ -13,11 +14,13 @@ export interface ProductFormValues {
   amount: string
   measures: Measure[]
   images: ImageItem[]
+  contactId: string
 }
 
 interface ProductFormProps {
   heading: string
   submitLabel: string
+  contactPersons?: ContactPerson[]
   initialValues?: {
     educationField?: string
     title?: string
@@ -26,11 +29,13 @@ interface ProductFormProps {
     amount?: string
     measures?: Measure[]
     existingImages?: { id: string; url: string }[]
+    contactId?: string
+  
   }
   onSubmit: (values: ProductFormValues) => Promise<void>
 }
 
-export default function ProductForm({ heading, submitLabel, initialValues, onSubmit }: ProductFormProps) {
+export default function ProductForm({ heading, submitLabel, contactPersons, initialValues, onSubmit }: ProductFormProps) {
   const [educationField, setEducationField] = useState(initialValues?.educationField ?? "")
   const [title, setTitle] = useState(initialValues?.title ?? "")
   const [description, setDescription] = useState(initialValues?.description ?? "")
@@ -38,10 +43,17 @@ export default function ProductForm({ heading, submitLabel, initialValues, onSub
   const [amount, setAmount] = useState(initialValues?.amount ?? "")
   const [measures, setMeasures] = useState<Measure[]>(initialValues?.measures ?? [])
   const [images, setImages] = useState<ImageItem[]>([])
+  const [contactId, setContactId] = useState(initialValues?.contactId ?? "")
 
   const educationFieldRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLDivElement>(null)
+
+
+  useEffect(() => {
+    console.log(contactPersons)
+  }, [])
+ 
 
   const handleForm = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,7 +68,7 @@ export default function ProductForm({ heading, submitLabel, initialValues, onSub
       descriptionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
     }
 
-    await onSubmit({ educationField, title, description, price, amount, measures, images })
+    await onSubmit({ educationField, title, description, price, amount, measures, images, contactId })
   }
 
   return (
@@ -90,12 +102,20 @@ export default function ProductForm({ heading, submitLabel, initialValues, onSub
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-
+        <div className='space-y-1'>
+          <label className='label'>Kontakt person</label>
+          <select className='input' value={contactId} onChange={(e) => setContactId(e.target.value)}>
+            <option value="">Velg kontakt person</option>
+            {contactPersons?.map((contactPerson, index) => (
+              <option key={index} value={contactPerson.id}>{contactPerson.name}</option>
+            ))}
+          </select>
+        </div>
         {/* Description */}
         <div className="space-y-1" ref={descriptionRef}>
           <label className="label">Beskrivelse *</label>
           <textarea
-            className="input min-h-[100px]"
+            className="input min-h-25"
             placeholder="Beskriv produkt"
             value={description}
             onChange={(e) => setDescription(e.target.value)}

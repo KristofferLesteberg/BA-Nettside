@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 export type AdminTab = {
   label: string
   content: React.ReactNode
+  count?: number
 }
 
 export default function AdminTabManager({ tabs }: { tabs: AdminTab[] }) {
@@ -38,7 +39,7 @@ export default function AdminTabManager({ tabs }: { tabs: AdminTab[] }) {
               onClick={() => handleTabChange(index)}
               className={`label cursor-pointer px-4 py-2.5 bg-bg hover:bg-surface-raised transition-colors whitespace-nowrap border-b-2 ${activeIndex === index ? "text-primary border-b-primary" : "text-text-faint border-b-transparent"}`}
             >
-              {tab.label}
+              {`${tab.label} ${tab.count ? `(${tab.count})` : ""}`}
             </button>
           ))}
         </div>

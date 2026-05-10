@@ -21,6 +21,12 @@ enum Status {
   COMPLETE
 }
 
+enum OrderStatus {
+  NEW
+  IN_CONTACT
+  COMPLETED
+}
+
 model Product {
   id              Int             @id @default(autoincrement())
   educationField  EducationField?
@@ -33,6 +39,7 @@ model Product {
   images          ProductImage[]
   contactPersonId Int?
   contactPerson   ContactPerson?  @relation(fields: [contactPersonId], references: [id])
+  orders          ProductOrder[]
 
   @@index([educationField])
 }
@@ -85,4 +92,16 @@ model ContactPerson {
   phone   String
   title   String
   product Product[]
+}
+
+model ProductOrder {
+  id           Int         @id @default(autoincrement())
+  clientName   String
+  clientEmail  String
+  clientPhone  String
+  amount       Int
+  extraDetails String?
+  status       OrderStatus @default(NEW)
+  productId    Int?
+  product      Product?    @relation(fields: [productId], references: [id])
 }

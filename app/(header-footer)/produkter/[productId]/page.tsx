@@ -4,16 +4,22 @@ import Carousel from "@/components/shared/ImageCarousel"
 import ProductTabs from "@/components/shared/products/ProductTabs"
 import { getProductById } from "@/actions/products"
 
+
+
 export default async function ProductPage({
+ 
   params,
 }: {
   params: Promise<{ productId: string }>
 }) {
+  
   const productId = parseInt((await params).productId)
   if (Number.isNaN(productId)) notFound()
 
   const product = await getProductById(productId)
   if (!product) notFound()
+
+  
 
   return (
     <div className="bg-page min-h-screen">
@@ -24,6 +30,7 @@ export default async function ProductPage({
           <span className="small-text">
             <Link href="/" className="hover:underline">Hjem</Link>
             <span className="text-faint mx-2">/</span>
+            <Link href="/produkter" className="hover:underline">Produkter</Link>
             <Link href="/produkter" className="hover:underline">Produkter</Link>
             <span className="text-faint mx-2">/</span>
             <span className="text-faint">{product.title}</span>
@@ -56,9 +63,15 @@ export default async function ProductPage({
             </div>
 
             {/* CTA */}
-            <button className="btn btn-primary w-full py-3 text-base">
-              Ta kontakt
-            </button>
+            {product.amount > 0 ? (
+              <Link className="btn btn-primary" href={`/OrderProduct/${product.id}`}>
+                Bestill!
+              </Link>
+            ) : (
+              <button disabled className="btn btn-primary opacity-50 cursor-not-allowed">
+                Utsolgt
+              </button>
+            )}
 
             <hr className="border-default" />
 
@@ -112,6 +125,34 @@ export default async function ProductPage({
                     </div>
                   )}
                 </div>
+              }
+              contactInfo={
+                <div className="card-subtle flex flex-col divide-y" style={{ borderRadius: "var(--radius-lg)" }}>
+                  <div className="flex justify-between px-4 py-3">
+                    <span className="small-text">Navn</span>
+                    <span className="small-text" style={{ color: "var(--color-text)" }}>{product.contactPerson?.name || ""}</span>
+                  </div>
+                  <div className="flex justify-between px-4 py-3">
+                    <span className="small-text">Mail</span>
+                    <span className="small-text" style={{ color: "var(--color-text)" }}>
+                      {product.contactPerson?.email}
+                    </span>
+                  </div>
+                  <div className="flex justify-between px-4 py-3">
+                    <span className="small-text">Telefon</span>
+                    <span className="small-text" style={{ color: "var(--color-text)" }}>
+                      {product.contactPerson?.phone}
+                    </span>
+                  </div>
+                  <div className="flex justify-between px-4 py-3">
+                    <span className="small-text">Tittel</span>
+                    <span className="small-text" style={{ color: "var(--color-text)" }}>
+                      {product.contactPerson?.title}
+                    </span>
+                  </div>
+                </div>
+                
+
               }
             />
           </div>
