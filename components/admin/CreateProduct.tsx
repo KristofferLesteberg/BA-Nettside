@@ -4,11 +4,10 @@ import { createDraftProduct } from "@/actions/products"
 import { HiOutlinePlusSm } from "react-icons/hi"
 export default function CreateProduct() {
   const router = useRouter()
-  
-    const handleNewProduct = async () => {
-      const { id } = await createDraftProduct()
-      router.push(`/admin/nytt-produkt/${id}`)
-    }
+  const handleNewProduct = async () => {
+    const { id } = await createDraftProduct()
+    router.push(`/admin/nytt-produkt/${id}`)
+  }
   return (
      <button onClick={handleNewProduct} className="btn btn-primary w-full gap-1.5">
           <HiOutlinePlusSm className="text-base" />

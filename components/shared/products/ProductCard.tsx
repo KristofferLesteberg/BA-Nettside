@@ -36,6 +36,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
   function handleAnimationEnd() { if (closing) { setClosing(false); setOpen(false) } }
 
   useEffect(() => {
+    console.log("Draft" + product.draft)
     if (!open || closing) return
     function onClickOutside(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) closeMenu()
@@ -129,11 +130,14 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
           <span className="font-semibold text-text">
             {product.price.toLocaleString('nb-NO')} kr
           </span>
-          {product.amount > 0 ? (
-            <span className="badge badge-neutral">{product.amount} stk</span>
-          ) : (
-            <span className="badge badge-error">Utsolgt</span>
-          )}
+          <div className="flex flex-row gap-2">
+            {product.draft ? <span className="badge badge-info">Utkast</span> : ""}
+            {product.amount > 0 ? (
+              <span className="badge badge-neutral">{product.amount} stk</span>
+            ) : (
+              <span className="badge badge-error">Utsolgt</span>
+            )}
+          </div>
         </div>
 
       </div>
