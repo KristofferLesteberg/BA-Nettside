@@ -75,7 +75,7 @@ function EditBtn({ field, active, onUnlock, onLock, onCancel }: EditBtnProps) {
   )
 }
 
-export default function UpdateProjectForm({ id, initialValues }: { id: string; initialValues: FormValues }) {
+export default function UpdateProjectForm({ id, prevPage, initialValues }: { id: string; prevPage?: string; initialValues: FormValues }) {
   const router = useRouter()
   const [values, setValues] = useState<FormValues>(initialValues)
   const [activeField, setActiveField] = useState<EditableField | null>(null)
@@ -135,12 +135,12 @@ export default function UpdateProjectForm({ id, initialValues }: { id: string; i
   const hasOrg = !!(values.organizationName || values.organizationNumber)
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4 sm:px-6 py-10">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-10">
       <form onSubmit={handleSubmit} className="space-y-6">
 
         {/* ── Header ───────────────────────────────────────── */}
         <div className="flex items-center justify-between flex-wrap gap-3">
-          <BackBtn />
+          <BackBtn handleOnClick={() => router.push("/")} text={'← Forside'} />
           <div className="flex items-center gap-3 flex-wrap">
             {activeField !== null && (
               <p className="small-text text-warning">Lagre eller avbryt gjeldende felt for å sende inn</p>

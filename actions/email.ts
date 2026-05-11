@@ -3,7 +3,7 @@
 import { sendMail } from '@/app/lib/mail'
 import { prisma } from '@/app/lib/prisma'
 
-const adminEmail = 'kristoffer.ihme.lesteberg@gmail.com'
+const adminEmail = 'yehormaksiuchenko@gmail.com'
 
 interface sendOrderEmailProps {
   clientName: string

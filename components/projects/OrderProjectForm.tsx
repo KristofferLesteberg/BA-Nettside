@@ -12,16 +12,18 @@ import PriceRange from '@/components/shared/input/price-range'
 import { ProjectRequestPage1Schema, ProjectRequestPage2Schema } from '@/app/lib/schemas'
 import { FaLink } from "react-icons/fa"
 import BackBtn from '@/components/shared/BackBtn'
-import ProjectOrderedSuccess from '@/components/projects/ProjectOrderedSuccess'
 
 type IdentityType = "private" | "organization" | ""
 
-export default function OrderProjectForm() {
+interface Props {
+  onSuccess: (data: { id: string; email: string }) => void
+}
+
+export default function OrderProjectForm({ onSuccess }: Props) {
   const [page, setPage] = useState(0)
   const [sliding, setSliding] = useState(false)
   const [slideDir, setSlideDir] = useState<"left" | "right">("left")
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [ordered, setOrdered] = useState<{ id: string; email: string } | null>(null)
 
   // Page 1 — contact info
   const [identityType, setIdentityType] = useState<IdentityType>("")
@@ -138,7 +140,7 @@ export default function OrderProjectForm() {
         address,
         billingAddress: sameAsAddress ? address : billingAddress,
       })
-      setOrdered({ id, email })
+      onSuccess({ id, email })
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Noe gikk galt')
     }
@@ -149,10 +151,6 @@ export default function OrderProjectForm() {
       ? "opacity-0 -translate-x-8"
       : "opacity-0 translate-x-8"
     : "opacity-100 translate-x-0"
-
-  if (ordered) {
-    return <ProjectOrderedSuccess id={ordered.id} email={ordered.email} />
-  }
 
   return (
     <div className="w-4/5 min-w-120 max-w-230 mx-auto py-10 overflow-hidden">

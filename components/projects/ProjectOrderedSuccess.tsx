@@ -14,7 +14,7 @@ export default function ProjectOrderedSuccess({ id, email }: Props) {
         <div className="flex flex-col items-center text-center gap-3 py-2">
           <FaCheckCircle className="text-success text-5xl" />
           <h2 className="heading-2">Forespørsel mottatt!</h2>
-          <p className="body-text max-w-md">
+          <p className="body-text">
             Takk for din prosjektforespørsel. Vi har mottatt den og vil gå gjennom den så snart som mulig.
           </p>
         </div>
@@ -22,7 +22,7 @@ export default function ProjectOrderedSuccess({ id, email }: Props) {
         <hr className="border-border" />
 
         <div className="space-y-3">
-          <h3 className="heading-4">Hva skjer videre?</h3>
+          <h3 className="heading-3">Hva skjer videre?</h3>
           <ol className="space-y-2 body-text list-decimal list-inside">
             <li>Vi gjennomgår forespørselen din og vurderer omfanget.</li>
             <li>En av våre representanter tar kontakt med deg på oppgitt e-post eller telefon.</li>
@@ -32,20 +32,29 @@ export default function ProjectOrderedSuccess({ id, email }: Props) {
 
         <hr className="border-border" />
 
-        <div className="space-y-2">
-          <h3 className="heading-4">Referansenummer</h3>
-          <p className="small-text">
-            Oppgi dette nummeret om du kontakter oss angående forespørselen.
-          </p>
-          <span className="badge badge-secondary font-mono tracking-wide">{id}</span>
-          <div className="pt-1">
-            <Link
-              href={`/prosjekter/${id}`}
-              className="btn btn-outline inline-flex items-center gap-2 text-sm"
-            >
-              <FaExternalLinkAlt className="text-xs" />
-              Åpne forespørselen
-            </Link>
+        <div className="space-y-4">
+          <h3 className="heading-3">Referering til denne forespørselen</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+            <div className="card-subtle space-y-2">
+              <p className="label">Se forespørselen</p>
+              <p className="small-text">Bruk denne lenken for å se eller avbestille forespørselen.</p>
+              <a href={`/prosjekter/${id}`}
+              target='_blank'
+              className="btn btn-outline inline-flex items-center gap-2">
+                Se min forespørsel
+                <FaExternalLinkAlt className="text-xs" />
+              </a>
+            </div>
+
+            <div className="card-subtle space-y-2">
+              <p className="label">Referansenummer</p>
+              <p className="small-text">Oppgi dette nummeret om du kontakter oss angående forespørselen.</p>
+              <code className="block w-full px-3 py-2 rounded-md bg-secondary text-text-on-primary text-sm font-mono break-all">
+                {id}
+              </code>
+            </div>
+
           </div>
         </div>
 
