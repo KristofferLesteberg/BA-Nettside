@@ -11,7 +11,13 @@ import { err } from '@/app/lib/api-response'
 
 // ─── Schemas ─────────────────────────────────────────────────────────────────
 
-const MeasuresSchema = z.record(z.string(), z.string())
+const MeasuresSchema = z.array(
+  z.object({
+    name:  z.string().min(1).max(50),
+    value: z.string().min(1).max(30),
+    unit:  z.string().max(20),
+  })
+)
 
 const ProductCreateSchema = z.object({
   educationField: z.preprocess(

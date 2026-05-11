@@ -105,27 +105,36 @@ export default async function ProductPage({
                   </div>
                 </div>
               }
-              measures={
-                <div
-                  className="card-subtle flex flex-col divide-y"
-                  style={{ borderRadius: "var(--radius-lg)" }}
-                >
-                  {product.measures && Object.keys(product.measures).length > 0 ? (
-                    Object.entries(product.measures).map(([key, value]) => (
-                      <div key={key} className="flex justify-between px-4 py-3">
-                        <span className="small-text">{key}</span>
-                        <span className="small-text" style={{ color: "var(--color-text)" }}>
-                          {value}
-                        </span>
+              measures={(() => {
+                type StoredMeasure = { name: string; value: string; unit: string }
+                const raw = product.measures
+                const entries: StoredMeasure[] = Array.isArray(raw)
+                  ? (raw as StoredMeasure[])
+                  : Object.entries((raw ?? {}) as Record<string, string>)
+                      .map(([name, value]) => ({ name, value, unit: "" }))
+
+                return (
+                  <div
+                    className="card-subtle flex flex-col divide-y"
+                    style={{ borderRadius: "var(--radius-lg)" }}
+                  >
+                    {entries.length > 0 ? (
+                      entries.map((m, i) => (
+                        <div key={i} className="flex justify-between items-baseline px-4 py-3">
+                          <span className="label">{m.name}</span>
+                          <span className="small-text font-semibold" style={{ color: "var(--color-text)" }}>
+                            {m.value}{m.unit}
+                          </span>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="px-4 py-3">
+                        <span className="small-text text-faint">Ingen mål tilgjengelig</span>
                       </div>
-                    ))
-                  ) : (
-                    <div className="px-4 py-3">
-                      <span className="small-text text-faint">Ingen mål tilgjengelig</span>
-                    </div>
-                  )}
-                </div>
-              }
+                    )}
+                  </div>
+                )
+              })()}
               contactInfo={
                 <div className="card-subtle flex flex-col divide-y" style={{ borderRadius: "var(--radius-lg)" }}>
                   <div className="flex justify-between px-4 py-3">

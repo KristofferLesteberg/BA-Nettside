@@ -40,6 +40,7 @@ export default function MeasurementInput({ name, value, unit, onChange, onDelete
         type="text"
         placeholder="Navn"
         className="input min-w-0"
+        maxLength={50}
         value={name}
         onChange={e => onChange("name", e.target.value)}
       />
@@ -47,6 +48,7 @@ export default function MeasurementInput({ name, value, unit, onChange, onDelete
         type="text"
         placeholder="Verdi"
         className="input min-w-0"
+        maxLength={30}
         value={value}
         onChange={e => onChange("value", e.target.value)}
       />
@@ -91,6 +93,7 @@ export default function MeasurementInput({ name, value, unit, onChange, onDelete
             type="text"
             placeholder="Egendefinert"
             className="input w-28"
+            maxLength={20}
             value={unit}
             onChange={e => onChange("unit", e.target.value)}
           />
