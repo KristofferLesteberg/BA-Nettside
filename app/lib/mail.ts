@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer"
 
-
 interface MailProps {
   body: string
   subject: string

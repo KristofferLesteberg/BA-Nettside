@@ -36,6 +36,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
   function handleAnimationEnd() { if (closing) { setClosing(false); setOpen(false) } }
 
   useEffect(() => {
+    console.log("Draft" + product.draft)
     if (!open || closing) return
     function onClickOutside(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) closeMenu()
@@ -53,12 +54,15 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
   }, [open, closing, closeMenu])
 
   return (
-    // No overflow-hidden here — it would clip the admin dropdown
+ // No overflow-hidden here — it would clip the admin dropdown
+  <>
+   
     <div
-      className="card group flex flex-col p-0 hover:border-primary transition-colors duration-200 hover:shadow-md cursor-pointer"
+      className={` card group flex flex-col p-0 hover:border-primary transition-colors duration-200 hover:shadow-md cursor-pointer`}
       onClick={() => router.push(`/produkter/${product.id}`)}
       onMouseLeave={closeMenu}
     >
+     
 
       {/* Image — overflow-hidden is scoped here so it doesn't clip the dropdown */}
       <div className="relative w-full aspect-4/3 overflow-hidden rounded-t-lg bg-surface">
@@ -129,14 +133,19 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
           <span className="font-semibold text-text">
             {product.price.toLocaleString('nb-NO')} kr
           </span>
-          {product.amount > 0 ? (
-            <span className="badge badge-neutral">{product.amount} stk</span>
-          ) : (
-            <span className="badge badge-error">Utsolgt</span>
-          )}
+          <div className="flex flex-row gap-2">
+            {product.draft ? <span className="badge badge-info">Utkast</span> : ""}
+            {product.amount > 0 ? (
+              <span className="badge badge-neutral">{product.amount} stk</span>
+            ) : (
+              <span className="badge badge-error">Utsolgt</span>
+            )}
+          </div>
         </div>
 
       </div>
     </div>
+    </>
   )
 }
+

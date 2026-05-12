@@ -38,10 +38,8 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           description:    product.description,
           price:          Number(product.price).toString(),
           amount:         String(product.amount),
-          measures:       Array.isArray(product.measures)
-                            ? (product.measures as Measure[])
-                            : Object.entries((product.measures ?? {}) as Record<string, string>)
-                                .map(([name, value]) => ({ name, value, unit: "" })),
+          measures:       Object.entries((product.measures ?? {}) as Record<string, string>)
+                            .map(([name, value]) => ({ name, value })),
           existingImages: product.images.map(img => ({ id: img.id, url: `/images/${img.id}.webp` })),
           contactId: Number(product.id).toString()
         })
@@ -61,17 +59,16 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     formData.append("description", description)
     formData.append("price", price || "0")
     formData.append("amount", amount || "0")
-    formData.append("measures", JSON.stringify(measures))
-    formData.append("contactId", contactId || "0")
-
+    formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
+    formData.append("contactId", contactId)
     formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
 
     try {
       await updateProduct(productId, formData)
-      toast.success("Produkt oppdatert")
+      toast.success("Produkt opprettet!")
       router.push("/admin?tab=produkter")
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Kunne ikke oppdatere produktet")
+      toast.error(error instanceof Error ? error.message : "Kunne ikke opprette produktet")
     }
   }
 
@@ -80,11 +77,10 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <ProductForm
-      heading={`Oppdater ${loaded.title}`}
-      submitLabel="Oppdater annonse"
-      initialValues={loaded}
-      productId={productId}
+      heading={`Nytt Produkt`}
+      submitLabel="Opprett annonse"
       onSubmit={handleSubmit}
+      productId={productId}
       onNewImage={async (file) => {
         const formData = new FormData()
         formData.append('image', file)

@@ -84,9 +84,11 @@ function SortableItem({ img, onDelete }: { img: ImageItem; onDelete: (id: string
 export default function ImageOrder({
   initialImages = [],
   onChange,
+  onNewImage,
 }: {
   initialImages?: { id: string; url: string }[]
   onChange?: (images: ImageItem[]) => void
+  onNewImage?: (file: File) => Promise<{ id: string }>
 }) {
   const [images, setImages] = useState<ImageItem[]>(
     initialImages.map(img => ({ id: img.id, type: "existing" as const, url: img.url }))
@@ -98,13 +100,13 @@ export default function ImageOrder({
     onChange?.(updated)
   }
 
-  const onDrop = (acceptedFiles: File[]) => {
-    const newImages: ImageItem[] = acceptedFiles.map(file => ({
-      id: crypto.randomUUID(),
-      type: "new" as const,
-      file,
-      preview: URL.createObjectURL(file),
-    }))
+  const onDrop = async (acceptedFiles: File[]) => {
+    const newImages: ImageItem[] = await Promise.all(
+      acceptedFiles.map(async (file) => {
+        const id = onNewImage ? (await onNewImage(file)).id : crypto.randomUUID()
+        return { id, type: "new" as const, file, preview: URL.createObjectURL(file) }
+      })
+    )
     const updated = [...images, ...newImages]
     setImages(updated)
     onChange?.(updated)
@@ -160,6 +162,7 @@ export default function ImageOrder({
                   e.currentTarget.scrollBy({ left: e.deltaY * 0.5, behavior: "smooth" })
                 }}
               >
+                
                 {images.map(img => (
                   <SortableItem key={img.id} img={img} onDelete={handleDelete} />
                 ))}
