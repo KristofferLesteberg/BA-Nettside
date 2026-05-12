@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth'
 import { prisma } from '@/app/lib/prisma'
 import { authOptions } from '@/app/lib/auth'
 import type { EducationField } from '@/generated/prisma'
+import { sendProjectEmail } from '@/actions/email'
 
 // ─── Schemas ─────────────────────────────────────────────────────────────────
 
@@ -51,6 +52,16 @@ export async function createProject(data: unknown) {
   const project = await prisma.projectRequest.create({
     data: { id, ...rest, educationField: (educationField as EducationField) ?? null },
   })
+  await sendProjectEmail({
+    clientForename: rest.clientForename,
+    clientSurname: rest.clientSurname,
+    clientEmail: rest.clientEmail,
+    clientPhone: rest.clientPhone,
+    title: rest.title,
+    description: rest.description,
+    minPrice: rest.minPrice,
+    maxPrice: rest.maxPrice,
+  })
   revalidatePath('/admin?tab=prosjekter')
   return { id: project.id }
 }
@@ -64,6 +75,7 @@ export async function updateProject(id: string, data: unknown) {
     where: { id },
     data: { ...rest, educationField: (educationField as EducationField) ?? null },
   })
+  await sendProjectEmail(rest)
   revalidatePath('/admin?tab=prosjekter')
 }
 

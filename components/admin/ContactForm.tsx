@@ -2,6 +2,9 @@
 import { ContactPerson } from "@/generated/prisma"
 import { useState } from "react"
 import RegretBtn from "../shared/BackBtn"
+import PhoneInputWithCountrySelect from 'react-phone-number-input'
+import { parsePhoneNumberWithError } from 'libphonenumber-js'
+import type { E164Number, CountryCode } from 'libphonenumber-js'
 
 type ContactFormData = Omit<ContactPerson, 'id' | 'products'>
 
@@ -14,12 +17,13 @@ interface Props {
 export default function ContactForm({ exsitingContact, onSubmit, heading}: Props) {
   const [name, setName] = useState(exsitingContact?.name || "")
   const [email, setEmail] = useState(exsitingContact?.email || "")
-  const [phone, setPhone] = useState(exsitingContact?.phone || "")
+  const [phone, setPhone] = useState<E164Number | undefined>()
+  const [phoneCountry, setPhoneCountry] = useState<CountryCode>("NO")
   const [title, setTitle] = useState(exsitingContact?.title || "")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await onSubmit( {name, email, phone, title })
+    await onSubmit({ name, email, phone: String(phone ?? ''), title })
   }
 
   return (
@@ -51,12 +55,21 @@ export default function ContactForm({ exsitingContact, onSubmit, heading}: Props
             </div>
             <div className="space-y-1">
               <label className="label">Telefon</label>
-              <input
-                type="text"
+              <PhoneInputWithCountrySelect
                 className="input"
+                international={true}
+                defaultCountry='NO'
+                country={phoneCountry}
+                onCountryChange={(c) => setPhoneCountry(c ?? "NO")}
+                placeholder="Telefonnummer"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-               />
+                onChange={(phoneNr) => {
+                  setPhone(phoneNr)
+                  if (phoneNr) {
+                    try { const p = parsePhoneNumberWithError(String(phoneNr)); if (p?.country) setPhoneCountry(p.country) } catch {}
+                  }
+                }}
+              />
              
             </div>
             <div className="space-y-1">

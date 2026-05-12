@@ -7,7 +7,7 @@ import { FaAngleUp } from "react-icons/fa6";
 import { useState, useEffect } from 'react'
 import MeasurementInput from './MeasurementInput'
 
-export type Measure = { name: string; value: string }
+export type Measure = { name: string; value: string; unit: string }
 
 export default function MeasurementList({ onChange, initialMeasures }: { onChange: (measures: Measure[]) => void; initialMeasures?: Measure[] }) {
   const [showMeasures, setShowMeasures] = useState((initialMeasures?.length ?? 0) > 0)
@@ -16,7 +16,7 @@ export default function MeasurementList({ onChange, initialMeasures }: { onChang
   useEffect(() => onChange(measures), [measures])
 
   function addMeasure() {
-    setMeasures(prev => [...prev, { name: "", value: "" }])
+    setMeasures(prev => [...prev, { name: "", value: "", unit: "" }])
     setShowMeasures(true)
   }
 
@@ -47,6 +47,7 @@ export default function MeasurementList({ onChange, initialMeasures }: { onChang
                 key={index}
                 name={measure.name}
                 value={measure.value}
+                unit={measure.unit}
                 onChange={(field, val) => updateMeasure(index, field, val)}
                 onDelete={() => deleteMeasure(index)}
               />

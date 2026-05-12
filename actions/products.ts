@@ -7,10 +7,17 @@ import { prisma } from '@/app/lib/prisma'
 import { authOptions } from '@/app/lib/auth'
 import { uploadProductImages, syncProductImages, deleteAllProductImages } from '@/app/lib/images'
 import type { EducationField } from '@/generated/prisma'
+import { err } from '@/app/lib/api-response'
 
 // ─── Schemas ─────────────────────────────────────────────────────────────────
 
-const MeasuresSchema = z.record(z.string(), z.string())
+const MeasuresSchema = z.array(
+  z.object({
+    name:  z.string().min(1).max(50),
+    value: z.string().min(1).max(30),
+    unit:  z.string().max(20),
+  })
+)
 
 const ProductCreateSchema = z.object({
   educationField: z.preprocess(
@@ -130,6 +137,17 @@ export async function updateProduct(id: number, formData: FormData) {
   revalidatePath('/admin')
   revalidatePath('/')
 }
+
+export async function updateProductAmount(id: number, amount: number) {
+  const product = await prisma.product.findUnique({ where: { id: id} })
+  if(!product) throw new Error("Kunne ikke finne produktet!")
+  if(amount > product.amount) throw new Error("Kan ikke bestille mer enn antallet")
+
+  await prisma.product.update({where: {id: id, amount: {gte: amount }}, data: {amount: { decrement: amount }}})
+  revalidatePath("/admin")
+  revalidatePath("/")
+}
+
 
 export async function deleteProduct(id: number) {
   const session = await getServerSession(authOptions)

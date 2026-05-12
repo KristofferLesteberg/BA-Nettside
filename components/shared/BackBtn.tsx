@@ -1,7 +1,7 @@
 
 import { useRouter } from "next/navigation"
 
-export default function BackBtn({handleOnClick}: {handleOnClick?: () => void}) {
+export default function BackBtn({handleOnClick, text}: {handleOnClick?: () => void; text?: string}) {
   const router = useRouter()
 
   return (
@@ -10,7 +10,7 @@ export default function BackBtn({handleOnClick}: {handleOnClick?: () => void}) {
       onClick={handleOnClick ?? (() => router.back())}
       className="btn btn-outline px-3 text-sm"
     >
-      ← Tilbake
+      {text || '← Tilbake'}
     </button>  
   )
 } 

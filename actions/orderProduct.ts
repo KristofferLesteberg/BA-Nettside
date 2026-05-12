@@ -1,11 +1,11 @@
 'use server'
 
 import { z } from 'zod'
-import { ProductOrder } from '@/generated/prisma'
 import { prisma } from '@/app/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/lib/auth'
+import { sendOrderEmail } from '@/actions/email'
 
 const OrderProductCreateSchema = z.object({
   clientName: z.string().min(1, "Navn er påkrev"),
@@ -14,6 +14,10 @@ const OrderProductCreateSchema = z.object({
   amount: z.coerce.number().min(1, "Du må minst bestille en av produktet"),
   extraDetails: z.string().optional(),
   productId: z.number()
+})
+
+const OrderProductStatusUpdateCreate = z.object({
+  status: z.enum(["NEW", "IN_CONTACT", "COMPLETED"])
 })
 
 export async function getAllOrders() {
@@ -37,11 +41,12 @@ export async function getOrderById(id: number) {
   return order
 }
 
-export async function createProuctOrder(data: unknown) {
+export async function createProductOrder(data: unknown) {
   const parsed = OrderProductCreateSchema.parse(data)
   const ProductOrder = await prisma.productOrder.create({ 
     data: parsed
   })
+  await sendOrderEmail(parsed)
   revalidatePath("/admin")
   return ProductOrder
 }
@@ -55,6 +60,16 @@ export async function deleteOrder(id: number) {
 
   const deleted = await prisma.productOrder.delete({ where: { id: id } })
   revalidatePath('/admin')
+}
+
+export async function UpdateOrder(id: number, status: string) {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+  const { status: parsed } = OrderProductStatusUpdateCreate.parse({ status })
+  await prisma.productOrder.update({
+    where: { id: id}, data: { status: parsed}
+  })
+  revalidatePath("/admin")
 }
 
 

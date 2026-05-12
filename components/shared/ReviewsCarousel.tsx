@@ -63,6 +63,7 @@ export default function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
             slidesPerView={1}
             spaceBetween={24}
             loop={reviews.length > 2}
+            centerInsufficientSlides={true}
             autoplay={{ delay: 6000, disableOnInteraction: false, pauseOnMouseEnter: true }}
             pagination={{ clickable: false, el: '#reviews-pagination' }}
             breakpoints={{
