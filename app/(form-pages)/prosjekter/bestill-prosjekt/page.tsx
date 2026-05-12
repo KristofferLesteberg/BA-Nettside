@@ -7,10 +7,11 @@ import { createProject } from '@/actions/projects'
 import PhoneInputWithCountrySelect from 'react-phone-number-input'
 import { parsePhoneNumberWithError } from 'libphonenumber-js'
 import type { E164Number, CountryCode } from 'libphonenumber-js'
+import OrgNumberInput from '@/components/shared/input/orgNumberInput'
 import AddressInput from '@/components/shared/input/address-input'
 import PriceRange from '@/components/shared/input/price-range'
 import { ProjectRequestPage1Schema, ProjectRequestPage2Schema } from '@/app/lib/schemas'
-import { IoSearch } from "react-icons/io5";
+import { FaLink } from "react-icons/fa";
 import BackBtn from '@/components/shared/BackBtn'
 
 type IdentityType = "private" | "organization" | ""
@@ -33,6 +34,7 @@ export default function RequestProject() {
   const [orgNumber, setOrgNumber] = useState("")
   const [address, setAddress] = useState("")
   const [billingAddress, setBillingAddress] = useState("")
+  const [sameAsAddress, setSameAsAddress] = useState(false)
 
   // Page 2 — project info
   const [educationField, setEducationField] = useState("")
@@ -49,37 +51,6 @@ export default function RequestProject() {
   const educationFieldRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
 
-
-
-
-  const getOrgInfo = async (orgNumber: number) => {
-    try {
-      const res = await fetch(`https://data.brreg.no/enhetsregisteret/api/enheter/${orgNumber}`)
-      if(!res) {
-        toast.error("Fant ikke organisasjonen")
-        return
-      }
-      const data = await res.json()
-      if(data.epostadresse) {
-        setEmail(data.epostadresse)
-      }
-      
-      if(data.telefon) {
-        setPhoneCountry("NO")
-        const e164 = `+47${data.telefon.replace(/\s/g, "")}` as E164Number
-        setPhone(e164)
-      }
-
-      setOrgName(data.navn)
-      if(data.forretningsadresse) {
-        setAddress(`${data.forretningsadresse.adresse[0]}, ${data.forretningsadresse.postnummer} ${data.forretningsadresse.poststed}`)
-      }
-      
-    } catch(error) {
-      console.error(error)
-    }
-
-  }
   function clearError(field: string) {
     setErrors(prev => { const next = { ...prev }; delete next[field]; return next })
   }
@@ -108,7 +79,7 @@ export default function RequestProject() {
       clientEmail: email,
       clientPhone: phone,
       address,
-      billingAddress,
+      billingAddress: sameAsAddress ? address : billingAddress,
       organizationName: orgName || undefined,
       organizationNumber: orgNumber || undefined,
     })
@@ -166,7 +137,7 @@ export default function RequestProject() {
         organizationName: orgName || undefined,
         organizationNumber: orgNumber || undefined,
         address,
-        billingAddress,
+        billingAddress: sameAsAddress ? address : billingAddress,
       })
       toast.success('Forespørsel sendt!')
       router.push('/')
@@ -247,22 +218,16 @@ export default function RequestProject() {
 
               <div className={`space-y-1 ${identityType == "organization" ? 'max-h-200 opacity-100' : 'max-h-0 opacity-0'}`}>
                 <label className="label">Organisasjonsnummer  </label>
-                <div className='relative flex-1 justify-center align-middle'>
-                  <input
-                    type="text"
-                    className={`${inputClass("organizationNumber")}`}
-                    placeholder="123 456 789"
-                    value={orgNumber}
-                    onChange={(e) => { setOrgNumber(e.target.value.replace(/\D/g, "").slice(0, 9)); clearError("organizationNumber") }}
-                  />
-                  <button
-                    type='button'
-                    onClick={() => getOrgInfo(Number(orgNumber))}
-                    className="absolute right-1 mt-auto mb-auto mr-3 h-full"
-                  >
-                    <IoSearch className='cursor-pointer' />
-                  </button>
-                </div>
+                <OrgNumberInput 
+                  inputClassName={`${inputClass("organizationNumber")}`}
+                  value={orgNumber}
+                  onChange={(e) => { setOrgNumber(e.target.value.replace(/\D/g, "").slice(0, 9)); clearError("organizationNumber") }}
+                  setEmail={setEmail}
+                  setPhoneCountry={setPhoneCountry}
+                  setPhone={setPhone}
+                  setOrgName={setOrgName}
+                  setAddress={setAddress}
+                />
                 {errors.organizationNumber && <p className="text-error text-sm">{errors.organizationNumber}</p>}
               </div>
 
@@ -347,9 +312,9 @@ export default function RequestProject() {
                 </div>
 
                 {/* Address */}
-                <div className="grid grid-cols-2 gap-4" ref={addressRef}>
-                  <div className="" >
-                    <label className="label">Adresse <span className="text-error">*</span></label>
+                <div className="flex gap-3 items-end" ref={addressRef}>
+                  <div className="flex-1 space-y-1">
+                    <label className="label">Bestillingsadresse <span className="text-error">*</span></label>
                     <AddressInput
                       value={address}
                       onChange={(value) => { setAddress(value); clearError("address") }}
@@ -357,14 +322,28 @@ export default function RequestProject() {
                     />
                     {errors.address && <p className="text-error text-sm">{errors.address}</p>}
                   </div>
-                  <div>
+                  <button
+                    type="button"
+                    onClick={() => setSameAsAddress(prev => !prev)}
+                    title={sameAsAddress ? 'Koble fra' : 'Bruk samme adresse'}
+                    className={`flex-none w-8 h-8 rounded-full flex items-center justify-center text-xs border transition-all duration-200 cursor-pointer ${
+                      sameAsAddress
+                        ? 'bg-secondary text-text-on-primary border-secondary'
+                        : 'bg-bg text-text-muted border-border-strong hover:bg-surface hover:text-secondary hover:border-secondary'
+                    }`}
+                  >
+                    <FaLink />
+                  </button>
+                  <div className="flex-1 space-y-1">
                     <label className="label">Fakturaadresse <span className="text-error">*</span></label>
-                    <AddressInput
-                      value={billingAddress}
-                      onChange={(value) => { setBillingAddress(value); clearError("billingAddress") }}
-                      placeholder='Gateveien 1, 0001 Oslo'
-                    />
-                    
+                    <div onInput={() => setSameAsAddress(false)}>
+                      <AddressInput
+                        value={sameAsAddress ? address : billingAddress}
+                        onChange={(value) => { setSameAsAddress(false); setBillingAddress(value); clearError("billingAddress") }}
+                        placeholder='Gateveien 1, 0001 Oslo'
+                      />
+                    </div>
+                    {errors.billingAddress && <p className="text-error text-sm">{errors.billingAddress}</p>}
                   </div>
                 </div>
                 <button type="submit" className="btn btn-primary w-full">

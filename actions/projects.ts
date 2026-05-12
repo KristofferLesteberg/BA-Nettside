@@ -34,6 +34,10 @@ const ProjectRequestStatusUpdateSchema = z.object({
 
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
+export async function getProjectById(id: string) {
+  return prisma.projectRequest.findUnique({ where: { id }})
+}
+
 export async function getAllProjects() {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
@@ -43,26 +47,39 @@ export async function getAllProjects() {
 
 export async function createProject(data: unknown) {
   const { educationField, ...rest } = ProjectRequestCreateSchema.parse(data)
+  const id = crypto.randomUUID()
   const project = await prisma.projectRequest.create({
-    data: { ...rest, educationField: (educationField as EducationField) ?? null },
+    data: { id, ...rest, educationField: (educationField as EducationField) ?? null },
   })
-  revalidatePath('/admin')
+  revalidatePath('/admin?tab=prosjekter')
   return { id: project.id }
 }
 
-export async function updateProjectStatus(id: number, status: string) {
+export async function updateProject(id: string, data: unknown) {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+
+  const { educationField, ...rest } = ProjectRequestCreateSchema.parse(data)
+  await prisma.projectRequest.update({
+    where: { id },
+    data: { ...rest, educationField: (educationField as EducationField) ?? null },
+  })
+  revalidatePath('/admin?tab=prosjekter')
+}
+
+export async function updateProjectStatus(id: string, status: string) {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
 
   const { status: validated } = ProjectRequestStatusUpdateSchema.parse({ status })
   await prisma.projectRequest.update({ where: { id }, data: { status: validated } })
-  revalidatePath('/admin')
+  revalidatePath('/admin?tab=prosjekter')
 }
 
-export async function deleteProject(id: number) {
+export async function deleteProject(id: string) {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
 
   await prisma.projectRequest.delete({ where: { id } })
-  revalidatePath('/admin')
+  revalidatePath('/admin?tab=prosjekter')
 }
