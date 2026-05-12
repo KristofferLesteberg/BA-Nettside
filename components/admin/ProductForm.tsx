@@ -88,7 +88,7 @@ export default function ProductForm({ heading, submitLabel, contactPersons, prod
     formData.append("price", price || "0")
     formData.append("amount", amount || "0")
     formData.append("measures", JSON.stringify(measures))
-    formData.append("contactId", contactId || "0")
+    formData.append("contactId", contactId)
     formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
     try {
       console.log("test")

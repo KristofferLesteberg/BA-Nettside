@@ -40,7 +40,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           amount:         String(product.amount),
           measures:       Array.isArray(product.measures) ? (product.measures as unknown as Measure[]) : [],
           existingImages: product.images.map(img => ({ id: img.id, url: `/images/${img.id}.webp` })),
-          contactId: Number(product.id).toString()
+          contactId: product.contactPersonId ? String(product.contactPersonId) : ''
         })
       } catch {
         toast.error("Kunne ikke laste produktet")
