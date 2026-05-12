@@ -69,42 +69,6 @@ export async function getProductById(id: number) {
   }
 }
 
-export async function createProduct(formData: FormData) {
-  const session = await getServerSession(authOptions)
-  if (!session) throw new Error('Ikke autorisert')
-
-  const measuresRaw = formData.get('measures')
-
-  const { educationField, ...rest } = ProductCreateSchema.parse({
-    educationField:  formData.get('educationField') || undefined,
-    title:           formData.get('title'),
-    description:     formData.get('description'),
-    price:           formData.get('price'),
-    measures:        measuresRaw ? JSON.parse(measuresRaw as string) : undefined,
-    amount:          formData.get('amount'),
-    contactPersonId: formData.get('contactId'),
-    draft:           false
-  })
-
-  const product = await prisma.product.create({
-    data: { ...rest, educationField: (educationField as EducationField) ?? null },
-  })
-
-  const imageIds  = JSON.parse((formData.get('imageIds') as string) ?? '[]') as string[]
-  const imageFiles = (formData.getAll('images') as File[]).filter((f) => f.size > 0)
-
-  if (imageFiles.length > 0) {
-    await uploadProductImages(
-      imageFiles.map((file, i) => ({ id: imageIds[i] ?? crypto.randomUUID(), file })),
-      product.id
-    )
-  }
-
-  revalidatePath('/admin')
-  revalidatePath('/')
-  return { id: product.id }
-}
-
 export async function createDraftProduct() {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
@@ -157,8 +121,6 @@ export async function updateProduct(id: number, formData: FormData, publish = tr
   revalidatePath('/admin')
   revalidatePath('/')
 }
-
-
 
 export async function addImageToProduct(id: number, formdata: FormData) {
   const session = await getServerSession(authOptions)

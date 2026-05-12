@@ -90,7 +90,6 @@ export default function ProductForm({ heading, submitLabel, contactPersons, prod
     formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
     formData.append("contactId", contactId || "0")
     formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
-
     try {
       await updateProduct(productId, formData, false)
       console.log("produkt Id" + productId)
@@ -101,29 +100,29 @@ export default function ProductForm({ heading, submitLabel, contactPersons, prod
       toast.error("Kunne ikke lagre produktet som utkast")
     }
   }
-
   const handleDeleteDraft = async () => {
     try {
       await deleteProduct(productId)
       setShowPopUp(false)
+      toast("Utkastet ble slettet")
       router.back()
     } catch(error) {
       toast.error("Kunne ikke slette utkast")
     }
   }
-    
 
   return (
 
     
     <div className="w-4/5 min-w-120 max-w-230 mx-auto py-10">
-      <div className={`${showPopUp ? `opacity-100` : `opacity-0`}`}>
+      <div className={`${showPopUp ? `block` : `hidden`}`}>
         <PopUp 
           title='Lagre endringen som et utkast' 
           yesLabel='Ja, lagre som utkast' 
           noLabel='Nei, kast endringene' 
           onYes={handleSaveDraft}
           onNo={handleDeleteDraft}
+          onClose={() => setShowPopUp(false)}
         />
       </div>
       <form onSubmit={handleForm} className="card-accented space-y-6 shadow-mist-500 shadow-xl">

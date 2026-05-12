@@ -42,8 +42,6 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
   const [status, setStatus] = useState<StatusFilter>('ALL')
   const [drawerOpen, setDrawerOpen] = useState(false)
 
-
-
   const filtered = useMemo(() => {
     const statusResult = products.filter(p => {
       const productDraft = status === 'DRAFT' ? true : false

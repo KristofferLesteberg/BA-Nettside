@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { Measure } from '@/components/admin/MeasurementList'
 import ProductForm, { ProductFormValues } from '@/components/admin/ProductForm'
-import { getProductById, updateProduct, addImageToProduct, createProduct } from '@/actions/products'
+import { getProductById, updateProduct, addImageToProduct } from '@/actions/products'
 
 interface LoadedProduct {
   title: string
