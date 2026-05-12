@@ -23,7 +23,7 @@ export default function ContactForm({ exsitingContact, onSubmit, heading}: Props
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await onSubmit( {name, email, phone, title })
+    await onSubmit({ name, email, phone: String(phone ?? ''), title })
   }
 
   return (

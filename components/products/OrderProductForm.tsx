@@ -6,6 +6,9 @@ import toast from 'react-hot-toast'
 import { createProductOrder } from '@/actions/orderProduct'
 import { getProductById, updateProductAmount } from '@/actions/products'
 import BackBtn from '@/components/shared/BackBtn'
+import PhoneInputWithCountrySelect from 'react-phone-number-input'
+import { parsePhoneNumberWithError } from 'libphonenumber-js'
+import type { E164Number, CountryCode } from 'libphonenumber-js'
 
 interface Props {
   productId: number
@@ -16,7 +19,8 @@ export default function OrderProductForm({ productId, onSuccess }: Props) {
   const [loading, setLoading] = useState(false)
   const [clientName, setClientName] = useState("")
   const [clientEmail, setClientEmail] = useState("")
-  const [clientPhone, setClientPhone] = useState("")
+  const [clientPhone, setClientPhone] = useState<E164Number | undefined>()
+  const [phoneCountry, setPhoneCountry] = useState<CountryCode>("NO")
   const [amount, setAmount] = useState("")
   const [extraDetails, setExtraDetails] = useState("")
   const [product, setProduct] = useState<Awaited<ReturnType<typeof getProductById>>>(null)
@@ -38,7 +42,7 @@ export default function OrderProductForm({ productId, onSuccess }: Props) {
       const order = await createProductOrder({
         clientName,
         clientEmail,
-        clientPhone,
+        clientPhone: String(clientPhone),
         amount,
         extraDetails: extraDetails || undefined,
         productId,
@@ -111,12 +115,20 @@ export default function OrderProductForm({ productId, onSuccess }: Props) {
             </div>
             <div className="space-y-1">
               <label className="label">Telefon <span className="text-error">*</span></label>
-              <input
-                type="tel"
+              <PhoneInputWithCountrySelect
                 className="input"
-                placeholder="+47 000 00 000"
+                international={true}
+                defaultCountry="NO"
+                country={phoneCountry}
+                onCountryChange={(c) => setPhoneCountry(c ?? "NO")}
+                placeholder="Telefonnummer"
                 value={clientPhone}
-                onChange={(e) => setClientPhone(e.target.value)}
+                onChange={(nr) => {
+                  setClientPhone(nr)
+                  if (nr) {
+                    try { const p = parsePhoneNumberWithError(String(nr)); if (p?.country) setPhoneCountry(p.country) } catch {}
+                  }
+                }}
               />
             </div>
           </div>
