@@ -87,10 +87,11 @@ export default function ProductForm({ heading, submitLabel, contactPersons, prod
     formData.append("description", description)
     formData.append("price", price || "0")
     formData.append("amount", amount || "0")
-    formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
+    formData.append("measures", JSON.stringify(measures))
     formData.append("contactId", contactId || "0")
     formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
     try {
+      console.log("test")
       await updateProduct(productId, formData, false)
       console.log("produkt Id" + productId)
       toast("Utkast lagret")
