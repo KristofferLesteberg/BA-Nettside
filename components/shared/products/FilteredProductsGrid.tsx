@@ -6,9 +6,10 @@ import ProductsGrid from './ProductsGrid'
 import { EducationField } from '@/generated/prisma'
 import { FaSliders, FaXmark } from 'react-icons/fa6'
 
-export type SortOption = 'newest' | 'oldest' | 'price-asc' | 'price-desc'
-export type CategoryFilter = EducationField | 'ALL' // Allows for future changes in EducationField variations with no big tweaks
 
+export type SortOption = 'newest' | 'oldest' | 'price-asc' | 'price-desc'
+export type CategoryFilter = EducationField | 'ALL'// Allows for future changes in EducationField variations with no big tweaks
+export type StatusFilter = 'ALL' | 'DRAFT' | 'PUBLISHED'
 interface Props {
   products: ProductCardData[]
   isAdmin: boolean
@@ -17,6 +18,11 @@ interface Props {
   extraFilters?: ((p: ProductCardData) => boolean)[]
 }
 
+const STATUS_OPTIONS: { value: StatusFilter; label: string; }[] = [
+  { value: 'ALL', label: 'Alle' },
+  { value: 'DRAFT', label: 'Utkast'},
+  { value: 'PUBLISHED', label: 'Publisert' }
+]
 const CATEGORY_OPTIONS: { value: CategoryFilter; label: string }[] = [
   { value: 'ALL',          label: 'Alle'   },
   { value: 'BUILDING',     label: 'Bygg'   },
@@ -33,10 +39,19 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 export default function FilteredProductsGrid({ products, isAdmin, sidebarAction, extraControls, extraFilters = [] }: Props) {
   const [category, setCategory] = useState<CategoryFilter>('ALL')
   const [sort, setSort] = useState<SortOption>('newest')
+  const [status, setStatus] = useState<StatusFilter>('ALL')
   const [drawerOpen, setDrawerOpen] = useState(false)
 
+
+
   const filtered = useMemo(() => {
-    const result = products.filter(p => {
+    const statusResult = products.filter(p => {
+      const productDraft = status === 'DRAFT' ? true : false
+      if (status !== 'ALL' && p.draft !== productDraft) return false
+      return true
+    })
+
+    const result = statusResult.filter(p => {
       if (category !== 'ALL' && p.educationField !== category) return false
       for (const fn of extraFilters) if (!fn(p)) return false
       return true
@@ -50,12 +65,35 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
     }
 
     return result
-  }, [products, category, sort, extraFilters])
+  }, [products, category, sort, extraFilters, status])
 
   const activeFilterCount = category !== 'ALL' ? 1 : 0
 
   const controlPanel = (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5">      
+    {isAdmin && (
+       <div className='flex flex-col gap-2'>
+        <span className='label'>Produkt status</span>
+        <div className='flex flex-col gap-1.5'>
+          {STATUS_OPTIONS.map((stat) => (
+            <button
+              key={stat.value}
+              onClick={() => setStatus(stat.value)}
+              className={`btn w-full justify-start ${status === stat.value ? 'btn-primary' : 'btn-outline'}`}
+              >
+              {stat.label}
+            </button>
+
+          ))}
+        </div>
+        
+      </div>
+    )}
+    {isAdmin && (
+       <hr className='border-border' />
+    )}
+    
+    
 
       <div className="flex flex-col gap-2">
         <span className="label">Kategori</span>

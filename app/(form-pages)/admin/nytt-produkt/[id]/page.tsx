@@ -65,10 +65,10 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
     try {
       await updateProduct(productId, formData)
-      toast.success("Produkt oppdatert")
+      toast.success("Produkt opprettet!")
       router.push("/admin?tab=produkter")
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Kunne ikke oppdatere produktet")
+      toast.error(error instanceof Error ? error.message : "Kunne ikke opprette produktet")
     }
   }
 
