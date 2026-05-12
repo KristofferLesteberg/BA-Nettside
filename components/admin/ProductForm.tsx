@@ -5,6 +5,10 @@ import ImageOrder, { ImageItem } from './ImageOrder'
 import MeasurementList, { Measure } from './MeasurementList'
 import BackBtn from '@/components/shared/BackBtn'
 import { ContactPerson } from '@/generated/prisma'
+import PopUp from '../shared/PopUp'
+import { deleteProduct, updateProduct } from '@/actions/products'
+import toast from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
 
 export interface ProductFormValues {
   educationField: string
@@ -21,6 +25,7 @@ interface ProductFormProps {
   heading: string
   submitLabel: string
   contactPersons?: ContactPerson[]
+  productId: number
   initialValues?: {
     educationField?: string
     title?: string
@@ -35,7 +40,9 @@ interface ProductFormProps {
   onSubmit: (values: ProductFormValues) => Promise<void>
 }
 
-export default function ProductForm({ heading, submitLabel, contactPersons, initialValues, onNewImage, onSubmit }: ProductFormProps) {
+export default function ProductForm({ heading, submitLabel, contactPersons, productId, initialValues, onNewImage, onSubmit }: ProductFormProps) {
+  const router = useRouter()
+
   const [educationField, setEducationField] = useState(initialValues?.educationField ?? "")
   const [title, setTitle] = useState(initialValues?.title ?? "")
   const [description, setDescription] = useState(initialValues?.description ?? "")
@@ -48,6 +55,8 @@ export default function ProductForm({ heading, submitLabel, contactPersons, init
   const educationFieldRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLDivElement>(null)
+ 
+  const [showPopUp, setShowPopUp] = useState<boolean>(false)
 
 
   useEffect(() => {
@@ -71,12 +80,56 @@ export default function ProductForm({ heading, submitLabel, contactPersons, init
     await onSubmit({ educationField, title, description, price, amount, measures, images, contactId })
   }
 
+  const handleSaveDraft = async () => {
+    const formData = new FormData
+    formData.append("educationField", educationField)
+    formData.append("title", title)
+    formData.append("description", description)
+    formData.append("price", price || "0")
+    formData.append("amount", amount || "0")
+    formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
+    formData.append("contactId", contactId || "0")
+    formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
+
+    try {
+      await updateProduct(productId, formData, false)
+      console.log("produkt Id" + productId)
+      toast("Utkast lagret")
+      setShowPopUp(false)
+      router.back()
+    } catch(error) {
+      toast.error("Kunne ikke lagre produktet som utkast")
+    }
+  }
+
+  const handleDeleteDraft = async () => {
+    try {
+      await deleteProduct(productId)
+      setShowPopUp(false)
+      router.back()
+    } catch(error) {
+      toast.error("Kunne ikke slette utkast")
+    }
+  }
+    
+
   return (
+
+    
     <div className="w-4/5 min-w-120 max-w-230 mx-auto py-10">
+      <div className={`${showPopUp ? `opacity-100` : `opacity-0`}`}>
+        <PopUp 
+          title='Lagre endringen som et utkast' 
+          yesLabel='Ja, lagre som utkast' 
+          noLabel='Nei, kast endringene' 
+          onYes={handleSaveDraft}
+          onNo={handleDeleteDraft}
+        />
+      </div>
       <form onSubmit={handleForm} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
 
         <div className="flex items-start">
-          <BackBtn />
+          <BackBtn handleOnClick={() => setShowPopUp(true)}/>
         </div>
         <h2 className="heading-2">{heading}</h2>
         <p className="text-text-faint italic -mt-4">Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette</p>

@@ -81,6 +81,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       heading={`Oppdater ${loaded.title}`}
       submitLabel="Oppdater annonse"
       initialValues={loaded}
+      productId={productId}
       onSubmit={handleSubmit}
       onNewImage={async (file) => {
         const formData = new FormData()

@@ -60,11 +60,11 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     formData.append("price", price || "0")
     formData.append("amount", amount || "0")
     formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
-    formData.append("contactId", contactId || "0")
+    formData.append("contactId", contactId)
     formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
 
     try {
-      await createProduct(formData)
+      await updateProduct(productId, formData)
       toast.success("Produkt oppdatert")
       router.push("/admin?tab=produkter")
     } catch (error) {
@@ -80,6 +80,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       heading={`Nytt Produkt`}
       submitLabel="Opprett annonse"
       onSubmit={handleSubmit}
+      productId={productId}
       onNewImage={async (file) => {
         const formData = new FormData()
         formData.append('image', file)

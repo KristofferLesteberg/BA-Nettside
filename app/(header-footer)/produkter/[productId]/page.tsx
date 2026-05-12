@@ -1,163 +1,93 @@
-import { notFound } from "next/navigation"
-import Link from "next/link"
-import Carousel from "@/components/shared/ImageCarousel"
-import ProductTabs from "@/components/shared/products/ProductTabs"
-import { getProductById } from "@/actions/products"
+"use client"
 
+import { use, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
+import { Measure } from '@/components/admin/MeasurementList'
+import ProductForm, { ProductFormValues } from '@/components/admin/ProductForm'
+import { getProductById, updateProduct, addImageToProduct } from '@/actions/products'
 
+interface LoadedProduct {
+  title: string
+  educationField: string
+  description: string
+  price: string
+  amount: string
+  measures: Measure[]
+  existingImages: { id: string; url: string }[]
+  contactId: string
+}
 
-export default async function ProductPage({
- 
-  params,
-}: {
-  params: Promise<{ productId: string }>
-}) {
-  
-  const productId = parseInt((await params).productId)
-  if (Number.isNaN(productId)) notFound()
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
+  const productId = parseInt(use(params).id)
+  const router = useRouter()
+  const [loaded, setLoaded] = useState<LoadedProduct | null>(null)
+  const [error, setError] = useState(false)
 
-  const product = await getProductById(productId)
-  if (!product) notFound()
+  useEffect(() => {
+    if (Number.isNaN(productId)) { setError(true); return }
 
-  
+    const load = async () => {
+      try {
+        const product = await getProductById(productId)
+        if (!product) { setError(true); return }
+
+        setLoaded({
+          title:          product.title,
+          educationField: product.educationField ?? '',
+          description:    product.description,
+          price:          Number(product.price).toString(),
+          amount:         String(product.amount),
+          measures:       Object.entries((product.measures ?? {}) as Record<string, string>)
+                            .map(([name, value]) => ({ name, value })),
+          existingImages: product.images.map(img => ({ id: img.id, url: `/images/${img.id}.webp` })),
+          contactId: Number(product.id).toString()
+        })
+      } catch {
+        toast.error("Kunne ikke laste produktet")
+        setError(true)
+      }
+    }
+
+    load()
+  }, [productId])
+
+  const handleSubmit = async ({ educationField, title, description, price, amount, measures, images, contactId }: ProductFormValues) => {
+    const formData = new FormData()
+    formData.append("educationField", educationField)
+    formData.append("title", title)
+    formData.append("description", description)
+    formData.append("price", price || "0")
+    formData.append("amount", amount || "0")
+    formData.append("measures", JSON.stringify(Object.fromEntries(measures.map(m => [m.name, m.value]))))
+    formData.append("contactId", contactId || "0")
+
+    formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
+
+    try {
+      await updateProduct(productId, formData)
+      toast.success("Produkt oppdatert")
+      router.push("/admin?tab=produkter")
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Kunne ikke oppdatere produktet")
+    }
+  }
+
+  if (error)   return <p className="mt-10 text-center text-text-muted">Ingen produkt funnet.</p>
+  if (!loaded) return <p className="mt-10 text-center text-text-muted">Laster...</p>
 
   return (
-    <div className="bg-page min-h-screen">
-      <div className="max-w-5xl mx-auto px-4 py-8 sm:px-6 sm:py-12">
-
-        {/* Breadcrumb */}
-        <nav className="mb-6">
-          <span className="small-text">
-            <Link href="/" className="hover:underline">Hjem</Link>
-            <span className="text-faint mx-2">/</span>
-            <Link href="/produkter" className="hover:underline">Produkter</Link>
-            <Link href="/produkter" className="hover:underline">Produkter</Link>
-            <span className="text-faint mx-2">/</span>
-            <span className="text-faint">{product.title}</span>
-          </span>
-        </nav>
-
-        {/* Main layout */}
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-
-          {/* Left — carousel */}
-          <div className="w-full lg:w-1/2 lg:sticky lg:top-8 lg:self-start">
-            <Carousel
-              images={product.images.map(img => img.id)}
-              className="w-full h-72 sm:h-96 rounded-2xl"
-            />
-          </div>
-
-          {/* Right — product details */}
-          <div className="w-full lg:w-1/2 flex flex-col gap-6">
-
-            {/* Title block */}
-            <div className="flex flex-col gap-2">
-              <span className="badge badge-neutral self-start">
-                {product.educationField}
-              </span>
-              <h1 className="heading-2">{product.title}</h1>
-              <p className="heading-2" style={{ color: "var(--color-primary)" }}>
-                NOK {Number(product.price).toFixed(2)}
-              </p>
-            </div>
-
-            {/* CTA */}
-            {product.amount > 0 ? (
-              <Link className="btn btn-primary" href={`/OrderProduct/${product.id}`}>
-                Bestill!
-              </Link>
-            ) : (
-              <button disabled className="btn btn-primary opacity-50 cursor-not-allowed">
-                Utsolgt
-              </button>
-            )}
-
-            <hr className="border-default" />
-
-            {/* Description */}
-            <div className="flex flex-col gap-2">
-              <p className="label">Beskrivelse</p>
-              <p className="body-text">{product.description}</p>
-            </div>
-
-            <hr className="border-default" />
-
-            {/* Details table */}
-            <ProductTabs
-              details={
-                <div className="card-subtle flex flex-col divide-y" style={{ borderRadius: "var(--radius-lg)" }}>
-                  <div className="flex justify-between px-4 py-3">
-                    <span className="small-text">Antall på lager</span>
-                    <span className="small-text" style={{ color: "var(--color-text)" }}>{product.amount}</span>
-                  </div>
-                  <div className="flex justify-between px-4 py-3">
-                    <span className="small-text">Publisert</span>
-                    <span className="small-text" style={{ color: "var(--color-text)" }}>
-                      {new Date(product.publishedAt).toLocaleDateString("no-NO")}
-                    </span>
-                  </div>
-                  <div className="flex justify-between px-4 py-3">
-                    <span className="small-text">Fagfelt</span>
-                    <span className="small-text" style={{ color: "var(--color-text)" }}>
-                      {product.educationField === "BUILDING" ? "Bygg" : "Anlegg"}
-                    </span>
-                  </div>
-                </div>
-              }
-              measures={
-                <div
-                  className="card-subtle flex flex-col divide-y"
-                  style={{ borderRadius: "var(--radius-lg)" }}
-                >
-                  {product.measures && Object.keys(product.measures).length > 0 ? (
-                    Object.entries(product.measures).map(([key, value]) => (
-                      <div key={key} className="flex justify-between px-4 py-3">
-                        <span className="small-text">{key}</span>
-                        <span className="small-text" style={{ color: "var(--color-text)" }}>
-                          {value}
-                        </span>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="px-4 py-3">
-                      <span className="small-text text-faint">Ingen mål tilgjengelig</span>
-                    </div>
-                  )}
-                </div>
-              }
-              contactInfo={
-                <div className="card-subtle flex flex-col divide-y" style={{ borderRadius: "var(--radius-lg)" }}>
-                  <div className="flex justify-between px-4 py-3">
-                    <span className="small-text">Navn</span>
-                    <span className="small-text" style={{ color: "var(--color-text)" }}>{product.contactPerson?.name || ""}</span>
-                  </div>
-                  <div className="flex justify-between px-4 py-3">
-                    <span className="small-text">Mail</span>
-                    <span className="small-text" style={{ color: "var(--color-text)" }}>
-                      {product.contactPerson?.email}
-                    </span>
-                  </div>
-                  <div className="flex justify-between px-4 py-3">
-                    <span className="small-text">Telefon</span>
-                    <span className="small-text" style={{ color: "var(--color-text)" }}>
-                      {product.contactPerson?.phone}
-                    </span>
-                  </div>
-                  <div className="flex justify-between px-4 py-3">
-                    <span className="small-text">Tittel</span>
-                    <span className="small-text" style={{ color: "var(--color-text)" }}>
-                      {product.contactPerson?.title}
-                    </span>
-                  </div>
-                </div>
-                
-
-              }
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    <ProductForm
+      heading={`Oppdater ${loaded.title}`}
+      submitLabel="Oppdater annonse"
+      initialValues={loaded}
+      productId={productId}
+      onSubmit={handleSubmit}
+      onNewImage={async (file) => {
+        const formData = new FormData()
+        formData.append('image', file)
+        return addImageToProduct(productId, formData)
+      }}
+    />
   )
 }

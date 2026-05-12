@@ -52,14 +52,21 @@ export async function getAllProducts() {
 }
 
 export async function getProductById(id: number) {
-
-  return prisma.product.findUnique({
+  const product = await prisma.product.findUnique({
     where: { id },
     include: {
       images: { orderBy: { sortOrder: 'asc' } },
       contactPerson: true,
     },
   })
+
+  if (!product) return null
+
+  return {
+    ...product,
+    price: product.price.toNumber(),
+    publishedAt: product.publishedAt.toISOString(),
+  }
 }
 
 export async function createProduct(formData: FormData) {
@@ -114,7 +121,7 @@ export async function createDraftProduct() {
   return { id: draftProduct.id}
 }
 
-export async function updateProduct(id: number, formData: FormData) {
+export async function updateProduct(id: number, formData: FormData, publish = true) {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
 
@@ -131,8 +138,8 @@ export async function updateProduct(id: number, formData: FormData) {
     measures:        measuresRaw ? JSON.parse(measuresRaw as string) : undefined,
     amount:          formData.get('amount')          || undefined,
     contactPersonId: formData.get('contactPersonId') || undefined,
-    draft:           false
-  })
+    draft:           !publish
+    })
 
   await prisma.product.update({
     where: { id },
@@ -150,6 +157,8 @@ export async function updateProduct(id: number, formData: FormData) {
   revalidatePath('/admin')
   revalidatePath('/')
 }
+
+
 
 export async function addImageToProduct(id: number, formdata: FormData) {
   const session = await getServerSession(authOptions)

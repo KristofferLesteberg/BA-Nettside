@@ -6,6 +6,7 @@ export default function CreateProduct() {
   const router = useRouter()
   const handleNewProduct = async () => {
     const { id } = await createDraftProduct()
+    console.log(id)
     router.push(`/admin/nytt-produkt/${id}`)
   }
   return (
