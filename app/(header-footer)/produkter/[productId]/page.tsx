@@ -65,7 +65,7 @@ export default async function ProductPage({
             {/* CTA */}
             {product.amount > 0 ? (
               <Link className="btn btn-primary" href={`/OrderProduct/${product.id}`}>
-                Bestill!
+                Bestill
               </Link>
             ) : (
               <button disabled className="btn btn-primary opacity-50 cursor-not-allowed">
@@ -139,18 +139,20 @@ export default async function ProductPage({
                 <div className="card-subtle flex flex-col divide-y" style={{ borderRadius: "var(--radius-lg)" }}>
                   <div className="flex justify-between px-4 py-3">
                     <span className="small-text">Navn</span>
-                    <span className="small-text" style={{ color: "var(--color-text)" }}>{product.contactPerson?.name || ""}</span>
+                    <span className="small-text text-text">{product.contactPerson?.name || ""}</span>
                   </div>
                   <div className="flex justify-between px-4 py-3">
                     <span className="small-text">Mail</span>
-                    <span className="small-text" style={{ color: "var(--color-text)" }}>
-                      {product.contactPerson?.email}
+                    <span className="small-text text-text">
+                      <a href={`mailto:${product.contactPerson?.email}`} className="underline">
+                        {product.contactPerson?.email}
+                      </a>
                     </span>
                   </div>
                   <div className="flex justify-between px-4 py-3">
                     <span className="small-text">Telefon</span>
-                    <span className="small-text" style={{ color: "var(--color-text)" }}>
-                      {product.contactPerson?.phone}
+                    <span className="small-text text-text">
+                      <a className="underline" href={`tel:${product.contactPerson?.phone}`}>{product.contactPerson?.phone}</a>
                     </span>
                   </div>
                   <div className="flex justify-between px-4 py-3">
