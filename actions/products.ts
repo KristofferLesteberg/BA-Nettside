@@ -107,7 +107,7 @@ export async function updateProduct(id: number, formData: FormData, publish = tr
     price:           formData.get('price')           || undefined,
     measures:        measuresRaw ? JSON.parse(measuresRaw as string) : undefined,
     amount:          formData.get('amount')          || undefined,
-    contactPersonId: formData.get('contactPersonId') || undefined,
+    contactPersonId: formData.get('contactId') || undefined,
     draft:           !publish
     })
 
