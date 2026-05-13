@@ -1,13 +1,19 @@
 "use client"
 
 import type { ProductCardData } from "@/app/lib/types"
-import DeleteProduct from "../../admin/DeleteProduct"
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useRef, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import { usePopUp } from "@/components/shared/PopUp"
+
+import toast from 'react-hot-toast'
+import { deleteProduct } from '@/actions/products'
+
 import { BsThreeDots } from "react-icons/bs"
 import { MdOutlineModeEdit } from "react-icons/md"
+import { FaRegTrashCan } from "react-icons/fa6"
+
 
 const FIELD_LABEL: Record<string, string> = {
   BUILDING:     'Bygg',
@@ -26,11 +32,45 @@ interface ProductCardProps {
   isAdmin: boolean
 }
 
+function DeleteProduct({ productID, openPopUp }: {
+  productID: number
+  openPopUp: ReturnType<typeof usePopUp>['open']
+}) {
+  const router = useRouter()
+
+  const handleDelete = async () => {
+    try {
+      await deleteProduct(productID)
+      toast.success("Produkt slettet")
+      router.refresh()
+    } catch {
+      toast.error("Kunne ikke slette produktet")
+    }
+  }
+
+  return (
+    <button
+      onClick={() => openPopUp({
+        title: "Vil du slette produktet?",
+        yesLabel: "Slett",
+        noLabel: "Avbryt",
+        onYes: handleDelete,
+      })}
+      className="btn btn-ghost w-full justify-start gap-2 text-lg text-error hover:bg-error-bg"
+    >
+      <FaRegTrashCan />
+      Slett
+    </button>
+  )
+}
+
 export default function ProductCard({ product, isAdmin }: ProductCardProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [closing, setClosing] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+
+  const { open: openPopUp, element: popUpElement } = usePopUp()
 
   const closeMenu = useCallback(() => { if (open && !closing) setClosing(true) }, [open, closing])
   function handleAnimationEnd() { if (closing) { setClosing(false); setOpen(false) } }
@@ -62,7 +102,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
       onClick={() => router.push(`/produkter/${product.id}`)}
       onMouseLeave={closeMenu}
     >
-     
+      {popUpElement}
 
       {/* Image — overflow-hidden is scoped here so it doesn't clip the dropdown */}
       <div className="relative w-full aspect-4/3 overflow-hidden rounded-t-lg bg-surface">
@@ -121,7 +161,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
                     Rediger
                   </Link>
                   <hr className="border-border my-1" />
-                  <DeleteProduct productID={product.id} />
+                  <DeleteProduct productID={product.id} openPopUp={openPopUp} />
                 </div>
               )}
             </div>
