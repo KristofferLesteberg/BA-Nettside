@@ -1,15 +1,10 @@
 "use client"
-import { deleteOrder, UpdateOrder } from "@/actions/orderProduct"
-import { Prisma, OrderStatus } from "@/generated/prisma"
+import { deleteOrder, UpdateOrder, type OrderWithProduct } from "@/actions/orderProduct"
+import { OrderStatus } from "@/generated/prisma"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import toast from "react-hot-toast"
-
-
-type OrderWithProduct = Prisma.ProductOrderGetPayload<{
-  include: { product: { include: { images: true } } }
-}>
 
 interface Props {
   order: OrderWithProduct

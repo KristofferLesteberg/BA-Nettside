@@ -20,6 +20,8 @@ const OrderProductStatusUpdateCreate = z.object({
   status: z.enum(["NEW", "IN_CONTACT", "COMPLETED"])
 })
 
+export type OrderWithProduct = Awaited<ReturnType<typeof getAllOrders>>[number]
+
 export async function getAllOrders() {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
