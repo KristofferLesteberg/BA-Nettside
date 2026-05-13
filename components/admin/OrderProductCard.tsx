@@ -4,6 +4,7 @@ import { OrderStatus } from "@/generated/prisma"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { usePopUp } from "@/components/shared/PopUp"
 import toast from "react-hot-toast"
 
 type OrderWithProduct = Awaited<ReturnType<typeof getAllOrders>>[number]
@@ -26,11 +27,11 @@ const STATUS_STYLES: Record<OrderStatus, string> = {
 
 export default function OrderCard({ order }: Props) {
   const router = useRouter()
+  const { open: openPopUp, element: popUpElement } = usePopUp()
   const [showProduct, setShowProduct] = useState(false)
 
 
   const orderDelete = async () => {
-    if (!window.confirm('Vil du slette bestillingen?')) return
     try {
       await deleteOrder(order.id)
       toast.success("Bestilling fjernet!")
@@ -53,6 +54,7 @@ export default function OrderCard({ order }: Props) {
 
   return (
     <div className="card-subtle flex flex-col gap-0 overflow-hidden border">
+      {popUpElement}
 
       {/* Header */}
       <div className="flex items-start justify-between gap-4 px-6 pt-5 pb-4">
@@ -75,7 +77,15 @@ export default function OrderCard({ order }: Props) {
             <option value="IN_CONTACT">I kontakt</option>
             <option value="COMPLETED">Ferdig</option>
           </select>
-          <button className="btn btn-error" onClick={orderDelete}>Fjern</button>
+          <button className="btn btn-error" onClick={() => openPopUp({
+            title: "Slett bestillingen?",
+            subtitle: "Er du sikker på at du vil slette denne bestillingen? Denne handlingen kan ikke angres.",
+            yesLabel: "Ja, slett",
+            noLabel: "Nei, behold",
+            onYes: orderDelete
+          })}>
+            Fjern
+          </button>
         </div>
       </div>
 
