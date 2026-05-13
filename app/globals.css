@@ -79,12 +79,30 @@
 }
 
 @keyframes fade-scale-in {
-  from { opacity: 0; transform: scale(0.9); }
+  from { opacity: 0; transform: scale(0.8); }
   to   { opacity: 1; transform: scale(1); }
 }
 
 @utility animate-fade-in {
   animation: fade-scale-in 150ms ease;
+}
+
+@keyframes popup-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes popup-overlay-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@utility animate-popup-in {
+  animation: popup-overlay-in 200ms ease;
+}
+
+@utility animate-popup-out {
+  animation: popup-overlay-out 200ms ease forwards;
 }
 
 /* Automatically apply a certain style to all the elements of given type */

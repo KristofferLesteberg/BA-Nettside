@@ -5,7 +5,7 @@ import ImageOrder, { ImageItem } from './ImageOrder'
 import MeasurementList, { Measure } from './MeasurementList'
 import BackBtn from '@/components/shared/BackBtn'
 import { ContactPerson } from '@/generated/prisma'
-import PopUp from '../shared/PopUp'
+import { usePopUp } from '../shared/PopUp'
 import { deleteProduct, updateProduct } from '@/actions/products'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
@@ -56,12 +56,7 @@ export default function ProductForm({ heading, submitLabel, contactPersons, prod
   const titleRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLDivElement>(null)
  
-  const [showPopUp, setShowPopUp] = useState<boolean>(false)
-
-
-  useEffect(() => {
-    console.log(contactPersons)
-  }, [])
+  const { open: openPopUp, close: closePopUp, element: popUpElement } = usePopUp()
  
 
   const handleForm = async (e: React.FormEvent) => {
@@ -95,7 +90,7 @@ export default function ProductForm({ heading, submitLabel, contactPersons, prod
       await updateProduct(productId, formData, false)
       console.log("produkt Id" + productId)
       toast("Utkast lagret")
-      setShowPopUp(false)
+      closePopUp()
       router.back()
     } catch(error) {
       toast.error("Kunne ikke lagre produktet som utkast")
@@ -104,7 +99,7 @@ export default function ProductForm({ heading, submitLabel, contactPersons, prod
   const handleDeleteDraft = async () => {
     try {
       await deleteProduct(productId)
-      setShowPopUp(false)
+      closePopUp()
       toast("Utkastet ble slettet")
       router.back()
     } catch(error) {
@@ -116,20 +111,18 @@ export default function ProductForm({ heading, submitLabel, contactPersons, prod
 
     
     <div className="w-4/5 min-w-120 max-w-230 mx-auto py-10">
-      <div className={`${showPopUp ? `block` : `hidden`}`}>
-        <PopUp 
-          title='Lagre endringen som et utkast' 
-          yesLabel='Ja, lagre som utkast' 
-          noLabel='Nei, kast endringene' 
-          onYes={handleSaveDraft}
-          onNo={handleDeleteDraft}
-          onClose={() => setShowPopUp(false)}
-        />
-      </div>
+      {popUpElement}
       <form onSubmit={handleForm} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
 
         <div className="flex items-start">
-          <BackBtn handleOnClick={() => setShowPopUp(true)}/>
+          <BackBtn handleOnClick={() => openPopUp({
+            title:    'Lagre endringen som et utkast?',
+            subtitle: 'Du vil kunne fortsette å redigere utkastet senere, og det vil ikke være synlig for kunder før du publiserer det.',
+            yesLabel: 'Ja, lagre som utkast',
+            noLabel:  'Nei, slett endringene',
+            onYes:    handleSaveDraft,
+            onNo:     handleDeleteDraft,
+          })}/>
         </div>
         <h2 className="heading-2">{heading}</h2>
         <p className="text-text-faint italic -mt-4">Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette</p>

@@ -67,7 +67,7 @@ export async function deleteOrder(id: number) {
   const order = await prisma.productOrder.findUnique({ where: { id: id } })
   if(!order) throw new Error("Fant ikke bestilling")
 
-  const deleted = await prisma.productOrder.delete({ where: { id: id } })
+  await prisma.productOrder.delete({ where: { id: id } })
   revalidatePath('/admin')
 }
 

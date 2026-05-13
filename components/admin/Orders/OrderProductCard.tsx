@@ -1,10 +1,12 @@
 "use client"
-import { deleteOrder, UpdateOrder, type OrderWithProduct } from "@/actions/orderProduct"
+import { deleteOrder, getAllOrders, UpdateOrder } from "@/actions/orderProduct"
 import { OrderStatus } from "@/generated/prisma"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import toast from "react-hot-toast"
+
+type OrderWithProduct = Awaited<ReturnType<typeof getAllOrders>>[number]
 
 interface Props {
   order: OrderWithProduct
@@ -44,7 +46,7 @@ export default function OrderCard({ order }: Props) {
       await UpdateOrder(order.id, status)
       toast.success("Status oppdatert")
       router.refresh()
-    } catch(error) {
+    } catch {
       toast.error("Kunne ikke endre status")
     }
   }
