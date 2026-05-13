@@ -3,7 +3,7 @@ import { EducationField, ProjectRequest, Status } from "@/generated/prisma"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
-
+import { usePopUp } from "../shared/PopUp"
 
 type ConvertedProjectRequest = Omit<ProjectRequest, 'minPrice' | 'maxPrice' | 'createdAt'> & {
   minPrice: number
@@ -37,6 +37,8 @@ const ProjectCard = ({ project }: {project: ConvertedProjectRequest}) => {
   const router = useRouter()
   const formatted = new Date(project.createdAt)
 
+  const { open: openPopUp, element: popUpElement } = usePopUp()
+
   const handleDelete = async () => {
     try {
       await deleteProject(project.id)
@@ -58,6 +60,7 @@ const ProjectCard = ({ project }: {project: ConvertedProjectRequest}) => {
   }
   return (
     <div className="card card-subtle flex flex-col gap-4">
+      {popUpElement}
 
       {/* Badges + title + actions */}
       <div className="flex flex-col gap-2">
@@ -89,7 +92,13 @@ const ProjectCard = ({ project }: {project: ConvertedProjectRequest}) => {
               <option value="IN_PROGRESS">Under bygging</option>
               <option value="COMPLETE">Ferdig</option>
             </select>
-            <button className="btn btn-error" onClick={handleDelete}>
+            <button className="btn btn-error" onClick={() => openPopUp({
+              title: "Slett prosjektet?",
+              subtitle: "Er du sikker på at du vil slette dette prosjektet? Denne handlingen kan ikke angres.",
+              yesLabel: "Ja, slett",
+              noLabel: "Nei, behold",
+              onYes: handleDelete
+            })}>
               Fjern
             </button>
           </div>

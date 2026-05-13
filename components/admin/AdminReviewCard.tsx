@@ -80,6 +80,7 @@ export default function AdminReviewCard({ review }: { review: Review }) {
         <button
           onClick={() => openPopUp({
             title: 'Vil du slette anmeldelsen?',
+            subtitle: "Er du sikker på at du vil slette denne anmeldelsen? Denne handlingen kan ikke angres.",
             yesLabel: 'Slett',
             noLabel: 'Avbryt',
             onYes: handleDelete,
