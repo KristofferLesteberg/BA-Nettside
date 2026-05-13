@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import { HiOutlinePlusSm } from 'react-icons/hi'
-import { FaExternalLinkAlt } from "react-icons/fa";
 import { getAllReviews } from '@/actions/reviews'
-import DeleteReview from '@/components/admin/DeleteReview'
+import AdminReviewCard from '@/components/admin/AdminReviewCard'
 
 export default async function AdminReviewsView() {
   const reviews = await getAllReviews()
@@ -23,60 +22,7 @@ export default async function AdminReviewsView() {
 
       <div className="flex flex-col gap-4">
         {reviews.map((review) => (
-          <div key={review.id} className="card flex items-center gap-4">
-
-            {/* Avatar */}
-            <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-secondary shrink-0 bg-surface-sunken">
-              {review.imageId ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={`/images/${review.imageId}.webp`}
-                  alt={review.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-text-faint text-xl font-bold">
-                  {review.name.charAt(0).toUpperCase()}
-                </div>
-              )}
-            </div>
-
-            {/* Content */}
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-text">{review.name}</p>
-              {(review.role || review.orgName) && (
-                <p className="text-sm text-text-faint flex items-center gap-1 flex-wrap">
-                  {review.role && <span>{review.role}</span>}
-                  {review.role && review.orgName && <span>·</span>}
-                  {review.orgName && (
-                    review.orgURL ? (
-                      <a  
-                        href={review.orgURL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="header-link inline-flex items-center gap-1"
-                      >
-                        {review.orgName}
-                        <FaExternalLinkAlt className="text-[10px] opacity-60" />
-                      </a>
-                    ) : (
-                      <span>{review.orgName}</span>
-                    )
-                  )}
-                </p>
-              )}
-              <p className="text-sm text-text-muted line-clamp-2 mt-0.5">{review.message}</p>
-            </div>
-
-            {/* Actions */}
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <Link href={`/admin/oppdater-anmeldelse/${review.id}`} className="btn btn-outline text-sm">
-                Rediger
-              </Link>
-              <DeleteReview reviewId={review.id} />
-            </div>
-
-          </div>
+          <AdminReviewCard key={review.id} review={review} />
         ))}
       </div>
     </>
