@@ -117,6 +117,7 @@ export default function ProductForm({ heading, submitLabel, contactPersons, prod
         <div className="flex items-start">
           <BackBtn handleOnClick={() => openPopUp({
             title:    'Lagre endringen som et utkast?',
+            subtitle: 'Du vil kunne fortsette å redigere utkastet senere, og det vil ikke være synlig for kunder før du publiserer det.',
             yesLabel: 'Ja, lagre som utkast',
             noLabel:  'Nei, slett endringene',
             onYes:    handleSaveDraft,
