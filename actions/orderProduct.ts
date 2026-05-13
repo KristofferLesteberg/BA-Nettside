@@ -24,9 +24,16 @@ export async function getAllOrders() {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
 
-  return await prisma.productOrder.findMany({
+  const orders = await prisma.productOrder.findMany({
     include: { product: { include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } } } }
   })
+
+  return orders.map(order => ({
+    ...order,
+    product: order.product
+      ? { ...order.product, price: order.product.price.toNumber() }
+      : null,
+  }))
 }
 
 export async function getOrderById(id: number) {
@@ -58,7 +65,7 @@ export async function deleteOrder(id: number) {
   const order = await prisma.productOrder.findUnique({ where: { id: id } })
   if(!order) throw new Error("Fant ikke bestilling")
 
-  const deleted = await prisma.productOrder.delete({ where: { id: id } })
+  await prisma.productOrder.delete({ where: { id: id } })
   revalidatePath('/admin')
 }
 
