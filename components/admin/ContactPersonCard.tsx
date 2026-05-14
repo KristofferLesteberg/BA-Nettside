@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 import { deleteContactPerson } from "@/actions/contact"
+import { usePopUp } from "../shared/PopUp"
 
 interface Props {
   person: ContactPerson
@@ -12,11 +13,9 @@ interface Props {
 
 export default function ContactPersonCard({ person }: Props) {
   const router = useRouter()
-  
+  const { open: openPopUp, element: popUpElement } = usePopUp()
 
   const deletePerson = async () => {
-    if (!window.confirm('Vil du slette kontaktpersonen?')) return
-
     try {
       await deleteContactPerson(person.id)
       toast.success('Kontaktperson slettet')
@@ -28,6 +27,7 @@ export default function ContactPersonCard({ person }: Props) {
 
   return (
     <div className="card card-subtle flex flex-col gap-4">
+      {popUpElement}
       <div className="flex flex-row justify-between">
         <h1 className="heading-1">{person.name}</h1>
 
@@ -35,7 +35,15 @@ export default function ContactPersonCard({ person }: Props) {
           <Link href={`/admin/oppdater-kontakt/${person.id}`} className="btn btn-outline">
             Redigere
           </Link>
-          <button className="btn btn-error" onClick={deletePerson}>Fjern</button>
+          <button className="btn btn-error" onClick={() => openPopUp({
+            title: "Slett kontaktpersonen?",
+            subtitle: "Er du sikker på at du vil slette denne kontaktpersonen? Denne handlingen kan ikke angres.",
+            yesLabel: "Ja, slett",
+            noLabel: "Nei, behold",
+            onYes: deletePerson
+          })}>
+            Fjern
+          </button>
         </div>
       </div>
 

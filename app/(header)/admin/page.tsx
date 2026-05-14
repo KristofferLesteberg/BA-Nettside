@@ -46,7 +46,7 @@ const page = async () => {
       count: contactPersons
     },
     {
-      label: "Bestillinger",
+      label: "bestillinger",
       content: <AdminOrderView />,
       count: orders
     }
