@@ -11,6 +11,7 @@ export type { OrderWithProduct }
 export type OrderStatusFilter = PrismaOrderStatus | "ALL"
 export type SortOption = "newest" | "oldest"
 
+
 interface Props {
   orders: OrderWithProduct[]
   sidebarAction?: React.ReactNode
@@ -38,12 +39,10 @@ export default function FilteredOrdersGrid({ orders, sidebarAction }: Props) {
       if (status !== "ALL" && order.status !== status) return false
       return true
     })
-
     switch (sort) {
       case "newest": result.sort((a, b) => b.id - a.id); break
       case "oldest": result.sort((a, b) => a.id - b.id); break
     }
-
     return result
   }, [orders, status, sort])
 
