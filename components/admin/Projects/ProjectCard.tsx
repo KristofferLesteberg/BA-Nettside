@@ -13,7 +13,7 @@ export type SerializedProject = Omit<ProjectRequest, 'minPrice' | 'maxPrice' | '
 
 const STATUS_LABELS: Record<Status, string> = {
   NEW: 'Nytt prosjekt',
-  IN_PROGRESS: "Under bygging",
+  IN_PROGRESS: "Pågående",
   COMPLETE: "Ferdig"
 }
 

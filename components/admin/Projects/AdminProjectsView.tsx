@@ -18,9 +18,7 @@ export default async function AdminProjectsView() {
   return (
     <>
       <h1 className="heading-2 mb-10">Prosjekter - {convertedProject.length}</h1>
-      <div className="w-6xl ml-auto mr-auto grid grid-cols-1 gap-5">
-        <FilteredProjectGrid projects={convertedProject} />
-      </div>
+      <FilteredProjectGrid projects={convertedProject} />
     </>
   )
   
