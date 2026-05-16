@@ -39,6 +39,33 @@ export async function getProjectById(id: string) {
   return prisma.projectRequest.findUnique({ where: { id }})
 }
 
+export async function verifyProjectClient(id: string, forename: string, surname: string, email: string) {
+  const project = await prisma.projectRequest.findUnique({ where: { id } })
+  if (!project) return null
+
+  const forenameMatch = project.clientForename.trim().toLowerCase() === forename.trim().toLowerCase()
+  const surnameMatch = project.clientSurname.trim().toLowerCase() === surname.trim().toLowerCase()
+  const nameMatch = forenameMatch && surnameMatch
+  const emailMatch = project.clientEmail.trim().toLowerCase() === email.trim().toLowerCase()
+  if (!nameMatch || !emailMatch) return null
+
+  return {
+    educationField:     project.educationField ?? '',
+    title:              project.title,
+    description:        project.description,
+    minPrice:           Number(project.minPrice).toString(),
+    maxPrice:           Number(project.maxPrice).toString(),
+    clientForename:     project.clientForename,
+    clientSurname:      project.clientSurname,
+    clientEmail:        project.clientEmail,
+    clientPhone:        project.clientPhone,
+    organizationName:   project.organizationName  ?? '',
+    organizationNumber: project.organizationNumber ?? '',
+    address:            project.address,
+    billingAddress:     project.billingAddress,
+  }
+}
+
 export async function getAllProjects() {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
