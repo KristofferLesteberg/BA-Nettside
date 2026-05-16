@@ -21,9 +21,9 @@ const STATUS_LABELS: Record<Status, string> = {
 }
 
 const STATUS_STYLES: Record<Status, string> = {
-  NEW:         'badge badge-status-new',
-  IN_PROGRESS: 'badge badge-status-progress',
-  COMPLETE:    'badge badge-success',
+  NEW:         'badge badge-md badge-status-new',
+  IN_PROGRESS: 'badge badge-md badge-status-progress',
+  COMPLETE:    'badge badge-md badge-success',
 }
 
 const EDUCATION_LABELS: Record<EducationField, string> = {
@@ -158,7 +158,7 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
             </div>
 
             <div className="w-28 flex justify-center -ml-1.5">
-              <span className="badge badge-neutral gap-1.5">
+              <span className="badge badge-md badge-neutral gap-1.5">
                 {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" aria-hidden="true" />}
                 {project.educationField ? EDUCATION_LABELS[project.educationField] : 'Ingen linje'}
               </span>
