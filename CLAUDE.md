@@ -109,6 +109,10 @@ Prefer these over writing raw Tailwind for common UI elements:
 
 **Border helpers** — `.border-default`, `.border-strong`, `.border-primary`
 
+### Tailwind 4 sizing gotcha
+
+The `@theme` block defines custom `--spacing-xs/sm/md/lg/xl/section` tokens. In Tailwind 4, named size utilities like `max-w-sm`, `max-w-md`, `max-w-lg` resolve to these custom tokens (e.g. `max-w-md` → 1.5rem), **not** the Tailwind default breakpoint sizes. Always use **numeric** utilities (`max-w-120`, `w-96`, etc.) or arbitrary values (`max-w-[480px]`) for explicit pixel/rem sizes. Responsive breakpoint *prefixes* (`sm:`, `md:`, `lg:`) are unaffected and work normally.
+
 ### Custom Utilities (`@utility`)
 
 - `.shadow-t-md` / `.shadow-b-md` / `.shadow-y-md` — directional shadows (top, bottom, both)

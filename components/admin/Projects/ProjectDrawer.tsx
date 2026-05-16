@@ -171,7 +171,7 @@ export default function ProjectDrawer({ project, onClose }: Props) {
       />
 
       {/* Drawer */}
-      <aside className={`fixed top-0 right-0 h-full w-full max-w-9/12 z-52 bg-bg border-l border-border shadow-xl flex flex-col overflow-y-auto transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <aside className={`fixed top-0 right-0 h-full w-full max-w-120 z-52 bg-bg border-l border-border shadow-xl flex flex-col overflow-y-auto transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         {project && (
           <>
             {/* Header */}

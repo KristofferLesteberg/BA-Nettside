@@ -68,7 +68,7 @@ export default function PopUp({ title, subtitle, onYes, onNo, onClose, yesLabel,
   return (
     <div
       onClick={(e) => { e.stopPropagation(); onClose() }}
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs ${visible ? 'animate-popup-in' : 'animate-popup-out'}`}
+      className={`fixed inset-0 z-60 flex items-center justify-center bg-black/40 backdrop-blur-xs ${visible ? 'animate-popup-in' : 'animate-popup-out'}`}
     >
       <div
         ref={cardRef}
