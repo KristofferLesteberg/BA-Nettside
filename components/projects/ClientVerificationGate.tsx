@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { verifyProjectClient } from '@/actions/projects'
 import UpdateProjectForm from './updateProject'
+import BackBtn from '@/components/shared/BackBtn'
 import Link from 'next/link'
 
 type FormValues = {
@@ -22,12 +23,53 @@ type FormValues = {
   billingAddress: string
 }
 
+const CACHE_TTL = 60 * 60 * 1000 // 1 hour
+const cacheKey = (id: string) => `project-verify-${id}`
+
+function saveCache(id: string, forename: string, surname: string, email: string) {
+  localStorage.setItem(cacheKey(id), JSON.stringify({ forename, surname, email, expiresAt: Date.now() + CACHE_TTL }))
+}
+
+function clearCache(id: string) {
+  localStorage.removeItem(cacheKey(id))
+}
+
 export default function ClientVerificationGate({ id }: { id: string }) {
   const [forename, setForename] = useState('')
   const [surname, setSurname] = useState('')
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
+  const [autoVerifying, setAutoVerifying] = useState(true)
   const [initialValues, setInitialValues] = useState<FormValues | null>(null)
+
+  useEffect(() => {
+    const raw = localStorage.getItem(cacheKey(id))
+    if (!raw) { setAutoVerifying(false); return }
+
+    let cached: { forename: string; surname: string; email: string; expiresAt: number }
+    try { cached = JSON.parse(raw) } catch { clearCache(id); setAutoVerifying(false); return }
+
+    if (Date.now() > cached.expiresAt) { clearCache(id); setAutoVerifying(false); return }
+
+    verifyProjectClient(id, cached.forename, cached.surname, cached.email)
+      .then(result => {
+        if (result) {
+          setInitialValues(result)
+        } else {
+          clearCache(id)
+        }
+      })
+      .catch(() => clearCache(id))
+      .finally(() => setAutoVerifying(false))
+  }, [id])
+
+  if (autoVerifying) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-page">
+        <p className="small-text text-text-faint">Laster…</p>
+      </div>
+    )
+  }
 
   if (initialValues) {
     return <UpdateProjectForm id={id} initialValues={initialValues} />
@@ -42,6 +84,7 @@ export default function ClientVerificationGate({ id }: { id: string }) {
         toast.error('Feil navn eller e-postadresse. Sjekk at du bruker samme navn og e-post som da du sendte inn prosjektet.')
         return
       }
+      saveCache(id, forename, surname, email)
       setInitialValues(result)
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'En feil oppsto ved verifisering. Prøv igjen senere.')
@@ -53,6 +96,8 @@ export default function ClientVerificationGate({ id }: { id: string }) {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-16 bg-page">
       <div className="w-full max-w-96 md:max-w-2/3 lg:max-w-3/5 space-y-6">
+
+        <BackBtn />
 
         <div className="space-y-1">
           <p className="label">Prosjektforespørsel</p>
