@@ -256,66 +256,70 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
         <div className="border-t border-border">
           <button
             onClick={() => setDetailsOpen(v => !v)}
-            className="flex items-center justify-between w-full py-2 small-text font-medium text-text"
+            className="group flex items-center justify-between w-full py-2 small-text font-medium text-text"
             aria-expanded={detailsOpen}
             aria-controls={`project-details-${project.id}`}
           >
             Detaljer
-            <FaChevronDown className={`w-3 h-3 text-text-faint transition-transform duration-150 ${detailsOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+            <FaChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${detailsOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
           </button>
-          {detailsOpen && (
-            <div id={`project-details-${project.id}`} className="flex flex-col gap-1.5 pb-2">
-              <span className="flex items-center gap-1.5 small-text text-muted">
-                <FaCalendarDays className="text-text-faint shrink-0" aria-hidden="true" />
-                {formatDate(project.createdAt)}
-              </span>
-              <span className="flex items-center gap-1.5 small-text text-text font-medium">
-                <FaCoins className="text-text-faint shrink-0" aria-hidden="true" />
-                {priceRange}
-              </span>
-              {project.billingAddress && (
+          <div id={`project-details-${project.id}`} className={`grid transition-[grid-template-rows] duration-200 ${detailsOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+            <div className="overflow-hidden min-h-0">
+              <div className="flex flex-col gap-1.5 pb-2">
                 <span className="flex items-center gap-1.5 small-text text-muted">
-                  <FaFileInvoice className="text-text-faint shrink-0" aria-hidden="true" />
-                  {project.billingAddress}
+                  <FaCalendarDays className="text-text-faint shrink-0" aria-hidden="true" />
+                  {formatDate(project.createdAt)}
                 </span>
-              )}
+                <span className="flex items-center gap-1.5 small-text text-text font-medium">
+                  <FaCoins className="text-text-faint shrink-0" aria-hidden="true" />
+                  {priceRange}
+                </span>
+                {project.billingAddress && (
+                  <span className="flex items-center gap-1.5 small-text text-muted">
+                    <FaFileInvoice className="text-text-faint shrink-0" aria-hidden="true" />
+                    {project.billingAddress}
+                  </span>
+                )}
+              </div>
             </div>
-          )}
+          </div>
         </div>
 
         {/* Kontakt */}
         <div className="border-t border-border">
           <button
             onClick={() => setKontaktOpen(v => !v)}
-            className="flex items-center justify-between w-full py-2 small-text font-medium text-text"
+            className="group flex items-center justify-between w-full py-2 small-text font-medium text-text"
             aria-expanded={kontaktOpen}
             aria-controls={`project-kontakt-${project.id}`}
           >
             Kontakt
-            <FaChevronDown className={`w-3 h-3 text-text-faint transition-transform duration-150 ${kontaktOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+            <FaChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${kontaktOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
           </button>
-          {kontaktOpen && (
-            <div id={`project-kontakt-${project.id}`} className="flex flex-col gap-1.5 pb-2">
-              {project.clientEmail && (
-                <span className="flex items-center gap-1.5 small-text text-muted">
-                  <FaEnvelope className="text-text-faint shrink-0" aria-hidden="true" />
-                  {project.clientEmail}
-                </span>
-              )}
-              {project.clientPhone && (
-                <span className="flex items-center gap-1.5 small-text text-muted">
-                  <FaPhone className="text-text-faint shrink-0" aria-hidden="true" />
-                  {project.clientPhone}
-                </span>
-              )}
-              {project.address && (
-                <span className="flex items-center gap-1.5 small-text text-muted">
-                  <FaLocationDot className="text-text-faint shrink-0" aria-hidden="true" />
-                  {project.address}
-                </span>
-              )}
+          <div id={`project-kontakt-${project.id}`} className={`grid transition-[grid-template-rows] duration-200 ${kontaktOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+            <div className="overflow-hidden min-h-0">
+              <div className="flex flex-col gap-1.5 pb-2">
+                {project.clientEmail && (
+                  <span className="flex items-center gap-1.5 small-text text-muted">
+                    <FaEnvelope className="text-text-faint shrink-0" aria-hidden="true" />
+                    {project.clientEmail}
+                  </span>
+                )}
+                {project.clientPhone && (
+                  <span className="flex items-center gap-1.5 small-text text-muted">
+                    <FaPhone className="text-text-faint shrink-0" aria-hidden="true" />
+                    {project.clientPhone}
+                  </span>
+                )}
+                {project.address && (
+                  <span className="flex items-center gap-1.5 small-text text-muted">
+                    <FaLocationDot className="text-text-faint shrink-0" aria-hidden="true" />
+                    {project.address}
+                  </span>
+                )}
+              </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
