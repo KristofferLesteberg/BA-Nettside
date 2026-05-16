@@ -151,6 +151,7 @@ export default function OrderProjectForm({ onSuccess }: Props) {
         address,
         billingAddress:     sameAsAddress ? address : billingAddress,
       })
+      localStorage.setItem(`project-verify-${id}`, JSON.stringify({ forename, surname, email, expiresAt: Date.now() + 60 * 60 * 1000 }))
       onSuccess({ id, email })
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Noe gikk galt')
