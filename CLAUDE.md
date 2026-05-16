@@ -50,6 +50,7 @@ NextAuth v4 configured in `app/lib/auth.ts`:
 - Server Actions return a typed `ApiResponse` shape (see `app/lib/api-response.ts`)
 - Image processing uses Sharp; uploads handled by `react-dropzone` + `react-easy-crop` on the client
 - `next.config.ts` enables React Compiler and standalone output mode — don't disable these
+- Comments should be sparse — only when the why isn't obvious from the code. No block dividers, no section headers in comments, no emoji.
 
 ### Environment Variables
 
