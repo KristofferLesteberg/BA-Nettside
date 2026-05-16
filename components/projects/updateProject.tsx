@@ -229,14 +229,14 @@ export default function UpdateProjectForm({
   // ── Navigation guard ──────────────────────────────────────────────────────
 
   function handleBack() {
-    if (!hasChanges) { router.back(); return }
+    if (!hasChanges) { router.push('/'); return }
     popup.open({
       title:    'Ulagrede endringer',
       subtitle: 'Du har endringer som ikke er lagret. Hva vil du gjøre?',
       yesLabel: 'Lagre og forlat',
       noLabel:  'Forkast og forlat',
-      onYes: async () => { const ok = await save(); if (ok) router.back() },
-      onNo:  () => router.back(),
+      onYes: async () => { const ok = await save(); if (ok) router.push('/') },
+      onNo:  () => router.push('/'),
     })
   }
 
@@ -262,7 +262,7 @@ export default function UpdateProjectForm({
         <form id="update-project-form" onSubmit={handleSubmit} className="space-y-6">
 
           {/* ── Header ─────────────────────────────────────────── */}
-          <BackBtn handleOnClick={handleBack} />
+          <BackBtn handleOnClick={handleBack} text='←  Forside' />
           <h1 className="heading-1">Prosjektforespørsel</h1>
 
           {/* ── Prosjektinformasjon ─────────────────────────────── */}

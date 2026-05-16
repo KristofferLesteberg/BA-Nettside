@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { verifyProjectClient } from '@/actions/projects'
 import UpdateProjectForm from './updateProject'
@@ -35,6 +36,7 @@ function clearCache(id: string) {
 }
 
 export default function ClientVerificationGate({ id }: { id: string }) {
+  const router = useRouter()
   const [forename, setForename] = useState('')
   const [surname, setSurname] = useState('')
   const [email, setEmail] = useState('')
@@ -97,7 +99,7 @@ export default function ClientVerificationGate({ id }: { id: string }) {
     <div className="min-h-screen flex items-center justify-center px-4 py-16 bg-page">
       <div className="w-full max-w-96 md:max-w-2/3 lg:max-w-3/5 space-y-6">
 
-        <BackBtn />
+        <BackBtn text='←  Forside' handleOnClick={() => router.push('/')} />
 
         <div className="space-y-1">
           <p className="label">Prosjektforespørsel</p>
