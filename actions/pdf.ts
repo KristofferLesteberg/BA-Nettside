@@ -1,6 +1,7 @@
 'use server'
 
 import path from 'path'
+import fs from 'fs'
 import { createElement, type ReactElement } from 'react'
 import { renderToBuffer, type DocumentProps } from '@react-pdf/renderer'
 import { getServerSession } from 'next-auth'
@@ -8,7 +9,8 @@ import { authOptions } from '@/app/lib/auth'
 import { prisma } from '@/app/lib/prisma'
 import ProjectPdfDocument from '@/components/admin/Projects/ProjectPdfDocument'
 
-const LOGO_SRC = path.join(process.cwd(), 'public', 'icons', 'SamEyde_vgs_hvit.png')
+const logoPath = path.join(process.cwd(), 'public', 'icons', 'SamEyde_vgs_hvit.png')
+const LOGO_SRC = `data:image/png;base64,${fs.readFileSync(logoPath).toString('base64')}`
 
 export async function generateProjectPdf(id: string): Promise<Uint8Array> {
   const session = await getServerSession(authOptions)
