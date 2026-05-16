@@ -4,8 +4,9 @@ import { EducationField, ProjectRequest, Status } from "@/generated/prisma"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
+import { generateProjectPdf } from "@/actions/pdf"
 import { usePopUp } from "@/components/shared/PopUp"
-import { FaEllipsisVertical, FaFilePdf, FaTrash, FaHelmetSafety, FaRoad, FaCoins, FaCalendarDays, FaChevronDown, FaQuestion, FaEnvelope, FaPhone, FaLocationDot, FaFileInvoice } from "react-icons/fa6"
+import { FaEllipsisVertical, FaFilePdf, FaTrash, FaHelmetSafety, FaRoad, FaCoins, FaCalendarDays, FaChevronDown, FaQuestion, FaEnvelope, FaPhone, FaLocationDot, FaFileInvoice, FaSpinner } from "react-icons/fa6"
 import { RiProgress3Line } from "react-icons/ri"
 
 export type SerializedProject = Omit<ProjectRequest, 'minPrice' | 'maxPrice' | 'createdAt'> & {
@@ -60,6 +61,8 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
   const router = useRouter()
   const { open: openPopUp, element: popUpElement } = usePopUp()
 
+  const [isGenerating, setIsGenerating] = useState(false)
+
   const [menuMounted,  setMenuMounted]  = useState(false)
   const [menuOpen,     setMenuOpen]     = useState(false)
   const [detailsOpen,  setDetailsOpen]  = useState(false)
@@ -93,6 +96,29 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
   }, [menuMounted])
 
   useEffect(() => () => clearTimeout(closeTimer.current), [])
+
+  const handleDownloadPdf = async () => {
+    setIsGenerating(true)
+    try {
+      const bytes = await generateProjectPdf(project.id)
+      const blob  = new Blob([bytes.buffer as ArrayBuffer], { type: 'application/pdf' })
+      const url   = URL.createObjectURL(blob)
+      const a     = document.createElement('a')
+      const surname = project.clientSurname.toLowerCase()
+        .replace(/æ/g, 'ae').replace(/ø/g, 'o').replace(/å/g, 'a')
+        .replace(/[^a-z0-9]/g, '')
+      a.href     = url
+      a.download = `prosjekt-${project.id.slice(0, 8)}-${surname}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    } catch {
+      toast.error('Kunne ikke generere PDF')
+    } finally {
+      setIsGenerating(false)
+    }
+  }
 
   const handleDelete = async () => {
     try {
@@ -193,12 +219,16 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
           </button>
 
           <button
-            onClick={() => { /* TODO: PDF download */ }}
-            className="md:hidden btn btn-ghost p-2"
+            onClick={handleDownloadPdf}
+            disabled={isGenerating}
+            className="md:hidden btn btn-ghost p-2 disabled:opacity-50"
             title="Last ned PDF"
             aria-label="Last ned PDF"
           >
-            <FaFilePdf className="w-5 h-5" aria-hidden="true" />
+            {isGenerating
+              ? <FaSpinner className="w-5 h-5 animate-spin" aria-hidden="true" />
+              : <FaFilePdf className="w-5 h-5" aria-hidden="true" />
+            }
           </button>
 
           <div ref={menuRef} className="relative">

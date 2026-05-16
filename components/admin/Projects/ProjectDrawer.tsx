@@ -2,10 +2,11 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
-import { FaXmark, FaHelmetSafety, FaRoad, FaFilePdf, FaTrash, FaQuestion } from "react-icons/fa6"
+import { FaXmark, FaHelmetSafety, FaRoad, FaFilePdf, FaTrash, FaQuestion, FaSpinner } from "react-icons/fa6"
 import { RiProgress3Line } from "react-icons/ri"
 import { EducationField, Status } from "@/generated/prisma"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
+import { generateProjectPdf } from "@/actions/pdf"
 import { usePopUp } from "@/components/shared/PopUp"
 import CopyButton from "@/components/shared/CopyButton"
 import { type SerializedProject } from "./ProjectCard"
@@ -94,6 +95,8 @@ export default function ProjectDrawer({ project, onClose }: Props) {
     setCurrentStatus(project.status)
   }
 
+  const [isGenerating, setIsGenerating] = useState(false)
+
   const [menuMounted, setMenuMounted] = useState(false)
   const [menuOpen,    setMenuOpen]    = useState(false)
   const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
@@ -132,6 +135,30 @@ export default function ProjectDrawer({ project, onClose }: Props) {
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [isOpen, onClose])
+
+  const handleDownloadPdf = async () => {
+    if (!project) return
+    setIsGenerating(true)
+    try {
+      const bytes = await generateProjectPdf(project.id)
+      const blob  = new Blob([bytes.buffer as ArrayBuffer], { type: 'application/pdf' })
+      const url   = URL.createObjectURL(blob)
+      const a     = document.createElement('a')
+      const surname = project.clientSurname.toLowerCase()
+        .replace(/æ/g, 'ae').replace(/ø/g, 'o').replace(/å/g, 'a')
+        .replace(/[^a-z0-9]/g, '')
+      a.href     = url
+      a.download = `prosjekt-${project.id.slice(0, 8)}-${surname}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    } catch {
+      toast.error('Kunne ikke generere PDF')
+    } finally {
+      setIsGenerating(false)
+    }
+  }
 
   const handleDelete = async () => {
     if (!project) return
@@ -185,11 +212,15 @@ export default function ProjectDrawer({ project, onClose }: Props) {
 
               <div className="flex items-center gap-0.5 shrink-0">
                 <button
-                  onClick={() => { /* TODO: PDF download */ }}
-                  className="btn btn-ghost p-2"
+                  onClick={handleDownloadPdf}
+                  disabled={isGenerating}
+                  className="btn btn-ghost p-2 disabled:opacity-50"
                   title="Last ned PDF"
                 >
-                  <FaFilePdf className="w-5 h-5" />
+                  {isGenerating
+                    ? <FaSpinner className="w-5 h-5 animate-spin" />
+                    : <FaFilePdf className="w-5 h-5" />
+                  }
                 </button>
 
                 <div ref={menuRef} className="relative">

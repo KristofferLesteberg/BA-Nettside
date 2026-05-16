@@ -1,8 +1,8 @@
 'use server'
 
 import path from 'path'
-import { createElement } from 'react'
-import { renderToBuffer } from '@react-pdf/renderer'
+import { createElement, type ReactElement } from 'react'
+import { renderToBuffer, type DocumentProps } from '@react-pdf/renderer'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/lib/auth'
 import { prisma } from '@/app/lib/prisma'
@@ -24,7 +24,7 @@ export async function generateProjectPdf(id: string): Promise<Uint8Array> {
   }
 
   const buffer = await renderToBuffer(
-    createElement(ProjectPdfDocument, { project: serialized, logoSrc: LOGO_SRC })
+    createElement(ProjectPdfDocument, { project: serialized, logoSrc: LOGO_SRC }) as ReactElement<DocumentProps>
   )
 
   return new Uint8Array(buffer)
