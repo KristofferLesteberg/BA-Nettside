@@ -3,6 +3,7 @@ import { EducationField, ProjectRequest, Status } from "@/generated/prisma"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
+import { usePopUp } from "@/components/shared/PopUp"
 
 export type SerializedProject = Omit<ProjectRequest, 'minPrice' | 'maxPrice' | 'createdAt'> & {
   minPrice: number
@@ -35,6 +36,7 @@ const EDUCATION_STYLES: Record<EducationField, string> = {
 
 const ProjectCard = ({ project }: { project: SerializedProject }) => {
   const router = useRouter()
+  const { open: openPopUp, element: popUpElement } = usePopUp()
   const formatted = new Date(project.createdAt)
 
   const handleDelete = async () => {
@@ -58,6 +60,7 @@ const ProjectCard = ({ project }: { project: SerializedProject }) => {
   }
   return (
     <div className="card card-subtle flex flex-col gap-4">
+      {popUpElement}
 
       {/* Badges + title + actions */}
       <div className="flex flex-col gap-2">
@@ -89,7 +92,13 @@ const ProjectCard = ({ project }: { project: SerializedProject }) => {
               <option value="IN_PROGRESS">Under bygging</option>
               <option value="COMPLETE">Ferdig</option>
             </select>
-            <button className="btn btn-error" onClick={handleDelete}>
+            <button className="btn btn-error" onClick={() => openPopUp({
+              title: "Slett prosjektet?",
+              subtitle: "Er du sikker på at du vil slette dette prosjektet? Denne handlingen kan ikke angres.",
+              yesLabel: "Ja, slett",
+              noLabel: "Nei, behold",
+              onYes: handleDelete
+            })}>
               Fjern
             </button>
           </div>
