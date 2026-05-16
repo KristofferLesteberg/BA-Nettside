@@ -404,7 +404,7 @@ export default function OrderProjectForm({ onSuccess }: Props) {
               <div className="space-y-1.5">
                 <label className="label">Beskrivelse</label>
                 <textarea
-                  className="input min-h-[120px]"
+                  className="input min-h-30"
                   placeholder="Beskriv hva du ønsker utført"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
