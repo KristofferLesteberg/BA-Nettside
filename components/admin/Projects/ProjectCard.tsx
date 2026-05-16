@@ -5,7 +5,7 @@ import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
 import { usePopUp } from "@/components/shared/PopUp"
-import { FaEye, FaTrash, FaHelmetSafety, FaRoad, FaCoins, FaCalendarDays, FaChevronDown } from "react-icons/fa6"
+import { FaEye, FaTrash, FaHelmetSafety, FaRoad, FaCoins, FaCalendarDays, FaChevronDown, FaQuestion } from "react-icons/fa6"
 import { RiProgress3Line } from "react-icons/ri"
 
 export type SerializedProject = Omit<ProjectRequest, 'minPrice' | 'maxPrice' | 'createdAt'> & {
@@ -139,30 +139,30 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
             <span className={STATUS_STYLES[project.status]}>
               {STATUS_LABELS[project.status]}
             </span>
-            {project.educationField && (
-              <span className="badge badge-neutral gap-1.5">
-                {EDUCATION_ICONS[project.educationField]}
-                {EDUCATION_LABELS[project.educationField]}
-              </span>
-            )}
+            <span className="badge badge-neutral gap-1.5">
+              {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" />}
+              {project.educationField ? EDUCATION_LABELS[project.educationField] : 'Ingen linje'}
+            </span>
           </div>
         </div>
 
         {/* Middle: badges + date + price — hidden on small screens */}
         <div className="hidden md:flex items-center shrink-0">
-          <div className="w-px self-stretch bg-border mx-5" />
+          <div className="w-px self-stretch bg-border" />
 
-          <div className="flex items-center gap-2.5">
-            <span className={STATUS_STYLES[project.status]}>
-              {STATUS_LABELS[project.status]}
-            </span>
-
-            {project.educationField && (
-              <span className="badge badge-neutral gap-1.5">
-                {EDUCATION_ICONS[project.educationField]}
-                {EDUCATION_LABELS[project.educationField]}
+          <div className="flex items-center gap-2">
+            <div className="w-28 flex justify-center -mr-1.5">
+              <span className={STATUS_STYLES[project.status]}>
+                {STATUS_LABELS[project.status]}
               </span>
-            )}
+            </div>
+
+            <div className="w-28 flex justify-center -ml-1.5">
+              <span className="badge badge-neutral gap-1.5">
+                {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" />}
+                {project.educationField ? EDUCATION_LABELS[project.educationField] : 'Ingen linje'}
+              </span>
+            </div>
 
             <div className="w-px self-stretch bg-border mx-1" />
 

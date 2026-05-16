@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
-import { FaXmark, FaHelmetSafety, FaRoad, FaDownload, FaTrash } from "react-icons/fa6"
+import { FaXmark, FaHelmetSafety, FaRoad, FaDownload, FaTrash, FaQuestion } from "react-icons/fa6"
 import { RiProgress3Line } from "react-icons/ri"
 import { EducationField, Status } from "@/generated/prisma"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
@@ -174,7 +174,7 @@ export default function ProjectDrawer({ project, onClose }: Props) {
                   </button>
 
                   {menuMounted && (
-                    <div className={`absolute top-full right-0 mt-1 z-10 card rounded-[var(--radius-md)] flex flex-col p-1 min-w-40 shadow-lg ${menuOpen ? 'animate-dropdown-in' : 'animate-dropdown-out'}`}>
+                    <div className={`absolute top-full right-0 mt-1 z-10 card rounded-md flex flex-col p-1 min-w-40 shadow-lg ${menuOpen ? 'animate-dropdown-in' : 'animate-dropdown-out'}`}>
                       {ALL_STATUSES.map(s => (
                         <button
                           key={s}
@@ -219,12 +219,10 @@ export default function ProjectDrawer({ project, onClose }: Props) {
                 <span className={STATUS_STYLES[project.status]}>
                   {STATUS_LABELS[project.status]}
                 </span>
-                {project.educationField && (
-                  <span className="badge badge-neutral gap-1.5">
-                    {EDUCATION_ICONS[project.educationField]}
-                    {EDUCATION_LABELS[project.educationField]}
-                  </span>
-                )}
+                <span className="badge badge-neutral gap-1.5">
+                  {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" />}
+                  {project.educationField ? EDUCATION_LABELS[project.educationField] : 'Ingen linje'}
+                </span>
               </div>
 
               <div className="flex flex-col gap-3">
