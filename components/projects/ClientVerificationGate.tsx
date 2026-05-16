@@ -23,6 +23,7 @@ type FormValues = {
 
 export default function ClientVerificationGate({ id }: { id: string }) {
   const [forename, setForename] = useState('')
+  const [surname, setSurname] = useState('')
   const [clientSurname, setClientSurname] = useState('')
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
@@ -38,7 +39,7 @@ export default function ClientVerificationGate({ id }: { id: string }) {
     setLoading(true)
     setError(null)
     try {
-      const result = await verifyProjectClient(id, forename, email)
+      const result = await verifyProjectClient(id, forename, surname, email)
       if (!result) {
         setError('Feil navn eller e-postadresse. Sjekk at du bruker samme navn og e-post som da du sendte inn prosjektet.')
         return
@@ -84,8 +85,8 @@ export default function ClientVerificationGate({ id }: { id: string }) {
                 type="text"
                 className="input"
                 placeholder="Ditt etternavn"
-                value={clientSurname}
-                onChange={(e) => setClientSurname(e.target.value)}
+                value={surname}
+                onChange={(e) => setSurname(e.target.value)}
                 required
                 autoComplete="surname"
                 autoFocus
