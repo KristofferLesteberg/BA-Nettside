@@ -23,9 +23,11 @@ const mailOptions = {
   text: body,
 }
 try {
+  console.log(mailOptions)
   await transporter.sendMail(mailOptions)
   console.log(mailOptions)
 } catch(error) {
+ 
   throw new Error("Kunne ikke sende mail")
 }
 }

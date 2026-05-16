@@ -43,6 +43,7 @@ export default function OrderCard({ order }: Props) {
 
   const updateStatus = async (status: OrderStatus) => {
     try {
+      console.log(status)
       await UpdateOrder(order.id, status)
       toast.success("Status oppdatert")
       router.refresh()
