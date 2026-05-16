@@ -7,6 +7,7 @@ import { RiProgress3Line } from "react-icons/ri"
 import { EducationField, Status } from "@/generated/prisma"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
 import { usePopUp } from "@/components/shared/PopUp"
+import CopyButton from "@/components/shared/CopyButton"
 import { type SerializedProject } from "./ProjectCard"
 
 const STATUS_LABELS: Record<Status, string> = {
@@ -42,12 +43,31 @@ function formatDate(iso: string): string {
   })
 }
 
-function Field({ label, value }: { label: string; value?: string | null }) {
+function Field({ label, value, href, copyable }: {
+  label: string
+  value?: string | null
+  href?: string
+  copyable?: boolean
+}) {
   if (!value) return null
+  const isExternal = href?.startsWith('http')
   return (
     <div className="flex flex-col gap-0.5">
       <span className="label">{label}</span>
-      <p className="small-text">{value}</p>
+      <div className="flex items-center gap-1">
+        {href ? (
+          <a
+            href={href}
+            {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            className="small-text text-secondary hover:underline"
+          >
+            {value}
+          </a>
+        ) : (
+          <p className="small-text">{value}</p>
+        )}
+        {copyable && <CopyButton valueToCopy={value} />}
+      </div>
     </div>
   )
 }
@@ -66,6 +86,13 @@ export default function ProjectDrawer({ project, onClose }: Props) {
     const id = requestAnimationFrame(() => setIsOpen(!!project))
     return () => cancelAnimationFrame(id)
   }, [project])
+
+  const [trackedId,     setTrackedId]     = useState(project?.id)
+  const [currentStatus, setCurrentStatus] = useState<Status>(project?.status ?? 'NEW')
+  if (project && project.id !== trackedId) {
+    setTrackedId(project.id)
+    setCurrentStatus(project.status)
+  }
 
   const [menuMounted, setMenuMounted] = useState(false)
   const [menuOpen,    setMenuOpen]    = useState(false)
@@ -121,13 +148,14 @@ export default function ProjectDrawer({ project, onClose }: Props) {
   const handleStatusChange = async (status: Status) => {
     if (!project) return
     closeMenu()
-    if (status === project.status) return
+    if (status === currentStatus) return
+    setCurrentStatus(status)
     try {
       await updateProjectStatus(project.id, status)
       toast.success("Oppdatert status")
-      onClose()
       router.refresh()
     } catch {
+      setCurrentStatus(project.status)
       toast.error("Kunne ikke endre status")
     }
   }
@@ -179,9 +207,9 @@ export default function ProjectDrawer({ project, onClose }: Props) {
                         <button
                           key={s}
                           onClick={() => handleStatusChange(s)}
-                          className={`relative text-left pl-4 pr-3 py-2 rounded-[calc(var(--radius-md)-2px)] small-text transition-colors hover:bg-surface-raised cursor-pointer ${project.status === s ? 'font-semibold text-text' : 'text-text-muted'}`}
+                          className={`relative text-left pl-4 pr-3 py-2 rounded-[calc(var(--radius-md)-2px)] small-text transition-colors hover:bg-surface-raised cursor-pointer ${currentStatus === s ? 'font-semibold text-text' : 'text-text-muted'}`}
                         >
-                          {project.status === s && (
+                          {currentStatus === s && (
                             <span className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-3/5 rounded-full bg-secondary" />
                           )}
                           {STATUS_LABELS[s]}
@@ -216,8 +244,8 @@ export default function ProjectDrawer({ project, onClose }: Props) {
             {/* Content */}
             <div className="p-5 flex flex-col gap-6">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className={STATUS_STYLES[project.status]}>
-                  {STATUS_LABELS[project.status]}
+                <span className={STATUS_STYLES[currentStatus]}>
+                  {STATUS_LABELS[currentStatus]}
                 </span>
                 <span className="badge badge-neutral gap-1.5">
                   {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" />}
@@ -228,10 +256,10 @@ export default function ProjectDrawer({ project, onClose }: Props) {
               <div className="flex flex-col gap-3">
                 <span className="label">Detaljer</span>
                 <div className="card-subtle rounded-md p-4 flex flex-col gap-3">
-                  <Field label="ID"             value={project.id} />
+                  <Field label="ID"             value={project.id} copyable />
                   <Field label="Innsendt"        value={formatDate(project.createdAt)} />
                   <Field label="Prisforventning" value={`${Number(project.minPrice).toLocaleString('nb-NO')} – ${Number(project.maxPrice).toLocaleString('nb-NO')} kr`} />
-                  <Field label="Fakturaadresse"  value={project.billingAddress} />
+                  <Field label="Fakturaadresse"  value={project.billingAddress} href={project.billingAddress ? `https://maps.google.com/maps?q=${encodeURIComponent(project.billingAddress)}` : undefined} copyable />
                 </div>
               </div>
 
@@ -245,14 +273,14 @@ export default function ProjectDrawer({ project, onClose }: Props) {
               <div className="flex flex-col gap-3">
                 <span className="label">Kontakt</span>
                 <div className="card-subtle rounded-md p-4 flex flex-col gap-3">
-                  <Field label="E-post"       value={project.clientEmail} />
-                  <Field label="Telefon"      value={project.clientPhone} />
-                  <Field label="Bestillingsadresse"      value={project.address} />
+                  <Field label="E-post"  value={project.clientEmail} href={project.clientEmail ? `mailto:${project.clientEmail}` : undefined} copyable />
+                  <Field label="Telefon" value={project.clientPhone} href={project.clientPhone ? `tel:${project.clientPhone}` : undefined} copyable />
+                  <Field label="Bestillingsadresse" value={project.address} href={project.address ? `https://maps.google.com/maps?q=${encodeURIComponent(project.address)}` : undefined} copyable />
                   {project.organizationName && (
                     <Field label="Organisasjon" value={project.organizationName} />
                   )}
                   {project.organizationNumber && (
-                    <Field label="Org.nr."      value={project.organizationNumber} />
+                    <Field label="Org.nr." value={project.organizationNumber} href={`https://virksomhet.brreg.no/nb/oppslag/enheter/${project.organizationNumber.replace(/\s/g, '')}`} />
                   )}
                 </div>
               </div>
