@@ -126,6 +126,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   measures: 'measures',
   amount: 'amount',
   publishedAt: 'publishedAt',
+  draft: 'draft',
   contactPersonId: 'contactPersonId'
 };
 

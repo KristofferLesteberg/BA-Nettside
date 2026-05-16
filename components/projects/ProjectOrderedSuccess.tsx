@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { FaCheckCircle, FaEnvelope, FaExternalLinkAlt } from 'react-icons/fa'
+import { FaCheckCircle, FaEnvelope, FaExternalLinkAlt, FaHome } from 'react-icons/fa'
+import CopyButton from '../shared/CopyButton'
 
 interface Props {
   id: string
@@ -50,8 +51,9 @@ export default function ProjectOrderedSuccess({ id, email }: Props) {
             <div className="card-subtle space-y-2">
               <p className="label">Referansenummer</p>
               <p className="small-text">Oppgi dette nummeret om du kontakter oss angående forespørselen.</p>
-              <code className="block w-full px-3 py-2 rounded-md bg-secondary text-text-on-primary text-sm font-mono break-all">
+              <code className="flex flex-row justify-between w-full px-3 py-2 rounded-md bg-secondary text-text-on-primary text-sm font-mono break-all">
                 {id}
+                <CopyButton valueToCopy={id}/>
               </code>
             </div>
 
@@ -69,8 +71,8 @@ export default function ProjectOrderedSuccess({ id, email }: Props) {
           </p>
         </div>
 
-        <Link href="/" className="btn btn-primary w-full justify-center">
-          Tilbake til forsiden
+        <Link href="/" className="btn btn-primary w-full justify-center gap-1">
+          <FaHome />Tilbake til forsiden
         </Link>
 
       </div>

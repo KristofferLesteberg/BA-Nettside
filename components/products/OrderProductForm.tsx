@@ -1,64 +1,61 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
 import { createProductOrder } from '@/actions/orderProduct'
-import BackBtn from '@/components/shared/BackBtn'
 import { getProductById, updateProductAmount } from '@/actions/products'
+import BackBtn from '@/components/shared/BackBtn'
+import PhoneInputWithCountrySelect from 'react-phone-number-input'
+import { parsePhoneNumberWithError } from 'libphonenumber-js'
+import type { E164Number, CountryCode } from 'libphonenumber-js'
 
+interface Props {
+  productId: number
+  onSuccess: (data: { id: number; email: string; amount: number; productTitle: string }) => void
+}
 
-export default function OrderProduct() {
-
- 
-  const router = useRouter()
-  const params = useParams()
-  const productId = Number(params.id) || undefined
-
-
+export default function OrderProductForm({ productId, onSuccess }: Props) {
   const [loading, setLoading] = useState(false)
-
   const [clientName, setClientName] = useState("")
   const [clientEmail, setClientEmail] = useState("")
-  const [clientPhone, setClientPhone] = useState("")
+  const [clientPhone, setClientPhone] = useState<E164Number | undefined>()
+  const [phoneCountry, setPhoneCountry] = useState<CountryCode>("NO")
   const [amount, setAmount] = useState("")
   const [extraDetails, setExtraDetails] = useState("")
-  
   const [product, setProduct] = useState<Awaited<ReturnType<typeof getProductById>>>(null)
 
   useEffect(() => {
-    if (productId) getProductById(productId).then(setProduct)
+    getProductById(productId).then(setProduct)
   }, [productId])
 
-  async function handleSubmit(e: any) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
-    if(Number(amount) > Number(product?.amount)) {
+    if (Number(amount) > Number(product?.amount)) {
       toast.error(`Det er ikke mulig å bestille mer enn ${product?.amount}`)
       return
     }
-  
+
     setLoading(true)
     try {
-      await createProductOrder({
+      const order = await createProductOrder({
         clientName,
         clientEmail,
-        clientPhone,
+        clientPhone: String(clientPhone),
         amount,
         extraDetails: extraDetails || undefined,
         productId,
       })
-      await updateProductAmount(Number(productId), Number(amount))
-
-      toast.success('Bestilling sendt!')
-      router.push('/')
+      await updateProductAmount(productId, Number(amount))
+      onSuccess({ id: order.id, email: clientEmail, amount: Number(amount), productTitle: product?.title ?? '' })
     } catch (error: unknown) {
-      toast.error(error instanceof Error ? error.message : "Kunne ikke opprette et nytt produkt")
+      toast.error(error instanceof Error ? error.message : "Kunne ikke sende bestillingen")
     } finally {
       setLoading(false)
     }
   }
+
   return (
     <div className="w-4/5 min-w-120 max-w-160 mx-auto py-10">
       <div className="card-accented shadow-xl space-y-6 px-8 pb-8">
@@ -67,7 +64,7 @@ export default function OrderProduct() {
         </div>
 
         {product && (
-          <div className="flex gap-4 items-center border rounded-lg p-4">
+          <div className="card flex gap-4 items-center">
             {product.images[0] && (
               <div className="relative w-24 h-24 shrink-0 rounded overflow-hidden">
                 <Image
@@ -79,9 +76,9 @@ export default function OrderProduct() {
               </div>
             )}
             <div>
-              <h3 className="font-semibold text-lg">{product.title}</h3>
-              <p className="text-text-faint text-sm">kr {Number(product.price).toLocaleString('nb-NO')}</p>
-              <p className="text-text-faint text-sm">På lager: {product.amount} stk</p>
+              <h3 className="heading-4">{product.title}</h3>
+              <p className="small-text">kr {Number(product.price).toLocaleString('nb-NO')}</p>
+              <p className="small-text">På lager: {product.amount} stk</p>
             </div>
           </div>
         )}
@@ -101,9 +98,8 @@ export default function OrderProduct() {
               className="input"
               placeholder="Ola Nordmann"
               value={clientName}
-              onChange={(e) => { setClientName(e.target.value)}}
+              onChange={(e) => setClientName(e.target.value)}
             />
-            
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -114,21 +110,26 @@ export default function OrderProduct() {
                 className="input"
                 placeholder="ola@eksempel.no"
                 value={clientEmail}
-                onChange={(e) => { setClientEmail(e.target.value)}}
+                onChange={(e) => setClientEmail(e.target.value)}
               />
-          
             </div>
-
             <div className="space-y-1">
               <label className="label">Telefon <span className="text-error">*</span></label>
-              <input
-                type="tel"
+              <PhoneInputWithCountrySelect
                 className="input"
-                placeholder="+47 000 00 000"
+                international={true}
+                defaultCountry="NO"
+                country={phoneCountry}
+                onCountryChange={(c) => setPhoneCountry(c ?? "NO")}
+                placeholder="Telefonnummer"
                 value={clientPhone}
-                onChange={(e) => { setClientPhone(e.target.value)}}
+                onChange={(nr) => {
+                  setClientPhone(nr)
+                  if (nr) {
+                    try { const p = parsePhoneNumberWithError(String(nr)); if (p?.country) setPhoneCountry(p.country) } catch {}
+                  }
+                }}
               />
-
             </div>
           </div>
 
@@ -140,9 +141,8 @@ export default function OrderProduct() {
               className="input"
               placeholder="1"
               value={amount}
-              onChange={(e) => { setAmount(e.target.value)}}
+              onChange={(e) => setAmount(e.target.value)}
             />
-         
           </div>
 
           <div className="space-y-1">

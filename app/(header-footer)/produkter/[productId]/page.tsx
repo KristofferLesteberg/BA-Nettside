@@ -31,7 +31,6 @@ export default async function ProductPage({
             <Link href="/" className="hover:underline">Hjem</Link>
             <span className="text-faint mx-2">/</span>
             <Link href="/produkter" className="hover:underline">Produkter</Link>
-            <Link href="/produkter" className="hover:underline">Produkter</Link>
             <span className="text-faint mx-2">/</span>
             <span className="text-faint">{product.title}</span>
           </span>
@@ -64,8 +63,8 @@ export default async function ProductPage({
 
             {/* CTA */}
             {product.amount > 0 ? (
-              <Link className="btn btn-primary" href={`/OrderProduct/${product.id}`}>
-                Bestill!
+              <Link className="btn btn-primary" href={`/bestill-produkt/${product.id}`}>
+                Bestill
               </Link>
             ) : (
               <button disabled className="btn btn-primary opacity-50 cursor-not-allowed">
@@ -105,43 +104,54 @@ export default async function ProductPage({
                   </div>
                 </div>
               }
-              measures={
-                <div
-                  className="card-subtle flex flex-col divide-y"
-                  style={{ borderRadius: "var(--radius-lg)" }}
-                >
-                  {product.measures && Object.keys(product.measures).length > 0 ? (
-                    Object.entries(product.measures).map(([key, value]) => (
-                      <div key={key} className="flex justify-between px-4 py-3">
-                        <span className="small-text">{key}</span>
-                        <span className="small-text" style={{ color: "var(--color-text)" }}>
-                          {value}
-                        </span>
+              measures={(() => {
+                type StoredMeasure = { name: string; value: string; unit: string }
+                const raw = product.measures
+                const entries: StoredMeasure[] = Array.isArray(raw)
+                  ? (raw as StoredMeasure[])
+                  : Object.entries((raw ?? {}) as Record<string, string>)
+                      .map(([name, value]) => ({ name, value, unit: "" }))
+
+                return (
+                  <div
+                    className="card-subtle flex flex-col divide-y"
+                    style={{ borderRadius: "var(--radius-lg)" }}
+                  >
+                    {entries.length > 0 ? (
+                      entries.map((m, i) => (
+                        <div key={i} className="flex justify-between items-baseline px-4 py-3">
+                          <span className="label">{m.name}</span>
+                          <span className="small-text font-semibold" style={{ color: "var(--color-text)" }}>
+                            {m.value}{m.unit}
+                          </span>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="px-4 py-3">
+                        <span className="small-text text-faint">Ingen mål tilgjengelig</span>
                       </div>
-                    ))
-                  ) : (
-                    <div className="px-4 py-3">
-                      <span className="small-text text-faint">Ingen mål tilgjengelig</span>
-                    </div>
-                  )}
-                </div>
-              }
+                    )}
+                  </div>
+                )
+              })()}
               contactInfo={
                 <div className="card-subtle flex flex-col divide-y" style={{ borderRadius: "var(--radius-lg)" }}>
                   <div className="flex justify-between px-4 py-3">
                     <span className="small-text">Navn</span>
-                    <span className="small-text" style={{ color: "var(--color-text)" }}>{product.contactPerson?.name || ""}</span>
+                    <span className="small-text text-text">{product.contactPerson?.name || ""}</span>
                   </div>
                   <div className="flex justify-between px-4 py-3">
                     <span className="small-text">Mail</span>
-                    <span className="small-text" style={{ color: "var(--color-text)" }}>
-                      {product.contactPerson?.email}
+                    <span className="small-text text-text">
+                      <a href={`mailto:${product.contactPerson?.email}`} className="underline">
+                        {product.contactPerson?.email}
+                      </a>
                     </span>
                   </div>
                   <div className="flex justify-between px-4 py-3">
                     <span className="small-text">Telefon</span>
-                    <span className="small-text" style={{ color: "var(--color-text)" }}>
-                      {product.contactPerson?.phone}
+                    <span className="small-text text-text">
+                      <a className="underline" href={`tel:${product.contactPerson?.phone}`}>{product.contactPerson?.phone}</a>
                     </span>
                   </div>
                   <div className="flex justify-between px-4 py-3">

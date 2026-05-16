@@ -5,13 +5,19 @@ import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth'
 import { prisma } from '@/app/lib/prisma'
 import { authOptions } from '@/app/lib/auth'
-import { uploadProductImages, syncProductImages, deleteAllProductImages } from '@/app/lib/images'
+import { uploadProductImages, syncProductImages, deleteAllProductImages, uploadProductImage } from '@/app/lib/images'
 import type { EducationField } from '@/generated/prisma'
 import { err } from '@/app/lib/api-response'
 
 // ─── Schemas ─────────────────────────────────────────────────────────────────
 
-const MeasuresSchema = z.record(z.string(), z.string())
+const MeasuresSchema = z.array(
+  z.object({
+    name:  z.string().min(1).max(50),
+    value: z.string().min(1).max(30),
+    unit:  z.string().max(20),
+  })
+)
 
 const ProductCreateSchema = z.object({
   educationField: z.preprocess(
@@ -23,6 +29,7 @@ const ProductCreateSchema = z.object({
   price:           z.coerce.number().nonnegative('Pris kan ikke være negativ'),
   measures:        MeasuresSchema.optional(),
   amount:          z.coerce.number().int('Antall må være et heltall').min(0, 'Antall kan ikke være negativt'),
+  draft:           z.boolean(),
   contactPersonId: z.preprocess(
     (val) => (val === '' || val === null || val === undefined ? undefined : val),
     z.coerce.number().int('Kontaktperson-ID må være et heltall').optional()
@@ -51,52 +58,40 @@ export async function getAllProducts() {
 }
 
 export async function getProductById(id: number) {
-
-  return prisma.product.findUnique({
+  const product = await prisma.product.findUnique({
     where: { id },
     include: {
       images: { orderBy: { sortOrder: 'asc' } },
       contactPerson: true,
     },
   })
+
+  if (!product) return null
+
+  return {
+    ...product,
+    price: product.price.toNumber(),
+    publishedAt: product.publishedAt.toISOString(),
+  }
 }
 
-export async function createProduct(formData: FormData) {
+export async function createDraftProduct() {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
 
-  const measuresRaw = formData.get('measures')
-
-  const { educationField, ...rest } = ProductCreateSchema.parse({
-    educationField:  formData.get('educationField') || undefined,
-    title:           formData.get('title'),
-    description:     formData.get('description'),
-    price:           formData.get('price'),
-    measures:        measuresRaw ? JSON.parse(measuresRaw as string) : undefined,
-    amount:          formData.get('amount'),
-    contactPersonId: formData.get('contactId'),
+  const draftProduct = await prisma.product.create({
+    data: {
+      title: "",
+      description: "",
+      price: 0,
+      amount: 0,
+    }
   })
-
-  const product = await prisma.product.create({
-    data: { ...rest, educationField: (educationField as EducationField) ?? null },
-  })
-
-  const imageIds  = JSON.parse((formData.get('imageIds') as string) ?? '[]') as string[]
-  const imageFiles = (formData.getAll('images') as File[]).filter((f) => f.size > 0)
-
-  if (imageFiles.length > 0) {
-    await uploadProductImages(
-      imageFiles.map((file, i) => ({ id: imageIds[i] ?? crypto.randomUUID(), file })),
-      product.id
-    )
-  }
-
-  revalidatePath('/admin')
-  revalidatePath('/')
-  return { id: product.id }
+  revalidatePath("/admin")
+  return { id: draftProduct.id}
 }
 
-export async function updateProduct(id: number, formData: FormData) {
+export async function updateProduct(id: number, formData: FormData, publish = true) {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
 
@@ -112,8 +107,9 @@ export async function updateProduct(id: number, formData: FormData) {
     price:           formData.get('price')           || undefined,
     measures:        measuresRaw ? JSON.parse(measuresRaw as string) : undefined,
     amount:          formData.get('amount')          || undefined,
-    contactPersonId: formData.get('contactPersonId') || undefined,
-  })
+    contactPersonId: formData.get('contactId') || undefined,
+    draft:           !publish
+    })
 
   await prisma.product.update({
     where: { id },
@@ -132,12 +128,21 @@ export async function updateProduct(id: number, formData: FormData) {
   revalidatePath('/')
 }
 
+export async function addImageToProduct(id: number, formdata: FormData) {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+
+  const file = formdata.get("image") as File
+  const imageId = await uploadProductImage(file, id)
+  return { id: imageId }
+}
+
 export async function updateProductAmount(id: number, amount: number) {
   const product = await prisma.product.findUnique({ where: { id: id} })
   if(!product) throw new Error("Kunne ikke finne produktet!")
   if(amount > product.amount) throw new Error("Kan ikke bestille mer enn antallet")
 
-  await prisma.product.update({where: {id: id, amount: {gte: amount }}, data: {amount: { decrement: amount }}})
+  await prisma.product.update({where: { id: id, amount: { gte: amount } }, data: {amount: { decrement: amount } } })
   revalidatePath("/admin")
   revalidatePath("/")
 }

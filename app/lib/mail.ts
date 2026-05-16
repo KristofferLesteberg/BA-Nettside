@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer"
 
-
 interface MailProps {
   body: string
   subject: string
@@ -9,19 +8,19 @@ interface MailProps {
 
 export async function sendMail({ body, subject, email }: MailProps) {
   const transporter = nodemailer.createTransport({
-  host: "mail.sevgs.no",
-  port: 587,
+  host: process.env.MAIL_HOST,
+  port: Number(process.env.MAIL_PORT ?? 587),
   secure: false,
   auth: {
-    user: "bat-noreply@sevgs.no",
-    pass: "hrrEiPkNMrp7ey25Ikh8pQcR"
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS,
   },
 })
 const mailOptions = {
-  from: 'bat-noreply@sevgs.no',
-  to: `${email}`,
-  subject: `${subject}`,
-  text: `${body}`
+  from: process.env.MAIL_USER,
+  to: email,
+  subject,
+  text: body,
 }
 try {
   await transporter.sendMail(mailOptions)

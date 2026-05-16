@@ -3,8 +3,6 @@
 import { sendMail } from '@/app/lib/mail'
 import { prisma } from '@/app/lib/prisma'
 
-const adminEmail = 'yehormaksiuchenko@gmail.com'
-
 interface sendOrderEmailProps {
   clientName: string
   clientEmail: string
@@ -28,11 +26,15 @@ interface sendProjectEmailProps {
 export async function sendOrderEmail(order: sendOrderEmailProps) {
   const getProduct = await prisma.product.findUnique({ where: { id: order.productId }, include: { contactPerson: true }})
 
+  const adminEmail = process.env.ADMIN_EMAIL
+  const adminRecipient = getProduct?.contactPerson?.email || adminEmail
+
   //To admins
-  await sendMail({
-    email: String(getProduct?.contactPerson?.email || adminEmail),
-    subject: `Ny produktbestilling – ${order.clientName}`,
-    body: `
+  if (adminRecipient) {
+    await sendMail({
+      email: adminRecipient,
+      subject: `Ny produktbestilling – ${order.clientName}`,
+      body: `
   Du har mottatt en ny produktbestilling.
 
   Kundeinformasjon:
@@ -45,10 +47,11 @@ export async function sendOrderEmail(order: sendOrderEmailProps) {
   ${order.extraDetails ? `  Tilleggsinfo: ${order.extraDetails}` : ''}
 
   Logg inn i administrasjonspanelet for å følge opp bestillingen.
-    `.trim(),
-  })
+      `.trim(),
+    })
+  }
 
-  //To Clents
+  //To Clients
   await sendMail({
     email: order.clientEmail,
     subject: 'Bekreftelse på din bestilling',
@@ -66,17 +69,20 @@ export async function sendOrderEmail(order: sendOrderEmailProps) {
 
   Har du spørsmål i mellomtiden, er du velkommen til å kontakte oss.
 
-  Med vennlig hilsen${getProduct?.contactPerson?.email || adminEmail}
+  Med vennlig hilsen ${adminRecipient ?? ''}
     `.trim(),
   })
 }
 
 export async function sendProjectEmail(project: sendProjectEmailProps) {
+  const adminEmail = process.env.ADMIN_EMAIL
+
   //To admins
-  await sendMail({
-    email: adminEmail,
-    subject: `Ny prosjektforespørsel – ${project.title}`,
-    body: `
+  if (adminEmail) {
+    await sendMail({
+      email: adminEmail,
+      subject: `Ny prosjektforespørsel – ${project.title}`,
+      body: `
   Du har mottatt en ny prosjektforespørsel.
 
   Kundeinformasjon:
@@ -90,8 +96,9 @@ export async function sendProjectEmail(project: sendProjectEmailProps) {
       Budsjett:    ${project.minPrice} – ${project.maxPrice} kr
 
     Logg inn i administrasjonspanelet for å følge opp forespørselen.
-    `.trim(),
-  })
+      `.trim(),
+    })
+  }
 
   //to clients
   await sendMail({
@@ -112,7 +119,7 @@ export async function sendProjectEmail(project: sendProjectEmailProps) {
 
       Har du spørsmål i mellomtiden, er du velkommen til å kontakte oss.
 
-    Med vennlig hilsen ${adminEmail}
+    Med vennlig hilsen ${adminEmail ?? ''}
     `.trim(),
   })
 }

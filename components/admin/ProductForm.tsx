@@ -5,6 +5,10 @@ import ImageOrder, { ImageItem } from './ImageOrder'
 import MeasurementList, { Measure } from './MeasurementList'
 import BackBtn from '@/components/shared/BackBtn'
 import { ContactPerson } from '@/generated/prisma'
+import { usePopUp } from '../shared/PopUp'
+import { deleteProduct, updateProduct } from '@/actions/products'
+import toast from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
 
 export interface ProductFormValues {
   educationField: string
@@ -21,6 +25,7 @@ interface ProductFormProps {
   heading: string
   submitLabel: string
   contactPersons?: ContactPerson[]
+  productId: number
   initialValues?: {
     educationField?: string
     title?: string
@@ -30,12 +35,14 @@ interface ProductFormProps {
     measures?: Measure[]
     existingImages?: { id: string; url: string }[]
     contactId?: string
-  
   }
+  onNewImage?: (file: File) => Promise<{ id: string }>
   onSubmit: (values: ProductFormValues) => Promise<void>
 }
 
-export default function ProductForm({ heading, submitLabel, contactPersons, initialValues, onSubmit }: ProductFormProps) {
+export default function ProductForm({ heading, submitLabel, contactPersons, productId, initialValues, onNewImage, onSubmit }: ProductFormProps) {
+  const router = useRouter()
+
   const [educationField, setEducationField] = useState(initialValues?.educationField ?? "")
   const [title, setTitle] = useState(initialValues?.title ?? "")
   const [description, setDescription] = useState(initialValues?.description ?? "")
@@ -48,11 +55,8 @@ export default function ProductForm({ heading, submitLabel, contactPersons, init
   const educationFieldRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLDivElement>(null)
-
-
-  useEffect(() => {
-    console.log(contactPersons)
-  }, [])
+ 
+  const { open: openPopUp, close: closePopUp, element: popUpElement } = usePopUp()
  
 
   const handleForm = async (e: React.FormEvent) => {
@@ -71,12 +75,54 @@ export default function ProductForm({ heading, submitLabel, contactPersons, init
     await onSubmit({ educationField, title, description, price, amount, measures, images, contactId })
   }
 
+  const handleSaveDraft = async () => {
+    const formData = new FormData
+    formData.append("educationField", educationField)
+    formData.append("title", title)
+    formData.append("description", description)
+    formData.append("price", price || "0")
+    formData.append("amount", amount || "0")
+    formData.append("measures", JSON.stringify(measures))
+    formData.append("contactId", contactId)
+    formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
+    try {
+      console.log("test")
+      await updateProduct(productId, formData, false)
+      console.log("produkt Id" + productId)
+      toast("Utkast lagret")
+      closePopUp()
+      router.back()
+    } catch(error) {
+      toast.error("Kunne ikke lagre produktet som utkast")
+    }
+  }
+  const handleDeleteDraft = async () => {
+    try {
+      await deleteProduct(productId)
+      closePopUp()
+      toast("Utkastet ble slettet")
+      router.back()
+    } catch(error) {
+      toast.error("Kunne ikke slette utkast")
+    }
+  }
+
   return (
+
+    
     <div className="w-4/5 min-w-120 max-w-230 mx-auto py-10">
+      {popUpElement}
       <form onSubmit={handleForm} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
 
         <div className="flex items-start">
-          <BackBtn />
+          <BackBtn handleOnClick={() => openPopUp({
+            title:    'Lagre endringen som et utkast?',
+            subtitle: 'Du vil kunne fortsette å redigere utkastet senere, og det vil ikke være synlig for kunder før du publiserer det.',
+            yesLabel: 'Ja, lagre som utkast',
+            noLabel:  'Nei, slett endringene',
+            onYes:    handleSaveDraft,
+            onNo:     handleDeleteDraft,
+          })}/>
         </div>
         <h2 className="heading-2">{heading}</h2>
         <p className="text-text-faint italic -mt-4">Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette</p>
@@ -160,7 +206,7 @@ export default function ProductForm({ heading, submitLabel, contactPersons, init
 
         {/* Images */}
         <label className="label">Bilder</label>
-        <ImageOrder initialImages={initialValues?.existingImages} onChange={setImages} />
+        <ImageOrder initialImages={initialValues?.existingImages} onChange={setImages} onNewImage={onNewImage} />
 
         {/* Submit */}
         <button type="submit" className="btn btn-primary w-full">
