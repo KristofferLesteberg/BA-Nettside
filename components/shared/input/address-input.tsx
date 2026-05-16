@@ -84,6 +84,7 @@ export default function AddressInput({ value, onChange, placeholder }: Props) {
         onChange={(e) => { setAddress(e.target.value); onChange(e.target.value) }}
         onFocus={() => {setIsFocused(true)}}
         onBlur={() => {setIsFocused(false)}}
+        autoComplete="off"
         className="input"
       />
     </div>
