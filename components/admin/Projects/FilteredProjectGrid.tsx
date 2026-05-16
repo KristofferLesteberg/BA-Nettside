@@ -135,14 +135,11 @@ export default function FilteredProjectGrid({ projects }: Props) {
 
   return (
     <>
-     <div className="flex flex-col gap-2">
-        <span className="label">Pris</span>
-        <div className="flex flex-row justify-between items-center gap-4">
-          <div className="flex-1">
-            <PriceRange min={minPrice.toString()} max={maxPrice.toString()} onChange={(lo, hi) => { setMinPrice(Number(lo)); setMaxPrice(Number(hi)) }} />
-          </div>
-          <button onClick={() => { setMaxPrice(500000); setMinPrice(0); }} className="btn btn-secondary h-1/3 ">Reset</button>
+      <div className="flex flex-row justify-between items-center gap-4 mb-5">
+        <div className="flex-1">
+          <PriceRange min={minPrice.toString()} max={maxPrice.toString()} onChange={(lo, hi) => { setMinPrice(Number(lo)); setMaxPrice(Number(hi)) }} />
         </div>
+        <button onClick={() => { setMaxPrice(500000); setMinPrice(0); }} className="btn btn-secondary h-1/3 ">Tilbakestill</button>
       </div>
     
     <div className="flex gap-8 items-start">

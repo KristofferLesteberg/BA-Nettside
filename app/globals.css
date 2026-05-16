@@ -338,3 +338,11 @@
   from { opacity: 1; transform: translateY(0); }
   to   { opacity: 0; transform: translateY(6px); }
 }
+
+@utility animate-dropdown-in {
+  animation: dropdown-in 150ms ease forwards;
+}
+
+@utility animate-dropdown-out {
+  animation: dropdown-out 150ms ease forwards;
+}

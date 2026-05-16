@@ -1,4 +1,5 @@
 "use client"
+import { useState, useRef, useEffect } from "react"
 import { EducationField, ProjectRequest, Status } from "@/generated/prisma"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
@@ -10,7 +11,6 @@ export type SerializedProject = Omit<ProjectRequest, 'minPrice' | 'maxPrice' | '
   maxPrice: number
   createdAt: string
 }
-
 
 const STATUS_LABELS: Record<Status, string> = {
   NEW: 'Nytt prosjekt',
@@ -34,10 +34,44 @@ const EDUCATION_STYLES: Record<EducationField, string> = {
   CONSTRUCTION: 'badge-primary',
 }
 
+const ALL_STATUSES: Status[] = ['NEW', 'IN_PROGRESS', 'COMPLETE']
+
 const ProjectCard = ({ project }: { project: SerializedProject }) => {
   const router = useRouter()
   const { open: openPopUp, element: popUpElement } = usePopUp()
   const formatted = new Date(project.createdAt)
+
+  const [menuMounted, setMenuMounted] = useState(false)
+  const [menuOpen,    setMenuOpen]    = useState(false)
+  const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const menuRef    = useRef<HTMLDivElement>(null)
+
+  const openMenu = () => {
+    clearTimeout(closeTimer.current)
+    setMenuMounted(true)
+    setMenuOpen(true)
+  }
+
+  const closeMenu = () => {
+    setMenuOpen(false)
+    closeTimer.current = setTimeout(() => setMenuMounted(false), 150)
+  }
+
+  useEffect(() => {
+    if (!menuMounted) return
+    const onDown   = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) closeMenu()
+    }
+    const onScroll = () => closeMenu()
+    document.addEventListener('mousedown', onDown)
+    window.addEventListener('scroll', onScroll, true)
+    return () => {
+      document.removeEventListener('mousedown', onDown)
+      window.removeEventListener('scroll', onScroll, true)
+    }
+  }, [menuMounted])
+
+  useEffect(() => () => clearTimeout(closeTimer.current), [])
 
   const handleDelete = async () => {
     try {
@@ -49,7 +83,9 @@ const ProjectCard = ({ project }: { project: SerializedProject }) => {
     }
   }
 
-  const updateStatus = async (status: Status) => {
+  const handleStatusChange = async (status: Status) => {
+    closeMenu()
+    if (status === project.status) return
     try {
       await updateProjectStatus(project.id, status)
       toast.success("Oppdatert status")
@@ -58,6 +94,7 @@ const ProjectCard = ({ project }: { project: SerializedProject }) => {
       toast.error("Kunne ikke endre status")
     }
   }
+
   return (
     <div className="card card-subtle flex flex-col gap-4">
       {popUpElement}
@@ -86,12 +123,32 @@ const ProjectCard = ({ project }: { project: SerializedProject }) => {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <select className="input w-auto cursor-pointer" name="status" onChange={(e) => updateStatus(e.target.value as Status)}>
-              <option value="">Endre Status</option>
-              <option value="NEW">Nytt prosjekt</option>
-              <option value="IN_PROGRESS">Under bygging</option>
-              <option value="COMPLETE">Ferdig</option>
-            </select>
+            <div ref={menuRef} className="relative">
+              <button
+                className="btn btn-outline"
+                onClick={menuOpen ? closeMenu : openMenu}
+              >
+                Endre status
+              </button>
+
+              {menuMounted && (
+                <div className={`absolute bottom-0 right-[-4px] z-10 card rounded-[var(--radius-md)] flex flex-col p-1 min-w-[calc(100%+8px)] shadow-lg ${menuOpen ? 'animate-dropdown-in' : 'animate-dropdown-out'}`}>
+                  {ALL_STATUSES.map(s => (
+                    <button
+                      key={s}
+                      onClick={() => handleStatusChange(s)}
+                      className={`relative text-left pl-4 pr-3 py-2 rounded-[calc(var(--radius-md)-2px)] small-text transition-colors hover:bg-surface-raised cursor-pointer ${project.status === s ? 'font-semibold text-text' : 'text-text-muted'}`}
+                    >
+                      {project.status === s && (
+                        <span className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-3/5 rounded-full bg-secondary" />
+                      )}
+                      {STATUS_LABELS[s]}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <button className="btn btn-error" onClick={() => openPopUp({
               title: "Slett prosjektet?",
               subtitle: "Er du sikker på at du vil slette dette prosjektet? Denne handlingen kan ikke angres.",
@@ -127,7 +184,6 @@ const ProjectCard = ({ project }: { project: SerializedProject }) => {
 
     </div>
   )
-
-  }
+}
 
 export default ProjectCard
