@@ -31,14 +31,14 @@ const page = async () => {
       count: products
     },
     {
+      label: "bestillinger",
+      content: <AdminOrderView />,
+      count: orders
+    },
+    {
       label: "prosjekter",
       content: <AdminProjectsView />,
       count: projects
-    },
-    {
-      label: "anmeldelser",
-      content: <AdminReviewsView />,
-      count: reviews
     },
     {
       label: "kontakt personer",
@@ -46,9 +46,9 @@ const page = async () => {
       count: contactPersons
     },
     {
-      label: "bestillinger",
-      content: <AdminOrderView />,
-      count: orders
+      label: "anmeldelser",
+      content: <AdminReviewsView />,
+      count: reviews
     }
   ]
 
