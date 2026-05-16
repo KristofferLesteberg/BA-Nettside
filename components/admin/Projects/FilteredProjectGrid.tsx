@@ -3,6 +3,7 @@ import { EducationField, Status } from "@/generated/prisma"
 import { useMemo, useState } from "react"
 import { FaSliders, FaXmark } from "react-icons/fa6"
 import ProjectCard, { type SerializedProject } from "./ProjectCard"
+import ProjectDrawer from "./ProjectDrawer"
 import PriceRange from "@/components/shared/input/price-range"
 
 
@@ -46,6 +47,7 @@ export default function FilteredProjectGrid({ projects }: Props) {
   const [minPrice, setMinPrice] = useState<number>(0)
   const [maxPrice, setMaxPrice] = useState<number>(500000)
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [selectedProject, setSelectedProject] = useState<SerializedProject | null>(null)
 
   const filtered = useMemo(() => {
     console.log("Minpris" + minPrice)
@@ -155,9 +157,9 @@ export default function FilteredProjectGrid({ projects }: Props) {
           </button>
         </div>
 
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-3">
           {filtered.map((project) => (
-            <ProjectCard project={project} key={project.id} />
+            <ProjectCard project={project} key={project.id} onView={setSelectedProject} />
           ))}
         </div>
       </div>
@@ -186,6 +188,8 @@ export default function FilteredProjectGrid({ projects }: Props) {
       </aside>
 
     </div>
+
+    <ProjectDrawer project={selectedProject} onClose={() => setSelectedProject(null)} />
     </ >
   )
 }
