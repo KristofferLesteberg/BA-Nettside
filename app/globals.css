@@ -248,7 +248,7 @@
   .badge-info          { background: var(--color-info-bg);              color: var(--color-info); }
   .badge-status-new    { background: var(--color-status-new-bg);        color: var(--color-status-new); }
   .badge-status-progress { background: var(--color-status-progress-bg); color: var(--color-status-progress); }
-  .badge-md { font-size: 0.875rem; padding: 0.3rem 0.85rem; }
+  .badge-md { font-size: 0.75rem; padding: 0.3rem 0.85rem; justify-content: center; text-align: center; }
  
   /* Background helpers (mirrors elevation scale) */
   .bg-sunken { background: var(--color-surface-sunken); } /* level -1 */

@@ -15,9 +15,9 @@ const STATUS_LABELS: Record<string, string> = {
 }
 
 const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
-  NEW:         { bg: '#dbeafe', color: '#1d4ed8' },
-  IN_PROGRESS: { bg: '#fef9c3', color: '#854d0e' },
-  COMPLETE:    { bg: '#dcfce7', color: '#166534' },
+  NEW:         { bg: '#e0e7ff', color: '#4338ca' },
+  IN_PROGRESS: { bg: '#ffedd5', color: '#c2410c' },
+  COMPLETE:    { bg: '#d4edda', color: '#1e7e34' },
 }
 
 const EDUCATION_LABELS: Record<string, string> = {
@@ -64,18 +64,18 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   pill: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
     borderRadius: 4,
     marginRight: 6,
-    fontSize: 9,
+    fontSize: 8,
     fontFamily: 'Helvetica-Bold',
   },
   pillEducation: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
     borderRadius: 4,
-    fontSize: 9,
+    fontSize: 8,
     fontFamily: 'Helvetica-Bold',
     backgroundColor: SURFACE,
     color: '#374151',
@@ -209,7 +209,7 @@ export default function ProjectPdfDocument({
 
           {/* Prisforventning */}
           <View style={styles.section}>
-            <Text style={styles.sectionHeading}>PRISFORVENTNING</Text>
+            <Text style={styles.sectionHeading}>BETALING</Text>
             <Field label="Prisforventning"  value={priceRange} />
             <Field label="Fakturaadresse"   value={project.billingAddress} />
           </View>
