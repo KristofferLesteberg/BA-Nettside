@@ -39,14 +39,24 @@ export async function getProjectById(id: string) {
   return prisma.projectRequest.findUnique({ where: { id }})
 }
 
+const VerifyClientSchema = z.object({
+  forename: z.string().min(1, 'Fornavn er påkrevd'),
+  surname:  z.string().min(1, 'Etternavn er påkrevd'),
+  email:    z.email('Ugyldig e-postadresse'),
+})
+
 export async function verifyProjectClient(id: string, forename: string, surname: string, email: string) {
+  const parsed = VerifyClientSchema.safeParse({ forename, surname, email })
+  if (!parsed.success) throw new Error(parsed.error.issues[0].message)
+  const { forename: parsedForename, surname: parsedSurname, email: parsedEmail } = parsed.data
+
   const project = await prisma.projectRequest.findUnique({ where: { id } })
   if (!project) return null
 
-  const forenameMatch = project.clientForename.trim().toLowerCase() === forename.trim().toLowerCase()
-  const surnameMatch = project.clientSurname.trim().toLowerCase() === surname.trim().toLowerCase()
-  const nameMatch = forenameMatch && surnameMatch
-  const emailMatch = project.clientEmail.trim().toLowerCase() === email.trim().toLowerCase()
+  const nameMatch =
+    project.clientForename.trim().toLowerCase() === parsedForename.trim().toLowerCase() &&
+    project.clientSurname.trim().toLowerCase()  === parsedSurname.trim().toLowerCase()
+  const emailMatch = project.clientEmail.trim().toLowerCase() === parsedEmail.trim().toLowerCase()
   if (!nameMatch || !emailMatch) return null
 
   return {
