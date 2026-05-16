@@ -5,7 +5,7 @@ import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
 import { usePopUp } from "@/components/shared/PopUp"
-import { FaEye, FaTrash, FaHelmetSafety, FaRoad } from "react-icons/fa6"
+import { FaEye, FaTrash, FaHelmetSafety, FaRoad, FaCoins, FaCalendarDays } from "react-icons/fa6"
 import { RiProgress3Line } from "react-icons/ri"
 
 export type SerializedProject = Omit<ProjectRequest, 'minPrice' | 'maxPrice' | 'createdAt'> & {
@@ -39,7 +39,7 @@ const EDUCATION_ICONS: Record<EducationField, React.ReactNode> = {
 const ALL_STATUSES: Status[] = ['NEW', 'IN_PROGRESS', 'COMPLETE']
 
 function formatPrice(kr: number): string {
-  if (kr < 5000) return kr.toLocaleString('nb-NO') + ' kr'
+  if (kr < 5000) return kr.toLocaleString('nb-NO')
   const base      = Math.floor(kr / 1000)
   const remainder = kr % 1000
   if (remainder < 150) return `${base}k`
@@ -114,11 +114,11 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
     }
   }
 
-  const priceRange = `${formatPrice(project.minPrice)} – ${formatPrice(project.maxPrice)}`
+  const priceRange = `${formatPrice(project.minPrice)} – ${formatPrice(project.maxPrice)} kr`
   const shortId    = project.id.slice(0, 8)
 
   return (
-    <div className="card card-subtle flex items-center gap-4 py-3 px-4">
+    <div className="card card-subtle flex items-center py-3 px-5">
       {popUpElement}
 
       {/* Left: title, client, id */}
@@ -134,35 +134,46 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
       </div>
 
       {/* Middle: badges + date + price — hidden on small screens */}
-      <div className="hidden md:flex items-center gap-3 shrink-0">
-        <span className={STATUS_STYLES[project.status]}>
-          {STATUS_LABELS[project.status]}
-        </span>
+      <div className="hidden md:flex items-center shrink-0">
+        <div className="w-px self-stretch bg-border mx-5" />
 
-        {project.educationField && (
-          <span className="badge badge-neutral gap-1.5">
-            {EDUCATION_ICONS[project.educationField]}
-            {EDUCATION_LABELS[project.educationField]}
+        <div className="flex items-center gap-2.5">
+          <span className={STATUS_STYLES[project.status]}>
+            {STATUS_LABELS[project.status]}
           </span>
-        )}
 
-        <span className="small-text text-muted whitespace-nowrap">
-          {formatDate(project.createdAt)}
-        </span>
+          {project.educationField && (
+            <span className="badge badge-neutral gap-1.5">
+              {EDUCATION_ICONS[project.educationField]}
+              {EDUCATION_LABELS[project.educationField]}
+            </span>
+          )}
 
-        <span className="small-text text-muted whitespace-nowrap font-medium">
-          {priceRange}
-        </span>
+          <div className="w-px self-stretch bg-border mx-1" />
+
+          <div className="flex flex-col gap-0.5">
+            <span className="flex items-center gap-1.5 small-text text-muted whitespace-nowrap">
+              <FaCalendarDays className="text-text-faint shrink-0" />
+              {formatDate(project.createdAt)}
+            </span>
+            <span className="flex items-center gap-1.5 small-text text-text whitespace-nowrap font-medium">
+              <FaCoins className="text-text-faint shrink-0" />
+              {priceRange}
+            </span>
+          </div>
+        </div>
+
+        <div className="w-px self-stretch bg-border mx-5" />
       </div>
 
       {/* Right: actions */}
-      <div className="flex items-center gap-1 shrink-0">
+      <div className="flex items-center gap-0.5 shrink-0">
         <button
           onClick={() => onView(project)}
           className="btn btn-ghost p-2"
           title="Se detaljer"
         >
-          <FaEye />
+          <FaEye className="w-5 h-5" />
         </button>
 
         <div ref={menuRef} className="relative">
@@ -171,7 +182,7 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
             className="btn btn-ghost p-2"
             title="Endre status"
           >
-            <RiProgress3Line />
+            <RiProgress3Line className="w-5 h-5" />
           </button>
 
           {menuMounted && (
@@ -203,7 +214,7 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
           className="btn btn-ghost p-2 text-error hover:bg-error-bg"
           title="Slett prosjekt"
         >
-          <FaTrash />
+          <FaTrash className="w-5 h-5" />
         </button>
       </div>
     </div>
