@@ -5,7 +5,7 @@ import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
 import { usePopUp } from "@/components/shared/PopUp"
-import { FaEye, FaTrash, FaHelmetSafety, FaRoad, FaCoins, FaCalendarDays, FaChevronDown, FaQuestion } from "react-icons/fa6"
+import { FaEllipsisVertical, FaFilePdf, FaTrash, FaHelmetSafety, FaRoad, FaCoins, FaCalendarDays, FaChevronDown, FaQuestion, FaEnvelope, FaPhone, FaLocationDot, FaFileInvoice } from "react-icons/fa6"
 import { RiProgress3Line } from "react-icons/ri"
 
 export type SerializedProject = Omit<ProjectRequest, 'minPrice' | 'maxPrice' | 'createdAt'> & {
@@ -32,8 +32,8 @@ const EDUCATION_LABELS: Record<EducationField, string> = {
 }
 
 const EDUCATION_ICONS: Record<EducationField, React.ReactNode> = {
-  BUILDING:     <FaHelmetSafety className="shrink-0" />,
-  CONSTRUCTION: <FaRoad         className="shrink-0" />,
+  BUILDING:     <FaHelmetSafety className="shrink-0" aria-hidden="true" />,
+  CONSTRUCTION: <FaRoad         className="shrink-0" aria-hidden="true" />,
 }
 
 const ALL_STATUSES: Status[] = ['NEW', 'IN_PROGRESS', 'COMPLETE']
@@ -120,7 +120,7 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
   const shortId    = project.id.slice(0, 8)
 
   return (
-    <div className="card card-subtle py-3 px-5">
+    <div className="card card-subtle py-3 px-5" role="article" aria-label={project.title}>
       {popUpElement}
 
       {/* Main row */}
@@ -140,7 +140,7 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
               {STATUS_LABELS[project.status]}
             </span>
             <span className="badge badge-neutral gap-1.5">
-              {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" />}
+              {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" aria-hidden="true" />}
               {project.educationField ? EDUCATION_LABELS[project.educationField] : 'Ingen linje'}
             </span>
           </div>
@@ -159,7 +159,7 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
 
             <div className="w-28 flex justify-center -ml-1.5">
               <span className="badge badge-neutral gap-1.5">
-                {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" />}
+                {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" aria-hidden="true" />}
                 {project.educationField ? EDUCATION_LABELS[project.educationField] : 'Ingen linje'}
               </span>
             </div>
@@ -168,11 +168,11 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
 
             <div className="flex flex-col gap-0.5">
               <span className="flex items-center gap-1.5 small-text text-muted whitespace-nowrap">
-                <FaCalendarDays className="text-text-faint shrink-0" />
+                <FaCalendarDays className="text-text-faint shrink-0" aria-hidden="true" />
                 {formatDate(project.createdAt)}
               </span>
               <span className="flex items-center gap-1.5 small-text text-text whitespace-nowrap font-medium">
-                <FaCoins className="text-text-faint shrink-0" />
+                <FaCoins className="text-text-faint shrink-0" aria-hidden="true" />
                 {priceRange}
               </span>
             </div>
@@ -187,8 +187,18 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
             onClick={() => onView(project)}
             className="hidden md:flex btn btn-ghost p-2"
             title="Se detaljer"
+            aria-label="Se detaljer"
           >
-            <FaEye className="w-5 h-5" />
+            <FaEllipsisVertical className="w-5 h-5" aria-hidden="true" />
+          </button>
+
+          <button
+            onClick={() => { /* TODO: PDF download */ }}
+            className="md:hidden btn btn-ghost p-2"
+            title="Last ned PDF"
+            aria-label="Last ned PDF"
+          >
+            <FaFilePdf className="w-5 h-5" aria-hidden="true" />
           </button>
 
           <div ref={menuRef} className="relative">
@@ -196,17 +206,22 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
               onClick={menuOpen ? closeMenu : openMenu}
               className="btn btn-ghost p-2"
               title="Endre status"
+              aria-label="Endre status"
+              aria-expanded={menuOpen}
+              aria-haspopup="true"
             >
-              <RiProgress3Line className="w-5 h-5" />
+              <RiProgress3Line className="w-5 h-5" aria-hidden="true" />
             </button>
 
             {menuMounted && (
-              <div className={`absolute top-full right-0 mt-1 z-10 card rounded-[var(--radius-md)] flex flex-col p-1 min-w-40 shadow-lg ${menuOpen ? 'animate-dropdown-in' : 'animate-dropdown-out'}`}>
+              <div role="menu" className={`absolute top-full right-0 mt-1 z-10 card rounded-md flex flex-col p-1 min-w-40 shadow-lg ${menuOpen ? 'animate-dropdown-in' : 'animate-dropdown-out'}`}>
                 {ALL_STATUSES.map(s => (
                   <button
                     key={s}
+                    role="menuitem"
                     onClick={() => handleStatusChange(s)}
                     className={`relative text-left pl-4 pr-3 py-2 rounded-[calc(var(--radius-md)-2px)] small-text transition-colors hover:bg-surface-raised cursor-pointer ${project.status === s ? 'font-semibold text-text' : 'text-text-muted'}`}
+                    aria-current={project.status === s ? 'true' : undefined}
                   >
                     {project.status === s && (
                       <span className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-3/5 rounded-full bg-secondary" />
@@ -228,8 +243,9 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
             })}
             className="btn btn-ghost p-2 text-error hover:bg-error-bg"
             title="Slett prosjekt"
+            aria-label="Slett prosjekt"
           >
-            <FaTrash className="w-5 h-5" />
+            <FaTrash className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -241,22 +257,27 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
           <button
             onClick={() => setDetailsOpen(v => !v)}
             className="flex items-center justify-between w-full py-2 small-text font-medium text-text"
+            aria-expanded={detailsOpen}
+            aria-controls={`project-details-${project.id}`}
           >
             Detaljer
-            <FaChevronDown className={`w-3 h-3 text-text-faint transition-transform duration-150 ${detailsOpen ? 'rotate-180' : ''}`} />
+            <FaChevronDown className={`w-3 h-3 text-text-faint transition-transform duration-150 ${detailsOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
           </button>
           {detailsOpen && (
-            <div className="flex flex-col gap-1.5 pb-2">
+            <div id={`project-details-${project.id}`} className="flex flex-col gap-1.5 pb-2">
               <span className="flex items-center gap-1.5 small-text text-muted">
-                <FaCalendarDays className="text-text-faint shrink-0" />
+                <FaCalendarDays className="text-text-faint shrink-0" aria-hidden="true" />
                 {formatDate(project.createdAt)}
               </span>
               <span className="flex items-center gap-1.5 small-text text-text font-medium">
-                <FaCoins className="text-text-faint shrink-0" />
+                <FaCoins className="text-text-faint shrink-0" aria-hidden="true" />
                 {priceRange}
               </span>
               {project.billingAddress && (
-                <p className="small-text text-muted">{project.billingAddress}</p>
+                <span className="flex items-center gap-1.5 small-text text-muted">
+                  <FaFileInvoice className="text-text-faint shrink-0" aria-hidden="true" />
+                  {project.billingAddress}
+                </span>
               )}
             </div>
           )}
@@ -267,20 +288,31 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
           <button
             onClick={() => setKontaktOpen(v => !v)}
             className="flex items-center justify-between w-full py-2 small-text font-medium text-text"
+            aria-expanded={kontaktOpen}
+            aria-controls={`project-kontakt-${project.id}`}
           >
             Kontakt
-            <FaChevronDown className={`w-3 h-3 text-text-faint transition-transform duration-150 ${kontaktOpen ? 'rotate-180' : ''}`} />
+            <FaChevronDown className={`w-3 h-3 text-text-faint transition-transform duration-150 ${kontaktOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
           </button>
           {kontaktOpen && (
-            <div className="flex flex-col gap-1.5 pb-2">
+            <div id={`project-kontakt-${project.id}`} className="flex flex-col gap-1.5 pb-2">
               {project.clientEmail && (
-                <p className="small-text text-muted">{project.clientEmail}</p>
+                <span className="flex items-center gap-1.5 small-text text-muted">
+                  <FaEnvelope className="text-text-faint shrink-0" aria-hidden="true" />
+                  {project.clientEmail}
+                </span>
               )}
               {project.clientPhone && (
-                <p className="small-text text-muted">{project.clientPhone}</p>
+                <span className="flex items-center gap-1.5 small-text text-muted">
+                  <FaPhone className="text-text-faint shrink-0" aria-hidden="true" />
+                  {project.clientPhone}
+                </span>
               )}
               {project.address && (
-                <p className="small-text text-muted">{project.address}</p>
+                <span className="flex items-center gap-1.5 small-text text-muted">
+                  <FaLocationDot className="text-text-faint shrink-0" aria-hidden="true" />
+                  {project.address}
+                </span>
               )}
             </div>
           )}

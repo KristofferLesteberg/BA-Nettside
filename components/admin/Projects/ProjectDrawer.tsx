@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
-import { FaXmark, FaHelmetSafety, FaRoad, FaDownload, FaTrash, FaQuestion } from "react-icons/fa6"
+import { FaXmark, FaHelmetSafety, FaRoad, FaFilePdf, FaTrash, FaQuestion } from "react-icons/fa6"
 import { RiProgress3Line } from "react-icons/ri"
 import { EducationField, Status } from "@/generated/prisma"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
@@ -161,7 +161,7 @@ export default function ProjectDrawer({ project, onClose }: Props) {
                   className="btn btn-ghost p-2"
                   title="Last ned PDF"
                 >
-                  <FaDownload className="w-5 h-5" />
+                  <FaFilePdf className="w-5 h-5" />
                 </button>
 
                 <div ref={menuRef} className="relative">
