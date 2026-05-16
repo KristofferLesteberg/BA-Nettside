@@ -74,9 +74,11 @@ function EditBtn({ field, active, onUnlock, onLock, onCancel, changed, onUndo }:
   const editing = active === field
   const blocked = !editing && active !== null
 
+  // key="editing"/"view" forces React to unmount+remount on mode switch,
+  // so animate-fade-in triggers in both directions.
   if (editing) {
     return (
-      <div className="flex gap-2 animate-fade-in">
+      <div key="editing" className="flex gap-2 animate-fade-in">
         <button type="button" onClick={onCancel} className="btn btn-ghost text-sm">
           Avbryt
         </button>
@@ -88,7 +90,7 @@ function EditBtn({ field, active, onUnlock, onLock, onCancel, changed, onUndo }:
   }
 
   return (
-    <div className="flex gap-1.5">
+    <div key="view" className="flex gap-1.5 animate-fade-in">
       <button
         type="button"
         onClick={() => onUnlock(field)}
@@ -97,16 +99,18 @@ function EditBtn({ field, active, onUnlock, onLock, onCancel, changed, onUndo }:
       >
         <FaEdit className="text-xs" /> Rediger
       </button>
-      {changed && onUndo && (
-        <button
-          type="button"
-          onClick={onUndo}
-          disabled={blocked}
-          className="btn btn-ghost p-1.5 py-1 text-sm gap-1 text-warning transition-opacity duration-150 disabled:opacity-30 animate-fade-in"
-        >
-          <FaUndo className="text-xs" /> Angre
-        </button>
-      )}
+      {/* Always rendered so CSS transition handles both appear and disappear. */}
+      <button
+        type="button"
+        onClick={onUndo}
+        disabled={blocked}
+        aria-hidden={!changed}
+        className={`btn btn-ghost p-1.5 py-1 text-sm gap-1 text-warning transition-all duration-200 ${
+          changed ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'
+        }`}
+      >
+        <FaUndo className="text-xs" /> Angre
+      </button>
     </div>
   )
 }
@@ -123,15 +127,15 @@ export default function UpdateProjectForm({
   const router  = useRouter()
   const popup   = usePopUp()
 
-  const [baseValues,   setBaseValues]   = useState<FormValues>(initialValues)
-  const [values,       setValues]       = useState<FormValues>(initialValues)
-  const [activeField,  setActiveField]  = useState<EditableField | null>(null)
-  const [snapshot,     setSnapshot]     = useState<FormValues | null>(null)
-  const [submitting,   setSubmitting]   = useState(false)
+  const [baseValues,    setBaseValues]    = useState<FormValues>(initialValues)
+  const [values,        setValues]        = useState<FormValues>(initialValues)
+  const [activeField,   setActiveField]   = useState<EditableField | null>(null)
+  const [snapshot,      setSnapshot]      = useState<FormValues | null>(null)
+  const [submitting,    setSubmitting]    = useState(false)
   const [sameAsAddress, setSameAsAddress] = useState(
     () => !!initialValues.billingAddress && initialValues.billingAddress === initialValues.address
   )
-  const [phoneCountry, setPhoneCountry] = useState<CountryCode>(() => {
+  const [phoneCountry,  setPhoneCountry]  = useState<CountryCode>(() => {
     try {
       return (parsePhoneNumberWithError(initialValues.clientPhone).country as CountryCode) ?? 'NO'
     } catch { return 'NO' }
@@ -158,7 +162,6 @@ export default function UpdateProjectForm({
     onCancel: () => { if (snapshot) setValues(snapshot); setSnapshot(null); setActiveField(null) },
   }
 
-  // Resets a single field back to the last saved baseline, with side-effects.
   function undoField(field: EditableField) {
     setValues(prev => {
       const next = { ...prev }
@@ -176,7 +179,6 @@ export default function UpdateProjectForm({
     }
   }
 
-  // Resets all fields back to the last saved baseline.
   function discardAll() {
     setValues({ ...baseValues })
     setSameAsAddress(!!baseValues.billingAddress && baseValues.billingAddress === baseValues.address)
@@ -262,7 +264,7 @@ export default function UpdateProjectForm({
         <form id="update-project-form" onSubmit={handleSubmit} className="space-y-6">
 
           {/* ── Header ─────────────────────────────────────────── */}
-          <BackBtn handleOnClick={handleBack} text='←  Forside' />
+          <BackBtn handleOnClick={handleBack} text='← Forside' />
           <h1 className="heading-1">Prosjektforespørsel</h1>
 
           {/* ── Prosjektinformasjon ─────────────────────────────── */}
@@ -277,13 +279,13 @@ export default function UpdateProjectForm({
                   changed={isFieldChanged('educationField')} onUndo={() => undoField('educationField')} />
               </div>
               {activeField === 'educationField' ? (
-                <select className="input" value={values.educationField} onChange={(e) => set('educationField')(e.target.value)}>
+                <select className="input animate-fade-in" value={values.educationField} onChange={(e) => set('educationField')(e.target.value)}>
                   <option value="">Ikke spesifisert</option>
                   <option value="BUILDING">Bygg</option>
                   <option value="CONSTRUCTION">Anlegg</option>
                 </select>
               ) : (
-                <span className={`badge ${values.educationField ? 'badge-secondary' : 'badge-neutral'}`}>
+                <span className={`badge animate-fade-in ${values.educationField ? 'badge-secondary' : 'badge-neutral'}`}>
                   {values.educationField ? EDUCATION_LABELS[values.educationField] : 'Ikke spesifisert'}
                 </span>
               )}
@@ -297,9 +299,9 @@ export default function UpdateProjectForm({
                   changed={isFieldChanged('title')} onUndo={() => undoField('title')} />
               </div>
               {activeField === 'title' ? (
-                <input type="text" className="input" value={values.title} onChange={(e) => set('title')(e.target.value)} />
+                <input type="text" className="input animate-fade-in" value={values.title} onChange={(e) => set('title')(e.target.value)} />
               ) : (
-                <p className="heading-3">{values.title}</p>
+                <p className="heading-3 animate-fade-in">{values.title}</p>
               )}
             </div>
 
@@ -311,9 +313,9 @@ export default function UpdateProjectForm({
                   changed={isFieldChanged('description')} onUndo={() => undoField('description')} />
               </div>
               {activeField === 'description' ? (
-                <textarea className="input min-h-30" value={values.description} onChange={(e) => set('description')(e.target.value)} />
+                <textarea className="input min-h-30 animate-fade-in" value={values.description} onChange={(e) => set('description')(e.target.value)} />
               ) : (
-                <p className="body-text whitespace-pre-wrap">
+                <p className="body-text whitespace-pre-wrap animate-fade-in">
                   {values.description || <span className="italic text-text-faint">Ingen beskrivelse</span>}
                 </p>
               )}
@@ -327,13 +329,15 @@ export default function UpdateProjectForm({
                   changed={isFieldChanged('budget')} onUndo={() => undoField('budget')} />
               </div>
               {activeField === 'budget' ? (
-                <PriceRange
-                  min={values.minPrice}
-                  max={values.maxPrice}
-                  onChange={(lo, hi) => setValues(prev => ({ ...prev, minPrice: lo, maxPrice: hi }))}
-                />
+                <div className="animate-fade-in">
+                  <PriceRange
+                    min={values.minPrice}
+                    max={values.maxPrice}
+                    onChange={(lo, hi) => setValues(prev => ({ ...prev, minPrice: lo, maxPrice: hi }))}
+                  />
+                </div>
               ) : (
-                <p className="heading-4">
+                <p className="heading-4 animate-fade-in">
                   {Number(values.minPrice).toLocaleString('nb-NO')} kr – {Number(values.maxPrice).toLocaleString('nb-NO')} kr
                 </p>
               )}
@@ -354,12 +358,12 @@ export default function UpdateProjectForm({
                     changed={isFieldChanged('name')} onUndo={() => undoField('name')} />
                 </div>
                 {activeField === 'name' ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 animate-fade-in">
                     <input type="text" className="input" placeholder="Fornavn"   value={values.clientForename} onChange={(e) => set('clientForename')(e.target.value)} />
                     <input type="text" className="input" placeholder="Etternavn" value={values.clientSurname}  onChange={(e) => set('clientSurname')(e.target.value)} />
                   </div>
                 ) : (
-                  <p className="body-text font-semibold text-text">{values.clientForename} {values.clientSurname}</p>
+                  <p className="body-text font-semibold text-text animate-fade-in">{values.clientForename} {values.clientSurname}</p>
                 )}
               </div>
 
@@ -371,9 +375,9 @@ export default function UpdateProjectForm({
                     changed={isFieldChanged('email')} onUndo={() => undoField('email')} />
                 </div>
                 {activeField === 'email' ? (
-                  <input type="email" className="input" value={values.clientEmail} onChange={(e) => set('clientEmail')(e.target.value)} />
+                  <input type="email" className="input animate-fade-in" value={values.clientEmail} onChange={(e) => set('clientEmail')(e.target.value)} />
                 ) : (
-                  <p className="body-text">{values.clientEmail}</p>
+                  <p className="body-text animate-fade-in">{values.clientEmail}</p>
                 )}
               </div>
 
@@ -385,17 +389,19 @@ export default function UpdateProjectForm({
                     changed={isFieldChanged('phone')} onUndo={() => undoField('phone')} />
                 </div>
                 {activeField === 'phone' ? (
-                  <PhoneInputWithCountrySelect
-                    className="input"
-                    international
-                    defaultCountry="NO"
-                    country={phoneCountry}
-                    onCountryChange={(c) => setPhoneCountry(c ?? 'NO')}
-                    value={(values.clientPhone || undefined) as E164Number | undefined}
-                    onChange={(v) => set('clientPhone')(v ?? '')}
-                  />
+                  <div className="animate-fade-in">
+                    <PhoneInputWithCountrySelect
+                      className="input"
+                      international
+                      defaultCountry="NO"
+                      country={phoneCountry}
+                      onCountryChange={(c) => setPhoneCountry(c ?? 'NO')}
+                      value={(values.clientPhone || undefined) as E164Number | undefined}
+                      onChange={(v) => set('clientPhone')(v ?? '')}
+                    />
+                  </div>
                 ) : (
-                  <p className="body-text">{values.clientPhone}</p>
+                  <p className="body-text animate-fade-in">{values.clientPhone}</p>
                 )}
               </div>
 
@@ -408,7 +414,7 @@ export default function UpdateProjectForm({
                       changed={isFieldChanged('org')} onUndo={() => undoField('org')} />
                   </div>
                   {activeField === 'org' ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 animate-fade-in">
                       <div className="space-y-1">
                         <label className="label">Navn</label>
                         <input type="text" className="input" placeholder="Firma AS" value={values.organizationName} onChange={(e) => set('organizationName')(e.target.value)} />
@@ -429,7 +435,7 @@ export default function UpdateProjectForm({
                       </div>
                     </div>
                   ) : (
-                    <p className="body-text">
+                    <p className="body-text animate-fade-in">
                       {values.organizationName || '–'}
                       {values.organizationNumber && (
                         <span className="text-text-faint text-sm ml-2">· Org.nr. {values.organizationNumber}</span>
@@ -447,9 +453,11 @@ export default function UpdateProjectForm({
                     changed={isFieldChanged('address')} onUndo={() => undoField('address')} />
                 </div>
                 {activeField === 'address' ? (
-                  <AddressInput value={values.address} onChange={set('address')} />
+                  <div className="animate-fade-in">
+                    <AddressInput value={values.address} onChange={set('address')} />
+                  </div>
                 ) : (
-                  <p className="body-text">{values.address}</p>
+                  <p className="body-text animate-fade-in">{values.address}</p>
                 )}
               </div>
 
@@ -479,14 +487,14 @@ export default function UpdateProjectForm({
                   )}
                 </div>
                 {activeField === 'billingAddress' ? (
-                  <div onInput={() => setSameAsAddress(false)}>
+                  <div className="animate-fade-in" onInput={() => setSameAsAddress(false)}>
                     <AddressInput
                       value={sameAsAddress ? values.address : values.billingAddress}
                       onChange={(val) => { setSameAsAddress(false); set('billingAddress')(val) }}
                     />
                   </div>
                 ) : (
-                  <p className="body-text">{sameAsAddress ? values.address : values.billingAddress}</p>
+                  <p className="body-text animate-fade-in">{sameAsAddress ? values.address : values.billingAddress}</p>
                 )}
               </div>
 
@@ -499,20 +507,31 @@ export default function UpdateProjectForm({
       {/* ── Sticky footer ──────────────────────────────────────── */}
       <div className="fixed bottom-0 left-0 right-0 z-10 bg-surface border-t border-border shadow-t-md">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3 flex-wrap">
-          <div>
-            {activeField !== null ? (
-              <p className="small-text text-warning">Lagre eller avbryt gjeldende felt for å sende inn</p>
-            ) : hasChanges && (
-              <button type="button" onClick={handleDiscardAll} className="btn btn-outline text-sm">
-                Forkast alle endringer
-              </button>
-            )}
+
+          {/* Left slot: warning text and discard button share the same grid cell
+              so neither causes a layout shift when the other appears/disappears. */}
+          <div className="grid items-center">
+            <p className={`row-start-1 col-start-1 small-text text-warning whitespace-nowrap transition-all duration-200 ${
+              activeField !== null ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1 pointer-events-none'
+            }`}>
+              Lagre eller avbryt gjeldende felt for å sende inn
+            </p>
+            <button
+              type="button"
+              onClick={handleDiscardAll}
+              className={`row-start-1 col-start-1 btn btn-outline text-sm whitespace-nowrap transition-all duration-200 ${
+                hasChanges && activeField === null ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1 pointer-events-none'
+              }`}
+            >
+              Forkast alle endringer
+            </button>
           </div>
+
           <button
             type="submit"
             form="update-project-form"
             disabled={submitting || activeField !== null || !hasChanges}
-            className="btn btn-primary disabled:opacity-50"
+            className="btn btn-primary transition-opacity duration-200 disabled:opacity-50"
           >
             {submitting ? 'Lagrer...' : 'Lagre endringer'}
           </button>
