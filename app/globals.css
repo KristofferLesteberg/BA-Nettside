@@ -42,6 +42,13 @@
   --color-warning-bg:       #fff3cd;
   --color-info:             #1d4ed8;
   --color-info-bg:          #dbeafe;
+
+  /* --- Project status --- */
+  --color-status-new:           #4338ca;
+  --color-status-new-bg:        #e0e7ff;
+  --color-status-progress:      #c2410c;
+  --color-status-progress-bg:   #ffedd5;
+  /* COMPLETE reuses --color-success / --color-success-bg */
  
   /* --- Typography --- */
   --font-sans:    "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -232,13 +239,15 @@
     font-weight:  500;
     line-height:  1.4;
   }
-  .badge-primary  { background: var(--color-primary);    color: var(--color-text-on-primary); }
-  .badge-secondary{ background: var(--color-secondary);  color: var(--color-text-on-primary); }
-  .badge-neutral  { background: var(--color-surface);    color: var(--color-text-muted); }
-  .badge-success  { background: var(--color-success-bg); color: var(--color-success); }
-  .badge-error    { background: var(--color-error-bg);   color: var(--color-error); }
-  .badge-warning  { background: var(--color-warning-bg); color: var(--color-warning); }
-  .badge-info     { background: var(--color-info-bg);    color: var(--color-info); }
+  .badge-primary       { background: var(--color-primary);              color: var(--color-text-on-primary); }
+  .badge-secondary     { background: var(--color-secondary);            color: var(--color-text-on-primary); }
+  .badge-neutral       { background: var(--color-surface);              color: var(--color-text-muted); }
+  .badge-success       { background: var(--color-success-bg);           color: var(--color-success); }
+  .badge-error         { background: var(--color-error-bg);             color: var(--color-error); }
+  .badge-warning       { background: var(--color-warning-bg);           color: var(--color-warning); }
+  .badge-info          { background: var(--color-info-bg);              color: var(--color-info); }
+  .badge-status-new    { background: var(--color-status-new-bg);        color: var(--color-status-new); }
+  .badge-status-progress { background: var(--color-status-progress-bg); color: var(--color-status-progress); }
  
   /* Background helpers (mirrors elevation scale) */
   .bg-sunken { background: var(--color-surface-sunken); } /* level -1 */
