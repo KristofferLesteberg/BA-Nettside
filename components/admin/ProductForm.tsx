@@ -9,7 +9,7 @@ import { usePopUp } from '../shared/PopUp'
 import { deleteProduct, updateProduct } from '@/actions/products'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
-import { EDUCATION_FIELD_OPTIONS } from '@/app/lib/education-fields'
+import LinjeDropdown from '@/components/shared/LinjeDropdown'
 
 export interface ProductFormValues {
   educationField: string
@@ -131,12 +131,11 @@ export default function ProductForm({ heading, submitLabel, contactPersons, prod
         {/* Education Field */}
         <div className="space-y-1" ref={educationFieldRef}>
           <label className="label">Kategori *</label>
-          <select className="input" value={educationField} onChange={(e) => setEducationField(e.target.value)}>
-            <option value="">Velg kategori</option>
-            {EDUCATION_FIELD_OPTIONS.map(opt => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-          </select>
+          <LinjeDropdown
+            value={educationField}
+            onChange={setEducationField}
+            placeholder="Velg kategori"
+          />
         </div>
 
         {/* Title */}
