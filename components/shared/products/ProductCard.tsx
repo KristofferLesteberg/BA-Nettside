@@ -8,11 +8,12 @@ import { useRouter } from "next/navigation"
 import { usePopUp } from "@/components/shared/PopUp"
 
 import toast from 'react-hot-toast'
-import { deleteProduct } from '@/actions/products'
+import { deleteProduct, publishProduct } from '@/actions/products'
 
 import { BsThreeDots } from "react-icons/bs"
 import { MdOutlineModeEdit } from "react-icons/md"
 import { FaRegTrashCan } from "react-icons/fa6"
+import { title } from "node:process"
 
 
 const FIELD_LABEL: Record<string, string> = {
@@ -64,6 +65,41 @@ function DeleteProduct({ productID, openPopUp }: {
   )
 }
 
+function Publish({ productID, openPopUp, publish }: {
+  productID: number
+  openPopUp: ReturnType<typeof usePopUp>['open']
+  publish: boolean
+}) {
+  const router = useRouter()
+
+  const handleConfirm = async () => {
+    try {
+      await publishProduct(productID, !publish)
+      toast.success(publish ? "Produkt publisert" : "Produkt gjort om til utkast")
+      router.refresh()
+    } catch {
+      toast.error(publish ? "Kunne ikke publisere produktet" : "Kunne ikke gjøre produktet til utkast")
+    }
+  }
+
+  return (
+    <button
+      onClick={() => openPopUp({
+        title: publish ? "Vil du publisere produktet?" : "Vil du gjøre produktet til utkast?",
+        subtitle: publish
+          ? "Trykker du ja vil produktet bli offentliggjort"
+          : "Trykker du ja vil produktet ikke lengere være synlig for kunder",
+        yesLabel: publish ? "Publiser produkt" : "Gjør til utkast",
+        noLabel: 'Avbryt',
+        onYes: handleConfirm,
+      })}
+      className="btn btn-ghost w-full justify-start gap-2 text-lg text-error hover:bg-error-bg"
+    >
+      {publish ? "Publiser" : "Gjør utkast"}
+    </button>
+  )
+}
+
 export default function ProductCard({ product, isAdmin }: ProductCardProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
@@ -90,7 +126,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
       document.removeEventListener('mousedown', onClickOutside)
       document.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('scroll', onScroll)
-    }
+    } 
   }, [open, closing, closeMenu])
 
   return (
@@ -162,6 +198,9 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
                   </Link>
                   <hr className="border-border my-1" />
                   <DeleteProduct productID={product.id} openPopUp={openPopUp} />
+                  <hr className="border-border my-1" />
+                  <Publish productID={product.id} openPopUp={openPopUp} publish={product.draft} />
+                  
                 </div>
               )}
             </div>

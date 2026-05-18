@@ -209,10 +209,15 @@ export default function ProductForm({ heading, submitLabel, contactPersons, prod
         <ImageOrder initialImages={initialValues?.existingImages} onChange={setImages} onNewImage={onNewImage} />
 
         {/* Submit */}
-        <button type="submit" className="btn btn-primary w-full">
-          {submitLabel}
-        </button>
-
+        <div className='flex flex-row gap-2'>
+          <button type="submit" className="btn btn-primary w-1/2">
+            {submitLabel}
+          </button>
+          
+          <button type="button" onClick={handleSaveDraft} className="btn btn-secondary w-1/2">
+            Lagre som utkast
+          </button>
+        </div>
       </form>
     </div>
   )

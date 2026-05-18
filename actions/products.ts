@@ -128,6 +128,19 @@ export async function updateProduct(id: number, formData: FormData, publish = tr
   revalidatePath('/')
 }
 
+export async function publishProduct(id: number, publish: boolean = false) {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+
+  const existing = await prisma.product.findUnique({ where: { id } })
+  if (!existing) throw new Error('Produkt ikke funnet')
+
+
+  await prisma.product.update({ where: { id: id }, data: { draft: publish }})
+  revalidatePath('/admin')
+  revalidatePath('/')
+}
+
 export async function addImageToProduct(id: number, formdata: FormData) {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')

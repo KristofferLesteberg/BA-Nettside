@@ -86,6 +86,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
         formData.append('image', file)
         return addImageToProduct(productId, formData)
       }}
+    
     />
   )
 }
