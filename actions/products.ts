@@ -22,7 +22,7 @@ const MeasuresSchema = z.array(
 const ProductCreateSchema = z.object({
   educationField: z.preprocess(
     (val) => (val === '' ? undefined : val),
-    z.enum(['BUILDING', 'CONSTRUCTION'], { message: 'Kategori er påkrevd' })
+    z.enum(['PLUMBER', 'CONCRETE', 'CARPENTER', 'CONSTRUCTION'], { message: 'Kategori er påkrevd' })
   ),
   title:           z.string().min(1, 'Tittel er påkrevd'),
   description:     z.string().min(1, 'Beskrivelse er påkrevd'),

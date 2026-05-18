@@ -13,7 +13,7 @@ import { sendProjectEmail } from '@/actions/email'
 const ProjectRequestCreateSchema = z.object({
   educationField: z.preprocess(
     (val) => (val === '' ? undefined : val),
-    z.enum(['BUILDING', 'CONSTRUCTION']).optional()
+    z.enum(['PLUMBER', 'CONCRETE', 'CARPENTER', 'CONSTRUCTION']).optional()
   ),
   title: z.string().min(1, 'Prosjekttittel er påkrevd'),
   description: z.string().default(''),

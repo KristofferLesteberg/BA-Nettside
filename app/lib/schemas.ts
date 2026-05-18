@@ -1,14 +1,14 @@
 import { z } from 'zod'
 import { isValidPhoneNumber } from 'libphonenumber-js'
 
-export const EducationFieldSchema = z.enum(['BUILDING', 'CONSTRUCTION'])
+export const EducationFieldSchema = z.enum(['PLUMBER', 'CONCRETE', 'CARPENTER', 'CONSTRUCTION'])
 
 export const MeasuresSchema = z.record(z.string(), z.string())
 
 export const ProductCreateSchema = z.object({
   educationField: z.preprocess(
     (val) => (val === '' ? undefined : val),
-    z.enum(['BUILDING', 'CONSTRUCTION'], { message: 'Kategori er påkrevd' })
+    z.enum(['PLUMBER', 'CONCRETE', 'CARPENTER', 'CONSTRUCTION'], { message: 'Kategori er påkrevd' })
   ),
   title: z.string().min(1, 'Tittel er påkrevd'),
   description: z.string().min(1, 'Beskrivelse er påkrevd'),
@@ -51,7 +51,7 @@ export const ProjectRequestPage1Schema = z.object({
 export const ProjectRequestPage2Schema = z.object({
   educationField: z.preprocess(
     (val) => (val === '' ? undefined : val),
-    z.enum(['BUILDING', 'CONSTRUCTION'], { message: 'Kategori er påkrevd' })
+    z.enum(['PLUMBER', 'CONCRETE', 'CARPENTER', 'CONSTRUCTION'], { message: 'Kategori er påkrevd' })
   ),
   title: z.string().min(1, 'Prosjekttittel er påkrevd'),
   description: z.string().default(''),
@@ -62,7 +62,7 @@ export const ProjectRequestPage2Schema = z.object({
 export const ProjectRequestCreateSchema = z.object({
   educationField: z.preprocess(
     (val) => (val === '' ? undefined : val),
-    z.enum(['BUILDING', 'CONSTRUCTION']).optional()
+    z.enum(['PLUMBER', 'CONCRETE', 'CARPENTER', 'CONSTRUCTION']).optional()
   ),
   title: z.string().min(1, 'Prosjekttittel er påkrevd'),
   description: z.string().default(''),
