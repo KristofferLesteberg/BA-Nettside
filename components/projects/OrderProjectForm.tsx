@@ -8,6 +8,7 @@ import { parsePhoneNumberWithError } from 'libphonenumber-js'
 import type { E164Number, CountryCode } from 'libphonenumber-js'
 import OrgNumberInput from '@/components/shared/input/orgNumberInput'
 import AddressInput from '@/components/shared/input/address-input'
+import { EDUCATION_FIELD_OPTIONS } from '@/app/lib/education-fields'
 import PriceRange from '@/components/shared/input/price-range'
 import { ProjectRequestPage1Schema, ProjectRequestPage2Schema } from '@/app/lib/schemas'
 import { FaLink } from 'react-icons/fa'
@@ -229,8 +230,9 @@ export default function OrderProjectForm({ onSuccess }: Props) {
                       onChange={(e) => setEducationField(e.target.value)}
                     >
                       <option value="" disabled>Velg linje</option>
-                      <option value="BUILDING">Bygg</option>
-                      <option value="CONSTRUCTION">Anlegg</option>
+                      {EDUCATION_FIELD_OPTIONS.map(opt => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                      ))}
                     </select>
                   </div>
 

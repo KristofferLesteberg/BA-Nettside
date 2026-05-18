@@ -9,6 +9,7 @@ import { usePopUp } from '../shared/PopUp'
 import { deleteProduct, updateProduct } from '@/actions/products'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
+import { EDUCATION_FIELD_OPTIONS } from '@/app/lib/education-fields'
 
 export interface ProductFormValues {
   educationField: string
@@ -132,8 +133,9 @@ export default function ProductForm({ heading, submitLabel, contactPersons, prod
           <label className="label">Kategori *</label>
           <select className="input" value={educationField} onChange={(e) => setEducationField(e.target.value)}>
             <option value="">Velg kategori</option>
-            <option value="BUILDING">Bygg</option>
-            <option value="CONSTRUCTION">Anlegg</option>
+            {EDUCATION_FIELD_OPTIONS.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
           </select>
         </div>
 

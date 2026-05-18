@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
 import { generateProjectPdf } from "@/actions/pdf"
 import { usePopUp } from "@/components/shared/PopUp"
-import { FaEllipsisVertical, FaFilePdf, FaTrash, FaHelmetSafety, FaRoad, FaCoins, FaCalendarDays, FaChevronDown, FaQuestion, FaEnvelope, FaPhone, FaLocationDot, FaFileInvoice, FaSpinner } from "react-icons/fa6"
+import { FaEllipsisVertical, FaFilePdf, FaTrash, FaHelmetSafety, FaRoad, FaWrench, FaCoins, FaCalendarDays, FaChevronDown, FaQuestion, FaEnvelope, FaPhone, FaLocationDot, FaFileInvoice, FaSpinner } from "react-icons/fa6"
+import { GiBrickWall } from "react-icons/gi"
+import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
 import { RiProgress3Line } from "react-icons/ri"
 
 export type SerializedProject = Omit<ProjectRequest, 'minPrice' | 'maxPrice' | 'createdAt'> & {
@@ -27,14 +29,11 @@ const STATUS_STYLES: Record<Status, string> = {
   COMPLETE:    'badge badge-md badge-success',
 }
 
-const EDUCATION_LABELS: Record<EducationField, string> = {
-  BUILDING:     'Bygg',
-  CONSTRUCTION: 'Anlegg',
-}
-
 const EDUCATION_ICONS: Record<EducationField, React.ReactNode> = {
-  BUILDING:     <FaHelmetSafety className="shrink-0" aria-hidden="true" />,
-  CONSTRUCTION: <FaRoad         className="shrink-0" aria-hidden="true" />,
+  PLUMBER:      <FaWrench      className="shrink-0" aria-hidden="true" />,
+  CONCRETE:     <GiBrickWall   className="shrink-0" aria-hidden="true" />,
+  CARPENTER:    <FaHelmetSafety className="shrink-0" aria-hidden="true" />,
+  CONSTRUCTION: <FaRoad        className="shrink-0" aria-hidden="true" />,
 }
 
 const ALL_STATUSES: Status[] = ['NEW', 'IN_PROGRESS', 'COMPLETE']
@@ -165,9 +164,9 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
             <span className={STATUS_STYLES[project.status]}>
               {STATUS_LABELS[project.status]}
             </span>
-            <span className="badge badge-neutral gap-1.5">
+            <span className="badge badge-lg badge-neutral gap-1.5">
               {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" aria-hidden="true" />}
-              {project.educationField ? EDUCATION_LABELS[project.educationField] : 'Ingen linje'}
+              {project.educationField ? EDUCATION_FIELD_LABELS[project.educationField] : 'Ingen linje'}
             </span>
           </div>
         </div>
@@ -184,9 +183,9 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
             </div>
 
             <div className="w-28 flex justify-center -ml-1.5">
-              <span className="badge badge-md badge-neutral gap-1.5">
+              <span className="badge badge-lg badge-neutral gap-1.5">
                 {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" aria-hidden="true" />}
-                {project.educationField ? EDUCATION_LABELS[project.educationField] : 'Ingen linje'}
+                {project.educationField ? EDUCATION_FIELD_LABELS[project.educationField] : 'Ingen linje'}
               </span>
             </div>
 
