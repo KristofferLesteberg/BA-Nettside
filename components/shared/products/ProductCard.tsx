@@ -11,7 +11,7 @@ import toast from 'react-hot-toast'
 import { deleteProduct, publishProduct } from '@/actions/products'
 
 import { BsThreeDots } from "react-icons/bs"
-import { MdOutlineModeEdit } from "react-icons/md"
+import { MdOutlineModeEdit, MdOutlinePublish, MdOutlineUnpublished } from "react-icons/md"
 import { FaRegTrashCan } from "react-icons/fa6"
 import { title } from "node:process"
 
@@ -93,8 +93,9 @@ function Publish({ productID, openPopUp, publish }: {
         noLabel: 'Avbryt',
         onYes: handleConfirm,
       })}
-      className="btn btn-ghost w-full justify-start gap-2 text-lg text-error hover:bg-error-bg"
+      className="btn btn-ghost w-full justify-start gap-2 text-lg text-secondary hover:bg-error-bg whitespace-nowrap"
     >
+      {publish ? <MdOutlinePublish /> : <MdOutlineUnpublished />}
       {publish ? "Publiser" : "Gjør utkast"}
     </button>
   )
