@@ -9,6 +9,7 @@ import { usePopUp } from '../shared/PopUp'
 import { deleteProduct, updateProduct } from '@/actions/products'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
+import { getAllContacts } from '@/actions/contact'
 
 export interface ProductFormValues {
   educationField: string
@@ -24,7 +25,7 @@ export interface ProductFormValues {
 interface ProductFormProps {
   heading: string
   submitLabel: string
-  contactPersons?: ContactPerson[]
+ 
   productId: number
   initialValues?: {
     educationField?: string
@@ -40,8 +41,15 @@ interface ProductFormProps {
   onSubmit: (values: ProductFormValues) => Promise<void>
 }
 
-export default function ProductForm({ heading, submitLabel, contactPersons, productId, initialValues, onNewImage, onSubmit }: ProductFormProps) {
+export default function ProductForm({ heading, submitLabel, productId, initialValues, onNewImage, onSubmit }: ProductFormProps) {
   const router = useRouter()
+
+  const [contactPersons, setContactPersons] = useState<ContactPerson[] | null>(null)
+  useEffect(() => {
+    getAllContacts()
+      .then(setContactPersons)
+      .catch(() => toast.error("Kunne ikke laste kontaktpersoner"))
+  }, [])
 
   const [educationField, setEducationField] = useState(initialValues?.educationField ?? "")
   const [title, setTitle] = useState(initialValues?.title ?? "")
@@ -70,7 +78,7 @@ export default function ProductForm({ heading, submitLabel, contactPersons, prod
     }
     if (!description.trim()) {
       descriptionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
-    }
+    } 
 
     await onSubmit({ educationField, title, description, price, amount, measures, images, contactId })
   }
@@ -148,12 +156,13 @@ export default function ProductForm({ heading, submitLabel, contactPersons, prod
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
+        {/*Kontact person */}
         <div className='space-y-1'>
           <label className='label'>Kontakt person</label>
           <select className='input' value={contactId} onChange={(e) => setContactId(e.target.value)}>
             <option value="">Velg kontakt person</option>
             {contactPersons?.map((contactPerson, index) => (
-              <option key={index} value={contactPerson.id}>{contactPerson.name}</option>
+              <option key={index} value={String(contactPerson.id)}>{contactPerson.name}</option>
             ))}
           </select>
         </div>
