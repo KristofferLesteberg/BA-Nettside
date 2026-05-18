@@ -3,6 +3,7 @@ import { EducationField, Status } from "@/generated/prisma"
 import { useMemo, useState } from "react"
 import { FaSliders, FaXmark } from "react-icons/fa6"
 import ProjectCard, { type SerializedProject } from "./ProjectCard"
+import ProjectDrawer from "./ProjectDrawer"
 import PriceRange from "@/components/shared/input/price-range"
 
 
@@ -46,6 +47,7 @@ export default function FilteredProjectGrid({ projects }: Props) {
   const [minPrice, setMinPrice] = useState<number>(0)
   const [maxPrice, setMaxPrice] = useState<number>(500000)
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [selectedProject, setSelectedProject] = useState<SerializedProject | null>(null)
 
   const filtered = useMemo(() => {
     console.log("Minpris" + minPrice)
@@ -132,14 +134,11 @@ export default function FilteredProjectGrid({ projects }: Props) {
 
   return (
     <>
-     <div className="flex flex-col gap-2">
-        <span className="label">Pris</span>
-        <div className="flex flex-row justify-between items-center gap-4">
-          <div className="flex-1">
-            <PriceRange min={minPrice.toString()} max={maxPrice.toString()} onChange={(lo, hi) => { setMinPrice(Number(lo)); setMaxPrice(Number(hi)) }} />
-          </div>
-          <button onClick={() => { setMaxPrice(500000); setMinPrice(0); }} className="btn btn-secondary h-1/3 ">Reset</button>
+      <div className="flex flex-row justify-between items-center gap-4 mb-5">
+        <div className="flex-1">
+          <PriceRange min={minPrice.toString()} max={maxPrice.toString()} onChange={(lo, hi) => { setMinPrice(Number(lo)); setMaxPrice(Number(hi)) }} />
         </div>
+        <button onClick={() => { setMaxPrice(500000); setMinPrice(0); }} className="btn btn-secondary h-1/3 ">Tilbakestill</button>
       </div>
     
     <div className="flex gap-8 items-start">
@@ -155,9 +154,9 @@ export default function FilteredProjectGrid({ projects }: Props) {
           </button>
         </div>
 
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-3">
           {filtered.map((project) => (
-            <ProjectCard project={project} key={project.id} />
+            <ProjectCard project={project} key={project.id} onView={setSelectedProject} />
           ))}
         </div>
       </div>
@@ -186,6 +185,8 @@ export default function FilteredProjectGrid({ projects }: Props) {
       </aside>
 
     </div>
+
+    <ProjectDrawer project={selectedProject} onClose={() => setSelectedProject(null)} />
     </ >
   )
 }

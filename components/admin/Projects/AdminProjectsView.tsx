@@ -1,5 +1,3 @@
-
-import ProjectCard from "@/components/admin/Projects/ProjectCard"
 import { getAllProjects } from "@/actions/projects"
 import FilteredProjectGrid from "./FilteredProjectGrid"
 
