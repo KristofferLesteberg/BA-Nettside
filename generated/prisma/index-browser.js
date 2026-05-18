@@ -211,7 +211,9 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 exports.EducationField = exports.$Enums.EducationField = {
-  BUILDING: 'BUILDING',
+  PLUMBER: 'PLUMBER',
+  CONCRETE: 'CONCRETE',
+  CARPENTER: 'CARPENTER',
   CONSTRUCTION: 'CONSTRUCTION'
 };
 

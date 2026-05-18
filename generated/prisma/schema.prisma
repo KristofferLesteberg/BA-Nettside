@@ -11,8 +11,10 @@ datasource db {
 }
 
 enum EducationField {
-  BUILDING // Bygg
-  CONSTRUCTION // Annlegg
+  PLUMBER
+  CONCRETE
+  CARPENTER
+  CONSTRUCTION
 }
 
 enum Status {
