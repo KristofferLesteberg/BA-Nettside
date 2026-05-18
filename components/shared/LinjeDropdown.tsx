@@ -26,11 +26,17 @@ const LinjeDropdown = forwardRef<HTMLDivElement, Props>(
     const innerRef   = useRef<HTMLDivElement>(null)
     const buttonRef  = useRef<HTMLButtonElement>(null)
     const panelRef   = useRef<HTMLDivElement>(null)
+    const optionRefs = useRef<(HTMLButtonElement | null)[]>([])
     const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
     const [menuMounted, setMenuMounted] = useState(false)
     const [menuOpen,    setMenuOpen]    = useState(false)
     const [panelStyle,  setPanelStyle]  = useState<React.CSSProperties>({})
+
+    const allOptions = [
+      ...(nullable ? [{ value: '', label: 'Ikke spesifisert' }] : []),
+      ...EDUCATION_FIELD_OPTIONS,
+    ]
 
     const openMenu = () => {
       clearTimeout(closeTimer.current)
@@ -47,13 +53,18 @@ const LinjeDropdown = forwardRef<HTMLDivElement, Props>(
       closeTimer.current = setTimeout(() => setMenuMounted(false), 150)
     }
 
+    // Focus selected (or first) option when panel opens
+    useEffect(() => {
+      if (!menuOpen) return
+      requestAnimationFrame(() => panelRef.current?.focus())
+    }, [menuOpen])
+
     useEffect(() => {
       if (!menuMounted) return
       const onDown = (e: MouseEvent) => {
         const target = e.target as Node
-        const insideTrigger = innerRef.current?.contains(target)
-        const insidePanel   = panelRef.current?.contains(target)
-        if (!insideTrigger && !insidePanel) closeMenu()
+        if (!innerRef.current?.contains(target) && !panelRef.current?.contains(target))
+          closeMenu()
       }
       const onScroll = () => closeMenu()
       document.addEventListener('mousedown', onDown)
@@ -69,12 +80,30 @@ const LinjeDropdown = forwardRef<HTMLDivElement, Props>(
     const handleSelect = (v: string) => {
       onChange(v)
       closeMenu()
+      buttonRef.current?.focus()
+    }
+
+    const handlePanelKeyDown = (e: React.KeyboardEvent) => {
+      const refs    = optionRefs.current
+      const current = refs.indexOf(document.activeElement as HTMLButtonElement)
+
+      if (e.key === 'ArrowDown' || (e.key === 'Tab' && !e.shiftKey)) {
+        e.preventDefault()
+        refs[current === -1 ? 0 : (current + 1) % refs.length]?.focus()
+      } else if (e.key === 'ArrowUp' || (e.key === 'Tab' && e.shiftKey)) {
+        e.preventDefault()
+        refs[current === -1 ? refs.length - 1 : (current - 1 + refs.length) % refs.length]?.focus()
+      } else if (e.key === 'Escape') {
+        e.preventDefault()
+        closeMenu()
+        buttonRef.current?.focus()
+      }
     }
 
     const mergeRef = (node: HTMLDivElement | null) => {
       innerRef.current = node
       if (typeof ref === 'function') ref(node)
-      else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node
+      else if (ref) (ref as { current: HTMLDivElement | null }).current = node
     }
 
     const icon = value ? ICONS[value as EducationField] : null
@@ -85,6 +114,12 @@ const LinjeDropdown = forwardRef<HTMLDivElement, Props>(
           ref={buttonRef}
           type="button"
           onClick={menuOpen ? closeMenu : openMenu}
+          onKeyDown={(e) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+              e.preventDefault()
+              openMenu()
+            }
+          }}
           className="input w-full flex items-center gap-2 cursor-pointer"
         >
           {icon}
@@ -101,27 +136,21 @@ const LinjeDropdown = forwardRef<HTMLDivElement, Props>(
           <div
             ref={panelRef}
             style={panelStyle}
-            className={`fixed z-50 card rounded-md flex flex-col p-1 shadow-lg ${menuOpen ? 'animate-dropdown-in' : 'animate-dropdown-out'}`}
+            onKeyDown={handlePanelKeyDown}
+            tabIndex={-1}
+            className={`fixed z-50 card rounded-md flex flex-col p-1 shadow-lg outline-none ${menuOpen ? 'animate-dropdown-in' : 'animate-dropdown-out'}`}
           >
-            {nullable && (
+            {allOptions.map((opt, i) => (
               <button
-                type="button"
-                onClick={() => handleSelect('')}
-                className={`relative text-left pl-4 pr-3 py-2 rounded-[calc(var(--radius-md)-2px)] small-text transition-colors hover:bg-surface-raised cursor-pointer${!value ? ' font-semibold text-text' : ' text-text-muted'}`}
-              >
-                {!value && <span className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-3/5 rounded-full bg-secondary" />}
-                Ikke spesifisert
-              </button>
-            )}
-            {EDUCATION_FIELD_OPTIONS.map(opt => (
-              <button
-                type="button"
                 key={opt.value}
+                ref={(el) => { optionRefs.current[i] = el }}
+                type="button"
+                tabIndex={-1}
                 onClick={() => handleSelect(opt.value)}
                 className={`relative flex items-center gap-2 text-left pl-4 pr-3 py-2 rounded-[calc(var(--radius-md)-2px)] small-text transition-colors hover:bg-surface-raised cursor-pointer${value === opt.value ? ' font-semibold text-text' : ' text-text-muted'}`}
               >
                 {value === opt.value && <span className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-3/5 rounded-full bg-secondary" />}
-                {ICONS[opt.value]}
+                {opt.value && ICONS[opt.value as EducationField]}
                 {opt.label}
               </button>
             ))}
