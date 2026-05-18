@@ -68,14 +68,11 @@ export default function FilteredProjectGrid({ projects }: Props) {
       if(Number(project.maxPrice) < maxPrice) return false
       return true
     })
-
     switch(sort) {
       case 'NEWEST':     priceRangeResult.sort((a, b) => b.createdAt.localeCompare(a.createdAt)); break
       case 'OLDEST':     priceRangeResult.sort((a, b) => a.createdAt.localeCompare(b.createdAt)); break
 
     }
-      
-
     return priceRangeResult
   }, [status, category, minPrice, maxPrice, sort, projects])
 
