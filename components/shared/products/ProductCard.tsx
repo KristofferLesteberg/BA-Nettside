@@ -15,6 +15,7 @@ import { MdOutlineModeEdit, MdOutlinePublish, MdOutlineUnpublished } from "react
 import { FaRegTrashCan } from "react-icons/fa6"
 import { title } from "node:process"
 import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
+import { isProductPublishable } from "@/app/lib/product-utils"
 
 
 
@@ -65,10 +66,11 @@ function DeleteProduct({ productID, openPopUp }: {
   )
 }
 
-function Publish({ productID, openPopUp, publish }: {
+function Publish({ productID, openPopUp, publish, canPublish }: {
   productID: number
   openPopUp: ReturnType<typeof usePopUp>['open']
   publish: boolean
+  canPublish: boolean
 }) {
   const router = useRouter()
 
@@ -93,7 +95,8 @@ function Publish({ productID, openPopUp, publish }: {
         noLabel: 'Avbryt',
         onYes: handleConfirm,
       })}
-      className="btn btn-ghost w-full justify-start gap-2 text-lg text-secondary hover:bg-error-bg whitespace-nowrap"
+      disabled={publish && !canPublish}
+      className="btn btn-ghost w-full justify-start gap-2 text-lg text-secondary hover:bg-error-bg whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed"
     >
       {publish ? <MdOutlinePublish /> : <MdOutlineUnpublished />}
       {publish ? "Publiser" : "Gjør utkast"}
@@ -200,7 +203,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
                   <hr className="border-border my-1" />
                   <DeleteProduct productID={product.id} openPopUp={openPopUp} />
                   <hr className="border-border my-1" />
-                  <Publish productID={product.id} openPopUp={openPopUp} publish={product.draft} />
+                  <Publish productID={product.id} openPopUp={openPopUp} publish={product.draft} canPublish={isProductPublishable(product)} />
                   
                 </div>
               )}
