@@ -34,6 +34,7 @@ export default function OrderCard({ order }: Props) {
   const { open: openPopUp, element: popUpElement } = usePopUp()
   const [showProduct, setShowProduct] = useState(false)
   const [kontaktOpen, setKontaktOpen] = useState(false)
+  const [descOpen,    setDescOpen]    = useState(false)
 
   const [menuMounted, setMenuMounted] = useState(false)
   const [menuOpen,    setMenuOpen]    = useState(false)
@@ -138,26 +139,20 @@ export default function OrderCard({ order }: Props) {
             <div className="w-px self-stretch bg-border mx-1" />
 
             <div className="flex flex-col gap-0.5">
-              <span className="flex items-center gap-1.5 small-text text-muted whitespace-nowrap">
+              <a href={`mailto:${order.clientEmail}`} className="header-link flex items-center gap-1.5 small-text whitespace-nowrap">
                 <FaEnvelope className="text-text-faint shrink-0" aria-hidden="true" />
                 {order.clientEmail}
-              </span>
-              <span className="flex items-center gap-1.5 small-text text-muted whitespace-nowrap">
+              </a>
+              <a href={`tel:${order.clientPhone}`} className="header-link flex items-center gap-1.5 small-text whitespace-nowrap">
                 <FaPhone className="text-text-faint shrink-0" aria-hidden="true" />
                 {order.clientPhone}
-              </span>
-              {order.extraDetails && (
-                <span className="flex items-center gap-1.5 small-text text-muted whitespace-nowrap max-w-64 truncate">
-                  <FaCircleInfo className="text-text-faint shrink-0" aria-hidden="true" />
-                  {order.extraDetails}
-                </span>
-              )}
+              </a>
             </div>
 
             <div className="w-px self-stretch bg-border mx-1" />
 
             <span className="flex items-center gap-1.5 small-text text-text font-medium whitespace-nowrap">
-              <FaBoxesStacked className="text-text-faint shrink-0" aria-hidden="true" />
+              <FaBoxesStacked className="text-text-faint shrink-0 w-4 h-4" aria-hidden="true" />
               {order.amount} stk
             </span>
           </div>
@@ -230,21 +225,41 @@ export default function OrderCard({ order }: Props) {
           <div className={`grid transition-[grid-template-rows] duration-200 ${kontaktOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
             <div className="overflow-hidden min-h-0">
               <div className="flex flex-col gap-1.5 pb-2">
-                <span className="flex items-center gap-1.5 small-text text-muted">
+                <a href={`mailto:${order.clientEmail}`} className="header-link flex items-center gap-1.5 small-text">
                   <FaEnvelope className="text-text-faint shrink-0" aria-hidden="true" />
                   {order.clientEmail}
-                </span>
-                <span className="flex items-center gap-1.5 small-text text-muted">
+                </a>
+                <a href={`tel:${order.clientPhone}`} className="header-link flex items-center gap-1.5 small-text">
                   <FaPhone className="text-text-faint shrink-0" aria-hidden="true" />
                   {order.clientPhone}
-                </span>
-                {order.extraDetails && (
-                  <span className="flex items-center gap-1.5 small-text text-muted">
-                    <FaCircleInfo className="text-text-faint shrink-0" aria-hidden="true" />
-                    {order.extraDetails}
-                  </span>
-                )}
+                </a>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tillegsinformasjon accordion — all screen sizes */}
+      <div className="mt-2 border-t border-border">
+        <button
+          onClick={() => setDescOpen(v => !v)}
+          className="group flex items-center justify-between w-full py-2 small-text font-medium text-text"
+          aria-expanded={descOpen}
+        >
+          Tillegsinformasjon
+          <FaChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${descOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+        </button>
+        <div className={`grid transition-[grid-template-rows] duration-200 ${descOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+          <div className="overflow-hidden min-h-0">
+            <div className="pb-2">
+              {order.extraDetails ? (
+                <p className="small-text text-muted">{order.extraDetails}</p>
+              ) : (
+                <span className="flex items-center gap-1.5 small-text text-faint italic">
+                  <FaCircleInfo className="shrink-0" aria-hidden="true" />
+                  Ingen tillegsinformasjon oppgitt
+                </span>
+              )}
             </div>
           </div>
         </div>
