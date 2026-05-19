@@ -11,6 +11,7 @@ import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { getAllContacts } from '@/actions/contact'
 import LinjeDropdown from '../shared/LinjeDropdown'
+import { RotateCcw } from 'lucide-react'
 
 export interface ProductFormValues {
   educationField: string
@@ -24,6 +25,7 @@ export interface ProductFormValues {
 }
 
 interface ProductFormProps {
+  mode: "create" | "update"
   heading: string
   submitLabel: string
 
@@ -43,7 +45,7 @@ interface ProductFormProps {
   onSubmit: (values: ProductFormValues) => Promise<void>
 }
 
-export default function ProductForm({ heading, submitLabel, productId, initialValues, onNewImage, onSubmit }: ProductFormProps) {
+export default function ProductForm({ mode, heading, submitLabel, productId, initialValues, onNewImage, onSubmit }: ProductFormProps) {
   const router = useRouter()
 
   const [contactPersons, setContactPersons] = useState<ContactPerson[] | null>(null)
@@ -72,20 +74,24 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
   const { open: openPopUp, close: closePopUp, element: popUpElement } = usePopUp()
 
 
-  const handleForm = async (e: React.FormEvent) => {
-    e.preventDefault()
-
+  const submitForm = async () => {
     if (!educationField) {
       educationFieldRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+      return
     }
     if (!title.trim()) {
       titleRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+      return
     }
     if (!description.trim()) {
       descriptionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+      return
     }
-
     await onSubmit({ educationField, title, description, price, amount, measures, images, contactId })
+  }
+
+  const handleForm = (e: React.SyntheticEvent) => {
+    e.preventDefault()
   }
 
     const original = useRef({
@@ -110,8 +116,10 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
     setContactId(original.current.contactId)
     setImagesChanged(false)
     setResetKey(k => k + 1)
-    if(backBtn) router.back()
+    if(backBtn) { router.back() }
   }
+
+
 
   const buildFormData = () => {
     const formData = new FormData
@@ -186,27 +194,39 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
       <form onSubmit={handleForm} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
 
         <div className="flex flex-row justify-between">
-          {isChanged ? 
+          {isChanged && mode === "update" ?
             <BackBtn handleOnClick={() => openPopUp({
-            title:    'Vil du lagre endringene dine?',
-            subtitle: 'Du vil kunne fortsette å redigere utkastet senere, og det vil ikke være synlig for kunder før du publiserer det.',
-            yesLabel: 'Lagre endringene',
-            noLabel:  'Forkast endringene',
-            onYes:    handleSaveChanges,
-            onNo:     () => resetAllFields(true),
-          })} />
+              title:    'Vil du lagre endringene dine?',
+              subtitle: 'Du vil kunne fortsette å redigere utkastet senere, og det vil ikke være synlig for kunder før du publiserer det.',
+              yesLabel: 'Lagre endringene',
+              noLabel:  'Forkast endringene',
+              onYes:    handleSaveChanges,
+              onNo:     () => resetAllFields(true),
+            })} />
           :
-          <BackBtn handleOnClick={() => router.back()} />
+            <BackBtn handleOnClick={() => openPopUp({
+              title: 'Vil du lagre som utkast?',
+              yesLabel: 'Ja',
+              noLabel: 'Nei',
+              onNo: () => { deleteProduct(productId); setTimeout(() => router.back(), 1000) },
+              onYes: () => router.back()
+
+            })} />
           }
-        <span className="badge badge-info">{initialValues?.draft ? 'Utkast' : 'Publisert'}</span>
+          {mode === "update" && (
+            <span className="badge badge-info">{initialValues?.draft ? 'Utkast' : 'Publisert'}</span>
+          )}
         </div>
         <h2 className="heading-2">{heading}</h2>
         <p className="text-text-faint italic -mt-4">Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette</p>
-        {isChanged && (
-            <button type="button" onClick={() => resetAllFields} className="btn btn-outline">
-              Tilbakestill
-            </button>
-          )}
+        <button
+          type="button"
+          onClick={() => resetAllFields()}
+          className={`btn btn-ghost transition-opacity duration-150 ${isChanged ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        >
+          <RotateCcw size={14} />
+          Tilbakestill
+        </button>
         {/* Education Field */}
         <div className="space-y-1" ref={educationFieldRef}>
           <label className="label">Kategori *</label>
@@ -220,65 +240,120 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
         {/* Title */}
         <div className="space-y-1" ref={titleRef}>
           <label className="label">Tittel *</label>
-          <input
-            type="text"
-            className="input"
-            placeholder="Produkt navn"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          <div className="relative">
+            <input
+              type="text"
+              className="input pr-8"
+              placeholder="Produkt navn"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            {title !== original.current.title && (
+              <button
+                type="button"
+                onClick={() => setTitle(original.current.title)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-text-faint hover:text-text transition-colors p-0.5 rounded cursor-pointer animate-fade-in"
+              >
+                <RotateCcw size={14} />
+              </button>
+            )}
+          </div>
         </div>
         {/*Kontact person */}
         <div className='space-y-1'>
           <label className='label'>Kontakt person</label>
-          <select className='input' value={contactId} onChange={(e) => setContactId(e.target.value)}>
-            <option value="">Velg kontakt person</option>
-            {contactPersons?.map((contactPerson, index) => (
-              <option key={index} value={String(contactPerson.id)}>{contactPerson.name}</option>
-            ))}
-          </select>
+          <div className="flex items-center gap-2">
+            <select className='input' value={contactId} onChange={(e) => setContactId(e.target.value)}>
+              <option value="">Velg kontakt person</option>
+              {contactPersons?.map((contactPerson, index) => (
+                <option key={index} value={String(contactPerson.id)}>{contactPerson.name}</option>
+              ))}
+            </select>
+            {contactId !== original.current.contactId && (
+              <button
+                type="button"
+                onClick={() => setContactId(original.current.contactId)}
+                className="text-text-faint hover:text-text transition-colors p-0.5 rounded cursor-pointer animate-fade-in shrink-0"
+              >
+                <RotateCcw size={14} />
+              </button>
+            )}
+          </div>
         </div>
         {/* Description */}
         <div className="space-y-1" ref={descriptionRef}>
           <label className="label">Beskrivelse *</label>
-          <textarea
-            className="input min-h-25"
-            placeholder="Beskriv produkt"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+          <div className="relative">
+            <textarea
+              className="input min-h-25 pr-8"
+              placeholder="Beskriv produkt"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            {description !== original.current.description && (
+              <button
+                type="button"
+                onClick={() => setDescription(original.current.description)}
+                className="absolute right-2 top-2 text-text-faint hover:text-text transition-colors p-0.5 rounded cursor-pointer animate-fade-in"
+              >
+                <RotateCcw size={14} />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Price + Amount */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1">
             <label className="label">Pris</label>
-            <input
-              type="text"
-              inputMode="decimal"
-              className="input"
-              placeholder="0.00"
-              value={price}
-              onChange={(e) => {
-                const sanitized = e.target.value.replace(/[^0-9.]/g, "").replace(/^(\d*\.?\d{0,2}).*/, "$1")
-                setPrice(sanitized)
-              }}
-              onBlur={() => {
-                const val = parseFloat(price)
-                if (!isNaN(val)) setPrice(val.toFixed(2))
-              }}
-            />
+            <div className="relative">
+              <input
+                type="text"
+                inputMode="decimal"
+                className="input pr-8"
+                placeholder="0.00"
+                value={price}
+                onChange={(e) => {
+                  const sanitized = e.target.value.replace(/[^0-9.]/g, "").replace(/^(\d*\.?\d{0,2}).*/, "$1")
+                  setPrice(sanitized)
+                }}
+                onBlur={() => {
+                  const val = parseFloat(price)
+                  if (!isNaN(val)) setPrice(val.toFixed(2))
+                }}
+              />
+              {price !== original.current.price && (
+                <button
+                  type="button"
+                  onClick={() => setPrice(original.current.price)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-text-faint hover:text-text transition-colors p-0.5 rounded cursor-pointer animate-fade-in"
+                >
+                  <RotateCcw size={14} />
+                </button>
+              )}
+            </div>
           </div>
           <div className="space-y-1">
             <label className="label">Antall</label>
-            <input
-              type="text"
-              inputMode="numeric"
-              className="input"
-              placeholder="0"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value.replace(/\D/g, ""))}
-            />
+            <div className="relative">
+              <input
+                type="text"
+                inputMode="numeric"
+                className="input pr-8"
+                placeholder="0"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value.replace(/\D/g, ""))}
+              />
+              {amount !== original.current.amount && (
+                <button
+                  type="button"
+                  onClick={() => setAmount(original.current.amount)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-text-faint hover:text-text transition-colors p-0.5 rounded cursor-pointer animate-fade-in"
+                >
+                  <RotateCcw size={14} />
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -291,12 +366,35 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
 
         {/* Submit */}
         <div className='flex flex-row gap-2'>
-          <button type="submit" className="btn btn-primary w-1/2">
+          
+          <button
+            type="button"
+            disabled={mode === "update" && !isChanged}
+            className={`btn w-1/2 ${mode === "update" && !isChanged ? 'btn-ghost' : 'btn-primary'}`}
+            onClick={() => openPopUp({
+              title: mode === "create" ? 'Ønsker du å publisere produktet?' : 'Ønsker du å oppdatere produktet med endringene?',
+              yesLabel: mode === "create" ? 'Ja, publiser' : 'Ja, oppdater',
+              noLabel: 'Avbryt',
+              onYes: submitForm,
+            })}
+          >
             {submitLabel}
           </button>
-          <button type="button" onClick={handleSaveDraft} className="btn btn-secondary w-1/2">
-            Lagre som utkast
-          </button>
+          {mode === "update" ? (
+            <button
+              type="button"
+              className="btn btn-secondary w-1/2"
+              onClick={() => openPopUp({
+                title: 'Ønsker du å lagre endringene?',
+                yesLabel: 'Lagre som utkast med endringer',
+                noLabel: 'Lagre som utkast uten endringer',
+                onYes: handleSaveDraft,
+                onNo: () => resetAllFields(true),
+              })}
+            >
+              Lagre som utkast
+            </button>
+          ) : <button className='btn btn-secondary w-1/2' onClick={handleSaveDraft}>Lagre som utkast</button>}
           
         </div>
       </form>

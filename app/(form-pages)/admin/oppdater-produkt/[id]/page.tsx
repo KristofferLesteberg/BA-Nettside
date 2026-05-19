@@ -82,8 +82,9 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <ProductForm
+      mode="update"
       heading={`Oppdater ${loaded.title}`}
-      submitLabel={`${loaded.draft ? 'Oppdater annonse og publiser' : 'Oppdater annonse'}`}
+      submitLabel={loaded.draft ? 'Oppdater annonse og publiser' : 'Oppdater annonse'}
       initialValues={loaded}
       productId={productId}
       onSubmit={handleSubmit}

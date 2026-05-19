@@ -76,6 +76,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <ProductForm
+      mode="create"
       heading={`Nytt Produkt`}
       submitLabel="Opprett annonse"
       onSubmit={handleSubmit}
