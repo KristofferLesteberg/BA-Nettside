@@ -5,6 +5,7 @@ import { FaSliders, FaXmark } from "react-icons/fa6"
 import ProjectCard, { type SerializedProject } from "./ProjectCard"
 import ProjectDrawer from "./ProjectDrawer"
 import PriceRange from "@/components/shared/input/price-range"
+import { EDUCATION_FIELD_OPTIONS } from "@/app/lib/education-fields"
 
 
 export type ProjectStatus = Status | 'ALL'
@@ -19,10 +20,9 @@ const STATUS_OPTIONS: { value: ProjectStatus, label: string}[] = [
   { value: 'COMPLETE', label: "Ferdig" }
 ]
 
-const CATEGORY_OPTIONS: { value: Category, label: string }[] = [
+const CATEGORY_OPTIONS: { value: Category; label: string }[] = [
   { value: 'ALL', label: 'Alle' },
-  { value: 'BUILDING', label: 'Bygg' },
-  { value: 'CONSTRUCTION', label: 'Anlegg' },
+  ...EDUCATION_FIELD_OPTIONS,
 ]
 
 const SORT_OPTIONS: { value: SortOptions, label: string }[] = [

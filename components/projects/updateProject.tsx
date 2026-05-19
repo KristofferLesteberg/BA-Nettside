@@ -13,6 +13,8 @@ import BackBtn from '@/components/shared/BackBtn'
 import { usePopUp } from '@/components/shared/PopUp'
 import { updateProject } from '@/actions/projects'
 import { FaEdit, FaUndo } from 'react-icons/fa'
+import { EDUCATION_FIELD_LABELS } from '@/app/lib/education-fields'
+import LinjeDropdown from '@/components/shared/LinjeDropdown'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -38,10 +40,6 @@ interface FormValues {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const EDUCATION_LABELS: Record<string, string> = {
-  BUILDING: 'Bygg',
-  CONSTRUCTION: 'Anlegg',
-}
 
 // Maps each EditableField to the FormValues keys it controls.
 // Add new fields here if the form grows.
@@ -279,14 +277,15 @@ export default function UpdateProjectForm({
                   changed={isFieldChanged('educationField')} onUndo={() => undoField('educationField')} />
               </div>
               {activeField === 'educationField' ? (
-                <select className="input animate-fade-in" value={values.educationField} onChange={(e) => set('educationField')(e.target.value)}>
-                  <option value="">Ikke spesifisert</option>
-                  <option value="BUILDING">Bygg</option>
-                  <option value="CONSTRUCTION">Anlegg</option>
-                </select>
+                <LinjeDropdown
+                  value={values.educationField}
+                  onChange={set('educationField')}
+                  nullable
+                  className="animate-fade-in"
+                />
               ) : (
                 <span className={`badge animate-fade-in ${values.educationField ? 'badge-secondary' : 'badge-neutral'}`}>
-                  {values.educationField ? EDUCATION_LABELS[values.educationField] : 'Ikke spesifisert'}
+                  {values.educationField ? EDUCATION_FIELD_LABELS[values.educationField as keyof typeof EDUCATION_FIELD_LABELS] : 'Ikke spesifisert'}
                 </span>
               )}
             </div>

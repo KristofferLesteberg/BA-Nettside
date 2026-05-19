@@ -5,6 +5,7 @@ import type { ProductCardData } from '@/app/lib/types'
 import ProductsGrid from './ProductsGrid'
 import { EducationField } from '@/generated/prisma'
 import { FaSliders, FaXmark } from 'react-icons/fa6'
+import { EDUCATION_FIELD_OPTIONS } from '@/app/lib/education-fields'
 
 
 export type SortOption = 'newest' | 'oldest' | 'price-asc' | 'price-desc'
@@ -24,9 +25,8 @@ const STATUS_OPTIONS: { value: StatusFilter; label: string; }[] = [
   { value: 'PUBLISHED', label: 'Publisert' }
 ]
 const CATEGORY_OPTIONS: { value: CategoryFilter; label: string }[] = [
-  { value: 'ALL',          label: 'Alle'   },
-  { value: 'BUILDING',     label: 'Bygg'   },
-  { value: 'CONSTRUCTION', label: 'Anlegg' },
+  { value: 'ALL', label: 'Alle' },
+  ...EDUCATION_FIELD_OPTIONS,
 ]
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [

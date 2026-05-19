@@ -138,11 +138,11 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
         {/* Education Field */}
         <div className="space-y-1" ref={educationFieldRef}>
           <label className="label">Kategori *</label>
-          <select className="input" value={educationField} onChange={(e) => setEducationField(e.target.value)}>
-            <option value="">Velg kategori</option>
-            <option value="BUILDING">Bygg</option>
-            <option value="CONSTRUCTION">Anlegg</option>
-          </select>
+          <LinjeDropdown
+            value={educationField}
+            onChange={setEducationField}
+            placeholder="Velg kategori"
+          />
         </div>
 
         {/* Title */}

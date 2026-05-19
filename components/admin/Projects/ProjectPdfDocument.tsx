@@ -1,5 +1,6 @@
 import { Document, Page, View, Text, Image, StyleSheet } from '@react-pdf/renderer'
 import { type SerializedProject } from './ProjectCard'
+import { EDUCATION_FIELD_LABELS } from '@/app/lib/education-fields'
 
 const RED         = '#c0392b'
 const BLUE        = '#1a5276'
@@ -20,10 +21,6 @@ const STATUS_COLORS: Record<string, { bg: string; color: string }> = {
   COMPLETE:    { bg: '#d4edda', color: '#1e7e34' },
 }
 
-const EDUCATION_LABELS: Record<string, string> = {
-  BUILDING:     'Bygg',
-  CONSTRUCTION: 'Anlegg',
-}
 
 const styles = StyleSheet.create({
   page: {
@@ -193,7 +190,7 @@ export default function ProjectPdfDocument({
             </Text>
             {project.educationField && (
               <Text style={styles.pillEducation}>
-                {EDUCATION_LABELS[project.educationField]}
+                {EDUCATION_FIELD_LABELS[project.educationField]}
               </Text>
             )}
           </View>

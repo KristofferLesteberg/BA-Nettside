@@ -24,7 +24,9 @@ const FIELD_LABEL: Record<string, string> = {
 // A temporary designing decision to have each linje in a different color
 // Considering the fact that we dont have that many colors, will probably need to change this in the future :)
 const FIELD_BADGE: Record<string, string> = {
-  BUILDING:     'badge-secondary',
+  PLUMBER:      'badge-secondary',
+  CONCRETE:     'badge-neutral',
+  CARPENTER:    'badge-info',
   CONSTRUCTION: 'badge-primary',
 }
 
@@ -158,7 +160,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
 
         {product.educationField && (
           <span className={`badge ${FIELD_BADGE[product.educationField]} absolute top-2 left-2`}>
-            {FIELD_LABEL[product.educationField]}
+            {EDUCATION_FIELD_LABELS[product.educationField]}
           </span>
         )}
       </div>

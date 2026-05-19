@@ -3,6 +3,7 @@ import Link from "next/link"
 import Carousel from "@/components/shared/ImageCarousel"
 import ProductTabs from "@/components/shared/products/ProductTabs"
 import { getProductById } from "@/actions/products"
+import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
 
 
 
@@ -98,7 +99,7 @@ export default async function ProductPage({
                   <div className="flex justify-between px-4 py-3">
                     <span className="small-text">Fagfelt</span>
                     <span className="small-text" style={{ color: "var(--color-text)" }}>
-                      {product.educationField === "BUILDING" ? "Bygg" : "Anlegg"}
+                      {product.educationField ? EDUCATION_FIELD_LABELS[product.educationField] : ''}
                     </span>
                   </div>
                 </div>

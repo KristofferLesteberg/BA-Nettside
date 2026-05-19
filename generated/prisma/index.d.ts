@@ -49,7 +49,9 @@ export type ProductOrder = $Result.DefaultSelection<Prisma.$ProductOrderPayload>
  */
 export namespace $Enums {
   export const EducationField: {
-  BUILDING: 'BUILDING',
+  PLUMBER: 'PLUMBER',
+  CONCRETE: 'CONCRETE',
+  CARPENTER: 'CARPENTER',
   CONSTRUCTION: 'CONSTRUCTION'
 };
 

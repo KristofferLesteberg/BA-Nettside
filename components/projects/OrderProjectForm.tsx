@@ -8,6 +8,7 @@ import { parsePhoneNumberWithError } from 'libphonenumber-js'
 import type { E164Number, CountryCode } from 'libphonenumber-js'
 import OrgNumberInput from '@/components/shared/input/orgNumberInput'
 import AddressInput from '@/components/shared/input/address-input'
+import LinjeDropdown from '@/components/shared/LinjeDropdown'
 import PriceRange from '@/components/shared/input/price-range'
 import { ProjectRequestPage1Schema, ProjectRequestPage2Schema } from '@/app/lib/schemas'
 import { FaLink } from 'react-icons/fa'
@@ -223,15 +224,10 @@ export default function OrderProjectForm({ onSuccess }: Props) {
 
                   <div className="space-y-1.5" ref={educationFieldRef}>
                     <label className="label">Linje <span className="text-error">*</span></label>
-                    <select
-                      className="input"
+                    <LinjeDropdown
                       value={educationField}
-                      onChange={(e) => setEducationField(e.target.value)}
-                    >
-                      <option value="" disabled>Velg linje</option>
-                      <option value="BUILDING">Bygg</option>
-                      <option value="CONSTRUCTION">Anlegg</option>
-                    </select>
+                      onChange={setEducationField}
+                    />
                   </div>
 
                   <div className={`overflow-hidden transition-all duration-300 ease-in-out ${identityType === 'organization' ? 'mt-6 max-h-30 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}>

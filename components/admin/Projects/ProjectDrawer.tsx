@@ -2,7 +2,9 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
-import { FaXmark, FaHelmetSafety, FaRoad, FaFilePdf, FaTrash, FaQuestion, FaSpinner } from "react-icons/fa6"
+import { FaXmark, FaHelmetSafety, FaRoad, FaWrench, FaFilePdf, FaTrash, FaQuestion, FaSpinner } from "react-icons/fa6"
+import { GiBrickWall } from "react-icons/gi"
+import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
 import { RiProgress3Line } from "react-icons/ri"
 import { EducationField, Status } from "@/generated/prisma"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
@@ -23,13 +25,10 @@ const STATUS_STYLES: Record<Status, string> = {
   COMPLETE:    'badge badge-md badge-success',
 }
 
-const EDUCATION_LABELS: Record<EducationField, string> = {
-  BUILDING:     'Bygg',
-  CONSTRUCTION: 'Anlegg',
-}
-
 const EDUCATION_ICONS: Record<EducationField, React.ReactNode> = {
-  BUILDING:     <FaHelmetSafety className="shrink-0" />,
+  PLUMBER:      <FaWrench       className="shrink-0" />,
+  CONCRETE:     <GiBrickWall    className="shrink-0" />,
+  CARPENTER:    <FaHelmetSafety className="shrink-0" />,
   CONSTRUCTION: <FaRoad         className="shrink-0" />,
 }
 
@@ -278,9 +277,9 @@ export default function ProjectDrawer({ project, onClose }: Props) {
                 <span className={STATUS_STYLES[currentStatus]}>
                   {STATUS_LABELS[currentStatus]}
                 </span>
-                <span className="badge badge-md badge-neutral gap-1.5">
+                <span className="badge badge-lg badge-neutral gap-1.5">
                   {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" />}
-                  {project.educationField ? EDUCATION_LABELS[project.educationField] : 'Ingen linje'}
+                  {project.educationField ? EDUCATION_FIELD_LABELS[project.educationField] : 'Ingen linje'}
                 </span>
               </div>
 
