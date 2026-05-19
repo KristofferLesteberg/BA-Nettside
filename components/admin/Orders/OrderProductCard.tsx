@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { useState, useRef, useEffect } from "react"
 import { usePopUp } from "@/components/shared/PopUp"
 import toast from "react-hot-toast"
-import { FaTrash, FaEnvelope, FaPhone, FaHashtag, FaBox, FaChevronDown, FaCircleInfo } from "react-icons/fa6"
+import { FaTrash, FaEnvelope, FaPhone, FaBoxesStacked, FaBox, FaChevronDown, FaCircleInfo } from "react-icons/fa6"
 import { RiProgress3Line } from "react-icons/ri"
 
 type OrderWithProduct = Awaited<ReturnType<typeof getAllOrders>>[number]
@@ -157,7 +157,7 @@ export default function OrderCard({ order }: Props) {
             <div className="w-px self-stretch bg-border mx-1" />
 
             <span className="flex items-center gap-1.5 small-text text-text font-medium whitespace-nowrap">
-              <FaHashtag className="text-text-faint shrink-0" aria-hidden="true" />
+              <FaBoxesStacked className="text-text-faint shrink-0" aria-hidden="true" />
               {order.amount} stk
             </span>
           </div>
@@ -237,10 +237,6 @@ export default function OrderCard({ order }: Props) {
                 <span className="flex items-center gap-1.5 small-text text-muted">
                   <FaPhone className="text-text-faint shrink-0" aria-hidden="true" />
                   {order.clientPhone}
-                </span>
-                <span className="flex items-center gap-1.5 small-text text-text font-medium">
-                  <FaHashtag className="text-text-faint shrink-0" aria-hidden="true" />
-                  {order.amount} stk
                 </span>
                 {order.extraDetails && (
                   <span className="flex items-center gap-1.5 small-text text-muted">
