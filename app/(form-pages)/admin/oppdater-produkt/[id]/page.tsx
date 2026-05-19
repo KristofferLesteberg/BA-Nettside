@@ -16,7 +16,7 @@ interface LoadedProduct {
   measures: Measure[]
   existingImages: { id: string; url: string }[]
   contactId: string
-  published: boolean
+  draft: boolean
 }
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -45,7 +45,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                                 .map(([name, value]) => ({ name, value, unit: "" })),
           existingImages: product.images.map(img => ({ id: img.id, url: `/images/${img.id}.webp` })),
           contactId: product.contactPersonId ? String(product.contactPersonId) : '',
-          published: product.publishedAt !== null
+          draft: product.draft,
         })
       } catch {
         toast.error("Kunne ikke laste produktet")
@@ -83,7 +83,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
   return (
     <ProductForm
       heading={`Oppdater ${loaded.title}`}
-      submitLabel="Oppdater og publiser annonse"
+      submitLabel={`${loaded.draft ? 'Oppdater annonse og publiser' : 'Oppdater annonse'}`}
       initialValues={loaded}
       productId={productId}
       onSubmit={handleSubmit}

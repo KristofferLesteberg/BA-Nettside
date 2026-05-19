@@ -37,7 +37,7 @@ interface ProductFormProps {
     measures?: Measure[]
     existingImages?: { id: string; url: string }[]
     contactId?: string
-    published?: boolean
+    draft?: boolean
   }
   onNewImage?: (file: File) => Promise<{ id: string }>
   onSubmit: (values: ProductFormValues) => Promise<void>
@@ -100,8 +100,7 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
   })
 
 
-  const resetAllFields = () => {
-    if(isChanged) router.back()
+  const resetAllFields = (backBtn?: boolean) => {
     setEducationField(original.current.educationField)
     setTitle(original.current.title)
     setDescription(original.current.description)
@@ -111,6 +110,7 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
     setContactId(original.current.contactId)
     setImagesChanged(false)
     setResetKey(k => k + 1)
+    if(backBtn) router.back()
   }
 
   const buildFormData = () => {
@@ -128,7 +128,7 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
 
   const handleSaveChanges = async () => {
     try {
-      await updateProduct(productId, buildFormData(), initialValues?.published ?? false)
+      await updateProduct(productId, buildFormData(), !initialValues?.draft)
       toast("Endringer lagret")
       closePopUp()
       router.back()
@@ -185,7 +185,7 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
       {popUpElement}
       <form onSubmit={handleForm} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
 
-        <div className="flex items-start">
+        <div className="flex flex-row justify-between">
           {isChanged ? 
             <BackBtn handleOnClick={() => openPopUp({
             title:    'Vil du lagre endringene dine?',
@@ -193,17 +193,17 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
             yesLabel: 'Lagre endringene',
             noLabel:  'Forkast endringene',
             onYes:    handleSaveChanges,
-            onNo:     resetAllFields,
-          })}/>
+            onNo:     () => resetAllFields(true),
+          })} />
           :
           <BackBtn handleOnClick={() => router.back()} />
           }
-          
+        <span className="badge badge-info">{initialValues?.draft ? 'Utkast' : 'Publisert'}</span>
         </div>
         <h2 className="heading-2">{heading}</h2>
         <p className="text-text-faint italic -mt-4">Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette</p>
         {isChanged && (
-            <button type="button" onClick={resetAllFields} className="btn btn-outline">
+            <button type="button" onClick={() => resetAllFields} className="btn btn-outline">
               Tilbakestill
             </button>
           )}
