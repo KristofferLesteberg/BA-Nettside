@@ -16,6 +16,7 @@ interface LoadedProduct {
   measures: Measure[]
   existingImages: { id: string; url: string }[]
   contactId: string
+  published: boolean
 }
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -43,7 +44,8 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                             : Object.entries((product.measures ?? {}) as Record<string, string>)
                                 .map(([name, value]) => ({ name, value, unit: "" })),
           existingImages: product.images.map(img => ({ id: img.id, url: `/images/${img.id}.webp` })),
-          contactId: product.contactPersonId ? String(product.contactPersonId) : ''
+          contactId: product.contactPersonId ? String(product.contactPersonId) : '',
+          published: product.publishedAt !== null
         })
       } catch {
         toast.error("Kunne ikke laste produktet")

@@ -26,7 +26,7 @@ export interface ProductFormValues {
 interface ProductFormProps {
   heading: string
   submitLabel: string
- 
+
   productId: number
   initialValues?: {
     educationField?: string
@@ -37,6 +37,7 @@ interface ProductFormProps {
     measures?: Measure[]
     existingImages?: { id: string; url: string }[]
     contactId?: string
+    published?: boolean
   }
   onNewImage?: (file: File) => Promise<{ id: string }>
   onSubmit: (values: ProductFormValues) => Promise<void>
@@ -61,12 +62,15 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
   const [images, setImages] = useState<ImageItem[]>([])
   const [contactId, setContactId] = useState(initialValues?.contactId ?? "")
 
+  const [resetKey, setResetKey] = useState(0)
+  const [imagesChanged, setImagesChanged] = useState(false)
+
   const educationFieldRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLDivElement>(null)
- 
+
   const { open: openPopUp, close: closePopUp, element: popUpElement } = usePopUp()
- 
+
 
   const handleForm = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -79,9 +83,58 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
     }
     if (!description.trim()) {
       descriptionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
-    } 
+    }
 
     await onSubmit({ educationField, title, description, price, amount, measures, images, contactId })
+  }
+
+    const original = useRef({
+    educationField: initialValues?.educationField ?? "",
+    title: initialValues?.title ?? "",
+    description: initialValues?.description ?? "",
+    price: initialValues?.price ?? "",
+    amount: initialValues?.amount ?? "",
+    measures: initialValues?.measures ?? [] as Measure[],
+    contactId: initialValues?.contactId ?? "",
+    existingImages: initialValues?.existingImages ?? [] as { id: string; url: string }[],
+  })
+
+
+  const resetAllFields = () => {
+    if(isChanged) router.back()
+    setEducationField(original.current.educationField)
+    setTitle(original.current.title)
+    setDescription(original.current.description)
+    setPrice(original.current.price)
+    setAmount(original.current.amount)
+    setMeasures(original.current.measures)
+    setContactId(original.current.contactId)
+    setImagesChanged(false)
+    setResetKey(k => k + 1)
+  }
+
+  const buildFormData = () => {
+    const formData = new FormData
+    formData.append("educationField", educationField)
+    formData.append("title", title)
+    formData.append("description", description)
+    formData.append("price", price || "0")
+    formData.append("amount", amount || "0")
+    formData.append("measures", JSON.stringify(measures))
+    formData.append("contactId", contactId)
+    formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
+    return formData
+  }
+
+  const handleSaveChanges = async () => {
+    try {
+      await updateProduct(productId, buildFormData(), initialValues?.published ?? false)
+      toast("Endringer lagret")
+      closePopUp()
+      router.back()
+    } catch {
+      toast.error("Kunne ikke lagre endringene")
+    }
   }
 
   const handleSaveDraft = async () => {
@@ -116,26 +169,44 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
     }
   }
 
+  const isChanged =
+    educationField !== original.current.educationField ||
+    title !== original.current.title ||
+    description !== original.current.description ||
+    price !== original.current.price ||
+    amount !== original.current.amount ||
+    contactId !== original.current.contactId ||
+    JSON.stringify(measures) !== JSON.stringify(original.current.measures) ||
+    imagesChanged
   return (
 
-    
+ 
     <div className="w-4/5 min-w-120 max-w-230 mx-auto py-10">
       {popUpElement}
       <form onSubmit={handleForm} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
 
         <div className="flex items-start">
-          <BackBtn handleOnClick={() => openPopUp({
-            title:    'Lagre endringen som et utkast?',
+          {isChanged ? 
+            <BackBtn handleOnClick={() => openPopUp({
+            title:    'Vil du lagre endringene dine?',
             subtitle: 'Du vil kunne fortsette å redigere utkastet senere, og det vil ikke være synlig for kunder før du publiserer det.',
-            yesLabel: 'Ja, lagre som utkast',
-            noLabel:  'Nei, slett endringene',
-            onYes:    handleSaveDraft,
-            onNo:     handleDeleteDraft,
+            yesLabel: 'Lagre endringene',
+            noLabel:  'Forkast endringene',
+            onYes:    handleSaveChanges,
+            onNo:     resetAllFields,
           })}/>
+          :
+          <BackBtn handleOnClick={() => router.back()} />
+          }
+          
         </div>
         <h2 className="heading-2">{heading}</h2>
         <p className="text-text-faint italic -mt-4">Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette</p>
-
+        {isChanged && (
+            <button type="button" onClick={resetAllFields} className="btn btn-outline">
+              Tilbakestill
+            </button>
+          )}
         {/* Education Field */}
         <div className="space-y-1" ref={educationFieldRef}>
           <label className="label">Kategori *</label>
@@ -212,21 +283,21 @@ export default function ProductForm({ heading, submitLabel, productId, initialVa
         </div>
 
         {/* Measures */}
-        <MeasurementList initialMeasures={initialValues?.measures} onChange={setMeasures} />
+        <MeasurementList resetKey={resetKey} initialMeasures={initialValues?.measures} onChange={setMeasures} />
 
         {/* Images */}
         <label className="label">Bilder</label>
-        <ImageOrder initialImages={initialValues?.existingImages} onChange={setImages} onNewImage={onNewImage} />
+        <ImageOrder resetKey={resetKey} initialImages={initialValues?.existingImages} onChange={(imgs) => { setImages(imgs); setImagesChanged(true) }} onNewImage={onNewImage} />
 
         {/* Submit */}
         <div className='flex flex-row gap-2'>
           <button type="submit" className="btn btn-primary w-1/2">
             {submitLabel}
           </button>
-          
           <button type="button" onClick={handleSaveDraft} className="btn btn-secondary w-1/2">
             Lagre som utkast
           </button>
+          
         </div>
       </form>
     </div>

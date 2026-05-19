@@ -85,10 +85,12 @@ export default function ImageOrder({
   initialImages = [],
   onChange,
   onNewImage,
+  resetKey
 }: {
   initialImages?: { id: string; url: string }[]
   onChange?: (images: ImageItem[]) => void
   onNewImage?: (file: File) => Promise<{ id: string }>
+  resetKey: number
 }) {
   const [images, setImages] = useState<ImageItem[]>(
     initialImages.map(img => ({ id: img.id, type: "existing" as const, url: img.url }))
