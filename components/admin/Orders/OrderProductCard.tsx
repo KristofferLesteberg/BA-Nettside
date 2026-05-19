@@ -139,11 +139,11 @@ export default function OrderCard({ order }: Props) {
             <div className="w-px self-stretch bg-border mx-1" />
 
             <div className="flex flex-col gap-0.5">
-              <a href={`mailto:${order.clientEmail}`} className="header-link flex items-center gap-1.5 small-text whitespace-nowrap">
+              <a href={`mailto:${order.clientEmail}`} className="text-secondary hover:underline flex items-center gap-1.5 small-text whitespace-nowrap">
                 <FaEnvelope className="text-text-faint shrink-0" aria-hidden="true" />
                 {order.clientEmail}
               </a>
-              <a href={`tel:${order.clientPhone}`} className="header-link flex items-center gap-1.5 small-text whitespace-nowrap">
+              <a href={`tel:${order.clientPhone}`} className="text-secondary hover:underline flex items-center gap-1.5 small-text whitespace-nowrap">
                 <FaPhone className="text-text-faint shrink-0" aria-hidden="true" />
                 {order.clientPhone}
               </a>
@@ -225,11 +225,11 @@ export default function OrderCard({ order }: Props) {
           <div className={`grid transition-[grid-template-rows] duration-200 ${kontaktOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
             <div className="overflow-hidden min-h-0">
               <div className="flex flex-col gap-1.5 pb-2">
-                <a href={`mailto:${order.clientEmail}`} className="header-link flex items-center gap-1.5 small-text">
+                <a href={`mailto:${order.clientEmail}`} className="text-secondary hover:underline flex items-center gap-1.5 small-text">
                   <FaEnvelope className="text-text-faint shrink-0" aria-hidden="true" />
                   {order.clientEmail}
                 </a>
-                <a href={`tel:${order.clientPhone}`} className="header-link flex items-center gap-1.5 small-text">
+                <a href={`tel:${order.clientPhone}`} className="text-secondary hover:underline flex items-center gap-1.5 small-text">
                   <FaPhone className="text-text-faint shrink-0" aria-hidden="true" />
                   {order.clientPhone}
                 </a>
