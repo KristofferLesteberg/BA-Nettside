@@ -14,12 +14,10 @@ import { BsThreeDots } from "react-icons/bs"
 import { MdOutlineModeEdit, MdOutlinePublish, MdOutlineUnpublished } from "react-icons/md"
 import { FaRegTrashCan } from "react-icons/fa6"
 import { title } from "node:process"
+import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
 
 
-const FIELD_LABEL: Record<string, string> = {
-  BUILDING:     'Bygg',
-  CONSTRUCTION: 'Anlegg',
-}
+
 
 // A temporary designing decision to have each linje in a different color
 // Considering the fact that we dont have that many colors, will probably need to change this in the future :)

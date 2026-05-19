@@ -10,6 +10,7 @@ import { deleteProduct, updateProduct } from '@/actions/products'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { getAllContacts } from '@/actions/contact'
+import LinjeDropdown from '../shared/LinjeDropdown'
 
 export interface ProductFormValues {
   educationField: string
