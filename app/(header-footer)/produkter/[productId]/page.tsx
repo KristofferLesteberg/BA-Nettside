@@ -43,7 +43,7 @@ export default async function ProductPage({
           <div className="w-full lg:w-1/2 lg:sticky lg:top-8 lg:self-start">
             <Carousel
               images={product.images.map(img => img.id)}
-              className="w-full h-72 sm:h-96 rounded-2xl"
+              className="w-full h-72 sm:h-96"
             />
           </div>
 
