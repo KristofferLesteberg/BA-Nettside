@@ -106,6 +106,10 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
   })
 
 
+  useEffect(() => {
+    console.log("mode" + mode)
+  }, [])
+
   const resetAllFields = (backBtn?: boolean) => {
     setEducationField(original.current.educationField)
     setTitle(original.current.title)
@@ -194,7 +198,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
       <form onSubmit={handleForm} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
 
         <div className="flex flex-row justify-between">
-          {isChanged && mode === "update" ?
+          {isChanged && mode === "update" &&
             <BackBtn handleOnClick={() => openPopUp({
               title:    'Vil du lagre endringene dine?',
               subtitle: 'Du vil kunne fortsette å redigere utkastet senere, og det vil ikke være synlig for kunder før du publiserer det.',
@@ -203,16 +207,24 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
               onYes:    handleSaveChanges,
               onNo:     () => resetAllFields(true),
             })} />
-          :
-            <BackBtn handleOnClick={() => openPopUp({
+          } 
+          {!isChanged && mode === 'update' && <BackBtn handleOnClick={() => router.back()} />}
+          
+        
+          {isChanged && mode === 'create' && 
+          <BackBtn handleOnClick={() => openPopUp({
               title: 'Vil du lagre som utkast?',
               yesLabel: 'Ja',
               noLabel: 'Nei',
               onNo: () => { deleteProduct(productId); setTimeout(() => router.back(), 1000) },
               onYes: () => router.back()
-
             })} />
-          }
+        }
+
+        {!isChanged && mode === 'create' && <BackBtn handleOnClick={() => { deleteProduct(productId); setTimeout(() => router.back(), 1000) }} />}
+          
+          
+          
           {mode === "update" && (
             <span className="badge badge-info">{initialValues?.draft ? 'Utkast' : 'Publisert'}</span>
           )}

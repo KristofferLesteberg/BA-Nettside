@@ -73,7 +73,6 @@ function Publish({ productID, openPopUp, publish, canPublish }: {
   canPublish: boolean
 }) {
   const router = useRouter()
-
   const handleConfirm = async () => {
     try {
       await publishProduct(productID, !publish)
@@ -83,7 +82,6 @@ function Publish({ productID, openPopUp, publish, canPublish }: {
       toast.error(publish ? "Kunne ikke publisere produktet" : "Kunne ikke gjøre produktet til utkast")
     }
   }
-
   return (
     <button
       onClick={() => openPopUp({
