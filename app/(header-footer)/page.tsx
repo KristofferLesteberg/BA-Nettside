@@ -14,6 +14,7 @@ import {
   FaHammer,
   FaCircleCheck,
   FaTruck,
+  FaFileContract
 } from 'react-icons/fa6'
 
 const page = async () => {
@@ -150,60 +151,66 @@ const page = async () => {
               </svg>
             </div>
 
-            {/* ROW 2 — arrows point left on desktop */}
+            {/* ROW 2 — on desktop, reversed via CSS order so the snake reads 4→5→6 left-to-right */}
             <div className='grid grid-cols-1 lg:grid-cols-[minmax(180px,1fr)_auto_minmax(180px,1fr)_auto_minmax(180px,1fr)] gap-6'>
 
-              <ProcessCard
-                icon={FaHammer}
-                title='Elev bygger'
-                description='Produktet lages av elever under veiledning av erfarne fagfolk.'
-              />
-
-              {/* Desktop arrow left */}
-              <div className='hidden lg:flex justify-center items-center w-30 xl:w-40'>
-                <svg width='100%' height='24' viewBox='0 0 200 24' fill='none'
-                  stroke='#c0392b' strokeWidth='4' strokeLinecap='round' strokeLinejoin='round'>
-                  <line x1='199' y1='12' x2='12' y2='12' strokeDasharray='11 16'/>
-                  <polyline points='19 5 12 12 19 19'/>
-                </svg>
-              </div>
-              {/* Mobile arrow down */}
-              <div className='flex lg:hidden justify-center'>
-                <svg width='24' height='40' viewBox='0 0 24 40' fill='none'
-                  stroke='#c0392b' strokeWidth='4' strokeLinecap='round' strokeLinejoin='round'>
-                  <line x1='12' y1='1' x2='12' y2='28' strokeDasharray='4 6'/>
-                  <polyline points='5 21 12 28 19 21'/>
-                </svg>
+              <div className='lg:order-5 flex flex-col'>
+                <ProcessCard
+                  icon={FaFileContract}
+                  title='Enighet'
+                  description='Kunde, lærer og elev blir enig om pris, levering og kontrakt'
+                />
               </div>
 
-              <ProcessCard
-                icon={FaCircleCheck}
-                title='Kvalitetskontroll'
-                description='Produktet gjennomgår en grundig sjekk før det godkjennes for levering.'
-              />
-
-              {/* Desktop arrow left */}
-              <div className='hidden lg:flex justify-center items-center w-30 xl:w-40'>
-                <svg width='100%' height='24' viewBox='0 0 200 24' fill='none'
-                  stroke='#c0392b' strokeWidth='4' strokeLinecap='round' strokeLinejoin='round'>
-                  <line x1='199' y1='12' x2='12' y2='12' strokeDasharray='11 16'/>
-                  <polyline points='19 5 12 12 19 19'/>
-                </svg>
-              </div>
-              {/* Mobile arrow down */}
-              <div className='flex lg:hidden justify-center'>
-                <svg width='24' height='40' viewBox='0 0 24 40' fill='none'
-                  stroke='#c0392b' strokeWidth='4' strokeLinecap='round' strokeLinejoin='round'>
-                  <line x1='12' y1='1' x2='12' y2='28' strokeDasharray='4 6'/>
-                  <polyline points='5 21 12 28 19 21'/>
-                </svg>
+              <div className='lg:order-4 lg:flex lg:items-center'>
+                <div className='hidden lg:flex justify-center items-center w-30 xl:w-40'>
+                  <svg width='100%' height='24' viewBox='0 0 200 24' fill='none'
+                    stroke='#c0392b' strokeWidth='4' strokeLinecap='round' strokeLinejoin='round'>
+                    <line x1='199' y1='12' x2='12' y2='12' strokeDasharray='11 16'/>
+                    <polyline points='19 5 12 12 19 19'/>
+                  </svg>
+                </div>
+                <div className='flex lg:hidden justify-center'>
+                  <svg width='24' height='40' viewBox='0 0 24 40' fill='none'
+                    stroke='#c0392b' strokeWidth='4' strokeLinecap='round' strokeLinejoin='round'>
+                    <line x1='12' y1='1' x2='12' y2='28' strokeDasharray='4 6'/>
+                    <polyline points='5 21 12 28 19 21'/>
+                  </svg>
+                </div>
               </div>
 
-              <ProcessCard
-                icon={FaTruck}
-                title='Levering / henting'
-                description='Du henter produktet på skolen, eller vi avtaler levering.'
-              />
+              <div className='lg:order-3 flex flex-col'>
+                <ProcessCard
+                  icon={FaCircleCheck}
+                  title='Kvalitetskontroll'
+                  description='Produktet gjennomgår en grundig sjekk før det godkjennes for levering.'
+                />
+              </div>
+
+              <div className='lg:order-2 lg:flex lg:items-center'>
+                <div className='hidden lg:flex justify-center items-center w-30 xl:w-40'>
+                  <svg width='100%' height='24' viewBox='0 0 200 24' fill='none'
+                    stroke='#c0392b' strokeWidth='4' strokeLinecap='round' strokeLinejoin='round'>
+                    <line x1='199' y1='12' x2='12' y2='12' strokeDasharray='11 16'/>
+                    <polyline points='19 5 12 12 19 19'/>
+                  </svg>
+                </div>
+                <div className='flex lg:hidden justify-center'>
+                  <svg width='24' height='40' viewBox='0 0 24 40' fill='none'
+                    stroke='#c0392b' strokeWidth='4' strokeLinecap='round' strokeLinejoin='round'>
+                    <line x1='12' y1='1' x2='12' y2='28' strokeDasharray='4 6'/>
+                    <polyline points='5 21 12 28 19 21'/>
+                  </svg>
+                </div>
+              </div>
+
+              <div className='lg:order-1 flex flex-col'>
+                <ProcessCard
+                  icon={FaTruck}
+                  title='Levering / henting'
+                  description='Du henter produktet på skolen, eller vi avtaler levering.'
+                />
+              </div>
             </div>
 
           </div>

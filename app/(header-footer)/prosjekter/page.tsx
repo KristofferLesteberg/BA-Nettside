@@ -2,9 +2,7 @@
 import { ReactNode, useEffect, useState } from 'react'
 import Link from 'next/link'
 import Checkbox from '@/components/shared/checkbox'
-
-import { FaExclamation } from "react-icons/fa";
-
+import Image from 'next/image'
 
 interface Prerequisite {
   label: string
@@ -13,7 +11,7 @@ interface Prerequisite {
 const prerequisites : Prerequisite[] = [
     {
       label: "Læreplan",
-      description: <>Oppdraget passer inn i vår <Link href='https://www.udir.no/lk20/bat01-03' className='text-primary underline'>Læreplanmål</Link></>
+      description: <>Oppdraget passer inn i våre <Link href='https://www.udir.no/lk20/bat01-03' className='text-primary underline'>Læreplanmål</Link></>
     },
     {
       label: "Tidsfrister",
@@ -59,26 +57,19 @@ export default function Projects() {
     setChecked(updated)
   }
   return (
-    <main>
-      {/* Hero */}
-      <section className="bg-subtle border-y border-border py-24 px-4">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12">
-
-          <div className="flex flex-col flex-1 gap-6">
-            <h1 className='heading-1 text-5xl text-primary'>Prosjekter</h1>
-            <h1 className="heading-1">
-              Få jobben gjort av fagfolk
-            </h1>
-            <p className="body-text text-lg">
-              Vi tar på oss prosjekter innen bygg og anlegg. 
-              Fortell oss hva du trenger så gir vi deg et tilbud.
-            </p>
+    <div>
+      <section
+        className='relative h-[60vh]'
+        style={{ backgroundImage: 'url("/static-images/fp-img2.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 30%' }}
+      >
+        <div className='absolute inset-0 bg-black/50' />
+        <div className='relative z-10 h-full flex flex-col items-center justify-center text-center px-4'>
+          <span className='heading-1 text-white mb-4'>Prosjekter</span>
+          <h1 className='text-white font-bold' style={{ fontSize: '3.5rem', lineHeight: '1.1', letterSpacing: '-0.02em', fontFamily: 'var(--font-display)' }}>Få jobben gjort av fagfolk</h1>
+          <p className='text-white/80 text-xl mt-4 max-w-2xl'>Vi tar på oss prosjekter innen bygg og anlegg. Fortell oss hva du trenger så gir vi deg et tilbud.</p>
+          <div className='mt-6'>
+            <a href='#forutsetninger' className='btn btn-primary hover:bg-primary-hover'>Bestill et prosjekt</a>
           </div>
-
-          <div className="w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-muted flex items-center justify-center text-text-faint shrink-0">
-            Bilde kommer
-          </div>
-
         </div>
       </section>
 
@@ -104,7 +95,7 @@ export default function Projects() {
             </div>
             <div className="card flex flex-col gap-3">
               <span className="text-3xl font-bold text-primary">03</span>
-              <h3 className="heading-3">Jobben utføres</h3>
+              <h3  id='forutsetninger' className="heading-3">Jobben utføres</h3>
               <p className="body-text">
                 Faglig dyktige elever utfører jobben under veiledning.
               </p>
@@ -146,6 +137,6 @@ export default function Projects() {
           )}
         </div>
       </section>
-     </main>
+     </div>
   )
 }
