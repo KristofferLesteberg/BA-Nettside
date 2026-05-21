@@ -20,7 +20,6 @@ export default async function ProductPage({
   const product = await getProductById(productId)
   if (!product) notFound()
 
-  
 
   return (
     <div className="bg-page min-h-screen">

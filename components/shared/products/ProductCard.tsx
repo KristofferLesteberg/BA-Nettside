@@ -8,13 +8,20 @@ import { useRouter } from "next/navigation"
 import { usePopUp } from "@/components/shared/PopUp"
 
 import toast from 'react-hot-toast'
-import { deleteProduct } from '@/actions/products'
+import { deleteProduct, publishProduct } from '@/actions/products'
 
 import { BsThreeDots } from "react-icons/bs"
-import { MdOutlineModeEdit } from "react-icons/md"
+import { MdOutlineModeEdit, MdOutlinePublish, MdOutlineUnpublished } from "react-icons/md"
 import { FaRegTrashCan } from "react-icons/fa6"
-import { EDUCATION_FIELD_LABELS } from '@/app/lib/education-fields'
+import { title } from "node:process"
+import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
+import { isProductPublishable } from "@/app/lib/product-utils"
 
+
+
+
+// A temporary designing decision to have each linje in a different color
+// Considering the fact that we dont have that many colors, will probably need to change this in the future :)
 const FIELD_BADGE: Record<string, string> = {
   PLUMBER:      'badge-secondary',
   CONCRETE:     'badge-neutral',
@@ -59,6 +66,42 @@ function DeleteProduct({ productID, openPopUp }: {
   )
 }
 
+function Publish({ productID, openPopUp, publish, canPublish }: {
+  productID: number
+  openPopUp: ReturnType<typeof usePopUp>['open']
+  publish: boolean
+  canPublish: boolean
+}) {
+  const router = useRouter()
+  const handleConfirm = async () => {
+    try {
+      await publishProduct(productID, !publish)
+      toast.success(publish ? "Produkt publisert" : "Produkt gjort om til utkast")
+      router.refresh()
+    } catch {
+      toast.error(publish ? "Kunne ikke publisere produktet" : "Kunne ikke gjøre produktet til utkast")
+    }
+  }
+  return (
+    <button
+      onClick={() => openPopUp({
+        title: publish ? "Vil du publisere produktet?" : "Vil du gjøre produktet til utkast?",
+        subtitle: publish
+          ? "Trykker du ja vil produktet bli offentliggjort"
+          : "Trykker du ja vil produktet ikke lengere være synlig for kunder",
+        yesLabel: publish ? "Publiser produkt" : "Gjør til utkast",
+        noLabel: 'Avbryt',
+        onYes: handleConfirm,
+      })}
+      disabled={publish && !canPublish}
+      className="btn btn-ghost w-full justify-start gap-2 text-lg text-secondary hover:bg-error-bg whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed"
+    >
+      {publish ? <MdOutlinePublish /> : <MdOutlineUnpublished />}
+      {publish ? "Publiser" : "Gjør utkast"}
+    </button>
+  )
+}
+
 export default function ProductCard({ product, isAdmin }: ProductCardProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
@@ -85,7 +128,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
       document.removeEventListener('mousedown', onClickOutside)
       document.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('scroll', onScroll)
-    }
+    } 
   }, [open, closing, closeMenu])
 
   return (
@@ -157,6 +200,9 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
                   </Link>
                   <hr className="border-border my-1" />
                   <DeleteProduct productID={product.id} openPopUp={openPopUp} />
+                  <hr className="border-border my-1" />
+                  <Publish productID={product.id} openPopUp={openPopUp} publish={product.draft} canPublish={isProductPublishable(product)} />
+                  
                 </div>
               )}
             </div>

@@ -9,7 +9,7 @@ import MeasurementInput from './MeasurementInput'
 
 export type Measure = { name: string; value: string; unit: string }
 
-export default function MeasurementList({ onChange, initialMeasures }: { onChange: (measures: Measure[]) => void; initialMeasures?: Measure[] }) {
+export default function MeasurementList({ onChange, initialMeasures, resetKey }: { onChange: (measures: Measure[]) => void; initialMeasures?: Measure[]; resetKey: number }) {
   const [showMeasures, setShowMeasures] = useState((initialMeasures?.length ?? 0) > 0)
   const [measures, setMeasures] = useState<Measure[]>(initialMeasures || [])
 

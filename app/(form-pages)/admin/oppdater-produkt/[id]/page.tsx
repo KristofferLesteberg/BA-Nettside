@@ -16,6 +16,7 @@ interface LoadedProduct {
   measures: Measure[]
   existingImages: { id: string; url: string }[]
   contactId: string
+  draft: boolean
 }
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -43,7 +44,8 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                             : Object.entries((product.measures ?? {}) as Record<string, string>)
                                 .map(([name, value]) => ({ name, value, unit: "" })),
           existingImages: product.images.map(img => ({ id: img.id, url: `/images/${img.id}.webp` })),
-          contactId: Number(product.id).toString()
+          contactId: product.contactPersonId ? String(product.contactPersonId) : '',
+          draft: product.draft,
         })
       } catch {
         toast.error("Kunne ikke laste produktet")
@@ -62,7 +64,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
     formData.append("price", price || "0")
     formData.append("amount", amount || "0")
     formData.append("measures", JSON.stringify(measures))
-    formData.append("contactId", contactId || "0")
+    formData.append("contactId", contactId)
 
     formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
 
@@ -80,8 +82,9 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <ProductForm
+      mode="update"
       heading={`Oppdater ${loaded.title}`}
-      submitLabel="Oppdater annonse"
+      submitLabel={loaded.draft ? 'Oppdater annonse og publiser' : 'Oppdater annonse'}
       initialValues={loaded}
       productId={productId}
       onSubmit={handleSubmit}
