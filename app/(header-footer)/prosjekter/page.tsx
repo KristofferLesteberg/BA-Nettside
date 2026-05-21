@@ -112,37 +112,36 @@ export default function Projects() {
           </div>
         </div>
       </section>
-      {/*Prerequisites*/}
-      <section className='w-5xl mx-auto mb-40'>
+      {/* Prerequisites */}
+      <section className='max-w-5xl mx-auto px-4 mb-40'>
         <h1 className='heading-1 text-center mt-5'>Hva vi ber om av dere:</h1>
-        
-        <div className='max-w-4xl card mx-auto mt-5 '>
+
+        <div className='max-w-4xl card mx-auto mt-5'>
           <div className='flex flex-col gap-4'>
             {prerequisites.map((item: Prerequisite, index: number) => (
-              <ul key={index} className='w-full mb-3'>
-                <li>
-                  
+              <div key={index} className='flex flex-row items-center justify-between gap-4 border-b border-border last:border-0 pb-4 last:pb-0'>
+                <div className='flex flex-col gap-1'>
                   <b className='text-primary text-lg'>{item.label}</b>
-                  <div className='flex flex-row justify-center align-center'>
-                    <p className='text-m'>{item.description}</p>
-                      <Checkbox checked={checked[index]} callback={() => toggle(index)} />
-                  </div>
-                </li>
-              </ul>    
+                  <p className='body-text text-muted'>{item.description}</p>
+                </div>
+                <div className='shrink-0'>
+                  <Checkbox checked={checked[index]} callback={() => toggle(index)} />
+                </div>
+              </div>
             ))}
-
           </div>
-          
         </div>
-        <p className='text-primary text-center italic mt-4'>Krysser du av alle punktene ovenfor godkjenner du at prosjektet oppfyller kravene vi har satt</p>
-        <div className=' mt-4 w-full flex flex-row justify-center' >
-          {allChecked ? (
 
-            <Link className="btn btn-primary w-1/3 h-10 cursor-pointer" href="/prosjekter/bestill-prosjekt">
-              <button className="cursor-pointer">Bestill et prosjekt!</button>
+        <p className='text-primary text-center italic mt-4'>
+          Krysser du av alle punktene ovenfor godkjenner du at prosjektet oppfyller kravene vi har satt
+        </p>
+        <div className='mt-4 w-full flex justify-center'>
+          {allChecked ? (
+            <Link className="btn btn-primary w-full sm:w-64 justify-center cursor-pointer" href="/prosjekter/bestill-prosjekt">
+              Bestill et prosjekt!
             </Link>
           ) : (
-            <button disabled className="btn btn-primary w-1/3 h-10">Bestill et prosjekt!</button>
+            <button disabled className="btn btn-primary w-full sm:w-64">Bestill et prosjekt!</button>
           )}
         </div>
       </section>
