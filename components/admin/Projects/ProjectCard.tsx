@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
 import { generateProjectPdf } from "@/actions/pdf"
 import { usePopUp } from "@/components/shared/PopUp"
-import { FaEllipsisVertical, FaFilePdf, FaTrash, FaHelmetSafety, FaRoad, FaWrench, FaCoins, FaCalendarDays, FaChevronDown, FaQuestion, FaEnvelope, FaPhone, FaLocationDot, FaFileInvoice, FaSpinner } from "react-icons/fa6"
+import { FaInfo, FaFilePdf, FaTrash, FaHelmetSafety, FaRoad, FaWrench, FaCoins, FaCalendarDays, FaChevronDown, FaQuestion, FaEnvelope, FaPhone, FaLocationDot, FaFileInvoice, FaSpinner } from "react-icons/fa6"
 import { GiBrickWall } from "react-icons/gi"
 import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
 import { RiProgress3Line } from "react-icons/ri"
@@ -214,7 +214,7 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
             title="Se detaljer"
             aria-label="Se detaljer"
           >
-            <FaEllipsisVertical className="w-5 h-5" aria-hidden="true" />
+            <FaInfo className="w-5 h-5" aria-hidden="true" />
           </button>
 
           <button
