@@ -166,7 +166,7 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
             </span>
             <span className="badge badge-lg badge-neutral gap-1.5">
               {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" aria-hidden="true" />}
-              {project.educationField ? EDUCATION_FIELD_LABELS[project.educationField] : 'Ingen linje'}
+              {project.educationField ? [project.educationField] : 'Ingen linje'}
             </span>
           </div>
         </div>
