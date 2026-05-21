@@ -1,5 +1,5 @@
 "use client"
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import Link from 'next/link'
 import Checkbox from '@/components/shared/checkbox'
 
@@ -8,12 +8,12 @@ import { FaExclamation } from "react-icons/fa";
 
 interface Prerequisite {
   label: string
-  description: string
+  description: ReactNode
 }
 const prerequisites : Prerequisite[] = [
     {
       label: "Læreplan",
-      description: "Oppdraget passer inn i vår læreplanmål"
+      description: <>Oppdraget passer inn i vår <Link href='https://www.udir.no/lk20/bat01-03' className='text-primary underline'>Læreplanmål</Link></>
     },
     {
       label: "Tidsfrister",
@@ -123,6 +123,7 @@ export default function Projects() {
                 <div className='flex flex-col gap-1'>
                   <b className='text-primary text-lg'>{item.label}</b>
                   <p className='body-text text-muted'>{item.description}</p>
+                  
                 </div>
                 <div className='shrink-0'>
                   <Checkbox checked={checked[index]} callback={() => toggle(index)} />

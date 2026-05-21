@@ -20,26 +20,29 @@ const page = async () => {
   const reviews = await getAllReviews()
 
   return (
-    <div className='mt-30 '>
-      <section className='max-w-full ml-auto bg-subtle border'>
-        <div className='flex flex-col md:flex-row max-w-4/5 ml-auto mr-auto p-3 items-center gap-3'>
-          <div className='flex flex-col'>
-            <h1 className='heading-1'>Kjøp byggematerialer eller <br />få jobben gjort av <br />fagfolk</h1>
-          
-            <div className='flex flex-row flex-1 gap-3 mt-3'>
-              <Link href="/produkter">
-                <button className='btn btn-primary hover:bg-primary-hover'>Se på våre produkter!</button>
-              </Link>
-              <Link href="/prosjekter">
-                <button className='btn btn-primary hover:bg-primary-hover'>Bestill en av våre Elever!</button>
-              </Link>
-            </div>
-          </div>
-          <div style={{ backgroundImage: 'url("/static-images/fp-img1.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-muted flex items-center justify-center ml-auto'>
-          
+    <div>
+      <section
+        className='relative h-[80vh]'
+        style={{ backgroundImage: 'url("/static-images/fp-img1.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 30%' }}
+      >
+        <div className='absolute inset-0 bg-black/50' />
+        <div className='relative z-10 h-full flex flex-col'>
+          <div className='h-20 shrink-0' />
+          <div className='flex-1 flex flex-col items-center justify-center text-center px-4 pb-10'>
+          <h1 className='text-white font-bold' style={{ fontSize: '3.5rem', lineHeight: '1.1', letterSpacing: '-0.02em', fontFamily: 'var(--font-display)' }}>Kjøp byggematerialer eller få jobben gjort av fagfolk</h1>
+          <p className='text-white/80 text-xl mt-4 max-w-2xl'>Velkommen til Sam Eyde VGS – her kan du kjøpe produkter eller bestille prosjekter fra våre elever.</p>
+          <div className='flex flex-row gap-3 mt-6'>
+            <Link href="/produkter">
+              <button className='btn btn-primary p-3 hover:bg-primary-hover'>Se på våre produkter!</button>
+            </Link>
+            <Link href="/prosjekter">
+              <button className='btn btn-primary p-3 hover:bg-primary-hover'>Bestill en av våre Elever!</button>
+            </Link>
           </div>
         </div>
-        </section>
+        </div>
+      </section>
+      <div className='mt-30'>
         <section className='mt-30'>
           <div className='text-center mb-20'>
             <h1 className='heading-1'>Vi tilbyr prosjekter og produkter fra to Linjer</h1>
@@ -213,7 +216,7 @@ const page = async () => {
           </section>
         )}
       </div>
-   
+    </div>
   )
 }
 
