@@ -112,6 +112,16 @@
   animation: popup-overlay-out 200ms ease forwards;
 }
 
+@keyframes contact-ring-pulse {
+  0%   { box-shadow: 0 0 0 0   rgb(192 57 43 / 0.5); }
+  70%  { box-shadow: 0 0 0 8px rgb(192 57 43 / 0);   }
+  100% { box-shadow: 0 0 0 0   rgb(192 57 43 / 0);   }
+}
+
+@utility contact-highlight {
+  animation: contact-ring-pulse 1.2s ease-out;
+}
+
 /* Automatically apply a certain style to all the elements of given type */
 @layer base {
   html {
