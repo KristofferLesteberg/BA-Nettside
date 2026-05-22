@@ -8,12 +8,16 @@ variables:
 
 mirror-to-github:
   stage: mirror
+  variables:
+    GIT_DEPTH: "0"
   image:
     name: alpine/git
     entrypoint: [""]
   script:
+    - git fetch origin '+refs/heads/*:refs/heads/*'
+    - git remote rm github || true
     - git remote add github https://$GITHUB_TOKEN@github.com/$GITHUB_REPO.git
-    - git push github HEAD:$CI_COMMIT_REF_NAME
+    - git push github --all --force
 
 build:
   stage: build
