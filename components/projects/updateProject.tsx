@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+import { Spinner } from '@/components/shared/Spinner'
 import OrgNumberInput from '../shared/input/orgNumberInput'
 import PhoneInputWithCountrySelect from 'react-phone-number-input'
 import { parsePhoneNumberWithError } from 'libphonenumber-js'
@@ -194,26 +195,31 @@ export default function UpdateProjectForm({
     const effectiveBilling = sameAsAddress ? values.address : values.billingAddress
     setSubmitting(true)
     try {
-      await updateProject(id, {
-        educationField:     values.educationField,
-        title:              values.title,
-        description:        values.description,
-        minPrice:           values.minPrice,
-        maxPrice:           values.maxPrice,
-        clientForename:     values.clientForename,
-        clientSurname:      values.clientSurname,
-        clientEmail:        values.clientEmail,
-        clientPhone:        values.clientPhone,
-        organizationName:   values.organizationName   || undefined,
-        organizationNumber: values.organizationNumber || undefined,
-        address:            values.address,
-        billingAddress:     effectiveBilling,
-      })
+      await toast.promise(
+        updateProject(id, {
+          educationField:     values.educationField,
+          title:              values.title,
+          description:        values.description,
+          minPrice:           values.minPrice,
+          maxPrice:           values.maxPrice,
+          clientForename:     values.clientForename,
+          clientSurname:      values.clientSurname,
+          clientEmail:        values.clientEmail,
+          clientPhone:        values.clientPhone,
+          organizationName:   values.organizationName   || undefined,
+          organizationNumber: values.organizationNumber || undefined,
+          address:            values.address,
+          billingAddress:     effectiveBilling,
+        }),
+        {
+          loading: 'Lagrer prosjekt…',
+          success: 'Prosjekt oppdatert',
+          error: (e: unknown) => e instanceof Error ? e.message : 'Kunne ikke oppdatere prosjektet',
+        }
+      )
       setBaseValues({ ...values, billingAddress: effectiveBilling })
-      toast.success('Prosjekt oppdatert')
       return true
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Kunne ikke oppdatere prosjektet')
+    } catch {
       return false
     } finally {
       setSubmitting(false)
@@ -530,9 +536,9 @@ export default function UpdateProjectForm({
             type="submit"
             form="update-project-form"
             disabled={submitting || activeField !== null || !hasChanges}
-            className="btn btn-primary transition-opacity duration-200 disabled:opacity-50"
+            className="btn btn-primary transition-opacity duration-200 disabled:opacity-50 gap-2"
           >
-            {submitting ? 'Lagrer...' : 'Lagre endringer'}
+            {submitting ? <><Spinner />Lagrer…</> : 'Lagre endringer'}
           </button>
         </div>
       </div>

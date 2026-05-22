@@ -3,6 +3,7 @@
 import { useRef, useState } from "react"
 import ReviewImageInput from "@/components/shared/input/ReviewImageInput"
 import BackBtn from "../shared/BackBtn"
+import { Spinner } from "@/components/shared/Spinner"
 
 export interface ReviewFormValues {
   name:      string
@@ -135,8 +136,8 @@ export default function ReviewForm({ heading, submitLabel, initialValues, onSubm
         </div>
 
         {/* Submit */}
-        <button type="submit" disabled={loading} className="btn btn-primary w-full">
-          {loading ? "Lagrer..." : submitLabel}
+        <button type="submit" disabled={loading} className="btn btn-primary w-full gap-2">
+          {loading ? <><Spinner />Lagrer…</> : submitLabel}
         </button>
 
       </form>

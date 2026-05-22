@@ -3,6 +3,7 @@
 import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, Suspense } from 'react';
+import { Spinner } from '@/components/shared/Spinner';
 
 function OAuthError() {
   const searchParams = useSearchParams()
@@ -22,15 +23,21 @@ export default function LoginForm() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const handleLogin = async (e: { preventDefault(): void }) => {
     e.preventDefault()
     setError("")
-    const result = await signIn("credentials", { username, password, redirect: false })
-    if (result?.error) {
-      setError("Feil brukernavn eller passord")
-    } else {
-      router.push('/admin')
+    setLoading(true)
+    try {
+      const result = await signIn("credentials", { username, password, redirect: false })
+      if (result?.error) {
+        setError("Feil brukernavn eller passord")
+      } else {
+        router.push('/admin')
+      }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -74,7 +81,9 @@ export default function LoginForm() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <button type="submit" className="btn btn-primary w-full">Logg inn</button>
+            <button type="submit" disabled={loading} className="btn btn-primary w-full gap-2">
+              {loading ? <><Spinner />Logger inn…</> : 'Logg inn'}
+            </button>
           </form>
 
           <div className="flex items-center gap-3">

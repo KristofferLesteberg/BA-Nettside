@@ -2,6 +2,7 @@
 import { ContactPerson } from "@/generated/prisma"
 import { useState } from "react"
 import RegretBtn from "../shared/BackBtn"
+import { Spinner } from "@/components/shared/Spinner"
 import PhoneInputWithCountrySelect from 'react-phone-number-input'
 import { parsePhoneNumberWithError } from 'libphonenumber-js'
 import type { E164Number, CountryCode } from 'libphonenumber-js'
@@ -20,10 +21,16 @@ export default function ContactForm({ exsitingContact, onSubmit, heading}: Props
   const [phone, setPhone] = useState<E164Number | undefined>()
   const [phoneCountry, setPhoneCountry] = useState<CountryCode>("NO")
   const [title, setTitle] = useState(exsitingContact?.title || "")
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await onSubmit({ name, email, phone: String(phone ?? ''), title })
+    setLoading(true)
+    try {
+      await onSubmit({ name, email, phone: String(phone ?? ''), title })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -81,11 +88,12 @@ export default function ContactForm({ exsitingContact, onSubmit, heading}: Props
                 onChange={(e) => setTitle(e.target.value)}
                />
             </div>
-            <button 
-              className="btn btn-primary w-full"
+            <button
+              className="btn btn-primary w-full gap-2"
               type="submit"
+              disabled={loading}
             >
-              Legg til Kontakt person
+              {loading ? <><Spinner />Lagrer…</> : 'Legg til Kontakt person'}
             </button>
           </form>
         </div>

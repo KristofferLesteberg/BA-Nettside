@@ -70,24 +70,26 @@ export default function OrderCard({ order }: Props) {
 
   const orderDelete = async () => {
     try {
-      await deleteOrder(order.id)
-      toast.success("Bestilling fjernet!")
+      await toast.promise(deleteOrder(order.id), {
+        loading: 'Sletter bestilling…',
+        success: 'Bestilling fjernet',
+        error: 'Kunne ikke slette bestilling',
+      })
       router.refresh()
-    } catch {
-      toast.error("Kunne ikke slette bestilling")
-    }
+    } catch {}
   }
 
   const handleStatusChange = async (status: OrderStatus) => {
     closeMenu()
     if (status === order.status) return
     try {
-      await UpdateOrder(order.id, status)
-      toast.success("Status oppdatert")
+      await toast.promise(UpdateOrder(order.id, status), {
+        loading: 'Oppdaterer status…',
+        success: 'Status oppdatert',
+        error: 'Kunne ikke endre status',
+      })
       router.refresh()
-    } catch {
-      toast.error("Kunne ikke endre status")
-    }
+    } catch {}
   }
 
   const thumbnail = order.product?.images?.[0]?.id

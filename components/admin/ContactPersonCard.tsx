@@ -17,12 +17,13 @@ export default function ContactPersonCard({ person }: Props) {
 
   const deletePerson = async () => {
     try {
-      await deleteContactPerson(person.id)
-      toast.success('Kontaktperson slettet')
+      await toast.promise(deleteContactPerson(person.id), {
+        loading: 'Sletter kontaktperson…',
+        success: 'Kontaktperson slettet',
+        error: (e: unknown) => e instanceof Error ? e.message : 'Kunne ikke fjerne kontaktperson',
+      })
       router.refresh()
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Kunne ikke fjerne kontaktperson')
-    }
+    } catch {}
   }
 
   return (

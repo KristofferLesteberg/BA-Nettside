@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
+import { Spinner } from '@/components/shared/Spinner'
 import { createProductOrder } from '@/actions/orderProduct'
 import { getProductById, updateProductAmount } from '@/actions/products'
 import BackBtn from '@/components/shared/BackBtn'
@@ -39,19 +40,24 @@ export default function OrderProductForm({ productId, onSuccess }: Props) {
 
     setLoading(true)
     try {
-      const order = await createProductOrder({
-        clientName,
-        clientEmail,
-        clientPhone: String(clientPhone),
-        amount,
-        extraDetails: extraDetails || undefined,
-        productId,
-      })
+      const order = await toast.promise(
+        createProductOrder({
+          clientName,
+          clientEmail,
+          clientPhone: String(clientPhone),
+          amount,
+          extraDetails: extraDetails || undefined,
+          productId,
+        }),
+        {
+          loading: 'Sender bestilling…',
+          success: 'Bestilling sendt!',
+          error: (e: unknown) => e instanceof Error ? e.message : 'Kunne ikke sende bestillingen',
+        }
+      )
       await updateProductAmount(productId, Number(amount))
       onSuccess({ id: order.id, email: clientEmail, amount: Number(amount), productTitle: product?.title ?? '' })
-    } catch (error: unknown) {
-      toast.error(error instanceof Error ? error.message : "Kunne ikke sende bestillingen")
-    } finally {
+    } catch {} finally {
       setLoading(false)
     }
   }
@@ -157,10 +163,10 @@ export default function OrderProductForm({ productId, onSuccess }: Props) {
 
           <button
             type="submit"
-            className="btn btn-primary w-full"
+            className="btn btn-primary w-full gap-2"
             disabled={loading}
           >
-            {loading ? 'Sender...' : 'Send bestilling'}
+            {loading ? <><Spinner />Sender…</> : 'Send bestilling'}
           </button>
         </form>
       </div>

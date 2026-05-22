@@ -42,12 +42,13 @@ function DeleteProduct({ productID, openPopUp }: {
 
   const handleDelete = async () => {
     try {
-      await deleteProduct(productID)
-      toast.success("Produkt slettet")
+      await toast.promise(deleteProduct(productID), {
+        loading: 'Sletter produkt…',
+        success: 'Produkt slettet',
+        error: 'Kunne ikke slette produktet',
+      })
       router.refresh()
-    } catch {
-      toast.error("Kunne ikke slette produktet")
-    }
+    } catch {}
   }
 
   return (
@@ -75,12 +76,13 @@ function Publish({ productID, openPopUp, publish, canPublish }: {
   const router = useRouter()
   const handleConfirm = async () => {
     try {
-      await publishProduct(productID, !publish)
-      toast.success(publish ? "Produkt publisert" : "Produkt gjort om til utkast")
+      await toast.promise(publishProduct(productID, !publish), {
+        loading: publish ? 'Publiserer…' : 'Gjør til utkast…',
+        success: publish ? 'Produkt publisert' : 'Produkt gjort om til utkast',
+        error: publish ? 'Kunne ikke publisere produktet' : 'Kunne ikke gjøre produktet til utkast',
+      })
       router.refresh()
-    } catch {
-      toast.error(publish ? "Kunne ikke publisere produktet" : "Kunne ikke gjøre produktet til utkast")
-    }
+    } catch {}
   }
   return (
     <button

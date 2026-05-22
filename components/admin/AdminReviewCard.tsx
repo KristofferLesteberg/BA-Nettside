@@ -17,12 +17,13 @@ export default function AdminReviewCard({ review }: { review: Review }) {
 
   const handleDelete = async () => {
     try {
-      await deleteReview(review.id)
-      toast.success('Anmeldelse slettet')
+      await toast.promise(deleteReview(review.id), {
+        loading: 'Sletter anmeldelse…',
+        success: 'Anmeldelse slettet',
+        error: 'Kunne ikke slette anmeldelsen',
+      })
       router.refresh()
-    } catch {
-      toast.error('Kunne ikke slette anmeldelsen')
-    }
+    } catch {}
   }
 
   return (

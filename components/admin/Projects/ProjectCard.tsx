@@ -99,7 +99,11 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
   const handleDownloadPdf = async () => {
     setIsGenerating(true)
     try {
-      const bytes = await generateProjectPdf(project.id)
+      const bytes = await toast.promise(generateProjectPdf(project.id), {
+        loading: 'Genererer PDF…',
+        success: 'PDF er klar',
+        error: 'Kunne ikke generere PDF',
+      })
       const blob  = new Blob([bytes.buffer as ArrayBuffer], { type: 'application/pdf' })
       const url   = URL.createObjectURL(blob)
       const a     = document.createElement('a')
@@ -112,33 +116,33 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
-    } catch {
-      toast.error('Kunne ikke generere PDF')
-    } finally {
+    } catch {} finally {
       setIsGenerating(false)
     }
   }
 
   const handleDelete = async () => {
     try {
-      await deleteProject(project.id)
-      toast.success("Fjernet prosjekt!")
+      await toast.promise(deleteProject(project.id), {
+        loading: 'Sletter prosjekt…',
+        success: 'Prosjekt slettet',
+        error: 'Kunne ikke slette prosjekt',
+      })
       router.refresh()
-    } catch {
-      toast.error("Kunne ikke slette prosjekt")
-    }
+    } catch {}
   }
 
   const handleStatusChange = async (status: Status) => {
     closeMenu()
     if (status === project.status) return
     try {
-      await updateProjectStatus(project.id, status)
-      toast.success("Oppdatert status")
+      await toast.promise(updateProjectStatus(project.id, status), {
+        loading: 'Oppdaterer status…',
+        success: 'Status oppdatert',
+        error: 'Kunne ikke endre status',
+      })
       router.refresh()
-    } catch {
-      toast.error("Kunne ikke endre status")
-    }
+    } catch {}
   }
 
   const priceRange = `${formatPrice(project.minPrice)} – ${formatPrice(project.maxPrice)} kr`

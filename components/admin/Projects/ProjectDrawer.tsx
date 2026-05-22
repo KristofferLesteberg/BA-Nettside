@@ -2,7 +2,8 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
-import { FaXmark, FaHelmetSafety, FaRoad, FaWrench, FaFilePdf, FaTrash, FaQuestion, FaSpinner } from "react-icons/fa6"
+import { FaXmark, FaHelmetSafety, FaRoad, FaWrench, FaFilePdf, FaTrash, FaQuestion } from "react-icons/fa6"
+import { Spinner } from "@/components/shared/Spinner"
 import { GiBrickWall } from "react-icons/gi"
 import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
 import { RiProgress3Line } from "react-icons/ri"
@@ -139,7 +140,11 @@ export default function ProjectDrawer({ project, onClose }: Props) {
     if (!project) return
     setIsGenerating(true)
     try {
-      const bytes = await generateProjectPdf(project.id)
+      const bytes = await toast.promise(generateProjectPdf(project.id), {
+        loading: 'Genererer PDF…',
+        success: 'PDF er klar',
+        error: 'Kunne ikke generere PDF',
+      })
       const blob  = new Blob([bytes.buffer as ArrayBuffer], { type: 'application/pdf' })
       const url   = URL.createObjectURL(blob)
       const a     = document.createElement('a')
@@ -152,9 +157,7 @@ export default function ProjectDrawer({ project, onClose }: Props) {
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
-    } catch {
-      toast.error('Kunne ikke generere PDF')
-    } finally {
+    } catch {} finally {
       setIsGenerating(false)
     }
   }
@@ -162,13 +165,14 @@ export default function ProjectDrawer({ project, onClose }: Props) {
   const handleDelete = async () => {
     if (!project) return
     try {
-      await deleteProject(project.id)
-      toast.success("Fjernet prosjekt!")
+      await toast.promise(deleteProject(project.id), {
+        loading: 'Sletter prosjekt…',
+        success: 'Prosjekt slettet',
+        error: 'Kunne ikke slette prosjekt',
+      })
       onClose()
       router.refresh()
-    } catch {
-      toast.error("Kunne ikke slette prosjekt")
-    }
+    } catch {}
   }
 
   const handleStatusChange = async (status: Status) => {
@@ -177,12 +181,14 @@ export default function ProjectDrawer({ project, onClose }: Props) {
     if (status === currentStatus) return
     setCurrentStatus(status)
     try {
-      await updateProjectStatus(project.id, status)
-      toast.success("Oppdatert status")
+      await toast.promise(updateProjectStatus(project.id, status), {
+        loading: 'Oppdaterer status…',
+        success: 'Status oppdatert',
+        error: 'Kunne ikke endre status',
+      })
       router.refresh()
     } catch {
       setCurrentStatus(project.status)
-      toast.error("Kunne ikke endre status")
     }
   }
 
@@ -217,7 +223,7 @@ export default function ProjectDrawer({ project, onClose }: Props) {
                   title="Last ned PDF"
                 >
                   {isGenerating
-                    ? <FaSpinner className="w-5 h-5 animate-spin" />
+                    ? <Spinner />
                     : <FaFilePdf className="w-5 h-5" />
                   }
                 </button>

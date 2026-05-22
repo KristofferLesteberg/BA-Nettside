@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+import { Spinner } from '@/components/shared/Spinner'
 import { verifyProjectClient } from '@/actions/projects'
 import UpdateProjectForm from './updateProject'
 import BackBtn from '@/components/shared/BackBtn'
@@ -81,16 +82,21 @@ export default function ClientVerificationGate({ id }: { id: string }) {
     e.preventDefault()
     setLoading(true)
     try {
-      const result = await verifyProjectClient(id, forename, surname, email)
-      if (!result) {
-        toast.error('Feil navn eller e-postadresse. Sjekk at du bruker samme navn og e-post som da du sendte inn prosjektet.')
-        return
-      }
+      const result = await toast.promise(
+        (async () => {
+          const r = await verifyProjectClient(id, forename, surname, email)
+          if (!r) throw new Error('Feil navn eller e-postadresse. Sjekk at du bruker samme navn og e-post som da du sendte inn prosjektet.')
+          return r
+        })(),
+        {
+          loading: 'Bekrefter identitet…',
+          success: 'Identitet bekreftet',
+          error: (e: unknown) => e instanceof Error ? e.message : 'En feil oppsto ved verifisering. Prøv igjen senere.',
+        }
+      )
       saveCache(id, forename, surname, email)
       setInitialValues(result)
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'En feil oppsto ved verifisering. Prøv igjen senere.')
-    } finally {
+    } catch {} finally {
       setLoading(false)
     }
   }
@@ -155,9 +161,9 @@ export default function ClientVerificationGate({ id }: { id: string }) {
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-primary w-full mt-2"
+              className="btn btn-primary w-full mt-2 gap-2"
             >
-              {loading ? 'Bekrefter…' : 'Gå til prosjektet'}
+              {loading ? <><Spinner />Bekrefter…</> : 'Gå til prosjektet'}
             </button>
           </form>
         </div>

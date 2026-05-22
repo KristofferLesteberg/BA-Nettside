@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import toast from 'react-hot-toast'
+import { Spinner } from '@/components/shared/Spinner'
 import { createProject } from '@/actions/projects'
 import PhoneInputWithCountrySelect from 'react-phone-number-input'
 import { parsePhoneNumberWithError } from 'libphonenumber-js'
@@ -21,9 +22,10 @@ interface Props {
 }
 
 export default function OrderProjectForm({ onSuccess }: Props) {
-  const [page,      setPage]      = useState(0)
-  const [sliding,   setSliding]   = useState(false)
-  const [slideDir,  setSlideDir]  = useState<'left' | 'right'>('left')
+  const [page,       setPage]       = useState(0)
+  const [sliding,    setSliding]    = useState(false)
+  const [slideDir,   setSlideDir]   = useState<'left' | 'right'>('left')
+  const [submitting, setSubmitting] = useState(false)
   // Page 1 — contact info
   const [identityType,  setIdentityType]  = useState<IdentityType>('')
   const [forename,      setForename]      = useState('')
@@ -136,26 +138,34 @@ export default function OrderProjectForm({ onSuccess }: Props) {
       return
     }
 
+    setSubmitting(true)
     try {
-      const { id } = await createProject({
-        educationField,
-        title,
-        description,
-        minPrice:           minBudget || '0',
-        maxPrice:           maxBudget || '0',
-        clientForename:     forename,
-        clientSurname:      surname,
-        clientEmail:        email,
-        clientPhone:        phone,
-        organizationName:   orgName   || undefined,
-        organizationNumber: orgNumber || undefined,
-        address,
-        billingAddress:     sameAsAddress ? address : billingAddress,
-      })
+      const { id } = await toast.promise(
+        createProject({
+          educationField,
+          title,
+          description,
+          minPrice:           minBudget || '0',
+          maxPrice:           maxBudget || '0',
+          clientForename:     forename,
+          clientSurname:      surname,
+          clientEmail:        email,
+          clientPhone:        phone,
+          organizationName:   orgName   || undefined,
+          organizationNumber: orgNumber || undefined,
+          address,
+          billingAddress:     sameAsAddress ? address : billingAddress,
+        }),
+        {
+          loading: 'Sender forespørsel…',
+          success: 'Forespørsel sendt!',
+          error: (e: unknown) => e instanceof Error ? e.message : 'Noe gikk galt',
+        }
+      )
       localStorage.setItem(`project-verify-${id}`, JSON.stringify({ forename, surname, email, expiresAt: Date.now() + 60 * 60 * 1000 }))
       onSuccess({ id, email })
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Noe gikk galt')
+    } catch {} finally {
+      setSubmitting(false)
     }
   }
 
@@ -413,8 +423,8 @@ export default function OrderProjectForm({ onSuccess }: Props) {
                 onChange={(lo, hi) => { setMinBudget(lo); setMaxBudget(hi) }}
               />
 
-              <button type="submit" className="btn btn-primary w-full">
-                Send forespørsel
+              <button type="submit" disabled={submitting} className="btn btn-primary w-full gap-2">
+                {submitting ? <><Spinner />Sender…</> : 'Send forespørsel'}
               </button>
 
             </form>

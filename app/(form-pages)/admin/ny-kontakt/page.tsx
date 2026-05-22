@@ -19,12 +19,13 @@ export default function NewContact() {
     formData.append('title', title)
 
     try {
-      await createContactPerson(formData)
-      toast.success('Ny kontaktperson opprettet')
+      await toast.promise(createContactPerson(formData), {
+        loading: 'Oppretter kontaktperson…',
+        success: 'Ny kontaktperson opprettet',
+        error: (e: unknown) => e instanceof Error ? e.message : 'Kunne ikke opprette kontaktpersonen',
+      })
       router.push('/admin?tab=kontakt personer')
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Kunne ikke opprette kontaktpersonen')
-    }
+    } catch {}
   }
 
   return (

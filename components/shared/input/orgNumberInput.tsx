@@ -1,9 +1,10 @@
 "use client"
 
-import { useRef, useLayoutEffect } from "react"
+import { useRef, useLayoutEffect, useState } from "react"
 import toast from "react-hot-toast";
 import type { E164Number, CountryCode } from 'libphonenumber-js'
 import { IoSearch } from "react-icons/io5";
+import { Spinner } from "@/components/shared/Spinner";
 
 interface Props {
   inputClassName?: string
@@ -33,6 +34,7 @@ const rawToFormattedPos = (rawPos: number, rawLength: number): number => {
 export default function OrgNumberInput({inputClassName, value, onChange, setEmail, setPhoneCountry, setPhone, setOrgName, setAddress, onSuccess} : Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const cursorRef = useRef<number | null>(null)
+  const [searching, setSearching] = useState(false)
 
   // Restore cursor after React re-renders the controlled formatted value.
   useLayoutEffect(() => {
@@ -43,37 +45,34 @@ export default function OrgNumberInput({inputClassName, value, onChange, setEmai
   })
 
   const getOrgInfo = async (orgNumber: number) => {
+    setSearching(true)
     try {
-      const res = await fetch(`https://data.brreg.no/enhetsregisteret/api/enheter/${orgNumber}`)
-      if (!res.ok) {
-        toast.error("Fant ikke organisasjonen")
-        return
-      }
-      const data = await res.json()
-      if (!data.navn) {
-        toast.error("Fant ikke organisasjonen")
-        return
-      }
-      if(data.epostadresse) {
-        setEmail(data.epostadresse)
-      }
-
-      if(data.telefon) {
+      const data = await toast.promise(
+        (async () => {
+          const res = await fetch(`https://data.brreg.no/enhetsregisteret/api/enheter/${orgNumber}`)
+          if (!res.ok) throw new Error('Fant ikke organisasjonen')
+          const json = await res.json()
+          if (!json.navn) throw new Error('Fant ikke organisasjonen')
+          return json
+        })(),
+        {
+          loading: 'Søker etter organisasjon…',
+          success: 'Organisasjon funnet!',
+          error: (e: unknown) => e instanceof Error ? e.message : 'Fant ikke organisasjonen',
+        }
+      )
+      if (data.epostadresse) setEmail(data.epostadresse)
+      if (data.telefon) {
         setPhoneCountry("NO")
-        const e164 = `+47${data.telefon.replace(/\s/g, "")}` as E164Number
-        setPhone(e164)
+        setPhone(`+47${data.telefon.replace(/\s/g, "")}` as E164Number)
       }
-
       setOrgName(data.navn)
-      if(data.forretningsadresse) {
+      if (data.forretningsadresse) {
         setAddress(`${data.forretningsadresse.adresse[0]}, ${data.forretningsadresse.postnummer} ${data.forretningsadresse.poststed}`)
       }
-      toast.success('Organisasjon funnet!')
       onSuccess?.()
-
-    } catch(error) {
-      toast.error("Fant ikke organisasjonen")
-      console.error(error)
+    } catch {} finally {
+      setSearching(false)
     }
   }
 
@@ -132,9 +131,13 @@ export default function OrgNumberInput({inputClassName, value, onChange, setEmai
       <button
         type='button'
         onClick={() => getOrgInfo(Number(value))}
-        className="absolute right-1 mt-auto mb-auto mr-3 h-full"
+        disabled={searching}
+        className="absolute right-1 mt-auto mb-auto mr-3 h-full disabled:opacity-50"
       >
-        <IoSearch className='cursor-pointer' title="Søk etter organisasjon" />
+        {searching
+          ? <Spinner className="w-4 h-4" />
+          : <IoSearch className='cursor-pointer' title="Søk etter organisasjon" />
+        }
       </button>
     </div>
   )

@@ -8,6 +8,7 @@ import { ContactPerson } from '@/generated/prisma'
 import { usePopUp } from '../shared/PopUp'
 import { deleteProduct, updateProduct } from '@/actions/products'
 import toast from 'react-hot-toast'
+import { Spinner } from '@/components/shared/Spinner'
 import { useRouter } from 'next/navigation'
 import { getAllContacts } from '@/actions/contact'
 import LinjeDropdown from '../shared/LinjeDropdown'
@@ -66,6 +67,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
 
   const [resetKey, setResetKey] = useState(0)
   const [imagesChanged, setImagesChanged] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   const educationFieldRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
@@ -140,13 +142,14 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
 
   const handleSaveChanges = async () => {
     try {
-      await updateProduct(productId, buildFormData(), !initialValues?.draft)
-      toast("Endringer lagret")
+      await toast.promise(updateProduct(productId, buildFormData(), !initialValues?.draft), {
+        loading: 'Lagrer endringer…',
+        success: 'Endringer lagret',
+        error: 'Kunne ikke lagre endringene',
+      })
       closePopUp()
       router.back()
-    } catch {
-      toast.error("Kunne ikke lagre endringene")
-    }
+    } catch {}
   }
 
   const handleSaveDraft = async () => {
@@ -159,26 +162,30 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
     formData.append("measures", JSON.stringify(measures))
     formData.append("contactId", contactId)
     formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
+    setSaving(true)
     try {
-      console.log("test")
-      await updateProduct(productId, formData, false)
-      console.log("produkt Id" + productId)
-      toast("Utkast lagret")
+      await toast.promise(updateProduct(productId, formData, false), {
+        loading: 'Lagrer utkast…',
+        success: 'Utkast lagret',
+        error: 'Kunne ikke lagre produktet som utkast',
+      })
       closePopUp()
       router.back()
-    } catch(error) {
-      toast.error("Kunne ikke lagre produktet som utkast")
+    } catch {} finally {
+      setSaving(false)
     }
   }
+
   const handleDeleteDraft = async () => {
     try {
-      await deleteProduct(productId)
+      await toast.promise(deleteProduct(productId), {
+        loading: 'Sletter utkast…',
+        success: 'Utkastet ble slettet',
+        error: 'Kunne ikke slette utkast',
+      })
       closePopUp()
-      toast("Utkastet ble slettet")
       router.back()
-    } catch(error) {
-      toast.error("Kunne ikke slette utkast")
-    }
+    } catch {}
   }
 
   const isChanged =
@@ -406,7 +413,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
             >
               Lagre som utkast
             </button>
-          ) : <button className='btn btn-secondary w-1/2' onClick={handleSaveDraft}>Lagre som utkast</button>}
+          ) : <button className='btn btn-secondary w-1/2 gap-2' disabled={saving} onClick={handleSaveDraft}>{saving ? <><Spinner />Lagrer…</> : 'Lagre som utkast'}</button>}
           
         </div>
       </form>
