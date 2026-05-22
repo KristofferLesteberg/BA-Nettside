@@ -1,4 +1,4 @@
-import { Toaster } from "react-hot-toast";
+import AppToaster from "@/components/shared/AppToaster";
 
 export default function FormPagesLayout({
   children,
@@ -8,7 +8,7 @@ export default function FormPagesLayout({
   return (
     <>
       {children}
-      <Toaster position="top-center" />
+      <AppToaster />
     </>
   );
 }

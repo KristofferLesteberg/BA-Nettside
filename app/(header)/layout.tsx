@@ -1,4 +1,4 @@
-import { Toaster } from "react-hot-toast";
+import AppToaster from "@/components/shared/AppToaster";
 import Header from "@/components/shared/Header";
 
 export default function HeaderOnlyLayout({
@@ -12,7 +12,7 @@ export default function HeaderOnlyLayout({
       <main className="pt-20 flex-1">
         {children}
       </main>
-      <Toaster position="top-center" />
+      <AppToaster />
     </>
   );
 }
