@@ -5,7 +5,17 @@ import Link from "next/link"
 import Carousel from "@/components/shared/ImageCarousel"
 import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
 import { FaEnvelope, FaPhone } from "react-icons/fa"
+import { FaWrench, FaHelmetSafety, FaRoad } from "react-icons/fa6"
+import { GiBrickWall } from "react-icons/gi"
 import type { getProductById } from "@/actions/products"
+import type { EducationField } from "@/generated/prisma"
+
+const FIELD_ICONS: Record<EducationField, React.ReactNode> = {
+  PLUMBER:      <FaWrench       className="shrink-0" />,
+  CONCRETE:     <GiBrickWall    className="shrink-0" />,
+  CARPENTER:    <FaHelmetSafety className="shrink-0" />,
+  CONSTRUCTION: <FaRoad         className="shrink-0" />,
+}
 
 type Product = NonNullable<Awaited<ReturnType<typeof getProductById>>>
 type StoredMeasure = { name: string; value: string; unit: string }
@@ -33,22 +43,21 @@ export default function ProductDetail({ product }: { product: Product }) {
     <div className="bg-page min-h-screen">
       <div className="max-w-5xl mx-auto px-4 py-6 sm:px-6 sm:py-8">
 
-        {/* Breadcrumb */}
-        <nav className="mb-5">
-          <span className="small-text">
-            <Link href="/" className="hover:underline">Hjem</Link>
-            <span className="text-faint mx-2">/</span>
-            <Link href="/produkter" className="hover:underline">Produkter</Link>
-            <span className="text-faint mx-2">/</span>
-            <span className="text-faint">{product.title}</span>
-          </span>
-        </nav>
-
         {/* Main layout */}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
 
           {/* Left — carousel */}
-          <div className="w-full lg:w-1/2 lg:sticky lg:top-8 lg:self-start">
+          <div className="w-full lg:w-1/2 lg:sticky lg:top-24 lg:self-start">
+            {/* Breadcrumb */}
+            <nav className="mb-5">
+              <span className="small-text">
+                <Link href="/" className="hover:underline">Hjem</Link>
+                <span className="text-faint mx-2">/</span>
+                <Link href="/produkter" className="hover:underline">Produkter</Link>
+                <span className="text-faint mx-2">/</span>
+                <span className="text-faint">{product.title}</span>
+              </span>
+            </nav>
             <Carousel
               images={product.images.map(img => img.id)}
               className="w-full h-72 sm:h-96"
@@ -61,7 +70,8 @@ export default function ProductDetail({ product }: { product: Product }) {
             {/* Title block */}
             <div className="flex flex-col gap-1.5">
               {product.educationField && (
-                <span className="badge badge-neutral self-start">
+                <span className="badge badge-neutral self-start flex items-center gap-1.5">
+                  {FIELD_ICONS[product.educationField]}
                   {EDUCATION_FIELD_LABELS[product.educationField]}
                 </span>
               )}
@@ -112,21 +122,21 @@ export default function ProductDetail({ product }: { product: Product }) {
             {/* Detaljer */}
             <div className="flex flex-col gap-2">
               <p className="label">Detaljer</p>
-              <div className="card-subtle flex flex-col divide-y" style={{ borderRadius: "var(--radius-lg)" }}>
-                <div className="flex justify-between px-4 py-3">
+              <div className="card p-3 flex flex-col divide-y rounded-lg">
+                <div className="flex justify-between px-4 py-2">
                   <span className="small-text">Antall på lager</span>
-                  <span className="small-text" style={{ color: "var(--color-text)" }}>{product.amount}</span>
+                  <span className="small-text text-text" >{product.amount}</span>
                 </div>
-                <div className="flex justify-between px-4 py-3">
+                <div className="flex justify-between px-4 py-2">
                   <span className="small-text">Publisert</span>
-                  <span className="small-text" style={{ color: "var(--color-text)" }}>
+                  <span className="small-text text-text">
                     {new Date(product.publishedAt).toLocaleDateString("no-NO")}
                   </span>
                 </div>
                 {product.educationField && (
-                  <div className="flex justify-between px-4 py-3">
+                  <div className="flex justify-between px-4 py-2">
                     <span className="small-text">Fagfelt</span>
-                    <span className="small-text" style={{ color: "var(--color-text)" }}>
+                    <span className="small-text text-text">
                       {EDUCATION_FIELD_LABELS[product.educationField]}
                     </span>
                   </div>
@@ -137,16 +147,16 @@ export default function ProductDetail({ product }: { product: Product }) {
             {/* Mål */}
             <div className="flex flex-col gap-2">
               <p className="label">Mål</p>
-              <div className="card-subtle flex flex-col divide-y" style={{ borderRadius: "var(--radius-lg)" }}>
+              <div className="card p-3 flex flex-col divide-y rounded-lg">
                 {measures.length > 0 ? measures.map((m, i) => (
-                  <div key={i} className="flex justify-between items-baseline px-4 py-3">
+                  <div key={i} className="flex justify-between items-baseline px-4 py-2">
                     <span className="label">{m.name}</span>
-                    <span className="small-text font-semibold" style={{ color: "var(--color-text)" }}>
+                    <span className="small-text font-semibold text-text">
                       {m.value}{m.unit}
                     </span>
                   </div>
                 )) : (
-                  <div className="px-4 py-3">
+                  <div className="px-4 py-2">
                     <span className="small-text text-faint">Ingen mål tilgjengelig</span>
                   </div>
                 )}
@@ -159,8 +169,7 @@ export default function ProductDetail({ product }: { product: Product }) {
               {contact ? (
                 <div
                   id="contact-card"
-                  className="card flex flex-col gap-4"
-                  style={{ borderRadius: "var(--radius-lg)" }}
+                  className="card flex flex-col gap-4 rounded-lg"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-full shrink-0 bg-surface-sunken border-2 border-secondary flex items-center justify-center">
