@@ -83,6 +83,15 @@ export default function ProductDetail({ product }: { product: Product }) {
 
             {/* CTA */}
             <div className="flex flex-col gap-3">
+              {product.amount > 0 ? (
+                <Link className="btn btn-primary" href={`/bestill-produkt/${product.id}`}>
+                  Bestill
+                </Link>
+              ) : (
+                <button disabled className="btn btn-primary opacity-50 cursor-not-allowed">
+                  Utsolgt
+                </button>
+              )}
               {contact && (
                 <div className="flex flex-col gap-1.5">
                   <button onClick={handleTaKontakt} className="btn btn-outline">
@@ -97,15 +106,6 @@ export default function ProductDetail({ product }: { product: Product }) {
                     <span className="small-text text-faint">{contact.name} · {contact.title}</span>
                   </div>
                 </div>
-              )}
-              {product.amount > 0 ? (
-                <Link className="btn btn-primary" href={`/bestill-produkt/${product.id}`}>
-                  Bestill
-                </Link>
-              ) : (
-                <button disabled className="btn btn-primary opacity-50 cursor-not-allowed">
-                  Utsolgt
-                </button>
               )}
             </div>
 
