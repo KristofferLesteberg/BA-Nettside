@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 "use client"
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import type { Swiper as SwiperType } from 'swiper'
 import { FaChevronLeft, FaChevronRight, FaImage } from 'react-icons/fa'
@@ -19,6 +19,59 @@ const DOT_CLASSES: Record<DotSize, string> = {
   normal: 'w-2 h-2 bg-border',
   small:  'w-2 h-2 bg-border opacity-60',
   tiny:   'w-1.5 h-1.5 bg-border opacity-30',
+}
+
+// Computes the clip-path inset that rounds just the visible image content corners,
+// not the full element box (which is larger due to object-contain letterboxing).
+function ContainedImage({ src, sizes }: { src: string; sizes: string }) {
+  const outerRef    = useRef<HTMLDivElement>(null)
+  const naturalRef  = useRef<{ w: number; h: number } | null>(null)
+  const [clipPath, setClipPath] = useState('')
+
+  function recalcClip() {
+    const outer = outerRef.current
+    const nat   = naturalRef.current
+    if (!outer || !nat || !nat.w || !nat.h) return
+    const cw = outer.clientWidth
+    const ch = outer.clientHeight
+    if (!cw || !ch) return
+    let rw: number, rh: number
+    if (nat.w / nat.h > cw / ch) {
+      rw = cw;  rh = cw * nat.h / nat.w
+    } else {
+      rh = ch;  rw = ch * nat.w / nat.h
+    }
+    const t = (ch - rh) / 2
+    const l = (cw - rw) / 2
+    setClipPath(`inset(${t}px ${cw - l - rw}px ${ch - t - rh}px ${l}px round 12px)`)
+  }
+
+  function handleLoad(e: React.SyntheticEvent<HTMLImageElement>) {
+    naturalRef.current = { w: e.currentTarget.naturalWidth, h: e.currentTarget.naturalHeight }
+    recalcClip()
+  }
+
+  useEffect(() => {
+    const outer = outerRef.current
+    if (!outer) return
+    const ro = new ResizeObserver(recalcClip)
+    ro.observe(outer)
+    return () => ro.disconnect()
+  }, [])
+
+  return (
+    <div ref={outerRef} className="absolute inset-3">
+      <Image
+        src={src}
+        alt=""
+        fill
+        sizes={sizes}
+        className="object-contain"
+        style={clipPath ? { clipPath } : undefined}
+        onLoad={handleLoad}
+      />
+    </div>
+  )
 }
 
 function getWindowStart(total: number, active: number): number {
@@ -39,7 +92,15 @@ function getDotSize(i: number, active: number, windowStart: number, total: numbe
   return 'normal'
 }
 
-export default function ImageCarousel({ images, className }: { images: string[], className?: string }) {
+export default function ImageCarousel({
+  images,
+  className,
+  sizes = '(max-width: 1024px) 100vw, 50vw',
+}: {
+  images: string[]
+  className?: string
+  sizes?: string
+}) {
   const swiperRef = useRef<SwiperType | null>(null)
   const [realIndex, setRealIndex] = useState(0)
   const showNav = images.length > 1
@@ -80,14 +141,13 @@ export default function ImageCarousel({ images, className }: { images: string[],
             slidesPerView={1}
             loop={images.length > 1}
             speed={500}
-            className="image-swiper absolute inset-0 rounded-2xl overflow-hidden"
+            className="image-swiper absolute inset-0 rounded-2xl overflow-hidden bg-surface-sunken"
           >
             {images.map((imageId) => (
-              <SwiperSlide key={imageId} className="flex items-center justify-center">
-                <img
+              <SwiperSlide key={imageId}>
+                <ContainedImage
                   src={`/images/${imageId}.webp`}
-                  alt=""
-                  className="w-full h-full object-contain"
+                  sizes={sizes}
                 />
               </SwiperSlide>
             ))}
