@@ -6,41 +6,37 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import type { Swiper as SwiperType } from 'swiper'
 import { FaChevronLeft, FaChevronRight, FaImage } from 'react-icons/fa'
 
-const MAX_DOTS = 7
+const MAX_VISIBLE = 7
+const SLOT_PX     = 18                                                        // reserved width per dot slot
+const GAP_PX      = 4                                                         // 4px
+const STEP_PX     = SLOT_PX + GAP_PX                                          // 22px per step
+const CLIP_PX     = MAX_VISIBLE * SLOT_PX + (MAX_VISIBLE - 1) * GAP_PX       // 150px visible window
 
 type DotSize = 'active' | 'normal' | 'small' | 'tiny'
 
 const DOT_CLASSES: Record<DotSize, string> = {
   active: 'w-5 h-2 bg-primary',
-  normal: 'w-2 h-2 bg-border hover:bg-border-strong',
-  small:  'w-1.5 h-1.5 bg-border opacity-60',
-  tiny:   'w-1 h-1 bg-border opacity-40',
+  normal: 'w-2 h-2 bg-border',
+  small:  'w-2 h-2 bg-border opacity-60',
+  tiny:   'w-1.5 h-1.5 bg-border opacity-30',
 }
 
-function getDots(total: number, active: number): { index: number; size: DotSize }[] {
-  if (total <= MAX_DOTS) {
-    return Array.from({ length: total }, (_, i) => ({
-      index: i,
-      size: i === active ? 'active' : 'normal',
-    }))
-  }
+function getWindowStart(total: number, active: number): number {
+  return Math.max(0, Math.min(active - Math.floor(MAX_VISIBLE / 2), total - MAX_VISIBLE))
+}
 
-  const windowStart = Math.max(0, Math.min(active - Math.floor(MAX_DOTS / 2), total - MAX_DOTS))
-  const windowEnd   = windowStart + MAX_DOTS - 1
+function getDotSize(i: number, active: number, windowStart: number, total: number): DotSize {
+  if (i === active) return 'active'
+  if (total <= MAX_VISIBLE) return 'normal'
+  const vp = i - windowStart
   const hasMoreBefore = windowStart > 0
-  const hasMoreAfter  = windowEnd < total - 1
-
-  return Array.from({ length: MAX_DOTS }, (_, p) => {
-    const index = windowStart + p
-    const isActive = index === active
-    let size: DotSize = 'normal'
-    if (isActive)                            size = 'active'
-    else if (p === 0 && hasMoreBefore)       size = 'tiny'
-    else if (p === 1 && hasMoreBefore)       size = 'small'
-    else if (p === MAX_DOTS - 1 && hasMoreAfter) size = 'tiny'
-    else if (p === MAX_DOTS - 2 && hasMoreAfter) size = 'small'
-    return { index, size }
-  })
+  const hasMoreAfter  = windowStart + MAX_VISIBLE < total
+  if (vp < 0 || vp >= MAX_VISIBLE)                  return 'tiny'
+  if (vp === 0 && hasMoreBefore)                    return 'tiny'
+  if (vp === 1 && hasMoreBefore)                    return 'small'
+  if (vp === MAX_VISIBLE - 1 && hasMoreAfter)       return 'tiny'
+  if (vp === MAX_VISIBLE - 2 && hasMoreAfter)       return 'small'
+  return 'normal'
 }
 
 export default function ImageCarousel({ images, className }: { images: string[], className?: string }) {
@@ -57,7 +53,9 @@ export default function ImageCarousel({ images, className }: { images: string[],
     )
   }
 
-  const dots = getDots(images.length, realIndex)
+  const usesWindow  = images.length > MAX_VISIBLE
+  const windowStart = usesWindow ? getWindowStart(images.length, realIndex) : 0
+  const translateX  = usesWindow ? -windowStart * STEP_PX : 0
 
   return (
     <div className={`flex flex-col gap-2 ${className ?? ''}`}>
@@ -108,17 +106,36 @@ export default function ImageCarousel({ images, className }: { images: string[],
 
       </div>
 
-      {/* Pagination dots — condensed window, outside the image frame */}
+      {/* Pagination dots — sliding window with clipped overflow */}
       {showNav && (
-        <div className="flex justify-center items-center gap-2">
-          {dots.map((dot, p) => (
-            <button
-              key={p}
-              onClick={() => swiperRef.current?.slideToLoop(dot.index)}
-              className={`rounded-full transition-all duration-300 cursor-pointer ${DOT_CLASSES[dot.size]}`}
-              aria-label={`Gå til bilde ${dot.index + 1}`}
-            />
-          ))}
+        <div className="flex justify-center">
+          <div style={{ overflow: 'hidden', width: usesWindow ? CLIP_PX : undefined }}>
+            <div
+              className="flex items-center"
+              style={{
+                gap: GAP_PX,
+                transform: `translateX(${translateX}px)`,
+                transition: 'transform 300ms ease',
+              }}
+            >
+              {images.map((_, i) => {
+                const size = getDotSize(i, realIndex, windowStart, images.length)
+                return (
+                  <button
+                    key={i}
+                    onClick={() => swiperRef.current?.slideToLoop(i)}
+                    style={{ width: SLOT_PX, height: SLOT_PX, flexShrink: 0 }}
+                    className="flex items-center justify-center cursor-pointer group"
+                    aria-label={`Gå til bilde ${i + 1}`}
+                  >
+                    <div
+                      className={`rounded-full transition-all duration-300 ${DOT_CLASSES[size]} ${size !== 'active' ? 'group-hover:bg-border-strong' : ''}`}
+                    />
+                  </button>
+                )
+              })}
+            </div>
+          </div>
         </div>
       )}
 
