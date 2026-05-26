@@ -26,7 +26,7 @@ export default function ImageCarousel({ images, className }: { images: string[],
       {showNav && (
         <button
           onClick={() => swiperRef.current?.slidePrev()}
-          className="w-10 flex items-center justify-center shrink-0 text-primary hover:text-primary-hover hover:bg-surface-sunken active:bg-surface-sunken rounded-md transition-colors duration-250 cursor-pointer"
+          className="w-10 h-1/3 my-auto flex items-center justify-center shrink-0 text-primary hover:text-primary-hover hover:bg-surface-sunken active:bg-surface-sunken rounded-md transition-colors duration-250 cursor-pointer"
           aria-label="Forrige bilde"
         >
           <FaChevronLeft className="text-xl" />
@@ -57,7 +57,7 @@ export default function ImageCarousel({ images, className }: { images: string[],
       {showNav && (
         <button
           onClick={() => swiperRef.current?.slideNext()}
-          className="w-10 flex items-center justify-center shrink-0 text-primary hover:text-primary-hover hover:bg-surface-sunken active:bg-surface-sunken rounded-md transition-colors duration-250 cursor-pointer"
+          className="w-10 h-1/3 my-auto flex items-center justify-center shrink-0 text-primary hover:text-primary-hover hover:bg-surface-sunken active:bg-surface-sunken rounded-md transition-colors duration-250 cursor-pointer"
           aria-label="Neste bilde"
         >
           <FaChevronRight className="text-xl" />
