@@ -305,6 +305,23 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
               </button>
             )}
           </div>
+          {(() => {
+            const selected = contactPersons?.find(cp => String(cp.id) === contactId)
+            return (
+              <div className={`grid transition-all duration-300 ease-in-out ${selected ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                <div className="overflow-hidden">
+                  {selected && (
+                    <div className="mt-2 p-3 bg-surface rounded-lg border border-border text-sm space-y-1">
+                      <p className="font-medium text-text">{selected.name}</p>
+                      <p className="text-text-muted">Rolle: {selected.title}</p>
+                      <p className="text-text-muted">Mail: {selected.email}</p>
+                      <p className="text-text-muted">Tlf: {selected.phone}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })()}
         </div>
         {/* Description */}
         <div className="space-y-1" ref={descriptionRef}>
