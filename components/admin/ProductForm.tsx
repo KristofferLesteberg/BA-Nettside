@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 import { getAllContacts } from '@/actions/contact'
 import LinjeDropdown from '../shared/LinjeDropdown'
 import { RotateCcw } from 'lucide-react'
+import { isProductPublishable } from '@/app/lib/product-utils'
 
 export interface ProductFormValues {
   educationField: string
@@ -239,7 +240,8 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
           )}
         </div>
         <h2 className="heading-2">{heading}</h2>
-        <p className="text-text-faint italic -mt-4">Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette</p>
+        <div className='flex justify-between items-center'>
+          <p className="text-text-faint italic">Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette</p>
         <button
           type="button"
           onClick={() => resetAllFields()}
@@ -248,6 +250,9 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
           <RotateCcw size={14} />
           Tilbakestill
         </button>
+
+        </div>
+        
         {/* Education Field */}
         <div className="space-y-1" ref={educationFieldRef}>
           <label className="label">Kategori *</label>
@@ -407,7 +412,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
           
           <button
             type="button"
-            disabled={mode === "update" && !isChanged}
+            disabled={mode === "update" && !isChanged || !isProductPublishable({ educationField, title, description })}
             className={`btn w-1/2 ${mode === "update" && !isChanged ? 'btn-ghost' : 'btn-primary'}`}
             onClick={() => openPopUp({
               title: mode === "create" ? 'Ønsker du å publisere produktet?' : 'Ønsker du å oppdatere produktet med endringene?',
