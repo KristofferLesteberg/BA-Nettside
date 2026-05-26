@@ -62,7 +62,9 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
   const [price, setPrice] = useState(initialValues?.price ?? "")
   const [amount, setAmount] = useState(initialValues?.amount ?? "")
   const [measures, setMeasures] = useState<Measure[]>(initialValues?.measures ?? [])
-  const [images, setImages] = useState<ImageItem[]>([])
+  const [images, setImages] = useState<ImageItem[]>(
+    initialValues?.existingImages?.map(img => ({ id: img.id, type: "existing" as const, url: img.url })) ?? []
+  )
   const [contactId, setContactId] = useState(initialValues?.contactId ?? "")
 
   const [resetKey, setResetKey] = useState(0)
@@ -385,20 +387,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
 
         {/* Submit */}
         <div className='flex flex-row gap-2'>
-          
-          <button
-            type="button"
-            disabled={mode === "update" && !isChanged}
-            className={`btn w-1/2 ${mode === "update" && !isChanged ? 'btn-ghost' : 'btn-primary'}`}
-            onClick={() => openPopUp({
-              title: mode === "create" ? 'Ønsker du å publisere produktet?' : 'Ønsker du å oppdatere produktet med endringene?',
-              yesLabel: mode === "create" ? 'Ja, publiser' : 'Ja, oppdater',
-              noLabel: 'Avbryt',
-              onYes: submitForm,
-            })}
-          >
-            {submitLabel}
-          </button>
+
           {mode === "update" ? (
             <button
               type="button"
@@ -414,6 +403,21 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
               Lagre som utkast
             </button>
           ) : <button className='btn btn-secondary w-1/2 gap-2' disabled={saving} onClick={handleSaveDraft}>{saving ? <><Spinner />Lagrer…</> : 'Lagre som utkast'}</button>}
+          
+          
+          <button
+            type="button"
+            disabled={mode === "update" && !isChanged}
+            className={`btn w-1/2 ${mode === "update" && !isChanged ? 'btn-ghost' : 'btn-primary'}`}
+            onClick={() => openPopUp({
+              title: mode === "create" ? 'Ønsker du å publisere produktet?' : 'Ønsker du å oppdatere produktet med endringene?',
+              yesLabel: mode === "create" ? 'Ja, publiser' : 'Ja, oppdater',
+              noLabel: 'Avbryt',
+              onYes: submitForm,
+            })}
+          >
+            {submitLabel}
+          </button>
           
         </div>
       </form>
