@@ -185,6 +185,17 @@ exports.Prisma.ProductOrderScalarFieldEnum = {
   productId: 'productId'
 };
 
+exports.Prisma.EmailQueueScalarFieldEnum = {
+  id: 'id',
+  to: 'to',
+  subject: 'subject',
+  body: 'body',
+  status: 'status',
+  attempts: 'attempts',
+  lastAttemptAt: 'lastAttemptAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -235,7 +246,8 @@ exports.Prisma.ModelName = {
   ProjectRequest: 'ProjectRequest',
   ClientReview: 'ClientReview',
   ContactPerson: 'ContactPerson',
-  ProductOrder: 'ProductOrder'
+  ProductOrder: 'ProductOrder',
+  EmailQueue: 'EmailQueue'
 };
 
 /**
