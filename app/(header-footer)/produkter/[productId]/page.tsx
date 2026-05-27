@@ -11,7 +11,7 @@ export default async function ProductPage({
   if (Number.isNaN(productId)) notFound()
 
   const product = await getProductById(productId)
-  if (!product) notFound()
+  if (!product || product.draft) notFound()
 
   return <ProductDetail product={product} />
 }

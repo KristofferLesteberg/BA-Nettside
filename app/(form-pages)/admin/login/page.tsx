@@ -1,104 +1,116 @@
 "use client";
 
-import { signIn } from 'next-auth/react'
+import { signIn, signOut } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, Suspense } from 'react';
-import { Spinner } from '@/components/shared/Spinner';
+import { useState, Suspense, useEffect } from 'react';
+import BackBtn from '@/components/shared/BackBtn';
+import toast from 'react-hot-toast';
 
 function OAuthError() {
   const searchParams = useSearchParams()
   const error = searchParams.get('error')
-  if (!error) return null
-  return (
-    <p className="small-text text-error bg-error-bg border border-error rounded-md px-3 py-2">
-      {error === 'AccessDenied'
+  useEffect(() => {
+    if (!error) return
+    toast.error(
+      error === 'AccessDenied'
         ? 'Denne Google-kontoen har ikke tilgang.'
-        : 'Noe gikk galt. Prøv igjen.'}
-    </p>
-  )
+        : 'Noe gikk galt. Prøv igjen.'
+    )
+  }, [error])
+  return null
 }
 
 export default function LoginForm() {
   const router = useRouter()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
   const handleLogin = async (e: { preventDefault(): void }) => {
     e.preventDefault()
-    setError("")
     setLoading(true)
     try {
-      const result = await signIn("credentials", { username, password, redirect: false })
-      if (result?.error) {
-        setError("Feil brukernavn eller passord")
-      } else {
-        router.push('/admin')
-      }
-    } finally {
+      await toast.promise(
+        (async () => {
+          let result = await signIn("credentials", { username, password, redirect: false })
+          // Non-credentials errors (e.g. stale CSRF/session cookie) — clear state and retry once
+          if (result?.error && result.error !== 'CredentialsSignin') {
+            await signOut({ redirect: false })
+            result = await signIn("credentials", { username, password, redirect: false })
+          }
+          if (result?.error) throw new Error()
+        })(),
+        {
+          loading: 'Logger inn…',
+          success: 'Innlogging vellykket',
+          error: 'Feil brukernavn eller passord',
+        }
+      )
+      router.push('/admin')
+    } catch {} finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8 bg-sunken">
-      <div className="w-full max-w-2xl card card-accented overflow-hidden p-0">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-sunken">
+      <div className="w-full max-w-180">
 
-        <div className="bg-secondary px-6 py-5">
-          <p className="text-xs font-bold uppercase tracking-widest text-white/50 mb-1">Administrasjonspanel</p>
-          <h2 className="heading-2 text-white">Logg inn</h2>
+        <div className="mb-4">
+          <BackBtn handleOnClick={() => router.push('/')} />
         </div>
 
-        <div className="bg-page px-6 py-6 space-y-5">
-          <Suspense>
-            <OAuthError />
-          </Suspense>
-
-          <form onSubmit={handleLogin} className="space-y-4">
-            {error && (
-              <p className="small-text text-error bg-error-bg border border-error rounded-md px-3 py-2">
-                {error}
-              </p>
-            )}
-            <div className="space-y-1">
-              <label className="label">Brukernavn</label>
-              <input
-                type="text"
-                className="input"
-                placeholder="Skriv inn brukernavn"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="label">Passord</label>
-              <input
-                type="password"
-                className="input"
-                placeholder="Skriv inn passord"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <button type="submit" disabled={loading} className="btn btn-primary w-full gap-2">
-              {loading ? <><Spinner />Logger inn…</> : 'Logg inn'}
-            </button>
-          </form>
-
-          <div className="flex items-center gap-3">
-            <hr className="flex-1" />
-            <span className="small-text">eller</span>
-            <hr className="flex-1" />
+        <div className="card card-accented overflow-hidden">
+          <div className="px-8 pt-8 pb-6">
+            <p className="label text-muted mb-1">Administrasjonspanel</p>
+            <h1 className="heading-2">Logg inn</h1>
           </div>
 
-          <button
-            onClick={() => signIn("google", { callbackUrl: '/admin' })}
-            className="btn btn-outline w-full gap-2"
-          >
-            <GoogleIcon />
-            Fortsett med Google
-          </button>
+          <div className="px-8 pb-8 space-y-5">
+            <Suspense>
+              <OAuthError />
+            </Suspense>
+
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-1">
+                <label className="label">Brukernavn</label>
+                <input
+                  type="text"
+                  className="input"
+                  placeholder="Skriv inn brukernavn"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="label">Passord</label>
+                <input
+                  type="password"
+                  className="input"
+                  placeholder="Skriv inn passord"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <button type="submit" disabled={loading} className="btn btn-primary w-full">
+                Logg inn
+              </button>
+            </form>
+
+            <div className="flex items-center gap-3">
+              <hr className="flex-1" />
+              <span className="small-text text-faint">eller</span>
+              <hr className="flex-1" />
+            </div>
+
+            <button
+              onClick={() => signIn("google", { callbackUrl: '/admin' })}
+              className="btn btn-outline w-full gap-2"
+            >
+              <GoogleIcon />
+              Fortsett med Google
+            </button>
+          </div>
         </div>
 
       </div>
