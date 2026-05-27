@@ -50,7 +50,7 @@ export async function uploadProductImages(
 ) {
   let sortOrder = 0;
   for (const img of images) {
-    uploadProductImage(
+    await uploadProductImage(
       img.file,
       productId,
       sortOrder,
