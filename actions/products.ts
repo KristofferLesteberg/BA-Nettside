@@ -125,7 +125,7 @@ export async function updateProduct(id: number, formData: FormData, publish = tr
   await syncProductImages(orderedIds, newFiles, id)
 
   revalidatePath('/admin')
-  revalidatePath('/')
+  revalidatePath('/', 'layout')
 }
 
 export async function publishProduct(id: number, publish: boolean = false) {

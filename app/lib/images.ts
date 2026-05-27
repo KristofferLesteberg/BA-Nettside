@@ -50,7 +50,7 @@ export async function uploadProductImages(
 ) {
   let sortOrder = 0;
   for (const img of images) {
-    uploadProductImage(
+    await uploadProductImage(
       img.file,
       productId,
       sortOrder,
@@ -94,9 +94,9 @@ export async function syncProductImages(
 
 export async function deleteProductImage(imageId: string) {
   const filePath = path.join(process.cwd(), "public", "images", `${imageId}.webp`)
-  
-  await fs.unlink(filePath)
-  
+
+  await fs.unlink(filePath).catch(() => {})
+
   await prisma.productImage.delete({
     where: { id: imageId }
   })
@@ -109,7 +109,7 @@ export async function deleteAllProductImages(productId: number) {
 
   for (const image of images) {
     const filePath = path.join(process.cwd(), "public", "images", `${image.id}.webp`)
-    await fs.unlink(filePath)
+    await fs.unlink(filePath).catch(() => {})
   }
 
   await prisma.productImage.deleteMany({

@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 import { getAllContacts } from '@/actions/contact'
 import LinjeDropdown from '../shared/LinjeDropdown'
 import { RotateCcw } from 'lucide-react'
+import { isProductPublishable } from '@/app/lib/product-utils'
 
 export interface ProductFormValues {
   educationField: string
@@ -62,12 +63,15 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
   const [price, setPrice] = useState(initialValues?.price ?? "")
   const [amount, setAmount] = useState(initialValues?.amount ?? "")
   const [measures, setMeasures] = useState<Measure[]>(initialValues?.measures ?? [])
-  const [images, setImages] = useState<ImageItem[]>([])
+  const [images, setImages] = useState<ImageItem[]>(
+    initialValues?.existingImages?.map(img => ({ id: img.id, type: "existing" as const, url: img.url })) ?? []
+  )
   const [contactId, setContactId] = useState(initialValues?.contactId ?? "")
 
   const [resetKey, setResetKey] = useState(0)
   const [imagesChanged, setImagesChanged] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [menyOpen, setMenyOpen] = useState<boolean>(false)
 
   const educationFieldRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
@@ -237,7 +241,8 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
           )}
         </div>
         <h2 className="heading-2">{heading}</h2>
-        <p className="text-text-faint italic -mt-4">Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette</p>
+        <div className='flex justify-between items-center'>
+          <p className="text-text-faint italic">Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette</p>
         <button
           type="button"
           onClick={() => resetAllFields()}
@@ -246,6 +251,9 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
           <RotateCcw size={14} />
           Tilbakestill
         </button>
+
+        </div>
+        
         {/* Education Field */}
         <div className="space-y-1" ref={educationFieldRef}>
           <label className="label">Kategori *</label>
@@ -291,13 +299,30 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
             {contactId !== original.current.contactId && (
               <button
                 type="button"
-                onClick={() => setContactId(original.current.contactId)}
+                onClick={() => { setContactId(original.current.contactId); }}
                 className="text-text-faint hover:text-text transition-colors p-0.5 rounded cursor-pointer animate-fade-in shrink-0"
               >
                 <RotateCcw size={14} />
               </button>
             )}
           </div>
+          {(() => {
+            const selected = contactPersons?.find(cp => String(cp.id) === contactId)
+            return (
+              <div className={`grid transition-all duration-300 ease-in-out ${selected ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                <div className="overflow-hidden">
+                  {selected && (
+                    <div className="mt-2 p-3 bg-surface rounded-lg border border-border text-sm space-y-1">
+                      <p className="font-medium text-text">{selected.name}</p>
+                      <p className="text-text-muted">Rolle: {selected.title}</p>
+                      <p className="text-text-muted">Mail: {selected.email}</p>
+                      <p className="text-text-muted">Tlf: {selected.phone}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })()}
         </div>
         {/* Description */}
         <div className="space-y-1" ref={descriptionRef}>
@@ -385,20 +410,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
 
         {/* Submit */}
         <div className='flex flex-row gap-2'>
-          
-          <button
-            type="button"
-            disabled={mode === "update" && !isChanged}
-            className={`btn w-1/2 ${mode === "update" && !isChanged ? 'btn-ghost' : 'btn-primary'}`}
-            onClick={() => openPopUp({
-              title: mode === "create" ? 'Ønsker du å publisere produktet?' : 'Ønsker du å oppdatere produktet med endringene?',
-              yesLabel: mode === "create" ? 'Ja, publiser' : 'Ja, oppdater',
-              noLabel: 'Avbryt',
-              onYes: submitForm,
-            })}
-          >
-            {submitLabel}
-          </button>
+
           {mode === "update" ? (
             <button
               type="button"
@@ -414,6 +426,21 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
               Lagre som utkast
             </button>
           ) : <button className='btn btn-secondary w-1/2 gap-2' disabled={saving} onClick={handleSaveDraft}>{saving ? <><Spinner />Lagrer…</> : 'Lagre som utkast'}</button>}
+          
+          
+          <button
+            type="button"
+            disabled={mode === "update" && !isChanged || !isProductPublishable({ educationField, title, description })}
+            className={`btn w-1/2 ${mode === "update" && !isChanged ? 'btn-ghost' : 'btn-primary'}`}
+            onClick={() => openPopUp({
+              title: mode === "create" ? 'Ønsker du å publisere produktet?' : 'Ønsker du å oppdatere produktet med endringene?',
+              yesLabel: mode === "create" ? 'Ja, publiser' : 'Ja, oppdater',
+              noLabel: 'Avbryt',
+              onYes: submitForm,
+            })}
+          >
+            {submitLabel}
+          </button>
           
         </div>
       </form>
