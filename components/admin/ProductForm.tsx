@@ -71,6 +71,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
   const [resetKey, setResetKey] = useState(0)
   const [imagesChanged, setImagesChanged] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [menyOpen, setMenyOpen] = useState<boolean>(false)
 
   const educationFieldRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
@@ -298,7 +299,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
             {contactId !== original.current.contactId && (
               <button
                 type="button"
-                onClick={() => setContactId(original.current.contactId)}
+                onClick={() => { setContactId(original.current.contactId); }}
                 className="text-text-faint hover:text-text transition-colors p-0.5 rounded cursor-pointer animate-fade-in shrink-0"
               >
                 <RotateCcw size={14} />
