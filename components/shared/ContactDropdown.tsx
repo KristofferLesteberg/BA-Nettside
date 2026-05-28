@@ -123,24 +123,26 @@ const ContactDropdown = forwardRef<HTMLDivElement, Props>(
             style={panelStyle}
             onKeyDown={handlePanelKeyDown}
             tabIndex={-1}
-            className={`fixed z-50 card rounded-md flex flex-col p-1 shadow-lg outline-none ${menuOpen ? 'animate-dropdown-in' : 'animate-dropdown-out'}`}
+            className={`fixed z-50 card rounded-md shadow-lg outline-none ${menuOpen ? 'animate-dropdown-in' : 'animate-dropdown-out'}`}
           >
-            {allOptions.map((opt, i) => (
-              <button
-                key={opt.id || '__none__'}
-                ref={(el) => { optionRefs.current[i] = el }}
-                type="button"
-                tabIndex={-1}
-                onClick={() => handleSelect(opt.id)}
-                className={`relative flex flex-col items-start text-left pl-4 pr-3 py-2 rounded-[calc(var(--radius-md)-2px)] transition-colors hover:bg-surface-raised cursor-pointer${value === opt.id ? ' text-text' : ' text-text-muted'}`}
-              >
-                {value === opt.id && (
-                  <span className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-3/5 rounded-full bg-secondary" />
-                )}
-                <span className={`small-text${value === opt.id ? ' font-semibold' : ''}`}>{opt.name}</span>
-                {opt.title && <span className="text-xs text-text-faint">{opt.title}</span>}
-              </button>
-            ))}
+            <div className="flex flex-col p-1 overflow-y-auto max-h-64">
+              {allOptions.map((opt, i) => (
+                <button
+                  key={opt.id || '__none__'}
+                  ref={(el) => { optionRefs.current[i] = el }}
+                  type="button"
+                  tabIndex={-1}
+                  onClick={() => handleSelect(opt.id)}
+                  className={`relative flex flex-col items-start text-left pl-4 pr-3 py-2 rounded-[calc(var(--radius-md)-2px)] transition-colors hover:bg-surface-raised cursor-pointer${value === opt.id ? ' text-text' : ' text-text-muted'}`}
+                >
+                  {value === opt.id && (
+                    <span className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-3/5 rounded-full bg-secondary" />
+                  )}
+                  <span className={`small-text${value === opt.id ? ' font-semibold' : ''}`}>{opt.name}</span>
+                  {opt.title && <span className="text-xs text-text-faint">{opt.title}</span>}
+                </button>
+              ))}
+            </div>
           </div>,
           document.body
         )}
