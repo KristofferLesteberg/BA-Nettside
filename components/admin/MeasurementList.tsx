@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FaPlus } from "react-icons/fa6"
 import MeasurementInput from './MeasurementInput'
 
@@ -34,55 +34,32 @@ export default function MeasurementList({
     }))
   )
 
-  const emit = (next: MeasureItem[]) => {
-    onChange(next.filter(m => !m.removing).map(({ name, value, unit }) => ({ name, value, unit })))
-  }
+  useEffect(() => {
+    onChange(measures.filter(m => !m.removing).map(({ name, value, unit }) => ({ name, value, unit })))
+  }, [measures, onChange])
 
   const addMeasure = () => {
-    setMeasures(prev => {
-      const next = [...prev, { id: makeId(), name: "", value: "", unit: "", removing: false, born: true }]
-      emit(next)
-      return next
-    })
+    setMeasures(prev => [...prev, { id: makeId(), name: "", value: "", unit: "", removing: false, born: true }])
   }
 
   const updateMeasure = (id: string, field: keyof Measure, val: string) => {
-    setMeasures(prev => {
-      const next = prev.map(m => m.id === id ? { ...m, [field]: val } : m)
-      emit(next)
-      return next
-    })
+    setMeasures(prev => prev.map(m => m.id === id ? { ...m, [field]: val } : m))
   }
 
   const deleteRow = (id: string) => {
-    setMeasures(prev => {
-      const next = prev.map(m => m.id === id ? { ...m, removing: true } : m)
-      emit(next)
-      setTimeout(() => {
-        setMeasures(curr => {
-          const filtered = curr.filter(m => m.id !== id)
-          emit(filtered)
-          return filtered
-        })
-      }, 200)
-      return next
-    })
+    setMeasures(prev => prev.map(m => m.id === id ? { ...m, removing: true } : m))
+    setTimeout(() => setMeasures(prev => prev.filter(m => m.id !== id)), 200)
   }
 
   const revertRow = (id: string) => {
-    setMeasures(prev => {
-      const item = prev.find(m => m.id === id)
-      if (!item) return prev
-      if (item.originalIndex !== undefined && initialMeasures) {
-        const orig = initialMeasures[item.originalIndex]
-        const next = prev.map(m => m.id === id ? { ...m, name: orig.name, value: orig.value, unit: orig.unit } : m)
-        emit(next)
-        return next
-      }
-      // New row with no original: revert = delete
+    const item = measures.find(m => m.id === id)
+    if (!item) return
+    if (item.originalIndex !== undefined && initialMeasures) {
+      const orig = initialMeasures[item.originalIndex]
+      setMeasures(prev => prev.map(m => m.id === id ? { ...m, name: orig.name, value: orig.value, unit: orig.unit } : m))
+    } else {
       deleteRow(id)
-      return prev
-    })
+    }
   }
 
   return (
