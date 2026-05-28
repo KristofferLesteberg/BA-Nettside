@@ -12,9 +12,11 @@ import { Spinner } from '@/components/shared/Spinner'
 import { useRouter } from 'next/navigation'
 import { getAllContacts } from '@/actions/contact'
 import LinjeDropdown from '../shared/LinjeDropdown'
+import ContactDropdown from '../shared/ContactDropdown'
 import { RotateCcw } from 'lucide-react'
 import { isProductPublishable } from '@/app/lib/product-utils'
 import PriceInput from '@/components/shared/input/price-input'
+import { TriangleAlert, CheckCircle2 } from 'lucide-react'
 
 export interface ProductFormValues {
   educationField: string
@@ -72,14 +74,12 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
   const [resetKey, setResetKey] = useState(0)
   const [imagesChanged, setImagesChanged] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [menyOpen, setMenyOpen] = useState<boolean>(false)
 
   const educationFieldRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
   const descriptionRef = useRef<HTMLDivElement>(null)
 
   const { open: openPopUp, close: closePopUp, element: popUpElement } = usePopUp()
-
 
   const submitForm = async () => {
     if (!educationField) {
@@ -101,7 +101,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
     e.preventDefault()
   }
 
-    const original = useRef({
+  const original = useRef({
     educationField: initialValues?.educationField ?? "",
     title: initialValues?.title ?? "",
     description: initialValues?.description ?? "",
@@ -111,11 +111,6 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
     contactId: initialValues?.contactId ?? "",
     existingImages: initialValues?.existingImages ?? [] as { id: string; url: string }[],
   })
-
-
-  useEffect(() => {
-    console.log("mode" + mode)
-  }, [])
 
   const resetAllFields = (backBtn?: boolean) => {
     setEducationField(original.current.educationField)
@@ -127,10 +122,8 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
     setContactId(original.current.contactId)
     setImagesChanged(false)
     setResetKey(k => k + 1)
-    if(backBtn) { router.back() }
+    if (backBtn) { router.back() }
   }
-
-
 
   const buildFormData = () => {
     const formData = new FormData
@@ -158,15 +151,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
   }
 
   const handleSaveDraft = async () => {
-    const formData = new FormData
-    formData.append("educationField", educationField)
-    formData.append("title", title)
-    formData.append("description", description)
-    formData.append("price", price || "0")
-    formData.append("amount", amount || "0")
-    formData.append("measures", JSON.stringify(measures))
-    formData.append("contactId", contactId)
-    formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
+    const formData = buildFormData()
     setSaving(true)
     try {
       await toast.promise(updateProduct(productId, formData, false), {
@@ -181,18 +166,6 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
     }
   }
 
-  const handleDeleteDraft = async () => {
-    try {
-      await toast.promise(deleteProduct(productId), {
-        loading: 'Sletter utkast…',
-        success: 'Utkastet ble slettet',
-        error: 'Kunne ikke slette utkast',
-      })
-      closePopUp()
-      router.back()
-    } catch {}
-  }
-
   const isChanged =
     educationField !== original.current.educationField ||
     title !== original.current.title ||
@@ -202,226 +175,253 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
     contactId !== original.current.contactId ||
     JSON.stringify(measures) !== JSON.stringify(original.current.measures) ||
     imagesChanged
-  return (
 
- 
+  const isDraft = initialValues?.draft ?? true
+
+  return (
     <div className="w-4/5 min-w-120 max-w-230 mx-auto py-10">
       {popUpElement}
-      <form onSubmit={handleForm} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
+      <form onSubmit={handleForm} className="card-accented shadow-xl overflow-hidden">
 
-        <div className="flex flex-row justify-between">
-          {isChanged && mode === "update" &&
-            <BackBtn handleOnClick={() => openPopUp({
-              title:    'Vil du lagre endringene dine?',
-              subtitle: 'Du vil kunne fortsette å redigere utkastet senere, og det vil ikke være synlig for kunder før du publiserer det.',
-              yesLabel: 'Lagre endringene',
-              noLabel:  'Forkast endringene',
-              onYes:    handleSaveChanges,
-              onNo:     () => resetAllFields(true),
-            })} />
-          } 
-          {!isChanged && mode === 'update' && <BackBtn handleOnClick={() => router.back()} />}
-          
-        
-          {isChanged && mode === 'create' && 
-          <BackBtn handleOnClick={() => openPopUp({
-              title: 'Vil du lagre som utkast?',
-              yesLabel: 'Ja',
-              noLabel: 'Nei',
-              onNo: () => { deleteProduct(productId); setTimeout(() => router.back(), 1000) },
-              onYes: () => router.back()
-            })} />
-        }
+        {/* Draft / Published banner */}
+        {mode === "update" && (
+          <div className={`-mx-6 -mt-6 px-6 py-3 flex items-center gap-2 border-b ${
+            isDraft
+              ? 'bg-warning-bg border-warning/20 text-warning'
+              : 'bg-success-bg border-success/20 text-success'
+          }`}>
+            {isDraft
+              ? <TriangleAlert size={15} className="shrink-0" />
+              : <CheckCircle2 size={15} className="shrink-0" />
+            }
+            <span className="small-text font-medium">
+              {isDraft ? 'Utkast — ikke synlig for kunder' : 'Publisert — synlig for kunder'}
+            </span>
+          </div>
+        )}
 
-        {!isChanged && mode === 'create' && <BackBtn handleOnClick={() => { deleteProduct(productId); setTimeout(() => router.back(), 1000) }} />}
-          
-          
-          
-          {mode === "update" && (
-            <span className="badge badge-info">{initialValues?.draft ? 'Utkast' : 'Publisert'}</span>
-          )}
-        </div>
-        <h2 className="heading-2">{heading}</h2>
-        <div className='flex justify-between items-center'>
-          <p className="text-text-faint italic">Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette</p>
-        <button
-          type="button"
-          onClick={() => resetAllFields()}
-          className={`btn btn-ghost transition-opacity duration-150 ${isChanged ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        >
-          <RotateCcw size={14} />
-          Tilbakestill
-        </button>
+        <div className="space-y-6 mt-6">
+          <div className="flex flex-row justify-between items-center">
+            {isChanged && mode === "update" &&
+              <BackBtn handleOnClick={() => openPopUp({
+                title:    'Vil du lagre endringene dine?',
+                subtitle: 'Du vil kunne fortsette å redigere utkastet senere, og det vil ikke være synlig for kunder før du publiserer det.',
+                yesLabel: 'Lagre endringene',
+                noLabel:  'Forkast endringene',
+                onYes:    handleSaveChanges,
+                onNo:     () => resetAllFields(true),
+              })} />
+            }
+            {!isChanged && mode === 'update' && <BackBtn handleOnClick={() => router.back()} />}
 
-        </div>
-        
-        {/* Education Field */}
-        <div className="space-y-1" ref={educationFieldRef}>
-          <label className="label">Kategori *</label>
-          <LinjeDropdown
-            value={educationField}
-            onChange={setEducationField}
-            placeholder="Velg kategori"
-          />
-        </div>
-
-        {/* Title */}
-        <div className="space-y-1" ref={titleRef}>
-          <label className="label">Tittel *</label>
-          <div className="relative">
-            <input
-              type="text"
-              className="input pr-8"
-              placeholder="Produkt navn"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-            {title !== original.current.title && (
-              <button
-                type="button"
-                onClick={() => setTitle(original.current.title)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-text-faint hover:text-text transition-colors p-0.5 rounded cursor-pointer animate-fade-in"
-              >
-                <RotateCcw size={14} />
-              </button>
+            {isChanged && mode === 'create' &&
+              <BackBtn handleOnClick={() => openPopUp({
+                title:   'Vil du lagre som utkast?',
+                yesLabel: 'Ja',
+                noLabel:  'Nei',
+                onNo:  () => { deleteProduct(productId); setTimeout(() => router.back(), 1000) },
+                onYes: () => router.back(),
+              })} />
+            }
+            {!isChanged && mode === 'create' && (
+              <BackBtn handleOnClick={() => { deleteProduct(productId); setTimeout(() => router.back(), 1000) }} />
             )}
           </div>
-        </div>
-        {/*Kontact person */}
-        <div className='space-y-1'>
-          <label className='label'>Kontakt person</label>
-          <div className="flex items-center gap-2">
-            <select className='input' value={contactId} onChange={(e) => setContactId(e.target.value)}>
-              <option value="">Velg kontakt person</option>
-              {contactPersons?.map((contactPerson, index) => (
-                <option key={index} value={String(contactPerson.id)}>{contactPerson.name}</option>
-              ))}
-            </select>
-            {contactId !== original.current.contactId && (
-              <button
-                type="button"
-                onClick={() => { setContactId(original.current.contactId); }}
-                className="text-text-faint hover:text-text transition-colors p-0.5 rounded cursor-pointer animate-fade-in shrink-0"
-              >
-                <RotateCcw size={14} />
-              </button>
-            )}
-          </div>
-          {(() => {
-            const selected = contactPersons?.find(cp => String(cp.id) === contactId)
-            return (
-              <div className={`grid transition-all duration-300 ease-in-out ${selected ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-                <div className="overflow-hidden">
-                  {selected && (
-                    <div className="mt-2 p-3 bg-surface rounded-lg border border-border text-sm space-y-1">
-                      <p className="font-medium text-text">{selected.name}</p>
-                      <p className="text-text-muted">Rolle: {selected.title}</p>
-                      <p className="text-text-muted">Mail: {selected.email}</p>
-                      <p className="text-text-muted">Tlf: {selected.phone}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )
-          })()}
-        </div>
-        {/* Description */}
-        <div className="space-y-1" ref={descriptionRef}>
-          <label className="label">Beskrivelse *</label>
-          <div className="relative">
-            <textarea
-              className="input min-h-25 pr-8"
-              placeholder="Beskriv produkt"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            {description !== original.current.description && (
-              <button
-                type="button"
-                onClick={() => setDescription(original.current.description)}
-                className="absolute right-2 top-2 text-text-faint hover:text-text transition-colors p-0.5 rounded cursor-pointer animate-fade-in"
-              >
-                <RotateCcw size={14} />
-              </button>
-            )}
-          </div>
-        </div>
 
-        {/* Price + Amount */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <label className="label">Pris</label>
-            <PriceInput
-              value={price}
-              onChange={setPrice}
-              onRevert={price !== original.current.price ? () => setPrice(original.current.price) : undefined}
+          <h2 className="heading-2">{heading}</h2>
+
+          <div className="flex justify-between items-center">
+            <p className="text-text-faint italic text-sm">
+              Feltene merket med <span className="text-red-500 italic font-medium">*</span> må fylles ut før du kan fortsette
+            </p>
+            <button
+              type="button"
+              onClick={() => resetAllFields()}
+              className={`btn btn-ghost transition-opacity duration-150 ${isChanged ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+            >
+              <RotateCcw size={14} />
+              Tilbakestill
+            </button>
+          </div>
+
+          {/* Education Field */}
+          <div className="space-y-1" ref={educationFieldRef}>
+            <label className="label">
+              Linje <span className="text-red-500 italic">*</span>
+            </label>
+            <LinjeDropdown
+              value={educationField}
+              onChange={setEducationField}
+              placeholder="Velg linje"
             />
           </div>
-          <div className="space-y-1">
-            <label className="label">Antall</label>
+
+          {/* Title */}
+          <div className="space-y-1" ref={titleRef}>
+            <label className="label">
+              Tittel <span className="text-red-500 italic">*</span>
+            </label>
             <div className="relative">
               <input
                 type="text"
-                inputMode="numeric"
                 className="input pr-8"
-                placeholder="0"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value.replace(/\D/g, ""))}
+                placeholder="Produkt navn"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
-              {amount !== original.current.amount && (
+              <button
+                type="button"
+                onClick={() => setTitle(original.current.title)}
+                className={`absolute right-2 top-1/2 -translate-y-1/2 text-text-faint hover:text-text transition-opacity duration-150 p-0.5 rounded cursor-pointer ${title !== original.current.title ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+              >
+                <RotateCcw size={14} />
+              </button>
+            </div>
+          </div>
+
+          {/* Contact person */}
+          <div className="space-y-1">
+            <label className="label">Kontakt person</label>
+            <div className="flex items-center gap-2">
+              <div className="flex-1">
+                <ContactDropdown
+                  contacts={contactPersons ?? []}
+                  value={contactId}
+                  onChange={setContactId}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => setContactId(original.current.contactId)}
+                className={`overflow-hidden transition-all duration-150 text-text-faint hover:text-text rounded flex items-center justify-center shrink-0 ${contactId !== original.current.contactId ? 'w-6 h-6 opacity-100 cursor-pointer' : 'w-0 opacity-0 pointer-events-none'}`}
+              >
+                <RotateCcw size={14} className="shrink-0" />
+              </button>
+            </div>
+            {(() => {
+              const selected = contactPersons?.find(cp => String(cp.id) === contactId)
+              return (
+                <div className={`grid transition-all duration-300 ease-in-out ${selected ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                  <div className="overflow-hidden">
+                    {selected && (
+                      <div className="mt-2 p-3 bg-surface rounded-lg border border-border text-sm space-y-1">
+                        <p className="font-medium text-text">{selected.name}</p>
+                        <p className="text-text-muted">Rolle: {selected.title}</p>
+                        <p className="text-text-muted">Mail: {selected.email}</p>
+                        <p className="text-text-muted">Tlf: {selected.phone}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )
+            })()}
+          </div>
+
+          {/* Description */}
+          <div className="space-y-1" ref={descriptionRef}>
+            <label className="label">
+              Beskrivelse <span className="text-red-500 italic">*</span>
+            </label>
+            <div className="relative">
+              <textarea
+                className="input min-h-25 pr-8"
+                placeholder="Beskriv produkt"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setDescription(original.current.description)}
+                className={`absolute right-2 top-2 text-text-faint hover:text-text transition-opacity duration-150 p-0.5 rounded cursor-pointer ${description !== original.current.description ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+              >
+                <RotateCcw size={14} />
+              </button>
+            </div>
+          </div>
+
+          {/* Price + Amount */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="label">Pris</label>
+              <PriceInput
+                value={price}
+                onChange={setPrice}
+                onRevert={price !== original.current.price ? () => setPrice(original.current.price) : undefined}
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="label">Antall</label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  className="input flex-1 min-w-0"
+                  placeholder="0"
+                  value={amount}
+                  onFocus={(e) => e.target.select()}
+                  onChange={(e) => {
+                    const digits = e.target.value.replace(/\D/g, "")
+                    setAmount(digits.replace(/^0+(\d)/, "$1"))
+                  }}
+                />
                 <button
                   type="button"
                   onClick={() => setAmount(original.current.amount)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-text-faint hover:text-text transition-colors p-0.5 rounded cursor-pointer animate-fade-in"
+                  className={`overflow-hidden transition-all duration-150 text-text-faint hover:text-text rounded flex items-center justify-center shrink-0 ${amount !== original.current.amount ? 'w-6 h-6 opacity-100 cursor-pointer' : 'w-0 opacity-0 pointer-events-none'}`}
                 >
-                  <RotateCcw size={14} />
+                  <RotateCcw size={14} className="shrink-0" />
                 </button>
-              )}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Measures */}
-        <MeasurementList resetKey={resetKey} initialMeasures={initialValues?.measures} onChange={setMeasures} />
+          {/* Measures */}
+          <MeasurementList key={resetKey} initialMeasures={initialValues?.measures} onChange={setMeasures} />
 
-        {/* Images */}
-        <label className="label">Bilder</label>
-        <ImageOrder resetKey={resetKey} initialImages={initialValues?.existingImages} onChange={(imgs) => { setImages(imgs); setImagesChanged(true) }} onNewImage={onNewImage} />
+          {/* Images */}
+          <label className="label">Bilder</label>
+          <ImageOrder resetKey={resetKey} initialImages={initialValues?.existingImages} onChange={(imgs) => { setImages(imgs); setImagesChanged(true) }} onNewImage={onNewImage} />
 
-        {/* Submit */}
-        <div className='flex flex-row gap-2'>
+          {/* Submit */}
+          <div className="flex flex-row gap-2">
+            {mode === "update" ? (
+              <button
+                type="button"
+                className="btn btn-secondary w-1/2"
+                onClick={() => openPopUp({
+                  title:   'Ønsker du å lagre endringene?',
+                  yesLabel: 'Lagre som utkast med endringer',
+                  noLabel:  'Lagre som utkast uten endringer',
+                  onYes:   handleSaveDraft,
+                  onNo:    () => resetAllFields(true),
+                })}
+              >
+                Lagre som utkast
+              </button>
+            ) : (
+              <button
+                className="btn btn-secondary w-1/2 gap-2"
+                disabled={saving}
+                onClick={handleSaveDraft}
+              >
+                {saving ? <><Spinner />Lagrer…</> : 'Lagre som utkast'}
+              </button>
+            )}
 
-          {mode === "update" ? (
             <button
               type="button"
-              className="btn btn-secondary w-1/2"
+              disabled={mode === "update" && !isChanged || !isProductPublishable({ educationField, title, description })}
+              className={`btn w-1/2 ${mode === "update" && !isChanged ? 'btn-ghost' : 'btn-primary'}`}
               onClick={() => openPopUp({
-                title: 'Ønsker du å lagre endringene?',
-                yesLabel: 'Lagre som utkast med endringer',
-                noLabel: 'Lagre som utkast uten endringer',
-                onYes: handleSaveDraft,
-                onNo: () => resetAllFields(true),
+                title:   mode === "create" ? 'Ønsker du å publisere produktet?' : 'Ønsker du å oppdatere produktet med endringene?',
+                yesLabel: mode === "create" ? 'Ja, publiser' : 'Ja, oppdater',
+                noLabel:  'Avbryt',
+                onYes:   submitForm,
               })}
             >
-              Lagre som utkast
+              {submitLabel}
             </button>
-          ) : <button className='btn btn-secondary w-1/2 gap-2' disabled={saving} onClick={handleSaveDraft}>{saving ? <><Spinner />Lagrer…</> : 'Lagre som utkast'}</button>}
-          
-          
-          <button
-            type="button"
-            disabled={mode === "update" && !isChanged || !isProductPublishable({ educationField, title, description })}
-            className={`btn w-1/2 ${mode === "update" && !isChanged ? 'btn-ghost' : 'btn-primary'}`}
-            onClick={() => openPopUp({
-              title: mode === "create" ? 'Ønsker du å publisere produktet?' : 'Ønsker du å oppdatere produktet med endringene?',
-              yesLabel: mode === "create" ? 'Ja, publiser' : 'Ja, oppdater',
-              noLabel: 'Avbryt',
-              onYes: submitForm,
-            })}
-          >
-            {submitLabel}
-          </button>
-          
+          </div>
         </div>
       </form>
     </div>
