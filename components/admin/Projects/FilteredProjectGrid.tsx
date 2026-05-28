@@ -179,10 +179,12 @@ export default function FilteredProjectGrid({ projects }: Props) {
           </button>
         </div>
 
-        <span className="small-text">Totalt: {filtered.length} prosjekter</span>
-        <div className="flex justify-between">
-          <span className="small-text">Side: {currentPage}/{maxPage}</span>
-          <span className="small-text">{`Viser ${pageSize < filtered.length ? pageSize : filtered.length} av ${filtered.length}`}</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 small-text text-muted">
+            <span>{filtered.length} prosjekter</span>
+            <span>·</span>
+            <span>Side {currentPage} av {maxPage}</span>
+          </div>
           <select
             value={pageSize}
             onChange={e => setFilter('pageSize', e.target.value)}

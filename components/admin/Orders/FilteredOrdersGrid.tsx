@@ -133,10 +133,12 @@ export default function FilteredOrdersGrid({ orders, sidebarAction }: Props) {
           </div>
         </div>
     
-        <span className="small-text">Totalt: {filtered.length} bestillinger</span>
-        <div className="flex justify-between">
-          <span className="small-text">Side: {currentPage}/{maxPage}</span>
-          <span className="small-text">{`Viser ${pageSize < filtered.length ? pageSize : filtered.length} av ${filtered.length}`}</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 small-text text-muted">
+            <span>{filtered.length} bestillinger</span>
+            <span>·</span>
+            <span>Side {currentPage} av {maxPage}</span>
+          </div>
           <select
             value={pageSize}
             onChange={e => setFilter('pageSize', e.target.value)}
