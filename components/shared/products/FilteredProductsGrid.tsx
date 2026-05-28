@@ -7,6 +7,7 @@ import { EducationField } from '@/generated/prisma'
 import { FaSliders, FaXmark } from 'react-icons/fa6'
 import { EDUCATION_FIELD_OPTIONS } from '@/app/lib/education-fields'
 import { useSearchParams, useRouter } from 'next/navigation'
+import Pagination from '../Pagination'
 
 
 export type SortOption = 'newest' | 'oldest' | 'price-asc' | 'price-desc'
@@ -41,9 +42,14 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
   const searchParams = useSearchParams()
   const router = useRouter()
 
+  
+
   const category = (searchParams.get('category') as CategoryFilter) ?? 'ALL'
   const status = (searchParams.get('status') as StatusFilter) ?? 'ALL'
   const sort = (searchParams.get('sort') as SortOption) ?? 'newest'
+
+  
+  
 
   const [drawerOpen, setDrawerOpen] = useState(false)
 
@@ -77,7 +83,14 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
     return result
   }, [products, category, sort, extraFilters, status])
 
+  
+
   const activeFilterCount = category !== 'ALL' ? 1 : 0
+
+  const currentPage = Number(searchParams.get('page') ?? '1')
+  const pageSize = 2
+  const maxPage = Math.ceil(filtered.length / pageSize)
+  const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
   const controlPanel = (
     <div className="flex flex-col gap-5">
@@ -165,11 +178,14 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
           </div>
         </div>
         <div className='flex justify-between'>
-           <span>Side </span>
-           <span>Totalt: {products.length}</span>
+          <span className="small-text">{currentPage}/{maxPage}</span>
+           <span>Totalt: {filtered.length}</span>
         </div>
-
-        <ProductsGrid products={filtered} isAdmin={isAdmin} />
+        <ProductsGrid products={paginated} isAdmin={isAdmin} />
+        <div>
+          <Pagination currentPage={currentPage} maxPages={maxPage} />
+        </div>
+        
       </div>
 
       {/* Desktop sidebar — hidden on mobile */}
@@ -203,7 +219,7 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
           {controlPanel}
         </div>
       </aside>
-
+      
     </div>
   )
 }
