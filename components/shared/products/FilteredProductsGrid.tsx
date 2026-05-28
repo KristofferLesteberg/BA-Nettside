@@ -47,11 +47,21 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
 
   const [drawerOpen, setDrawerOpen] = useState(false)
 
+  useEffect(() => {
+    const hasFilters = ['category', 'status', 'sort', 'pageSize'].some(k => searchParams.get(k))
+    if (!hasFilters) {
+      const saved = sessionStorage.getItem('productFilters')
+      if (saved) router.replace('?' + saved)
+    }
+  }, [])
+
   function setFilter(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString())
     params.set(key, value)
     params.set('page', '1')
-    router.replace('?' + params.toString())
+    const qs = params.toString()
+    sessionStorage.setItem('productFilters', qs)
+    router.replace('?' + qs)
   }
 
   const filtered = useMemo(() => {
