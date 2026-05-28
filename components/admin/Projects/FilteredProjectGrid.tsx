@@ -6,6 +6,7 @@ import ProjectCard, { type SerializedProject } from "./ProjectCard"
 import ProjectDrawer from "./ProjectDrawer"
 import PriceRange from "@/components/shared/input/price-range"
 import { EDUCATION_FIELD_OPTIONS } from "@/app/lib/education-fields"
+import { useSearchParams, useRouter } from "next/navigation"
 
 
 export type ProjectStatus = Status | 'ALL'
@@ -40,14 +41,21 @@ interface Props {
 }
 
 export default function FilteredProjectGrid({ projects }: Props) {
-
-  const [status, setStatus] = useState<ProjectStatus>('ALL')
-  const [category, setCategory] = useState<Category>('ALL')
-  const [sort, setSort] = useState<SortOptions>('NEWEST')
-  const [minPrice, setMinPrice] = useState<number>(0)
-  const [maxPrice, setMaxPrice] = useState<number>(500000)
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const status = (searchParams.get('status') as ProjectStatus) ?? 'ALL'
+  const category = (searchParams.get('category') as Category) ?? 'ALL'
+  const sort = (searchParams.get('sort') as SortOptions) ?? 'NEWEST'
+  const minPrice = Number(searchParams.get('minPrice') ?? '0')
+  const maxPrice = Number(searchParams.get('maxPrice') ?? '500000')
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [selectedProject, setSelectedProject] = useState<SerializedProject | null>(null)
+
+  function setFilter(key: string, value: string) {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set(key, value)
+    router.replace('?' + params.toString())
+  }
 
   const filtered = useMemo(() => {
     console.log("Minpris" + minPrice)
@@ -91,7 +99,7 @@ export default function FilteredProjectGrid({ projects }: Props) {
           {STATUS_OPTIONS.map(opt => (
             <button
               key={opt.value}
-              onClick={() => setStatus(opt.value)}
+              onClick={() => setFilter('status', opt.value)}
               className={`btn w-full justify-start ${status === opt.value ? "btn-primary" : "btn-outline"}`}
             >
               {opt.label}
@@ -106,7 +114,7 @@ export default function FilteredProjectGrid({ projects }: Props) {
           {CATEGORY_OPTIONS.map(opt => (
             <button
               key={opt.value}
-              onClick={() => setCategory(opt.value)}
+              onClick={() => setFilter('category', opt.value)}
               className={`btn w-full justify-start ${category === opt.value ? "btn-primary" : "btn-outline"}`}
             >
               {opt.label}
@@ -123,7 +131,7 @@ export default function FilteredProjectGrid({ projects }: Props) {
           {SORT_OPTIONS.map(opt => (
             <button
               key={opt.value}
-              onClick={() => setSort(opt.value)}
+              onClick={() => setFilter('sort', opt.value)}
               className={`btn w-full justify-start ${sort === opt.value ? "btn-secondary" : "btn-outline"}`}
             >
               {opt.label}
@@ -139,9 +147,9 @@ export default function FilteredProjectGrid({ projects }: Props) {
     <>
       <div className="flex flex-row justify-between items-center gap-4 mb-5">
         <div className="flex-1">
-          <PriceRange min={minPrice.toString()} max={maxPrice.toString()} onChange={(lo, hi) => { setMinPrice(Number(lo)); setMaxPrice(Number(hi)) }} />
+          <PriceRange min={minPrice.toString()} max={maxPrice.toString()} onChange={(lo, hi) => { setFilter('minPrice', lo); setFilter('maxPrice', hi) }} />
         </div>
-        <button onClick={() => { setMaxPrice(500000); setMinPrice(0); }} className="btn btn-secondary h-1/3 ">Tilbakestill</button>
+        <button onClick={() => { setFilter('minPrice', '0'); setFilter('maxPrice', '500000') }} className="btn btn-secondary h-1/3 ">Tilbakestill</button>
       </div>
     
     <div className="flex gap-8 items-start">

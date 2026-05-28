@@ -5,6 +5,7 @@ import { useMemo, useState } from "react"
 import { FaSliders, FaXmark } from "react-icons/fa6"
 import type { OrderWithProduct } from "@/actions/orderProduct"
 import OrderProductCard from "./OrderProductCard"
+import { useSearchParams, useRouter } from "next/navigation"
 
 export type { OrderWithProduct }
 
@@ -30,9 +31,17 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 ]
 
 export default function FilteredOrdersGrid({ orders, sidebarAction }: Props) {
-  const [status, setStatus] = useState<OrderStatusFilter>("ALL")
-  const [sort, setSort] = useState<SortOption>("newest")
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const status = (searchParams.get('status') as OrderStatusFilter) ?? 'ALL'
+  const sort = (searchParams.get('sort') as SortOption) ?? 'newest'
   const [drawerOpen, setDrawerOpen] = useState(false)
+
+  function setFilter(key: string, value: string) {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set(key, value)
+    router.replace('?' + params.toString())
+  }
 
   const filtered = useMemo(() => {
     const result = orders.filter(order => {
@@ -56,7 +65,7 @@ export default function FilteredOrdersGrid({ orders, sidebarAction }: Props) {
           {STATUS_OPTIONS.map(opt => (
             <button
               key={opt.value}
-              onClick={() => setStatus(opt.value)}
+              onClick={() => setFilter('status', opt.value)}
               className={`btn w-full justify-start ${status === opt.value ? "btn-primary" : "btn-outline"}`}
             >
               {opt.label}
@@ -73,7 +82,7 @@ export default function FilteredOrdersGrid({ orders, sidebarAction }: Props) {
           {SORT_OPTIONS.map(opt => (
             <button
               key={opt.value}
-              onClick={() => setSort(opt.value)}
+              onClick={() => setFilter('sort', opt.value)}
               className={`btn w-full justify-start ${sort === opt.value ? "btn-secondary" : "btn-outline"}`}
             >
               {opt.label}
