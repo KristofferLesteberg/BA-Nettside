@@ -7,7 +7,7 @@ interface PriceInputProps {
   onChange: (value: string) => void
   /** When provided, fully controls blur behaviour (clamping, etc.). Otherwise blurs format to toFixed(2). */
   onBlur?: () => void
-  /** When provided, renders a revert button in the right slot instead of the kr suffix. */
+  /** When provided, renders a revert button that slides in to the left of the kr suffix. */
   onRevert?: () => void
   placeholder?: string
   disabled?: boolean
@@ -49,20 +49,18 @@ export default function PriceInput({
           }
         }}
       />
-      {onRevert ? (
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+        <span className="text-sm text-text-faint pointer-events-none select-none">kr</span>
+        
         <button
           type="button"
           onClick={onRevert}
           aria-label="Tilbakestill pris"
-          className="absolute right-2 top-1/2 -translate-y-1/2 text-text-faint hover:text-text transition-colors p-0.5 rounded cursor-pointer animate-fade-in"
+          className={`overflow-hidden transition-all duration-150 text-text-faint hover:text-text rounded flex items-center justify-center ${onRevert ? 'w-4 opacity-100 cursor-pointer' : 'w-0 opacity-0 pointer-events-none'}`}
         >
-          <RotateCcw size={14} />
+          <RotateCcw size={14} className="shrink-0" />
         </button>
-      ) : (
-        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-text-faint pointer-events-none select-none">
-          kr
-        </span>
-      )}
+      </div>
     </div>
   )
 }
