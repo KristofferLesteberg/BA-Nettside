@@ -15,7 +15,7 @@ import { MdOutlineModeEdit, MdOutlinePublish, MdOutlineUnpublished } from "react
 import { FaRegTrashCan } from "react-icons/fa6"
 import { title } from "node:process"
 import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
-import { isProductPublishable } from "@/app/lib/product-utils"
+import { isProductPublishable, formatPrice } from "@/app/lib/product-utils"
 
 
 
@@ -214,7 +214,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
         {/* Price + stock */}
         <div className="flex items-center justify-between">
           <span className="font-semibold text-text">
-            {product.price.toLocaleString('nb-NO')} kr
+            {formatPrice(product.price)}
           </span>
           <div className="flex flex-row gap-2">
             {product.draft ? <span className="badge badge-info">Utkast</span> : ""}

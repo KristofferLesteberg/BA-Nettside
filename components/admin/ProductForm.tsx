@@ -14,6 +14,7 @@ import { getAllContacts } from '@/actions/contact'
 import LinjeDropdown from '../shared/LinjeDropdown'
 import { RotateCcw } from 'lucide-react'
 import { isProductPublishable } from '@/app/lib/product-utils'
+import PriceInput from '@/components/shared/input/price-input'
 
 export interface ProductFormValues {
   educationField: string
@@ -350,32 +351,11 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1">
             <label className="label">Pris</label>
-            <div className="relative">
-              <input
-                type="text"
-                inputMode="decimal"
-                className="input pr-8"
-                placeholder="0.00"
-                value={price}
-                onChange={(e) => {
-                  const sanitized = e.target.value.replace(/[^0-9.]/g, "").replace(/^(\d*\.?\d{0,2}).*/, "$1")
-                  setPrice(sanitized)
-                }}
-                onBlur={() => {
-                  const val = parseFloat(price)
-                  if (!isNaN(val)) setPrice(val.toFixed(2))
-                }}
-              />
-              {price !== original.current.price && (
-                <button
-                  type="button"
-                  onClick={() => setPrice(original.current.price)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-text-faint hover:text-text transition-colors p-0.5 rounded cursor-pointer animate-fade-in"
-                >
-                  <RotateCcw size={14} />
-                </button>
-              )}
-            </div>
+            <PriceInput
+              value={price}
+              onChange={setPrice}
+              onRevert={price !== original.current.price ? () => setPrice(original.current.price) : undefined}
+            />
           </div>
           <div className="space-y-1">
             <label className="label">Antall</label>

@@ -7,6 +7,7 @@ import { Spinner } from '@/components/shared/Spinner'
 import { createProductOrder } from '@/actions/orderProduct'
 import { getProductById, updateProductAmount } from '@/actions/products'
 import BackBtn from '@/components/shared/BackBtn'
+import { formatPrice } from '@/app/lib/product-utils'
 import PhoneInputWithCountrySelect from 'react-phone-number-input'
 import { parsePhoneNumberWithError } from 'libphonenumber-js'
 import type { E164Number, CountryCode } from 'libphonenumber-js'
@@ -83,7 +84,7 @@ export default function OrderProductForm({ productId, onSuccess }: Props) {
             )}
             <div>
               <h3 className="heading-4">{product.title}</h3>
-              <p className="small-text">kr {Number(product.price).toLocaleString('nb-NO')}</p>
+              <p className="small-text">{formatPrice(product.price)}</p>
               <p className="small-text">På lager: {product.amount} stk</p>
             </div>
           </div>
