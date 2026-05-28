@@ -1,11 +1,12 @@
 ﻿"use client"
 
 import { OrderStatus as PrismaOrderStatus } from "@/generated/prisma"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { FaSliders, FaXmark } from "react-icons/fa6"
 import type { OrderWithProduct } from "@/actions/orderProduct"
 import OrderProductCard from "./OrderProductCard"
 import { useSearchParams, useRouter } from "next/navigation"
+import Pagination from "@/components/shared/Pagination"
 
 export type { OrderWithProduct }
 
@@ -40,8 +41,20 @@ export default function FilteredOrdersGrid({ orders, sidebarAction }: Props) {
   function setFilter(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString())
     params.set(key, value)
-    router.replace('?' + params.toString())
+    const qs = params.toString()
+    const forStorage = new URLSearchParams(qs)
+    forStorage.delete('tab')
+    sessionStorage.setItem('tabFilters_bestillinger', forStorage.toString())
+    router.replace('?' + qs)
   }
+
+  useEffect(() => {
+    const hasFilters = ['status', 'sort'].some(k => searchParams.get(k))
+    if (!hasFilters) {
+      const saved = sessionStorage.getItem('tabFilters_bestillinger')
+      if (saved) router.replace('?' + saved + '&tab=bestillinger')
+    }
+  }, [])
 
   const filtered = useMemo(() => {
     const result = orders.filter(order => {
@@ -56,6 +69,13 @@ export default function FilteredOrdersGrid({ orders, sidebarAction }: Props) {
   }, [orders, status, sort])
 
   const activeFilterCount = status !== "ALL" ? 1 : 0
+
+
+  const currentPage = Number(searchParams.get('page') ?? '1')
+  const pageSize = Number(searchParams.get('pageSize') ?? '24')
+  const maxPage = Math.ceil(filtered.length / pageSize)
+  const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+
 
   const controlPanel = (
     <div className="flex flex-col gap-5">
@@ -112,11 +132,28 @@ export default function FilteredOrdersGrid({ orders, sidebarAction }: Props) {
             </button>
           </div>
         </div>
-
+    
+        <span className="small-text">Totalt: {filtered.length} bestillinger</span>
+        <div className="flex justify-between">
+          <span className="small-text">Side: {currentPage}/{maxPage}</span>
+          <span className="small-text">{`Viser ${pageSize < filtered.length ? pageSize : filtered.length} av ${filtered.length}`}</span>
+          <select
+            value={pageSize}
+            onChange={e => setFilter('pageSize', e.target.value)}
+            className="input w-auto py-1 text-sm cursor-pointer"
+          >
+            {[10, 20, 30, 40, 50].map(n => (
+              <option key={n} value={n}>{n} per side</option>
+            ))}
+          </select>
+        </div>
         <div className="flex flex-col gap-5">
-          {filtered.map(order => (
+          {paginated.map(order => (
             <OrderProductCard order={order} key={order.id} />
           ))}
+        </div>
+        <div className="mx-auto mt-10">
+          <Pagination currentPage={currentPage} maxPages={maxPage} />
         </div>
       </div>
 

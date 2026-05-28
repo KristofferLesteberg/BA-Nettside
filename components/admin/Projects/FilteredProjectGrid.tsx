@@ -1,12 +1,13 @@
 "use client"
 import { EducationField, Status } from "@/generated/prisma"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { FaSliders, FaXmark } from "react-icons/fa6"
 import ProjectCard, { type SerializedProject } from "./ProjectCard"
 import ProjectDrawer from "./ProjectDrawer"
 import PriceRange from "@/components/shared/input/price-range"
 import { EDUCATION_FIELD_OPTIONS } from "@/app/lib/education-fields"
 import { useSearchParams, useRouter } from "next/navigation"
+import Pagination from "@/components/shared/Pagination"
 
 
 export type ProjectStatus = Status | 'ALL'
@@ -54,12 +55,22 @@ export default function FilteredProjectGrid({ projects }: Props) {
   function setFilter(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString())
     params.set(key, value)
-    router.replace('?' + params.toString())
+    const qs = params.toString()
+    const forStorage = new URLSearchParams(qs)
+    forStorage.delete('tab')
+    sessionStorage.setItem('tabFilters_prosjekter', forStorage.toString())
+    router.replace('?' + qs)
   }
 
+  useEffect(() => {
+    const hasFilters = ['status', 'category', 'sort', 'minPrice', 'maxPrice'].some(k => searchParams.get(k))
+    if (!hasFilters) {
+      const saved = sessionStorage.getItem('tabFilters_prosjekter')
+      if (saved) router.replace('?' + saved + '&tab=prosjekter')
+    }
+  }, [])
+
   const filtered = useMemo(() => {
-    console.log("Minpris" + minPrice)
-    console.log("Maxpris" + maxPrice)
     const categoryResult = projects.filter((project) => {
       if(category === 'ALL') return true
       if(category !== project.educationField) return false
@@ -84,11 +95,14 @@ export default function FilteredProjectGrid({ projects }: Props) {
       case 'OLDEST':     priceRangeResult.sort((a, b) => a.createdAt.localeCompare(b.createdAt)); break
 
     }
-      
-
     return priceRangeResult
   }, [status, category, minPrice, maxPrice, sort, projects])
 
+
+  const currentPage = Number(searchParams.get('page') ?? '1')
+  const pageSize = Number(searchParams.get('pageSize') ?? '24')
+  const maxPage = Math.ceil(filtered.length / pageSize)
+  const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
   const activeFilterCount = (status !== 'ALL' ? 1 : 0) + (category !== 'ALL' ? 1 : 0)
   const controlPanel = (
@@ -165,10 +179,27 @@ export default function FilteredProjectGrid({ projects }: Props) {
           </button>
         </div>
 
+        <span className="small-text">Totalt: {filtered.length} prosjekter</span>
+        <div className="flex justify-between">
+          <span className="small-text">Side: {currentPage}/{maxPage}</span>
+          <span className="small-text">{`Viser ${pageSize < filtered.length ? pageSize : filtered.length} av ${filtered.length}`}</span>
+          <select
+            value={pageSize}
+            onChange={e => setFilter('pageSize', e.target.value)}
+            className="input w-auto py-1 text-sm cursor-pointer"
+          >
+            {[10, 20, 30, 40, 50].map(n => (
+              <option key={n} value={n}>{n} per side</option>
+            ))}
+          </select>
+        </div>
         <div className="flex flex-col gap-3">
-          {filtered.map((project) => (
+          {paginated.map((project) => (
             <ProjectCard project={project} key={project.id} onView={setSelectedProject} />
           ))}
+        </div>
+        <div className="mx-auto mt-10">
+          <Pagination currentPage={currentPage} maxPages={maxPage} />
         </div>
       </div>
 
