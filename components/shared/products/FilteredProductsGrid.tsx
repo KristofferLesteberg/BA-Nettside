@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import type { ProductCardData } from '@/app/lib/types'
 import ProductsGrid from './ProductsGrid'
 import { EducationField } from '@/generated/prisma'
@@ -41,15 +41,9 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 export default function FilteredProductsGrid({ products, isAdmin, sidebarAction, extraControls, extraFilters = [] }: Props) {
   const searchParams = useSearchParams()
   const router = useRouter()
-
-  
-
   const category = (searchParams.get('category') as CategoryFilter) ?? 'ALL'
   const status = (searchParams.get('status') as StatusFilter) ?? 'ALL'
-  const sort = (searchParams.get('sort') as SortOption) ?? 'newest'
-
-  
-  
+  const sort = (searchParams.get('sort') as SortOption) ?? 'newest'  
 
   const [drawerOpen, setDrawerOpen] = useState(false)
 
@@ -88,7 +82,7 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
   const activeFilterCount = category !== 'ALL' ? 1 : 0
 
   const currentPage = Number(searchParams.get('page') ?? '1')
-  const pageSize = 10
+  const pageSize = Number(searchParams.get('pageSize') ?? '24')
   const maxPage = Math.ceil(filtered.length / pageSize)
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
@@ -180,9 +174,20 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
         </div>
         {filtered.length > 0 ? 
         <>
+         <span className="small-text">Totalt: {filtered.length} produkter</span>
         <div className='flex justify-between'>
           <span className="small-text">Side: {currentPage}/{maxPage}</span>
-           <span>Totalt: {filtered.length}</span>
+          
+          <span className='small-text'>{`Viser ${pageSize < filtered.length ? pageSize : filtered.length} av ${filtered.length}`}</span>
+          <select
+            value={pageSize}
+            onChange={e => setFilter('pageSize', e.target.value)}
+            className="input w-auto py-1 text-sm cursor-pointer"
+          >
+            {[10, 20, 30, 40, 50].map(n => (
+              <option key={n} value={n}>{n} per side</option>
+            ))}
+          </select>
         </div>
         <ProductsGrid products={paginated} isAdmin={isAdmin} />
         <div className='mx-auto mt-10'>
