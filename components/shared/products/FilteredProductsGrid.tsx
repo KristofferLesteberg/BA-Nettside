@@ -50,8 +50,8 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
   useEffect(() => {
     const hasFilters = ['category', 'status', 'sort', 'pageSize'].some(k => searchParams.get(k))
     if (!hasFilters) {
-      const saved = sessionStorage.getItem('productFilters')
-      if (saved) router.replace('?' + saved)
+      const saved = sessionStorage.getItem('tabFilters_produkter')
+      if (saved) router.replace('?' + saved + '&tab=produkter')
     }
   }, [])
 
@@ -60,7 +60,9 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
     params.set(key, value)
     params.set('page', '1')
     const qs = params.toString()
-    sessionStorage.setItem('productFilters', qs)
+    const forStorage = new URLSearchParams(qs)
+    forStorage.delete('tab')
+    sessionStorage.setItem('tabFilters_produkter', forStorage.toString())
     router.replace('?' + qs)
   }
 
