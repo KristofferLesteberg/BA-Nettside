@@ -6,6 +6,7 @@ import ProductsGrid from './ProductsGrid'
 import { EducationField } from '@/generated/prisma'
 import { FaSliders, FaXmark } from 'react-icons/fa6'
 import { EDUCATION_FIELD_OPTIONS } from '@/app/lib/education-fields'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 
 export type SortOption = 'newest' | 'oldest' | 'price-asc' | 'price-desc'
@@ -37,10 +38,21 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 ]
 
 export default function FilteredProductsGrid({ products, isAdmin, sidebarAction, extraControls, extraFilters = [] }: Props) {
-  const [category, setCategory] = useState<CategoryFilter>('ALL')
-  const [sort, setSort] = useState<SortOption>('newest')
-  const [status, setStatus] = useState<StatusFilter>('ALL')
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
+  const category = (searchParams.get('category') as CategoryFilter) ?? 'ALL'
+  const status = (searchParams.get('status') as StatusFilter) ?? 'ALL'
+  const sort = (searchParams.get('sort') as SortOption) ?? 'newest'
+
   const [drawerOpen, setDrawerOpen] = useState(false)
+
+  function setFilter(key: string, value: string) {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set(key, value)
+    params.set('page', '1')
+    router.replace('?' + params.toString())
+  }
 
   const filtered = useMemo(() => {
     const statusResult = products.filter(p => {
@@ -68,7 +80,7 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
   const activeFilterCount = category !== 'ALL' ? 1 : 0
 
   const controlPanel = (
-    <div className="flex flex-col gap-5">      
+    <div className="flex flex-col gap-5">
     {isAdmin && (
        <div className='flex flex-col gap-2'>
         <span className='label'>Produkt status</span>
@@ -76,22 +88,19 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
           {STATUS_OPTIONS.map((stat) => (
             <button
               key={stat.value}
-              onClick={() => setStatus(stat.value)}
+              onClick={() => setFilter('status', stat.value)}
               className={`btn w-full justify-start ${status === stat.value ? 'btn-primary' : 'btn-outline'}`}
               >
               {stat.label}
             </button>
-
           ))}
         </div>
-        
+
       </div>
     )}
     {isAdmin && (
        <hr className='border-border' />
     )}
-    
-    
 
       <div className="flex flex-col gap-2">
         <span className="label">Kategori</span>
@@ -99,7 +108,7 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
           {CATEGORY_OPTIONS.map(opt => (
             <button
               key={opt.value}
-              onClick={() => setCategory(opt.value)}
+              onClick={() => setFilter('category', opt.value)}
               className={`btn w-full justify-start ${category === opt.value ? 'btn-primary' : 'btn-outline'}`}
             >
               {opt.label}
@@ -116,7 +125,7 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
           {SORT_OPTIONS.map(opt => (
             <button
               key={opt.value}
-              onClick={() => setSort(opt.value)}
+              onClick={() => setFilter('sort', opt.value)}
               className={`btn w-full justify-start ${sort === opt.value ? 'btn-secondary' : 'btn-outline'}`}
             >
               {opt.label}
@@ -154,6 +163,10 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
               Filtre{activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}
             </button>
           </div>
+        </div>
+        <div className='flex justify-between'>
+           <span>Side </span>
+           <span>Totalt: {products.length}</span>
         </div>
 
         <ProductsGrid products={filtered} isAdmin={isAdmin} />
