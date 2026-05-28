@@ -15,6 +15,7 @@ import LinjeDropdown from '../shared/LinjeDropdown'
 import ContactDropdown from '../shared/ContactDropdown'
 import { RotateCcw } from 'lucide-react'
 import { isProductPublishable } from '@/app/lib/product-utils'
+import { MeasureItemSchema } from '@/app/lib/schemas'
 import PriceInput from '@/components/shared/input/price-input'
 import { TriangleAlert, CheckCircle2 } from 'lucide-react'
 
@@ -81,6 +82,30 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
 
   const { open: openPopUp, close: closePopUp, element: popUpElement } = usePopUp()
 
+  const validateMeasures = (): boolean => {
+    const errors: string[] = []
+    measures.forEach((m, i) => {
+      const result = MeasureItemSchema.safeParse(m)
+      if (!result.success) {
+        const label = m.name.trim() ? `«${m.name.trim()}»` : `Mål #${i + 1}`
+        const fields = new Set(result.error.issues.map(issue => issue.path[0]))
+        const missing: string[] = []
+        if (fields.has('name'))  missing.push('navn')
+        if (fields.has('value')) missing.push('verdi')
+        if (fields.has('unit'))  missing.push('enhet')
+        const joined = missing.length <= 1
+          ? missing[0]
+          : missing.slice(0, -1).join(', ') + ' og ' + missing[missing.length - 1]
+        errors.push(`${label}: mangler ${joined}`)
+      }
+    })
+    if (errors.length > 0) {
+      errors.forEach(msg => toast.error(msg))
+      return false
+    }
+    return true
+  }
+
   const submitForm = async () => {
     if (!educationField) {
       educationFieldRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
@@ -94,6 +119,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
       descriptionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
       return
     }
+    if (!validateMeasures()) return
     await onSubmit({ educationField, title, description, price, amount, measures, images, contactId })
   }
 
@@ -151,6 +177,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
   }
 
   const handleSaveDraft = async () => {
+    if (!validateMeasures()) return
     const formData = buildFormData()
     setSaving(true)
     try {
