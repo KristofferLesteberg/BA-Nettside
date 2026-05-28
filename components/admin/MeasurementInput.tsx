@@ -3,6 +3,7 @@
 import { useRef, useState } from "react"
 import { FaMinus } from "react-icons/fa6"
 import { RotateCcw } from "lucide-react"
+import { IoClose } from "react-icons/io5"
 import type { Measure } from "./MeasurementList"
 
 const PRESET_UNITS = ["mm", "cm", "m", "g", "kg", "l", "ml", "stk", "%"]
@@ -29,12 +30,12 @@ function UnitDropdown({ value, onChange }: { value: string; onChange: (v: string
   }
 
   return (
-    <div className="flex gap-1 items-center">
+    <div className="relative w-24 shrink-0">
       <select
         value={customMode ? "" : value}
         onChange={handleSelectChange}
         disabled={customMode}
-        className={`input shrink-0 cursor-pointer overflow-hidden transition-all duration-150 ${customMode ? 'w-0 p-0 opacity-0 pointer-events-none' : 'w-24'}`}
+        className={`input w-full cursor-pointer transition-opacity duration-150 ${customMode ? 'opacity-0 pointer-events-none' : ''}`}
       >
         <option value="" disabled>Enhet</option>
         {PRESET_UNITS.map(u => (
@@ -46,7 +47,7 @@ function UnitDropdown({ value, onChange }: { value: string; onChange: (v: string
         ref={customRef}
         type="text"
         placeholder="Enhet"
-        className={`input shrink-0 overflow-hidden transition-all duration-150 ${customMode ? 'w-20' : 'w-0 p-0 opacity-0 pointer-events-none'}`}
+        className={`input w-full pr-7 absolute inset-0 transition-opacity duration-150 ${customMode ? '' : 'opacity-0 pointer-events-none'}`}
         maxLength={20}
         value={customMode ? value : ""}
         readOnly={!customMode}
@@ -56,9 +57,9 @@ function UnitDropdown({ value, onChange }: { value: string; onChange: (v: string
         type="button"
         onClick={exitCustomMode}
         title="Tilbake til forhåndsdefinerte enheter"
-        className={`overflow-hidden transition-all duration-150 btn btn-outline btn-icon shrink-0 ${customMode ? 'opacity-100 cursor-pointer' : 'w-0 opacity-0 pointer-events-none'}`}
+        className={`absolute right-1.5 top-1/2 -translate-y-1/2 rounded transition-all duration-150 text-text-faint hover:text-text hover:bg-surface-raised cursor-pointer p-0.5 ${customMode ? '' : 'opacity-0 pointer-events-none'}`}
       >
-        <RotateCcw size={12} />
+        <IoClose size={14} />
       </button>
     </div>
   )
