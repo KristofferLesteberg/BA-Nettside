@@ -22,7 +22,6 @@ export default function Pagination ({ currentPage, maxPages }: Props) {
 
   return (
     <div className="flex items-center">
-      <span className="small-text">{currentPage}/{maxPages}</span>
       <div className="flex items-center gap-2">
         <button
           onClick={() => setPage(currentPage - 1)}

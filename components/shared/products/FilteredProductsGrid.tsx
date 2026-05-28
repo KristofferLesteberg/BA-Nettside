@@ -88,7 +88,7 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
   const activeFilterCount = category !== 'ALL' ? 1 : 0
 
   const currentPage = Number(searchParams.get('page') ?? '1')
-  const pageSize = 2
+  const pageSize = 10
   const maxPage = Math.ceil(filtered.length / pageSize)
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
@@ -164,6 +164,7 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
     <div className="flex gap-8 items-start">
 
       {/* Grid area */}
+
       <div className="flex-1 min-w-0 flex flex-col gap-4">
 
         {/* Mobile controls — hidden on desktop */}
@@ -177,14 +178,21 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
             </button>
           </div>
         </div>
+        {filtered.length > 0 ? 
+        <>
         <div className='flex justify-between'>
-          <span className="small-text">{currentPage}/{maxPage}</span>
+          <span className="small-text">Side: {currentPage}/{maxPage}</span>
            <span>Totalt: {filtered.length}</span>
         </div>
         <ProductsGrid products={paginated} isAdmin={isAdmin} />
-        <div>
+        <div className='mx-auto mt-10'>
           <Pagination currentPage={currentPage} maxPages={maxPage} />
         </div>
+        </>
+        : 
+        <p className='mx-auto'>Ingen produkter funnet</p>
+        }
+        
         
       </div>
 
