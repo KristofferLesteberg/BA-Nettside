@@ -75,8 +75,8 @@ export async function uploadProductImages(
 }
 
 export async function getProductThumbnail(productId: number) {
-  const image = await prisma.productImage.findUnique({
-    where: { id: productId.toString(), sortOrder: 0 },
+  const image = await prisma.productImage.findFirst({
+    where: { productId, sortOrder: 0 },
   })
 
   return image ? {
