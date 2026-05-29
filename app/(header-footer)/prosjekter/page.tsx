@@ -104,15 +104,18 @@ export default function Projects() {
         </div>
       </section>
       {/* Prerequisites */}
-      <section className='max-w-5xl mx-auto px-4 mb-40'>
-        <h1 className='heading-1 text-center mt-5'>Hva vi ber om av dere:</h1>
-
+      <section className='max-w-5xl mx-auto px-4 mb-40 text-center'>
+        <h1 className='heading-1 mt-5'>Hva vi ber om av dere:</h1>
+        <i className='text-small'>Skal prosjektet foregå på skolen, stiller vi med fasiliteter og sted</i>
+        
         <div className='max-w-4xl card mx-auto mt-5'>
           <div className='flex flex-col gap-4'>
             {prerequisites.map((item: Prerequisite, index: number) => (
               <div key={index} className='flex flex-row items-center justify-between gap-4 border-b border-border last:border-0 pb-4 last:pb-0'>
                 <div className='flex flex-col gap-1'>
-                  <b className='text-primary text-lg'>{item.label}</b>
+                  <div className='flex items-center'>
+                    <b className='text-primary text-lg'>{item.label}</b>
+                  </div>
                   <p className='body-text text-muted'>{item.description}</p>
                   
                 </div>
