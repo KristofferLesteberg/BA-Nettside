@@ -5,6 +5,12 @@ export const EducationFieldSchema = z.enum(['PLUMBER', 'CONCRETE', 'CARPENTER', 
 
 export const MeasuresSchema = z.record(z.string(), z.string())
 
+export const MeasureItemSchema = z.object({
+  name:  z.string().min(1, 'Navn må fylles ut'),
+  value: z.string().min(1, 'Verdi må fylles ut'),
+  unit:  z.string().min(1, 'Enhet må velges'),
+})
+
 export const ProductCreateSchema = z.object({
   educationField: z.preprocess(
     (val) => (val === '' ? undefined : val),

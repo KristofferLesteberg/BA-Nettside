@@ -1,10 +1,71 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { FaMinus, FaRotateLeft } from "react-icons/fa6"
+import { FaMinus } from "react-icons/fa6"
+import { RotateCcw } from "lucide-react"
+import { IoClose } from "react-icons/io5"
+import type { Measure } from "./MeasurementList"
 
 const PRESET_UNITS = ["mm", "cm", "m", "g", "kg", "l", "ml", "stk", "%"]
 const CUSTOM_SENTINEL = "__custom__"
+
+function UnitDropdown({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const customRef = useRef<HTMLInputElement>(null)
+  const isCustom = value !== "" && !PRESET_UNITS.includes(value)
+  const [customMode, setCustomMode] = useState(isCustom)
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === CUSTOM_SENTINEL) {
+      setCustomMode(true)
+      onChange("")
+      setTimeout(() => customRef.current?.focus(), 10)
+    } else {
+      onChange(e.target.value)
+    }
+  }
+
+  const exitCustomMode = () => {
+    setCustomMode(false)
+    onChange("")
+  }
+
+  return (
+    <div className="relative w-24 shrink-0">
+      <select
+        value={customMode ? "" : value}
+        onChange={handleSelectChange}
+        disabled={customMode}
+        className={`input w-full cursor-pointer transition-opacity duration-150 ${customMode ? 'opacity-0 pointer-events-none' : ''}`}
+      >
+        <option value="" disabled>Enhet</option>
+        {PRESET_UNITS.map(u => (
+          <option key={u} value={u}>{u}</option>
+        ))}
+        <option value={CUSTOM_SENTINEL}>Annet…</option>
+      </select>
+      <input
+        ref={customRef}
+        type="text"
+        placeholder="Enhet"
+        className={`input w-full pr-7 absolute inset-0 transition-opacity duration-150 ${customMode ? '' : 'opacity-0 pointer-events-none'}`}
+        maxLength={20}
+        value={customMode ? value : ""}
+        readOnly={!customMode}
+        onChange={e => onChange(e.target.value)}
+      />
+      <button
+        type="button"
+        onClick={exitCustomMode}
+        title="Tilbake til forhåndsdefinerte enheter"
+        className={`absolute right-1.5 top-1/2 -translate-y-1/2 rounded transition-all duration-150 text-text-faint hover:text-text hover:bg-surface-raised cursor-pointer p-0.5 ${customMode ? '' : 'opacity-0 pointer-events-none'}`}
+      >
+        <IoClose size={14} />
+      </button>
+    </div>
+  )
+}
+
+// ── MeasurementInput ─────────────────────────────────────────────────────────
 
 type Props = {
   name: string
@@ -12,34 +73,24 @@ type Props = {
   unit: string
   onChange: (field: "name" | "value" | "unit", val: string) => void
   onDelete: () => void
+  onRevert?: () => void
+  originalMeasure?: Measure
 }
 
-export default function MeasurementInput({ name, value, unit, onChange, onDelete }: Props) {
-  const startsCustom = unit !== "" && !PRESET_UNITS.includes(unit)
-  const [customMode, setCustomMode] = useState(startsCustom)
-  const customInputRef = useRef<HTMLInputElement>(null)
-
-  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === CUSTOM_SENTINEL) {
-      setCustomMode(true)
-      onChange("unit", "")
-      setTimeout(() => customInputRef.current?.focus(), 210)
-    } else {
-      onChange("unit", e.target.value)
-    }
-  }
-
-  const exitCustomMode = () => {
-    setCustomMode(false)
-    onChange("unit", "")
-  }
+export default function MeasurementInput({ name, value, unit, onChange, onDelete, onRevert, originalMeasure }: Props) {
+  const hasChanges = originalMeasure !== undefined && (
+    name  !== originalMeasure.name  ||
+    value !== originalMeasure.value ||
+    unit  !== originalMeasure.unit
+  )
+  const canRevert = onRevert !== undefined && hasChanges
 
   return (
-    <div className="flex flex-row gap-2 bg-surface border-2 border-default rounded-md p-1">
+    <div className="flex flex-row gap-2 items-center bg-surface border border-border rounded-md p-2">
       <input
         type="text"
         placeholder="Navn"
-        className="input min-w-0"
+        className="input min-w-0 flex-1"
         maxLength={50}
         value={name}
         onChange={e => onChange("name", e.target.value)}
@@ -47,70 +98,26 @@ export default function MeasurementInput({ name, value, unit, onChange, onDelete
       <input
         type="text"
         placeholder="Verdi"
-        className="input min-w-0"
+        className="input w-24 shrink-0"
         maxLength={30}
         value={value}
         onChange={e => onChange("value", e.target.value)}
       />
 
-      <div className="flex gap-1 items-center shrink-0">
-        {/* Dropdown state — always in DOM, slides out when custom mode is active */}
-        <div
-          style={{
-            maxWidth:     customMode ? "0"    : "6rem",
-            opacity:      customMode ? 0      : 1,
-            overflow:     "hidden",
-            pointerEvents: customMode ? "none" : "auto",
-            transition:   "max-width 200ms ease, opacity 150ms ease",
-          }}
-        >
-          <select
-            className="input w-24 cursor-pointer"
-            value={unit}
-            onChange={handleSelect}
-          >
-            <option value="" disabled>Enhet</option>
-            {PRESET_UNITS.map(u => (
-              <option key={u} value={u}>{u}</option>
-            ))}
-            <option value={CUSTOM_SENTINEL}>Annet…</option>
-          </select>
-        </div>
-
-        {/* Custom input state — always in DOM, slides in when custom mode is active */}
-        <div
-          className="flex gap-1"
-          style={{
-            maxWidth:      customMode ? "calc(7rem + 2.5rem + 0.25rem)" : "0",
-            opacity:       customMode ? 1      : 0,
-            overflow:      "hidden",
-            pointerEvents: customMode ? "auto" : "none",
-            transition:    "max-width 200ms ease, opacity 150ms ease",
-          }}
-        >
-          <input
-            ref={customInputRef}
-            type="text"
-            placeholder="Egendefinert"
-            className="input w-28"
-            maxLength={20}
-            value={unit}
-            onChange={e => onChange("unit", e.target.value)}
-          />
-          <button
-            type="button"
-            className="btn btn-outline btn-icon shrink-0 self-center "
-            onClick={exitCustomMode}
-            title="Tilbake til forhåndsdefinerte enheter"
-          >
-            <FaRotateLeft style={{ fontSize: "0.75rem" }} />
-          </button>
-        </div>
-      </div>
+      <UnitDropdown value={unit} onChange={v => onChange("unit", v)} />
 
       <button
         type="button"
-        className="btn btn-error btn-icon self-center shrink-0"
+        onClick={onRevert}
+        title="Tilbakestill mål"
+        className={`overflow-hidden transition-all duration-150 text-text-faint hover:text-text rounded flex items-center justify-center shrink-0 ${canRevert ? 'w-6 h-6 opacity-100 cursor-pointer' : 'w-0 opacity-0 pointer-events-none'}`}
+      >
+        <RotateCcw size={14} className="shrink-0" />
+      </button>
+
+      <button
+        type="button"
+        className="btn btn-error btn-icon shrink-0"
         onClick={onDelete}
       >
         <FaMinus />
