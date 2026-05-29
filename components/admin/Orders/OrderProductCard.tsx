@@ -8,6 +8,7 @@ import { usePopUp } from "@/components/shared/PopUp"
 import toast from "react-hot-toast"
 import { FaTrash, FaEnvelope, FaPhone, FaBoxesStacked, FaBox, FaChevronDown, FaCircleInfo } from "react-icons/fa6"
 import { RiProgress3Line } from "react-icons/ri"
+import { formatPrice } from "@/app/lib/product-utils"
 
 type OrderWithProduct = Awaited<ReturnType<typeof getAllOrders>>[number]
 
@@ -307,12 +308,12 @@ export default function OrderCard({ order }: Props) {
                       </div>
                       <div className="flex flex-col items-end gap-0.5">
                         <span className="label">Pris/stk</span>
-                        <p className="small-text">NOK {Number(order.product.price).toFixed(2)}</p>
+                        <p className="small-text">{formatPrice(order.product.price)}</p>
                       </div>
                       <div className="flex flex-col items-end gap-0.5">
                         <span className="label">Totalt</span>
                         <p className="small-text font-semibold" style={{ color: 'var(--color-primary)' }}>
-                          NOK {(Number(order.product.price) * order.amount).toFixed(2)}
+                          {formatPrice(Number(order.product.price) * order.amount)}
                         </p>
                       </div>
                     </div>

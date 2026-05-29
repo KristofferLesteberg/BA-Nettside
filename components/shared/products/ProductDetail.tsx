@@ -4,6 +4,7 @@
 import Link from "next/link"
 import Carousel from "@/components/shared/ImageCarousel"
 import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
+import { formatPrice } from "@/app/lib/product-utils"
 import { FaEnvelope, FaPhone } from "react-icons/fa"
 import { FaWrench, FaHelmetSafety, FaRoad } from "react-icons/fa6"
 import { GiBrickWall } from "react-icons/gi"
@@ -77,7 +78,7 @@ export default function ProductDetail({ product }: { product: Product }) {
               )}
               <h1 className="heading-2">{product.title}</h1>
               <p className="heading-2" style={{ color: "var(--color-primary)" }}>
-                NOK {Number(product.price).toFixed(2)}
+                {formatPrice(product.price)}
               </p>
             </div>
 
