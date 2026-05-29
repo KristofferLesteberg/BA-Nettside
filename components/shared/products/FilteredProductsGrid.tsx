@@ -94,7 +94,7 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
   const activeFilterCount = category !== 'ALL' ? 1 : 0
 
   const currentPage = Number(searchParams.get('page') ?? '1')
-  const pageSize = Number(searchParams.get('pageSize') ?? '24')
+  const pageSize = Number(searchParams.get('pageSize') ?? '10')
   const maxPage = Math.ceil(filtered.length / pageSize)
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
