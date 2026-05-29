@@ -1,11 +1,13 @@
 "use client"
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import type { ProductCardData } from '@/app/lib/types'
 import ProductsGrid from './ProductsGrid'
 import { EducationField } from '@/generated/prisma'
 import { FaSliders, FaXmark } from 'react-icons/fa6'
 import { EDUCATION_FIELD_OPTIONS } from '@/app/lib/education-fields'
+import { useSearchParams, useRouter } from 'next/navigation'
+import Pagination from '../Pagination'
 
 
 export type SortOption = 'newest' | 'oldest' | 'price-asc' | 'price-desc'
@@ -37,10 +39,32 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 ]
 
 export default function FilteredProductsGrid({ products, isAdmin, sidebarAction, extraControls, extraFilters = [] }: Props) {
-  const [category, setCategory] = useState<CategoryFilter>('ALL')
-  const [sort, setSort] = useState<SortOption>('newest')
-  const [status, setStatus] = useState<StatusFilter>('ALL')
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const category = (searchParams.get('category') as CategoryFilter) ?? 'ALL'
+  const status = (searchParams.get('status') as StatusFilter) ?? 'ALL'
+  const sort = (searchParams.get('sort') as SortOption) ?? 'newest'  
+
   const [drawerOpen, setDrawerOpen] = useState(false)
+
+  useEffect(() => {
+    const hasFilters = ['category', 'status', 'sort', 'pageSize'].some(k => searchParams.get(k))
+    if (!hasFilters) {
+      const saved = sessionStorage.getItem('tabFilters_produkter')
+      if (saved) router.replace('?' + saved + '&tab=produkter')
+    }
+  }, [])
+
+  function setFilter(key: string, value: string) {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set(key, value)
+    params.set('page', '1')
+    const qs = params.toString()
+    const forStorage = new URLSearchParams(qs)
+    forStorage.delete('tab')
+    sessionStorage.setItem('tabFilters_produkter', forStorage.toString())
+    router.replace('?' + qs)
+  }
 
   const filtered = useMemo(() => {
     const statusResult = products.filter(p => {
@@ -65,10 +89,17 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
     return result
   }, [products, category, sort, extraFilters, status])
 
+  
+
   const activeFilterCount = category !== 'ALL' ? 1 : 0
 
+  const currentPage = Number(searchParams.get('page') ?? '1')
+  const pageSize = Number(searchParams.get('pageSize') ?? '10')
+  const maxPage = Math.ceil(filtered.length / pageSize)
+  const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+
   const controlPanel = (
-    <div className="flex flex-col gap-5">      
+    <div className="flex flex-col gap-5">
     {isAdmin && (
        <div className='flex flex-col gap-2'>
         <span className='label'>Produkt status</span>
@@ -76,22 +107,19 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
           {STATUS_OPTIONS.map((stat) => (
             <button
               key={stat.value}
-              onClick={() => setStatus(stat.value)}
+              onClick={() => setFilter('status', stat.value)}
               className={`btn w-full justify-start ${status === stat.value ? 'btn-primary' : 'btn-outline'}`}
               >
               {stat.label}
             </button>
-
           ))}
         </div>
-        
+
       </div>
     )}
     {isAdmin && (
        <hr className='border-border' />
     )}
-    
-    
 
       <div className="flex flex-col gap-2">
         <span className="label">Kategori</span>
@@ -99,7 +127,7 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
           {CATEGORY_OPTIONS.map(opt => (
             <button
               key={opt.value}
-              onClick={() => setCategory(opt.value)}
+              onClick={() => setFilter('category', opt.value)}
               className={`btn w-full justify-start ${category === opt.value ? 'btn-primary' : 'btn-outline'}`}
             >
               {opt.label}
@@ -116,7 +144,7 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
           {SORT_OPTIONS.map(opt => (
             <button
               key={opt.value}
-              onClick={() => setSort(opt.value)}
+              onClick={() => setFilter('sort', opt.value)}
               className={`btn w-full justify-start ${sort === opt.value ? 'btn-secondary' : 'btn-outline'}`}
             >
               {opt.label}
@@ -142,6 +170,7 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
     <div className="flex gap-8 items-start">
 
       {/* Grid area */}
+
       <div className="flex-1 min-w-0 flex flex-col gap-4">
 
         {/* Mobile controls — hidden on desktop */}
@@ -155,8 +184,34 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
             </button>
           </div>
         </div>
-
-        <ProductsGrid products={filtered} isAdmin={isAdmin} />
+        {filtered.length > 0 ? 
+        <>
+        <div className="flex items-center justify-between px-3 py-2 rounded-sm">
+          <div className="flex items-center gap-2 small-text text-muted">
+            <span>{filtered.length} produkter</span>
+            <span>·</span>
+            <span>Side {currentPage} av {maxPage}</span>
+          </div>
+          <select
+            value={pageSize}
+            onChange={e => setFilter('pageSize', e.target.value)}
+            className="input w-auto py-1 text-sm cursor-pointer"
+          >
+            {[10, 20, 30, 40, 50].map(n => (
+              <option key={n} value={n}>{n} per side</option>
+            ))}
+          </select>
+        </div>
+        <ProductsGrid products={paginated} isAdmin={isAdmin} />
+        <div className='mx-auto mt-10'>
+          <Pagination currentPage={currentPage} maxPages={maxPage} />
+        </div>
+        </>
+        : 
+        <p className='mx-auto'>Ingen produkter funnet</p>
+        }
+        
+        
       </div>
 
       {/* Desktop sidebar — hidden on mobile */}
@@ -190,7 +245,7 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
           {controlPanel}
         </div>
       </aside>
-
+      
     </div>
   )
 }

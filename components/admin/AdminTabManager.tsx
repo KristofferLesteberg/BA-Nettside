@@ -22,8 +22,16 @@ export default function AdminTabManager({ tabs }: { tabs: AdminTab[] }) {
   const [mounted, setMounted] = useState<Set<number>>(new Set([initialIndex]))
 
   const handleTabChange = (index: number) => {
+    const currentParams = new URLSearchParams(searchParams.toString())
+    currentParams.delete('tab')
+    sessionStorage.setItem(`tabFilters_${tabs[activeIndex].label}`, currentParams.toString())
+
+    const saved = sessionStorage.getItem(`tabFilters_${tabs[index].label}`) ?? ''
+    const newParams = new URLSearchParams(saved)
+    newParams.set('tab', tabs[index].label)
+
     setActiveIndex(index)
-    router.push(`/admin?tab=${tabs[index].label}`)
+    router.push('/admin?' + newParams.toString())
     setMounted(prev => new Set(prev).add(index))
   }
 

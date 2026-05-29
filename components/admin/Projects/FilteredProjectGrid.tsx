@@ -1,11 +1,13 @@
 "use client"
 import { EducationField, Status } from "@/generated/prisma"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { FaSliders, FaXmark } from "react-icons/fa6"
 import ProjectCard, { type SerializedProject } from "./ProjectCard"
 import ProjectDrawer from "./ProjectDrawer"
 import PriceRange from "@/components/shared/input/price-range"
 import { EDUCATION_FIELD_OPTIONS } from "@/app/lib/education-fields"
+import { useSearchParams, useRouter } from "next/navigation"
+import Pagination from "@/components/shared/Pagination"
 
 
 export type ProjectStatus = Status | 'ALL'
@@ -40,18 +42,35 @@ interface Props {
 }
 
 export default function FilteredProjectGrid({ projects }: Props) {
-
-  const [status, setStatus] = useState<ProjectStatus>('ALL')
-  const [category, setCategory] = useState<Category>('ALL')
-  const [sort, setSort] = useState<SortOptions>('NEWEST')
-  const [minPrice, setMinPrice] = useState<number>(0)
-  const [maxPrice, setMaxPrice] = useState<number>(500000)
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const status = (searchParams.get('status') as ProjectStatus) ?? 'ALL'
+  const category = (searchParams.get('category') as Category) ?? 'ALL'
+  const sort = (searchParams.get('sort') as SortOptions) ?? 'NEWEST'
+  const minPrice = Number(searchParams.get('minPrice') ?? '0')
+  const maxPrice = Number(searchParams.get('maxPrice') ?? '500000')
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [selectedProject, setSelectedProject] = useState<SerializedProject | null>(null)
 
+  function setFilter(key: string, value: string) {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set(key, value)
+    const qs = params.toString()
+    const forStorage = new URLSearchParams(qs)
+    forStorage.delete('tab')
+    sessionStorage.setItem('tabFilters_prosjekter', forStorage.toString())
+    router.replace('?' + qs)
+  }
+
+  useEffect(() => {
+    const hasFilters = ['status', 'category', 'sort', 'minPrice', 'maxPrice'].some(k => searchParams.get(k))
+    if (!hasFilters) {
+      const saved = sessionStorage.getItem('tabFilters_prosjekter')
+      if (saved) router.replace('?' + saved + '&tab=prosjekter')
+    }
+  }, [])
+
   const filtered = useMemo(() => {
-    console.log("Minpris" + minPrice)
-    console.log("Maxpris" + maxPrice)
     const categoryResult = projects.filter((project) => {
       if(category === 'ALL') return true
       if(category !== project.educationField) return false
@@ -76,11 +95,14 @@ export default function FilteredProjectGrid({ projects }: Props) {
       case 'OLDEST':     priceRangeResult.sort((a, b) => a.createdAt.localeCompare(b.createdAt)); break
 
     }
-      
-
     return priceRangeResult
   }, [status, category, minPrice, maxPrice, sort, projects])
 
+
+  const currentPage = Number(searchParams.get('page') ?? '1')
+  const pageSize = Number(searchParams.get('pageSize') ?? '10')
+  const maxPage = Math.ceil(filtered.length / pageSize)
+  const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
   const activeFilterCount = (status !== 'ALL' ? 1 : 0) + (category !== 'ALL' ? 1 : 0)
   const controlPanel = (
@@ -91,7 +113,7 @@ export default function FilteredProjectGrid({ projects }: Props) {
           {STATUS_OPTIONS.map(opt => (
             <button
               key={opt.value}
-              onClick={() => setStatus(opt.value)}
+              onClick={() => setFilter('status', opt.value)}
               className={`btn w-full justify-start ${status === opt.value ? "btn-primary" : "btn-outline"}`}
             >
               {opt.label}
@@ -106,7 +128,7 @@ export default function FilteredProjectGrid({ projects }: Props) {
           {CATEGORY_OPTIONS.map(opt => (
             <button
               key={opt.value}
-              onClick={() => setCategory(opt.value)}
+              onClick={() => setFilter('category', opt.value)}
               className={`btn w-full justify-start ${category === opt.value ? "btn-primary" : "btn-outline"}`}
             >
               {opt.label}
@@ -123,7 +145,7 @@ export default function FilteredProjectGrid({ projects }: Props) {
           {SORT_OPTIONS.map(opt => (
             <button
               key={opt.value}
-              onClick={() => setSort(opt.value)}
+              onClick={() => setFilter('sort', opt.value)}
               className={`btn w-full justify-start ${sort === opt.value ? "btn-secondary" : "btn-outline"}`}
             >
               {opt.label}
@@ -139,9 +161,9 @@ export default function FilteredProjectGrid({ projects }: Props) {
     <>
       <div className="flex flex-row justify-between items-center gap-4 mb-5">
         <div className="flex-1">
-          <PriceRange min={minPrice.toString()} max={maxPrice.toString()} onChange={(lo, hi) => { setMinPrice(Number(lo)); setMaxPrice(Number(hi)) }} />
+          <PriceRange min={minPrice.toString()} max={maxPrice.toString()} onChange={(lo, hi) => { setFilter('minPrice', lo); setFilter('maxPrice', hi) }} />
         </div>
-        <button onClick={() => { setMaxPrice(500000); setMinPrice(0); }} className="btn btn-secondary h-1/3 ">Tilbakestill</button>
+        <button onClick={() => { setFilter('minPrice', '0'); setFilter('maxPrice', '500000') }} className="btn btn-secondary h-1/3 ">Tilbakestill</button>
       </div>
     
     <div className="flex gap-8 items-start">
@@ -157,10 +179,29 @@ export default function FilteredProjectGrid({ projects }: Props) {
           </button>
         </div>
 
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 small-text text-muted">
+            <span>{filtered.length} prosjekter</span>
+            <span>·</span>
+            <span>Side {currentPage} av {maxPage}</span>
+          </div>
+          <select
+            value={pageSize}
+            onChange={e => setFilter('pageSize', e.target.value)}
+            className="input w-auto py-1 text-sm cursor-pointer"
+          >
+            {[10, 20, 30, 40, 50].map(n => (
+              <option key={n} value={n}>{n} per side</option>
+            ))}
+          </select>
+        </div>
         <div className="flex flex-col gap-3">
-          {filtered.map((project) => (
+          {paginated.map((project) => (
             <ProjectCard project={project} key={project.id} onView={setSelectedProject} />
           ))}
+        </div>
+        <div className="mx-auto mt-10">
+          <Pagination currentPage={currentPage} maxPages={maxPage} />
         </div>
       </div>
 
