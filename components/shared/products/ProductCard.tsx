@@ -148,7 +148,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
       <div className="relative w-full aspect-4/3 overflow-hidden rounded-t-lg bg-surface">
         {product.image ? (
           <Image
-            src={`/images/${product.image.id}.webp`}
+            src={`/images/low-res/${product.image.id}.webp`}
             alt={product.title}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"

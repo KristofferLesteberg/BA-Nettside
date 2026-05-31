@@ -43,7 +43,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                             ? (product.measures as Measure[])
                             : Object.entries((product.measures ?? {}) as Record<string, string>)
                                 .map(([name, value]) => ({ name, value, unit: "" })),
-          existingImages: product.images.map(img => ({ id: img.id, url: `/images/${img.id}.webp` })),
+          existingImages: product.images.map(img => ({ id: img.id, url: `/images/med-res/${img.id}.webp` })),
           contactId: product.contactPersonId ? String(product.contactPersonId) : '',
           draft: product.draft,
         })
