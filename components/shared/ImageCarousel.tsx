@@ -144,7 +144,7 @@ export default function ImageCarousel({
             slidesPerView={1}
             loop={images.length > 1}
             speed={500}
-            className={`image-swiper absolute inset-0 rounded-2xl overflow-hidden bg-surface-sunken${onImageClick ? ' cursor-pointer' : ''}`}
+            className={`image-swiper absolute inset-0 rounded-2xl overflow-hidden bg-surface-sunken${onImageClick ? ' cursor-zoom-in' : ''}`}
           >
             {images.map((imageId) => (
               <SwiperSlide key={imageId}>
