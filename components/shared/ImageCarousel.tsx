@@ -96,10 +96,12 @@ export default function ImageCarousel({
   images,
   className,
   sizes = '(max-width: 1024px) 100vw, 50vw',
+  onImageClick,
 }: {
   images: string[]
   className?: string
   sizes?: string
+  onImageClick?: (index: number) => void
 }) {
   const swiperRef = useRef<SwiperType | null>(null)
   const [realIndex, setRealIndex] = useState(0)
@@ -138,15 +140,16 @@ export default function ImageCarousel({
           <Swiper
             onSwiper={(s) => { swiperRef.current = s }}
             onSlideChange={(s) => setRealIndex(s.realIndex)}
+            onClick={(s) => onImageClick?.(s.realIndex)}
             slidesPerView={1}
             loop={images.length > 1}
             speed={500}
-            className="image-swiper absolute inset-0 rounded-2xl overflow-hidden bg-surface-sunken"
+            className={`image-swiper absolute inset-0 rounded-2xl overflow-hidden bg-surface-sunken${onImageClick ? ' cursor-pointer' : ''}`}
           >
             {images.map((imageId) => (
               <SwiperSlide key={imageId}>
                 <ContainedImage
-                  src={`/images/${imageId}.webp`}
+                  src={`/images/med-res/${imageId}.webp`}
                   sizes={sizes}
                 />
               </SwiperSlide>
