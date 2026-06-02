@@ -71,7 +71,7 @@ function SortableItem({ img, onDelete, onImageClick, isLeaving }: {
         <div
           onClick={onImageClick}
           className="w-50 h-27.5 flex items-center
-            justify-center overflow-hidden rounded-md cursor-pointer
+            justify-center overflow-hidden rounded-md bg-surface cursor-pointer
             border-2 border-secondary shadow-md shadow-secondary/35"
         >
           <img src={src} className="max-w-full max-h-full object-contain" alt="" />
