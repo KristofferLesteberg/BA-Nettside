@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 import { useState } from 'react'
-import { IoClose } from "react-icons/io5";
+import { IoTrashOutline } from "react-icons/io5";
 import { MdDragHandle } from "react-icons/md";
 import { useDropzone } from 'react-dropzone'
 import ImagesPreview from '@/components/shared/ImagesPreview'
@@ -56,20 +56,8 @@ function SortableItem({ img, onDelete, onImageClick }: {
       ref={setNodeRef}
       style={style}
       {...attributes}
-      className="relative group transition-all duration-200 animate-fade-in"
+      className="transition-all duration-200 animate-fade-in"
     >
-      <button
-        type="button"
-        onClick={(e) => { e.stopPropagation(); onDelete(img.id) }}
-        className="
-          absolute top-2 right-2 z-10 rounded-full cursor-pointer
-          bg-error-bg w-5 h-5 flex items-center justify-center
-          text-error opacity-0 group-hover:opacity-70
-          hover:opacity-100 transition-opacity duration-200
-        "
-      >
-        <IoClose />
-      </button>
       <div
         onClick={onImageClick}
         className="w-[200px] h-[110px] bg-gray-100 flex items-center
@@ -79,18 +67,30 @@ function SortableItem({ img, onDelete, onImageClick }: {
         <img src={src} className="max-w-full max-h-full object-contain" alt="" />
       </div>
       <div
-        {...listeners}
-        className={`flex items-center justify-between px-2 py-1 mt-3
-          rounded-md border border-border bg-surface
-          cursor-grab active:cursor-grabbing transition-all duration-200
-          text-text-faint hover:text-secondary
+        className={`grid grid-cols-3 items-center px-1 py-0.5 mt-3
+          rounded-md border border-border bg-surface transition-all duration-200
           ${isDragging ? "shadow-lg shadow-secondary/40" : ""}`}
       >
-        <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium
+        <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium justify-self-start
           ${img.type === "existing" ? "bg-info-bg text-info" : "bg-success-bg text-success"}`}>
           {img.type === "existing" ? "Lagret" : "Ny"}
         </span>
-        <MdDragHandle className="text-base" />
+        <div
+          {...listeners}
+          className="flex justify-center cursor-grab active:cursor-grabbing
+            text-text-faint hover:text-secondary transition-colors duration-200"
+        >
+          <MdDragHandle className="text-lg" />
+        </div>
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); onDelete(img.id) }}
+            className="btn btn-icon btn-error"
+          >
+            <IoTrashOutline />
+          </button>
+        </div>
       </div>
     </div>
   )
