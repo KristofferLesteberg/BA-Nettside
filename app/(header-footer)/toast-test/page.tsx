@@ -9,7 +9,7 @@ export default function ToastTestPageA() {
       <p className="text-muted">This page has a header + footer layout.</p>
       <button
         className="btn btn-primary"
-        onClick={() => toast.success("This toast should survive navigation!", { duration: 8000 })}
+        onClick={() => toast.success("This toast should survive navigation!", { duration: 2000 })}
       >
         Fire toast, then navigate →
       </button>
