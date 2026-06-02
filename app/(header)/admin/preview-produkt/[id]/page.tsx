@@ -24,6 +24,7 @@ export default async function AdminPreviewProductPage({
   return (
     <>
       <AdminPreviewBanner productId={product.id} isDraft={product.draft} />
+      <div className="h-12" />
       <ProductDetail product={product} />
     </>
   )
