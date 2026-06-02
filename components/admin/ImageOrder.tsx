@@ -2,8 +2,9 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { IoClose } from "react-icons/io5";
+import { MdDragHandle } from "react-icons/md";
 import { useDropzone } from 'react-dropzone'
 import ImagesPreview from '@/components/shared/ImagesPreview'
 
@@ -34,8 +35,6 @@ function SortableItem({ img, onDelete, onImageClick }: {
   onDelete: (id: string) => void
   onImageClick?: () => void
 }) {
-  const pointerStart = useRef<{ x: number; y: number } | null>(null)
-
   const {
     attributes,
     listeners,
@@ -52,29 +51,18 @@ function SortableItem({ img, onDelete, onImageClick }: {
 
   const src = img.type === "existing" ? img.url : img.preview
 
-  function handleClick(e: React.MouseEvent) {
-    const start = pointerStart.current
-    pointerStart.current = null
-    if (!start) return
-    const dx = e.clientX - start.x
-    const dy = e.clientY - start.y
-    if (Math.sqrt(dx * dx + dy * dy) < 5) onImageClick?.()
-  }
-
   return (
     <div
       ref={setNodeRef}
       style={style}
       {...attributes}
-      className={`relative group transition-all duration-200 animate-fade-in ${isDragging ? "shadow-xl cursor-grabbing" : "cursor-grab hover:cursor-pointer"}`}
-      onPointerDown={(e) => { pointerStart.current = { x: e.clientX, y: e.clientY } }}
-      onClick={handleClick}
+      className="relative group transition-all duration-200 animate-fade-in"
     >
       <button
         type="button"
         onClick={(e) => { e.stopPropagation(); onDelete(img.id) }}
         className="
-          absolute top-2 right-2 rounded-full cursor-pointer
+          absolute top-2 right-2 z-10 rounded-full cursor-pointer
           bg-error-bg w-5 h-5 flex items-center justify-center
           text-error opacity-0 group-hover:opacity-70
           hover:opacity-100 transition-opacity duration-200
@@ -83,17 +71,27 @@ function SortableItem({ img, onDelete, onImageClick }: {
         <IoClose />
       </button>
       <div
-        {...listeners}
+        onClick={onImageClick}
         className="w-[200px] h-[110px] bg-gray-100 flex items-center
-          justify-center overflow-hidden rounded-md
+          justify-center overflow-hidden rounded-md cursor-pointer
           border-2 border-secondary shadow-md shadow-secondary/35"
       >
         <img src={src} className="max-w-full max-h-full object-contain" alt="" />
       </div>
-      <span className={`absolute bottom-2 left-2 text-[10px] px-1.5 py-0.5 rounded-full font-medium
-        ${img.type === "existing" ? "bg-info-bg text-info" : "bg-success-bg text-success"}`}>
-        {img.type === "existing" ? "Lagret" : "Ny"}
-      </span>
+      <div
+        {...listeners}
+        className={`flex items-center justify-between px-2 py-1 mt-3
+          rounded-md border border-border bg-surface
+          cursor-grab active:cursor-grabbing transition-all duration-200
+          text-text-faint hover:text-secondary
+          ${isDragging ? "shadow-lg shadow-secondary/40" : ""}`}
+      >
+        <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium
+          ${img.type === "existing" ? "bg-info-bg text-info" : "bg-success-bg text-success"}`}>
+          {img.type === "existing" ? "Lagret" : "Ny"}
+        </span>
+        <MdDragHandle className="text-base" />
+      </div>
     </div>
   )
 }
@@ -159,7 +157,7 @@ export default function ImageOrder({
       <div
         {...getRootProps()}
         
-        className="bg-surface hover:bg-surface-raised hover:border-secondary transition-colors duration-200 min-h-20 flex group items-center justify-center text-center border-3 border-dashed border-border rounded-lg cursor-pointer mb-4">
+        className="bg-surface hover:bg-surface-raised hover:border-secondary transition-colors duration-200 min-h-20 flex group items-center justify-center text-center border-3 border-dashed border-border rounded-lg cursor-pointer mb-2">
         <input {...getInputProps()} />
         <div className="flex flex-col items-center gap-5 text-text-faint p-5 group-hover:text-secondary transition-colors duration-200">
           <p>Dra og slipp filer her, eller klikk for å velge filer</p>
