@@ -123,7 +123,7 @@ const ContactDropdown = forwardRef<HTMLDivElement, Props>(
             style={panelStyle}
             onKeyDown={handlePanelKeyDown}
             tabIndex={-1}
-            className={`fixed z-50 card rounded-md shadow-lg outline-none ${menuOpen ? 'animate-dropdown-in' : 'animate-dropdown-out'}`}
+            className={`fixed z-50 card p-2 rounded-md shadow-lg outline-none ${menuOpen ? 'animate-dropdown-in' : 'animate-dropdown-out'}`}
           >
             <div className="flex flex-col p-1 overflow-y-auto max-h-64">
               {allOptions.map((opt, i) => (
