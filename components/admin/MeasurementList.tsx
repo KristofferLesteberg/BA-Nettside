@@ -45,9 +45,18 @@ type SortableRowProps = {
 function SortableRow({ m, initialMeasures, onUpdate, onDelete, onRevert }: SortableRowProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: m.id })
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
+  const gridTransition = m.removing
+    ? 'grid-template-rows 200ms ease-out'
+    : !m.born
+      ? 'grid-template-rows 300ms ease-out'
+      : null
+
+  // When dnd-kit sets a transition (during drag settling) it would override the
+  // CSS class transition-[grid-template-rows] because inline styles win. Merge
+  // both so neither animation is lost.
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform) || undefined,
+    ...(transition && { transition: [transition, gridTransition].filter(Boolean).join(', ') }),
   }
 
   const handle = (
