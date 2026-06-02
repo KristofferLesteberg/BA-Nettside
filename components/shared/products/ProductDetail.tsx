@@ -1,8 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import Carousel from "@/components/shared/ImageCarousel"
+import ImagesPreview from "@/components/shared/ImagesPreview"
 import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
 import { formatPrice } from "@/app/lib/product-utils"
 import { FaEnvelope, FaPhone } from "react-icons/fa"
@@ -22,6 +23,9 @@ type Product = NonNullable<Awaited<ReturnType<typeof getProductById>>>
 type StoredMeasure = { name: string; value: string; unit: string }
 
 export default function ProductDetail({ product }: { product: Product }) {
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null)
+  const imageIds = product.images.map(img => img.id)
+
   const rawMeasures = product.measures
   const measures: StoredMeasure[] = Array.isArray(rawMeasures)
     ? (rawMeasures as StoredMeasure[])
@@ -42,7 +46,7 @@ export default function ProductDetail({ product }: { product: Product }) {
 
   return (
     <div className="bg-page min-h-screen">
-      <div className="max-w-5xl mx-auto px-4 py-6 sm:px-6 sm:py-8">
+      <div className="max-w-6xl mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-4">
 
         {/* Main layout */}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
@@ -60,9 +64,17 @@ export default function ProductDetail({ product }: { product: Product }) {
               </span>
             </nav>
             <Carousel
-              images={product.images.map(img => img.id)}
+              images={imageIds}
               className="w-full h-72 sm:h-96"
+              onImageClick={setPreviewIndex}
             />
+            {previewIndex !== null && (
+              <ImagesPreview
+                imageIds={imageIds}
+                initialIndex={previewIndex}
+                onClose={() => setPreviewIndex(null)}
+              />
+            )}
           </div>
 
           {/* Right — product details */}

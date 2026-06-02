@@ -289,7 +289,7 @@ export default function OrderCard({ order }: Props) {
                   {thumbnail ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={`/images/${thumbnail}.webp`}
+                      src={`/images/low-res/${thumbnail}.webp`}
                       alt={order.product.title}
                       className="w-16 h-16 object-cover rounded-md shrink-0"
                     />

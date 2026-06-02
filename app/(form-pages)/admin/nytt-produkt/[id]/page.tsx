@@ -39,7 +39,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           price:          Number(product.price).toString(),
           amount:         String(product.amount),
           measures:       Array.isArray(product.measures) ? (product.measures as unknown as Measure[]) : [],
-          existingImages: product.images.map(img => ({ id: img.id, url: `/images/${img.id}.webp` })),
+          existingImages: product.images.map(img => ({ id: img.id, url: `/images/med-res/${img.id}.webp` })),
           contactId: product.contactPersonId ? String(product.contactPersonId) : ''
         })
       } catch {

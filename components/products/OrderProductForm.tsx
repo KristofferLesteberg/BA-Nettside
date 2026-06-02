@@ -75,7 +75,7 @@ export default function OrderProductForm({ productId, onSuccess }: Props) {
             {product.images[0] && (
               <div className="relative w-24 h-24 shrink-0 rounded overflow-hidden">
                 <Image
-                  src={`/images/${product.images[0].id}.webp`}
+                  src={`/images/low-res/${product.images[0].id}.webp`}
                   alt={product.title}
                   fill
                   className="object-cover"
