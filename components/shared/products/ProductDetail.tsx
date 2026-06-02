@@ -46,7 +46,7 @@ export default function ProductDetail({ product }: { product: Product }) {
 
   return (
     <div className="bg-page min-h-screen">
-      <div className="max-w-5xl mx-auto px-4 py-6 sm:px-6 sm:py-8">
+      <div className="max-w-6xl mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-4">
 
         {/* Main layout */}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
