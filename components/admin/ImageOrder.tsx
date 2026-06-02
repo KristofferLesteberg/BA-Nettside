@@ -2,9 +2,10 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { IoClose } from "react-icons/io5";
 import { useDropzone } from 'react-dropzone'
+import ImagesPreview from '@/components/shared/ImagesPreview'
 
 import {
   DndContext,
@@ -28,7 +29,13 @@ export type ImageItem =
   | { id: string; type: "existing"; url: string }
   | { id: string; type: "new"; file: File; preview: string }
 
-function SortableItem({ img, onDelete }: { img: ImageItem; onDelete: (id: string) => void }) {
+function SortableItem({ img, onDelete, onImageClick }: {
+  img: ImageItem
+  onDelete: (id: string) => void
+  onImageClick?: () => void
+}) {
+  const pointerStart = useRef<{ x: number; y: number } | null>(null)
+
   const {
     attributes,
     listeners,
@@ -45,12 +52,23 @@ function SortableItem({ img, onDelete }: { img: ImageItem; onDelete: (id: string
 
   const src = img.type === "existing" ? img.url : img.preview
 
+  function handleClick(e: React.MouseEvent) {
+    const start = pointerStart.current
+    pointerStart.current = null
+    if (!start) return
+    const dx = e.clientX - start.x
+    const dy = e.clientY - start.y
+    if (Math.sqrt(dx * dx + dy * dy) < 5) onImageClick?.()
+  }
+
   return (
     <div
       ref={setNodeRef}
       style={style}
       {...attributes}
-      className={`cursor-grab relative group transition-all duration-200 ${isDragging ? "shadow-xl cursor-grabbing" : ""}`}
+      className={`relative group transition-all duration-200 animate-fade-in ${isDragging ? "shadow-xl cursor-grabbing" : "cursor-grab hover:cursor-pointer"}`}
+      onPointerDown={(e) => { pointerStart.current = { x: e.clientX, y: e.clientY } }}
+      onClick={handleClick}
     >
       <button
         type="button"
@@ -72,7 +90,6 @@ function SortableItem({ img, onDelete }: { img: ImageItem; onDelete: (id: string
       >
         <img src={src} className="max-w-full max-h-full object-contain" alt="" />
       </div>
-      {/* Badge to distinguish existing vs new */}
       <span className={`absolute bottom-2 left-2 text-[10px] px-1.5 py-0.5 rounded-full font-medium
         ${img.type === "existing" ? "bg-info-bg text-info" : "bg-success-bg text-success"}`}>
         {img.type === "existing" ? "Lagret" : "Ny"}
@@ -95,6 +112,7 @@ export default function ImageOrder({
   const [images, setImages] = useState<ImageItem[]>(
     initialImages.map(img => ({ id: img.id, type: "existing" as const, url: img.url }))
   )
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null)
 
   const handleDelete = (id: string) => {
     const updated = images.filter(img => img.id !== id)
@@ -150,7 +168,7 @@ export default function ImageOrder({
       </div>
 
       {images.length > 0 && (
-        <aside className="bg-surface rounded-lg px-2 pt-2 border-4 border-border">
+        <aside className="bg-surface rounded-lg px-2 pt-2 border-4 border-border animate-slide-down">
           <DndContext
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
@@ -164,14 +182,26 @@ export default function ImageOrder({
                   e.currentTarget.scrollBy({ left: e.deltaY * 0.5, behavior: "smooth" })
                 }}
               >
-                
-                {images.map(img => (
-                  <SortableItem key={img.id} img={img} onDelete={handleDelete} />
+                {images.map((img, index) => (
+                  <SortableItem
+                    key={img.id}
+                    img={img}
+                    onDelete={handleDelete}
+                    onImageClick={() => setPreviewIndex(index)}
+                  />
                 ))}
               </div>
             </SortableContext>
           </DndContext>
         </aside>
+      )}
+
+      {previewIndex !== null && (
+        <ImagesPreview
+          imageIds={images.map(img => img.id)}
+          initialIndex={previewIndex}
+          onClose={() => setPreviewIndex(null)}
+        />
       )}
     </section>
   )
