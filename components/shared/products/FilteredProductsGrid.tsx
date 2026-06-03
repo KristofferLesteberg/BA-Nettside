@@ -26,6 +26,12 @@ const STATUS_FROM_URL: Record<string, StatusFilter> = {
   publisert: 'PUBLISHED',
 }
 
+const STATUS_TO_URL: Record<StatusFilter, string> = {
+  ALL:       'alle',
+  DRAFT:     'utkast',
+  PUBLISHED: 'publisert',
+}
+
 const STATUS_OPTIONS: { value: StatusFilter; urlValue: string; label: string }[] = [
   { value: 'ALL',       urlValue: 'alle',      label: 'Alle' },
   { value: 'DRAFT',     urlValue: 'utkast',    label: 'Utkast' },
@@ -54,8 +60,16 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const category = CATEGORY_FROM_URL[searchParams.get('category') ?? 'alle'] ?? 'ALL'
-  const status = STATUS_FROM_URL[searchParams.get('status') ?? 'alle'] ?? 'ALL'
+  const categoryParam = searchParams.get('category') ?? 'alle'
+  const selectedCategories: EducationField[] = categoryParam === 'alle'
+    ? []
+    : categoryParam.split(',').map(v => CATEGORY_FROM_URL[v]).filter((v): v is EducationField => !!v && v !== 'ALL')
+
+  const statusParam = searchParams.get('status') ?? 'alle'
+  const selectedStatuses: Array<'DRAFT' | 'PUBLISHED'> = statusParam === 'alle'
+    ? []
+    : statusParam.split(',').map(v => STATUS_FROM_URL[v]).filter((v): v is 'DRAFT' | 'PUBLISHED' => !!v && v !== 'ALL')
+
   const sort = SORT_FROM_URL[searchParams.get('sort') ?? 'nyeste'] ?? 'newest'
 
   useEffect(() => {
@@ -65,6 +79,22 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
       if (saved) router.replace('?' + saved + '&tab=produkter')
     }
   }, [])
+
+  function toggleStatus(opt: StatusFilter) {
+    if (opt === 'ALL') { setFilter('status', 'alle'); return }
+    const next = selectedStatuses.includes(opt as 'DRAFT' | 'PUBLISHED')
+      ? selectedStatuses.filter(s => s !== opt)
+      : [...selectedStatuses, opt as 'DRAFT' | 'PUBLISHED']
+    setFilter('status', next.length === 0 ? 'alle' : next.map(s => STATUS_TO_URL[s]).join(','))
+  }
+
+  function toggleCategory(opt: CategoryFilter) {
+    if (opt === 'ALL') { setFilter('category', 'alle'); return }
+    const next = selectedCategories.includes(opt as EducationField)
+      ? selectedCategories.filter(c => c !== opt)
+      : [...selectedCategories, opt as EducationField]
+    setFilter('category', next.length === 0 ? 'alle' : next.map(c => CATEGORY_TO_URL[c]).join(','))
+  }
 
   function setFilter(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString())
@@ -79,12 +109,12 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
 
   const filtered = useMemo(() => {
     const statusResult = products.filter(p => {
-      if (status === 'ALL') return true
-      return p.draft === (status === 'DRAFT')
+      if (selectedStatuses.length === 0) return true
+      return selectedStatuses.some(s => p.draft === (s === 'DRAFT'))
     })
     const result = statusResult.filter(p => {
-      if (category !== 'ALL' && p.educationField !== category) return false
-      return true
+      if (selectedCategories.length === 0) return true
+      return p.educationField !== null && selectedCategories.includes(p.educationField as EducationField)
     })
     switch (sort) {
       case 'newest':     result.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt)); break
@@ -93,15 +123,15 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
       case 'price-desc': result.sort((a, b) => b.price - a.price); break
     }
     return result
-  }, [products, category, sort, status])
+  }, [products, selectedCategories, sort, selectedStatuses])
 
   const currentPage = Number(searchParams.get('page') ?? '1')
   const pageSize = Number(searchParams.get('pageSize') ?? '10')
   const maxPage = Math.ceil(filtered.length / pageSize)
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
-  const categoryActiveCount = category !== 'ALL' ? 1 : 0
-  const statusActiveCount = status !== 'ALL' ? 1 : 0
+  const categoryActiveCount = selectedCategories.length
+  const statusActiveCount = selectedStatuses.length
   const activeFilterCount = categoryActiveCount + (isAdmin ? statusActiveCount : 0)
 
   const categories = [
@@ -111,8 +141,8 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
       controls: STATUS_OPTIONS.map(opt => (
         <FilterOption
           key={opt.value}
-          active={status === opt.value}
-          onClick={() => setFilter('status', opt.urlValue)}
+          active={opt.value === 'ALL' ? selectedStatuses.length === 0 : selectedStatuses.includes(opt.value as 'DRAFT' | 'PUBLISHED')}
+          onClick={() => toggleStatus(opt.value)}
         >
           {opt.label}
         </FilterOption>
@@ -124,8 +154,8 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
       controls: CATEGORY_OPTIONS.map(opt => (
         <FilterOption
           key={opt.value}
-          active={category === opt.value}
-          onClick={() => setFilter('category', opt.urlValue)}
+          active={opt.value === 'ALL' ? selectedCategories.length === 0 : selectedCategories.includes(opt.value as EducationField)}
+          onClick={() => toggleCategory(opt.value)}
         >
           {opt.label}
         </FilterOption>
