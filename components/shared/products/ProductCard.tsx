@@ -13,7 +13,6 @@ import { deleteProduct, publishProduct } from '@/actions/products'
 import { BsThreeDots } from "react-icons/bs"
 import { MdOutlineModeEdit, MdOutlinePublish, MdOutlineUnpublished } from "react-icons/md"
 import { FaRegTrashCan } from "react-icons/fa6"
-import { title } from "node:process"
 import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
 import { isProductPublishable, formatPrice } from "@/app/lib/product-utils"
 
@@ -116,7 +115,6 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
   function handleAnimationEnd() { if (closing) { setClosing(false); setOpen(false) } }
 
   useEffect(() => {
-    console.log("Draft" + product.draft)
     if (!open || closing) return
     function onClickOutside(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) closeMenu()
@@ -139,7 +137,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
    
     <div
       className={` card group flex flex-col p-0 hover:border-primary transition-colors duration-200 hover:shadow-md cursor-pointer`}
-      onClick={() => router.push(`/produkter/${product.id}`)}
+      onClick={() => router.push(isAdmin ? `/admin/preview-produkt/${product.id}` : `/produkter/${product.id}`)}
       onMouseLeave={closeMenu}
     >
       {popUpElement}

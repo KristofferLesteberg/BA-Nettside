@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "@/app/globals.css";
 
 import Providers from '@/components/shared/providers';
+import AppToaster from '@/components/shared/AppToaster';
 import "react-phone-number-input/style.css";
 import "rc-slider/assets/index.css";
 import "swiper/css";
@@ -25,6 +26,7 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
+        <AppToaster />
       </body>
     </html>
   );

@@ -33,7 +33,7 @@ RUN apk add --no-cache su-exec && \
     adduser --system --uid 1001 ba-user && \
     mkdir -p /app/data
 
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=ba-user:ba-group /app/public ./public
 COPY --from=builder --chown=ba-user:ba-group /app/.next/standalone ./
 COPY --from=builder --chown=ba-user:ba-group /app/.next/static ./.next/static
 COPY --from=builder /app/prisma.config.ts ./

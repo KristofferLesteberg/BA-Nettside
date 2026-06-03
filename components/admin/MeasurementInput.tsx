@@ -1,10 +1,11 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { FaMinus } from "react-icons/fa6"
+import { IoTrashOutline } from "react-icons/io5";
 import { RotateCcw } from "lucide-react"
 import { IoClose } from "react-icons/io5"
 import type { Measure } from "./MeasurementList"
+import type { ReactNode } from "react"
 
 const PRESET_UNITS = ["mm", "cm", "m", "g", "kg", "l", "ml", "stk", "%"]
 const CUSTOM_SENTINEL = "__custom__"
@@ -75,9 +76,10 @@ type Props = {
   onDelete: () => void
   onRevert?: () => void
   originalMeasure?: Measure
+  dragHandle?: ReactNode
 }
 
-export default function MeasurementInput({ name, value, unit, onChange, onDelete, onRevert, originalMeasure }: Props) {
+export default function MeasurementInput({ name, value, unit, onChange, onDelete, onRevert, originalMeasure, dragHandle }: Props) {
   const hasChanges = originalMeasure !== undefined && (
     name  !== originalMeasure.name  ||
     value !== originalMeasure.value ||
@@ -87,6 +89,7 @@ export default function MeasurementInput({ name, value, unit, onChange, onDelete
 
   return (
     <div className="flex flex-row gap-2 items-center bg-surface border border-border rounded-md p-2">
+      {dragHandle}
       <input
         type="text"
         placeholder="Navn"
@@ -120,7 +123,7 @@ export default function MeasurementInput({ name, value, unit, onChange, onDelete
         className="btn btn-error btn-icon shrink-0"
         onClick={onDelete}
       >
-        <FaMinus />
+        <IoTrashOutline />
       </button>
     </div>
   )
