@@ -1,5 +1,7 @@
+"use client"
 import { FaEnvelope, FaFacebook, FaGlobe, FaLocationDot } from 'react-icons/fa6';
 import { IconType } from 'react-icons';
+import { motion, type Variants } from 'motion/react';
 
 interface ContactItem {
   Icon: IconType;
@@ -41,60 +43,101 @@ const contactItems: ContactItem[] = [
   },
 ];
 
+const listContainer: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.2 } },
+}
+
+const listItem: Variants = {
+  hidden: (i: number) => ({ opacity: 0, x: i % 2 === 0 ? 80 : -80 }),
+  show: { opacity: 1, x: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+}
+
 export default function ContactPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
 
       {/* Page header */}
       <div className="py-10">
-        <p className="label mb-2">Sam Eyde VGS</p>
-        <h1 className="heading-1 mb-3">Kontakt oss</h1>
-        <p className="body-text">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="label mb-2"
+        >
+          Sam Eyde VGS
+        </motion.p>
+        <motion.h1
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.25 }}
+          className="heading-1 mb-3"
+        >
+          Kontakt oss
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="body-text"
+        >
           Ta gjerne kontakt med oss – vi svarer så raskt vi kan.
-        </p>
+        </motion.p>
       </div>
 
       {/* Contact options */}
-      <section className="card mb-12 pb-1.5">
+      <motion.section
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="card mb-12 pb-1.5"
+      >
         <div className="flex items-center gap-2 mb-6">
           <FaLocationDot className="text-primary text-lg" />
           <h2 className="heading-3">Kontaktinformasjon</h2>
         </div>
 
-        <ul className="divide-y divide-border">
-          {contactItems.map(({ Icon, label, value, href }) => (
-            <li key={href}>
+        <motion.ul
+          variants={listContainer}
+          initial='hidden'
+          whileInView='show'
+          viewport={{ once: true, amount: 0.1 }}
+          className="divide-y divide-border"
+        >
+          {contactItems.map(({ Icon, label, value, href }, index) => (
+            <motion.li key={href} variants={listItem} custom={index}>
               <a
                 href={href}
                 target={href.startsWith('http') ? '_blank' : undefined}
                 rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
                 className="flex items-center gap-4 py-4 group"
               >
-                {/* Icon bubble */}
                 <span className="shrink-0 w-10 h-10 rounded-full bg-surface-sunken flex items-center justify-center text-primary text-base transition-colors duration-300 group-hover:bg-primary group-hover:text-white">
                   <Icon />
                 </span>
-
-                {/* Text */}
                 <div className="min-w-0">
                   <p className="small-text mb-0.5">{label}</p>
                   <p className="font-medium text-text truncate transition-colors duration-150 group-hover:text-primary">
                     {value}
                   </p>
                 </div>
-
-                {/* Arrow */}
                 <span className="ml-auto mr-5 text-text-faint opacity-0 -translate-x-1 transition-all duration-150 group-hover:opacity-100 group-hover:translate-x-0 text-2xl">
                   →
                 </span>
               </a>
-            </li>
+            </motion.li>
           ))}
-        </ul>
-      </section>
+        </motion.ul>
+      </motion.section>
 
       {/* Map */}
-      <section>
+      <motion.section
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="flex items-center gap-2">
           <FaLocationDot className="text-primary text-lg" />
           <h2 className="heading-3">Finn oss</h2>
@@ -118,7 +161,7 @@ export default function ContactPage() {
             Åpne i kart ↗
           </a>
         </p>
-      </section>
+      </motion.section>
 
     </main>
   );
