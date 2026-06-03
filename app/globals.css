@@ -332,15 +332,15 @@
 }
 
 /* rc-slider theme overrides */
-.rc-slider-rail {
+.rc-slider .rc-slider-rail {
   background-color: var(--color-border);
   height: 6px;
 }
-.rc-slider-track {
+.rc-slider .rc-slider-track {
   background-color: var(--color-primary);
   height: 6px;
 }
-.rc-slider-handle {
+.rc-slider .rc-slider-handle {
   width: 18px;
   height: 18px;
   margin-top: -6px;
@@ -349,9 +349,9 @@
   opacity: 1;
   box-shadow: none;
 }
-.rc-slider-handle:hover,
-.rc-slider-handle:focus,
-.rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
+.rc-slider .rc-slider-handle:hover,
+.rc-slider .rc-slider-handle:focus,
+.rc-slider .rc-slider-handle-dragging {
   border-color: var(--color-primary-hover);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 20%, transparent);
 }

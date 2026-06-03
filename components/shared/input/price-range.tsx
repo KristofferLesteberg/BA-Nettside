@@ -1,54 +1,62 @@
 "use client"
 
+import { useEffect, useState } from 'react'
 import Slider from 'rc-slider'
 import PriceInput from '@/components/shared/input/price-input'
 
 interface PriceRangeProps {
-  min: string
-  max: string
-  onChange: (min: string, max: string) => void
+  value: [number, number]
+  onCommit: (min: number, max: number) => void
   maxValue?: number
   step?: number
 }
 
-export default function PriceRange({ min, max, onChange, maxValue = 500000, step = 1000 }: PriceRangeProps) {
-  const minVal = parseInt(min || '0')
-  const maxVal = parseInt(max || '0')
+export default function PriceRange({ value, onCommit, maxValue = 500000, step = 1000 }: PriceRangeProps) {
+  const [localMin, setLocalMin] = useState(String(value[0]))
+  const [localMax, setLocalMax] = useState(String(value[1]))
+
+  const [extMin, extMax] = value
+  useEffect(() => {
+    setLocalMin(String(extMin))
+    setLocalMax(String(extMax))
+  }, [extMin, extMax])
+
+  const numMin = parseFloat(localMin) || 0
+  const numMax = parseFloat(localMax) || 0
+  const sliderMin = Math.max(0, Math.min(numMin, maxValue))
+  const sliderMax = Math.max(0, Math.min(numMax, maxValue))
+
+  function commit(lo: number, hi: number) {
+    const min = Math.max(0, Math.min(lo, maxValue))
+    const max = Math.max(min, Math.min(hi, maxValue))
+    onCommit(min, max)
+  }
 
   return (
-    <div className="space-y-2">
-      <label className="label">Budsjettramme (NOK)</label>
-      <div className="flex justify-between items-center gap-3">
-        <div className="flex-1">
-          <PriceInput
-            value={min}
-            placeholder="Minimumspris"
-            onChange={(v) => {
-              const n = parseFloat(v)
-              onChange(!isNaN(n) && n > maxValue ? String(maxValue) : v, max)
-            }}
-            onBlur={() => {
-              const v = Math.min(parseFloat(min) || 0, maxVal)
-              onChange(isNaN(v) ? '0' : v.toFixed(2), max)
-            }}
-          />
-        </div>
-        <span className="text-xs text-text-faint shrink-0">—</span>
-        <div className="flex-1">
-          <PriceInput
-            value={max}
-            placeholder="Maximumspris"
-            onChange={(v) => {
-              const n = parseFloat(v)
-              onChange(min, !isNaN(n) && n > maxValue ? String(maxValue) : v)
-            }}
-            onBlur={() => {
-              const v = Math.max(parseFloat(max) || 0, minVal)
-              const clamped = Math.min(v, maxValue)
-              onChange(min, isNaN(clamped) ? '0' : clamped.toFixed(2))
-            }}
-          />
-        </div>
+    <div className="flex flex-col gap-2">
+      <span className="label">Budsjettramme (NOK)</span>
+      <div className="flex flex-col gap-2">
+        <PriceInput
+          value={localMin}
+          placeholder="0"
+          onChange={(v) => setLocalMin(v)}
+          onBlur={() => {
+            const clamped = Math.min(numMin, numMax, maxValue)
+            setLocalMin(String(clamped))
+            commit(clamped, numMax)
+          }}
+        />
+        <PriceInput
+          value={localMax}
+          placeholder={String(maxValue)}
+          onChange={(v) => setLocalMax(v)}
+          onBlur={() => {
+            const clamped = Math.max(numMax, numMin)
+            const final = Math.min(clamped, maxValue)
+            setLocalMax(String(final))
+            commit(numMin, final)
+          }}
+        />
       </div>
       <div className="px-1 py-2">
         <Slider
@@ -56,10 +64,15 @@ export default function PriceRange({ min, max, onChange, maxValue = 500000, step
           min={0}
           max={maxValue}
           step={step}
-          value={[minVal, maxVal]}
+          value={[sliderMin, sliderMax]}
           onChange={(vals) => {
             const [lo, hi] = vals as number[]
-            onChange(String(lo), String(hi))
+            setLocalMin(String(lo))
+            setLocalMax(String(hi))
+          }}
+          onChangeComplete={(vals) => {
+            const [lo, hi] = vals as number[]
+            commit(lo, hi)
           }}
           allowCross={false}
         />

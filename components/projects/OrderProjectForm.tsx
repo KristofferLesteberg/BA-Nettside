@@ -418,9 +418,8 @@ export default function OrderProjectForm({ onSuccess }: Props) {
               </div>
 
               <PriceRange
-                min={minBudget}
-                max={maxBudget}
-                onChange={(lo, hi) => { setMinBudget(lo); setMaxBudget(hi) }}
+                value={[Number(minBudget), Number(maxBudget)]}
+                onCommit={(lo, hi) => { setMinBudget(String(lo)); setMaxBudget(String(hi)) }}
               />
 
               <button type="submit" disabled={submitting} className="btn btn-primary w-full gap-2">

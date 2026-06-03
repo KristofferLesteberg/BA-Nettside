@@ -13,7 +13,6 @@ import Pagination from "@/components/shared/Pagination"
 export type ProjectStatus = Status | 'ALL'
 export type SortOptions = 'NEWEST' | 'OLDEST' | 'PRICE_ASC' | 'PRICE_DESC'
 export type Category = EducationField | 'ALL'
-export type PriceOptions = 'MAX_PRICE' | 'MIN_PRICE'
 
 const STATUS_OPTIONS: { value: ProjectStatus, label: string}[] = [
   { value: 'ALL', label: "Alle" },
@@ -32,10 +31,8 @@ const SORT_OPTIONS: { value: SortOptions, label: string }[] = [
   { value: 'OLDEST', label: 'Eldste' },
 ]
 
-const PRICE_OPTIONS: { value: PriceOptions, label: string }[] = [
-  { value: 'MAX_PRICE', label: "Maks pris" },
-  { value: 'MIN_PRICE', label: "Minimum pris"}
-]
+const DEFAULT_MIN = 0
+const DEFAULT_MAX = 500000
 
 interface Props {
   projects: SerializedProject[]
@@ -47,8 +44,8 @@ export default function FilteredProjectGrid({ projects }: Props) {
   const status = (searchParams.get('status') as ProjectStatus) ?? 'ALL'
   const category = (searchParams.get('category') as Category) ?? 'ALL'
   const sort = (searchParams.get('sort') as SortOptions) ?? 'NEWEST'
-  const minPrice = Number(searchParams.get('minPrice') ?? '0')
-  const maxPrice = Number(searchParams.get('maxPrice') ?? '500000')
+  const minPrice = Number(searchParams.get('minPrice') ?? DEFAULT_MIN)
+  const maxPrice = Number(searchParams.get('maxPrice') ?? DEFAULT_MAX)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [selectedProject, setSelectedProject] = useState<SerializedProject | null>(null)
 
@@ -62,6 +59,24 @@ export default function FilteredProjectGrid({ projects }: Props) {
     router.replace('?' + qs)
   }
 
+  function setFilters(pairs: Record<string, string>) {
+    const params = new URLSearchParams(searchParams.toString())
+    Object.entries(pairs).forEach(([k, v]) => params.set(k, v))
+    const qs = params.toString()
+    const forStorage = new URLSearchParams(qs)
+    forStorage.delete('tab')
+    sessionStorage.setItem('tabFilters_prosjekter', forStorage.toString())
+    router.replace('?' + qs)
+  }
+
+  function resetAllFilters() {
+    const tab = searchParams.get('tab')
+    const params = new URLSearchParams()
+    if (tab) params.set('tab', tab)
+    sessionStorage.removeItem('tabFilters_prosjekter')
+    router.replace('?' + params.toString())
+  }
+
   useEffect(() => {
     const hasFilters = ['status', 'category', 'sort', 'minPrice', 'maxPrice'].some(k => searchParams.get(k))
     if (!hasFilters) {
@@ -72,28 +87,24 @@ export default function FilteredProjectGrid({ projects }: Props) {
 
   const filtered = useMemo(() => {
     const categoryResult = projects.filter((project) => {
-      if(category === 'ALL') return true
-      if(category !== project.educationField) return false
-      return true
+      if (category === 'ALL') return true
+      return category === project.educationField
     })
 
     const statusResult = categoryResult.filter((project) => {
-      if(status === 'ALL') return true
-      if(status !== project.status) return false
-      return true
+      if (status === 'ALL') return true
+      return status === project.status
     })
 
+    const priceActive = minPrice !== DEFAULT_MIN || maxPrice !== DEFAULT_MAX
     const priceRangeResult = statusResult.filter((project) => {
-      if(minPrice === 0 && maxPrice === 500000) return true
-      if(Number(project.minPrice) > minPrice) return false
-      if(Number(project.maxPrice) < maxPrice) return false
-      return true
+      if (!priceActive) return true
+      return project.minPrice <= maxPrice && project.maxPrice >= minPrice
     })
 
-    switch(sort) {
-      case 'NEWEST':     priceRangeResult.sort((a, b) => b.createdAt.localeCompare(a.createdAt)); break
-      case 'OLDEST':     priceRangeResult.sort((a, b) => a.createdAt.localeCompare(b.createdAt)); break
-
+    switch (sort) {
+      case 'NEWEST': priceRangeResult.sort((a, b) => b.createdAt.localeCompare(a.createdAt)); break
+      case 'OLDEST': priceRangeResult.sort((a, b) => a.createdAt.localeCompare(b.createdAt)); break
     }
     return priceRangeResult
   }, [status, category, minPrice, maxPrice, sort, projects])
@@ -104,7 +115,9 @@ export default function FilteredProjectGrid({ projects }: Props) {
   const maxPage = Math.ceil(filtered.length / pageSize)
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
-  const activeFilterCount = (status !== 'ALL' ? 1 : 0) + (category !== 'ALL' ? 1 : 0)
+  const priceActive = minPrice !== DEFAULT_MIN || maxPrice !== DEFAULT_MAX
+  const activeFilterCount = (status !== 'ALL' ? 1 : 0) + (category !== 'ALL' ? 1 : 0) + (priceActive ? 1 : 0)
+
   const controlPanel = (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
@@ -137,6 +150,11 @@ export default function FilteredProjectGrid({ projects }: Props) {
         </div>
       </div>
 
+      <PriceRange
+        value={[minPrice, maxPrice]}
+        onCommit={(lo, hi) => setFilters({ minPrice: String(lo), maxPrice: String(hi) })}
+      />
+
       <hr className="border-border" />
 
       <div className="flex flex-col gap-2">
@@ -153,21 +171,19 @@ export default function FilteredProjectGrid({ projects }: Props) {
           ))}
         </div>
       </div>
-      
+
+      <hr className="border-border" />
+
+      <button onClick={resetAllFilters} className="btn btn-outline w-full">
+        Tilbakestill alle filtre
+      </button>
     </div>
   )
 
   return (
     <>
-      <div className="flex flex-row justify-between items-center gap-4 mb-5">
-        <div className="flex-1">
-          <PriceRange min={minPrice.toString()} max={maxPrice.toString()} onChange={(lo, hi) => { setFilter('minPrice', lo); setFilter('maxPrice', hi) }} />
-        </div>
-        <button onClick={() => { setFilter('minPrice', '0'); setFilter('maxPrice', '500000') }} className="btn btn-secondary h-1/3 ">Tilbakestill</button>
-      </div>
-    
     <div className="flex gap-8 items-start">
-    
+
       <div className="flex-1 min-w-0 flex flex-col gap-4">
         <div className="flex items-center justify-between lg:hidden">
           <p className="small-text">
@@ -231,6 +247,6 @@ export default function FilteredProjectGrid({ projects }: Props) {
     </div>
 
     <ProjectDrawer project={selectedProject} onClose={() => setSelectedProject(null)} />
-    </ >
+    </>
   )
 }
