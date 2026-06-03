@@ -23,10 +23,10 @@ function AccordionSection({ label, controls, activeCount }: FilterCategory) {
     <div>
       <button
         onClick={() => setOpen(o => !o)}
-        className="flex items-center justify-between w-full py-2.5 group"
+        className="flex items-center justify-between w-full py-2 group cursor-pointer"
       >
         <div className="flex items-center gap-2">
-          <span className="label">{label}</span>
+          <span className="label group-hover:text-primary transition-colors duration-150">{label}</span>
           {!!activeCount && (
             <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-primary text-text-on-primary text-[10px] font-bold leading-none">
               {activeCount}
@@ -45,7 +45,7 @@ function AccordionSection({ label, controls, activeCount }: FilterCategory) {
         }}
         className="overflow-hidden"
       >
-        <div className="pb-3 flex flex-col gap-0.5">
+        <div className="pb-2 flex flex-col gap-0.5">
           {controls}
         </div>
       </div>
@@ -65,7 +65,7 @@ export function FilterOption({
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-2.5 w-full px-3 py-2 rounded-md text-sm font-medium text-left transition-all duration-150 ${
+      className={`flex items-center gap-2 w-full px-2.5 py-1.5 rounded-md text-sm font-medium text-left transition-all duration-150 cursor-pointer ${
         active
           ? 'bg-primary text-text-on-primary'
           : 'text-text hover:bg-surface-raised'
@@ -85,7 +85,7 @@ export default function FilterPanel({ categories, activeFilterCount, onReset, ch
   const resetButton = onReset ? (
     <button
       onClick={onReset}
-      className="flex items-center gap-1.5 text-xs text-text-faint hover:text-primary transition-colors font-medium"
+      className="flex items-center gap-1.5 text-xs text-text-faint hover:text-primary transition-colors font-medium cursor-pointer"
     >
       <FaArrowsRotate className="text-[9px]" />
       Nullstill
@@ -126,7 +126,7 @@ export default function FilterPanel({ categories, activeFilterCount, onReset, ch
             <h2 className="heading-4">Filtre</h2>
             {resetButton}
           </div>
-          <div className="px-2 pb-3">
+          <div className="px-1.5 pb-2">
             {panelContent}
           </div>
         </div>
