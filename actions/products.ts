@@ -161,12 +161,16 @@ export async function updateProductAmount(id: number, amount: number) {
 }
 
 
-export async function deleteProduct(id: number) {
+export async function deleteProduct(id: number, deleteOrders = false) {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
 
   const product = await prisma.product.findUnique({ where: { id } })
   if (!product) throw new Error('Produkt ikke funnet')
+
+  if (deleteOrders) {
+    await prisma.productOrder.deleteMany({ where: { productId: id } })
+  }
 
   await deleteAllProductImages(id)
   await prisma.product.delete({ where: { id } })
