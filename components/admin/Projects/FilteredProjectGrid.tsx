@@ -1,34 +1,41 @@
 "use client"
+
 import { EducationField, Status } from "@/generated/prisma"
 import { useEffect, useMemo, useState } from "react"
-import { FaSliders, FaXmark } from "react-icons/fa6"
 import ProjectCard, { type SerializedProject } from "./ProjectCard"
 import ProjectDrawer from "./ProjectDrawer"
 import PriceRange from "@/components/shared/input/price-range"
-import { EDUCATION_FIELD_OPTIONS } from "@/app/lib/education-fields"
+import { EDUCATION_FIELD_OPTIONS, CATEGORY_TO_URL, CATEGORY_FROM_URL } from "@/app/lib/education-fields"
 import { useSearchParams, useRouter } from "next/navigation"
 import Pagination from "@/components/shared/Pagination"
-
+import FilterPanel, { FilterOption } from "@/components/shared/FilterPanel"
 
 export type ProjectStatus = Status | 'ALL'
-export type SortOptions = 'NEWEST' | 'OLDEST' | 'PRICE_ASC' | 'PRICE_DESC'
+export type SortOption = 'nyeste' | 'eldste'
 export type Category = EducationField | 'ALL'
 
-const STATUS_OPTIONS: { value: ProjectStatus, label: string}[] = [
-  { value: 'ALL', label: "Alle" },
-  { value: 'NEW', label: "Ny" },
-  { value: 'IN_PROGRESS', label: "Pågående" },
-  { value: 'COMPLETE', label: "Ferdig" }
+const STATUS_OPTIONS: { value: ProjectStatus; urlValue: string; label: string }[] = [
+  { value: 'ALL',         urlValue: 'alle',     label: 'Alle' },
+  { value: 'NEW',         urlValue: 'ny',       label: 'Ny' },
+  { value: 'IN_PROGRESS', urlValue: 'pågående', label: 'Pågående' },
+  { value: 'COMPLETE',    urlValue: 'ferdig',   label: 'Ferdig' },
 ]
 
-const CATEGORY_OPTIONS: { value: Category; label: string }[] = [
-  { value: 'ALL', label: 'Alle' },
-  ...EDUCATION_FIELD_OPTIONS,
+const STATUS_FROM_URL: Record<string, ProjectStatus> = {
+  alle:     'ALL',
+  ny:       'NEW',
+  pågående: 'IN_PROGRESS',
+  ferdig:   'COMPLETE',
+}
+
+const CATEGORY_OPTIONS: { value: Category; urlValue: string; label: string }[] = [
+  { value: 'ALL', urlValue: 'alle', label: 'Alle' },
+  ...EDUCATION_FIELD_OPTIONS.map(o => ({ value: o.value, urlValue: CATEGORY_TO_URL[o.value], label: o.label })),
 ]
 
-const SORT_OPTIONS: { value: SortOptions, label: string }[] = [
-  { value: 'NEWEST', label: 'Nyeste' },
-  { value: 'OLDEST', label: 'Eldste' },
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: 'nyeste', label: 'Nyeste' },
+  { value: 'eldste', label: 'Eldste' },
 ]
 
 const DEFAULT_MIN = 0
@@ -41,12 +48,13 @@ interface Props {
 export default function FilteredProjectGrid({ projects }: Props) {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const status = (searchParams.get('status') as ProjectStatus) ?? 'ALL'
-  const category = (searchParams.get('category') as Category) ?? 'ALL'
-  const sort = (searchParams.get('sort') as SortOptions) ?? 'NEWEST'
+
+  const status = STATUS_FROM_URL[searchParams.get('status') ?? 'alle'] ?? 'ALL'
+  const category = CATEGORY_FROM_URL[searchParams.get('category') ?? 'alle'] ?? 'ALL'
+  const sort = (searchParams.get('sort') as SortOption) ?? 'nyeste'
   const minPrice = Number(searchParams.get('minPrice') ?? DEFAULT_MIN)
   const maxPrice = Number(searchParams.get('maxPrice') ?? DEFAULT_MAX)
-  const [drawerOpen, setDrawerOpen] = useState(false)
+
   const [selectedProject, setSelectedProject] = useState<SerializedProject | null>(null)
 
   function setFilter(key: string, value: string) {
@@ -86,29 +94,17 @@ export default function FilteredProjectGrid({ projects }: Props) {
   }, [])
 
   const filtered = useMemo(() => {
-    const categoryResult = projects.filter((project) => {
-      if (category === 'ALL') return true
-      return category === project.educationField
-    })
-
-    const statusResult = categoryResult.filter((project) => {
-      if (status === 'ALL') return true
-      return status === project.status
-    })
-
+    const categoryResult = projects.filter(p => category === 'ALL' || p.educationField === category)
+    const statusResult = categoryResult.filter(p => status === 'ALL' || p.status === status)
     const priceActive = minPrice !== DEFAULT_MIN || maxPrice !== DEFAULT_MAX
-    const priceRangeResult = statusResult.filter((project) => {
+    const priceResult = statusResult.filter(p => {
       if (!priceActive) return true
-      return project.minPrice <= maxPrice && project.maxPrice >= minPrice
+      return p.minPrice <= maxPrice && p.maxPrice >= minPrice
     })
-
-    switch (sort) {
-      case 'NEWEST': priceRangeResult.sort((a, b) => b.createdAt.localeCompare(a.createdAt)); break
-      case 'OLDEST': priceRangeResult.sort((a, b) => a.createdAt.localeCompare(b.createdAt)); break
-    }
-    return priceRangeResult
+    if (sort === 'eldste') priceResult.sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+    else priceResult.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    return priceResult
   }, [status, category, minPrice, maxPrice, sort, projects])
-
 
   const currentPage = Number(searchParams.get('page') ?? '1')
   const pageSize = Number(searchParams.get('pageSize') ?? '10')
@@ -116,137 +112,95 @@ export default function FilteredProjectGrid({ projects }: Props) {
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
   const priceActive = minPrice !== DEFAULT_MIN || maxPrice !== DEFAULT_MAX
-  const activeFilterCount = (status !== 'ALL' ? 1 : 0) + (category !== 'ALL' ? 1 : 0) + (priceActive ? 1 : 0)
+  const statusActiveCount = status !== 'ALL' ? 1 : 0
+  const categoryActiveCount = category !== 'ALL' ? 1 : 0
+  const priceActiveCount = priceActive ? 1 : 0
+  const activeFilterCount = statusActiveCount + categoryActiveCount + priceActiveCount
 
-  const controlPanel = (
-    <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <span className="label">Status</span>
-        <div className="flex flex-col gap-1.5">
-          {STATUS_OPTIONS.map(opt => (
-            <button
-              key={opt.value}
-              onClick={() => setFilter('status', opt.value)}
-              className={`btn w-full justify-start ${status === opt.value ? "btn-primary" : "btn-outline"}`}
-            >
-              {opt.label}
-            </button>
-          ))}
+  const categories = [
+    {
+      label: 'Status',
+      activeCount: statusActiveCount,
+      controls: STATUS_OPTIONS.map(opt => (
+        <FilterOption
+          key={opt.value}
+          active={status === opt.value}
+          onClick={() => setFilter('status', opt.urlValue)}
+        >
+          {opt.label}
+        </FilterOption>
+      )),
+    },
+    {
+      label: 'Kategori',
+      activeCount: categoryActiveCount,
+      controls: CATEGORY_OPTIONS.map(opt => (
+        <FilterOption
+          key={opt.value}
+          active={category === opt.value}
+          onClick={() => setFilter('category', opt.urlValue)}
+        >
+          {opt.label}
+        </FilterOption>
+      )),
+    },
+    {
+      label: 'Prisområde',
+      activeCount: priceActiveCount,
+      controls: (
+        <div className="px-1 pt-1">
+          <PriceRange
+            value={[minPrice, maxPrice]}
+            onCommit={(lo, hi) => setFilters({ minPrice: String(lo), maxPrice: String(hi) })}
+          />
         </div>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <span className="label">Kategori</span>
-        <div className="flex flex-col gap-1.5">
-          {CATEGORY_OPTIONS.map(opt => (
-            <button
-              key={opt.value}
-              onClick={() => setFilter('category', opt.value)}
-              className={`btn w-full justify-start ${category === opt.value ? "btn-primary" : "btn-outline"}`}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <PriceRange
-        value={[minPrice, maxPrice]}
-        onCommit={(lo, hi) => setFilters({ minPrice: String(lo), maxPrice: String(hi) })}
-      />
-
-      <hr className="border-border" />
-
-      <div className="flex flex-col gap-2">
-        <span className="label">Sorter</span>
-        <div className="flex flex-col gap-1.5">
-          {SORT_OPTIONS.map(opt => (
-            <button
-              key={opt.value}
-              onClick={() => setFilter('sort', opt.value)}
-              className={`btn w-full justify-start ${sort === opt.value ? "btn-secondary" : "btn-outline"}`}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <hr className="border-border" />
-
-      <button onClick={resetAllFilters} className="btn btn-outline w-full">
-        Tilbakestill alle filtre
-      </button>
-    </div>
-  )
+      ),
+    },
+    {
+      label: 'Sorter',
+      controls: SORT_OPTIONS.map(opt => (
+        <FilterOption
+          key={opt.value}
+          active={sort === opt.value}
+          onClick={() => setFilter('sort', opt.value)}
+        >
+          {opt.label}
+        </FilterOption>
+      )),
+    },
+  ]
 
   return (
     <>
-    <div className="flex gap-8 items-start">
-
-      <div className="flex-1 min-w-0 flex flex-col gap-4">
-        <div className="flex items-center justify-between lg:hidden">
-          <p className="small-text">
-            {filtered.length} {filtered.length === 1 ? "prosjekt" : "prosjekter"}
-          </p>
-          <button onClick={() => setDrawerOpen(true)} className="btn btn-outline gap-2">
-            <FaSliders />
-            Filtre{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
-          </button>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 small-text text-muted">
-            <span>{filtered.length} prosjekter</span>
-            <span>·</span>
-            <span>Side {currentPage} av {maxPage}</span>
+      <FilterPanel categories={categories} activeFilterCount={activeFilterCount} onReset={resetAllFilters}>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 small-text text-muted">
+              <span>{filtered.length} {filtered.length === 1 ? 'prosjekt' : 'prosjekter'}</span>
+              <span>·</span>
+              <span>Side {currentPage} av {maxPage}</span>
+            </div>
+            <select
+              value={pageSize}
+              onChange={e => setFilter('pageSize', e.target.value)}
+              className="input w-auto py-1 text-sm cursor-pointer"
+            >
+              {[10, 20, 30, 40, 50].map(n => (
+                <option key={n} value={n}>{n} per side</option>
+              ))}
+            </select>
           </div>
-          <select
-            value={pageSize}
-            onChange={e => setFilter('pageSize', e.target.value)}
-            className="input w-auto py-1 text-sm cursor-pointer"
-          >
-            {[10, 20, 30, 40, 50].map(n => (
-              <option key={n} value={n}>{n} per side</option>
+          <div className="flex flex-col gap-3">
+            {paginated.map(project => (
+              <ProjectCard project={project} key={project.id} onView={setSelectedProject} />
             ))}
-          </select>
+          </div>
+          <div className="mx-auto mt-10">
+            <Pagination currentPage={currentPage} maxPages={maxPage} />
+          </div>
         </div>
-        <div className="flex flex-col gap-3">
-          {paginated.map((project) => (
-            <ProjectCard project={project} key={project.id} onView={setSelectedProject} />
-          ))}
-        </div>
-        <div className="mx-auto mt-10">
-          <Pagination currentPage={currentPage} maxPages={maxPage} />
-        </div>
-      </div>
-
-      <aside className="hidden lg:flex flex-col gap-0 w-56 shrink-0 sticky top-28 card">
-        {controlPanel}
-      </aside>
-
-      <div
-        onClick={() => setDrawerOpen(false)}
-        className={`fixed inset-0 z-59 bg-black/40 lg:hidden transition-opacity duration-300 ${drawerOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-      />
-
-      <aside
-        className={`fixed top-0 right-0 h-full w-72 z-60 bg-bg border-l border-border shadow-xl flex flex-col gap-0 overflow-y-auto lg:hidden transition-transform duration-300 ${drawerOpen ? "translate-x-0" : "translate-x-full"}`}
-      >
-        <div className="flex items-center justify-between p-4 border-b border-border sticky top-0 bg-bg">
-          <h2 className="heading-4">Filtre</h2>
-          <button onClick={() => setDrawerOpen(false)} className="btn btn-ghost w-8 h-8 p-0">
-            <FaXmark />
-          </button>
-        </div>
-        <div className="p-5 flex-1">
-          {controlPanel}
-        </div>
-      </aside>
-
-    </div>
-
-    <ProjectDrawer project={selectedProject} onClose={() => setSelectedProject(null)} />
+      </FilterPanel>
+      <ProjectDrawer project={selectedProject} onClose={() => setSelectedProject(null)} />
     </>
   )
 }
