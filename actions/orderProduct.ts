@@ -81,4 +81,14 @@ export async function UpdateOrder(id: number, status: string) {
   revalidatePath("/admin")
 }
 
+export async function getOrdersByProductId(productId: number) {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+
+  return prisma.productOrder.findMany({
+    where: { productId },
+    select: { id: true, clientName: true, amount: true, status: true },
+  })
+}
+
 
