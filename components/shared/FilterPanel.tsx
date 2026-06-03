@@ -121,7 +121,7 @@ export default function FilterPanel({ categories, activeFilterCount, onReset, ch
 
       {/* Desktop sidebar */}
       <aside className="hidden lg:block w-56 shrink-0 sticky top-28">
-        <div className="card">
+        <div className="card p-2">
           <div className="flex items-center justify-between px-4 pt-4 pb-1">
             <h2 className="heading-4">Filtre</h2>
             {resetButton}

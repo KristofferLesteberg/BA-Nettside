@@ -34,7 +34,6 @@ export default function PriceRange({ value, onCommit, maxValue = 500000, step = 
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="label">Budsjettramme (NOK)</span>
       <div className="flex flex-col gap-2">
         <PriceInput
           value={localMin}

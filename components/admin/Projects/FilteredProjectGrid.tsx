@@ -183,7 +183,7 @@ export default function FilteredProjectGrid({ projects }: Props) {
       label: 'Prisområde',
       activeCount: priceActiveCount,
       controls: (
-        <div className="px-1 pt-1">
+        <div className="px-2 pt-1">
           <PriceRange
             value={[minPrice, maxPrice]}
             onCommit={(lo, hi) => setFilters({ minPrice: String(lo), maxPrice: String(hi) })}

@@ -417,10 +417,13 @@ export default function OrderProjectForm({ onSuccess }: Props) {
                 />
               </div>
 
-              <PriceRange
-                value={[Number(minBudget), Number(maxBudget)]}
-                onCommit={(lo, hi) => { setMinBudget(String(lo)); setMaxBudget(String(hi)) }}
-              />
+              <div className="space-y-1.5">
+                <label className="label">Budsjettramme (NOK)</label>
+                <PriceRange
+                  value={[Number(minBudget), Number(maxBudget)]}
+                  onCommit={(lo, hi) => { setMinBudget(String(lo)); setMaxBudget(String(hi)) }}
+                />
+              </div>
 
               <button type="submit" disabled={submitting} className="btn btn-primary w-full gap-2">
                 {submitting ? <><Spinner />Sender…</> : 'Send forespørsel'}
