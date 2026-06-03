@@ -25,10 +25,17 @@ const STATUS_OPTIONS: { value: OrderStatusFilter; urlValue: string; label: strin
 ]
 
 const STATUS_FROM_URL: Record<string, OrderStatusFilter> = {
-  alle:      "ALL",
-  ny:        "NEW",
+  alle:        "ALL",
+  ny:          "NEW",
   "i-kontakt": "IN_CONTACT",
-  ferdig:    "COMPLETED",
+  ferdig:      "COMPLETED",
+}
+
+const STATUS_TO_URL: Record<OrderStatusFilter, string> = {
+  ALL:        "alle",
+  NEW:        "ny",
+  IN_CONTACT: "i-kontakt",
+  COMPLETED:  "ferdig",
 }
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
@@ -40,8 +47,20 @@ export default function FilteredOrdersGrid({ orders }: Props) {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const status = STATUS_FROM_URL[searchParams.get('status') ?? 'alle'] ?? 'ALL'
+  const statusParam = searchParams.get('status') ?? 'alle'
+  const selectedStatuses: PrismaOrderStatus[] = statusParam === 'alle'
+    ? []
+    : statusParam.split(',').map(v => STATUS_FROM_URL[v]).filter((v): v is PrismaOrderStatus => !!v && v !== 'ALL')
+
   const sort = (searchParams.get('sort') as SortOption) ?? 'nyeste'
+
+  function toggleStatus(opt: OrderStatusFilter) {
+    if (opt === 'ALL') { setFilter('status', 'alle'); return }
+    const next = selectedStatuses.includes(opt as PrismaOrderStatus)
+      ? selectedStatuses.filter(s => s !== opt)
+      : [...selectedStatuses, opt as PrismaOrderStatus]
+    setFilter('status', next.length === 0 ? 'alle' : next.map(s => STATUS_TO_URL[s as OrderStatusFilter]).join(','))
+  }
 
   function setFilter(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString())
@@ -62,18 +81,20 @@ export default function FilteredOrdersGrid({ orders }: Props) {
   }, [])
 
   const filtered = useMemo(() => {
-    const result = orders.filter(order => status === "ALL" || order.status === status)
+    const result = orders.filter(order =>
+      selectedStatuses.length === 0 || selectedStatuses.includes(order.status)
+    )
     if (sort === "eldste") result.sort((a, b) => a.id - b.id)
     else result.sort((a, b) => b.id - a.id)
     return result
-  }, [orders, status, sort])
+  }, [orders, selectedStatuses, sort])
 
   const currentPage = Number(searchParams.get('page') ?? '1')
   const pageSize = Number(searchParams.get('pageSize') ?? '10')
   const maxPage = Math.ceil(filtered.length / pageSize)
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
-  const statusActiveCount = status !== "ALL" ? 1 : 0
+  const statusActiveCount = selectedStatuses.length
 
   const categories = [
     {
@@ -82,8 +103,8 @@ export default function FilteredOrdersGrid({ orders }: Props) {
       controls: STATUS_OPTIONS.map(opt => (
         <FilterOption
           key={opt.value}
-          active={status === opt.value}
-          onClick={() => setFilter('status', opt.urlValue)}
+          active={opt.value === 'ALL' ? selectedStatuses.length === 0 : selectedStatuses.includes(opt.value as PrismaOrderStatus)}
+          onClick={() => toggleStatus(opt.value)}
         >
           {opt.label}
         </FilterOption>
