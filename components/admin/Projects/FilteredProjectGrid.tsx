@@ -28,6 +28,13 @@ const STATUS_FROM_URL: Record<string, ProjectStatus> = {
   ferdig:   'COMPLETE',
 }
 
+const STATUS_TO_URL: Record<ProjectStatus, string> = {
+  ALL:         'alle',
+  NEW:         'ny',
+  IN_PROGRESS: 'pågående',
+  COMPLETE:    'ferdig',
+}
+
 const CATEGORY_OPTIONS: { value: Category; urlValue: string; label: string }[] = [
   { value: 'ALL', urlValue: 'alle', label: 'Alle' },
   ...EDUCATION_FIELD_OPTIONS.map(o => ({ value: o.value, urlValue: CATEGORY_TO_URL[o.value], label: o.label })),
@@ -49,13 +56,37 @@ export default function FilteredProjectGrid({ projects }: Props) {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const status = STATUS_FROM_URL[searchParams.get('status') ?? 'alle'] ?? 'ALL'
-  const category = CATEGORY_FROM_URL[searchParams.get('category') ?? 'alle'] ?? 'ALL'
+  const statusParam = searchParams.get('status') ?? 'alle'
+  const selectedStatuses: Status[] = statusParam === 'alle'
+    ? []
+    : statusParam.split(',').map(v => STATUS_FROM_URL[v]).filter((v): v is Status => !!v && v !== 'ALL')
+
+  const categoryParam = searchParams.get('category') ?? 'alle'
+  const selectedCategories: EducationField[] = categoryParam === 'alle'
+    ? []
+    : categoryParam.split(',').map(v => CATEGORY_FROM_URL[v]).filter((v): v is EducationField => !!v && v !== 'ALL')
+
   const sort = (searchParams.get('sort') as SortOption) ?? 'nyeste'
   const minPrice = Number(searchParams.get('minPrice') ?? DEFAULT_MIN)
   const maxPrice = Number(searchParams.get('maxPrice') ?? DEFAULT_MAX)
 
   const [selectedProject, setSelectedProject] = useState<SerializedProject | null>(null)
+
+  function toggleStatus(opt: ProjectStatus) {
+    if (opt === 'ALL') { setFilter('status', 'alle'); return }
+    const next = selectedStatuses.includes(opt as Status)
+      ? selectedStatuses.filter(s => s !== opt)
+      : [...selectedStatuses, opt as Status]
+    setFilter('status', next.length === 0 ? 'alle' : next.map(s => STATUS_TO_URL[s]).join(','))
+  }
+
+  function toggleCategory(opt: Category) {
+    if (opt === 'ALL') { setFilter('category', 'alle'); return }
+    const next = selectedCategories.includes(opt as EducationField)
+      ? selectedCategories.filter(c => c !== opt)
+      : [...selectedCategories, opt as EducationField]
+    setFilter('category', next.length === 0 ? 'alle' : next.map(c => CATEGORY_TO_URL[c]).join(','))
+  }
 
   function setFilter(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString())
@@ -94,8 +125,12 @@ export default function FilteredProjectGrid({ projects }: Props) {
   }, [])
 
   const filtered = useMemo(() => {
-    const categoryResult = projects.filter(p => category === 'ALL' || p.educationField === category)
-    const statusResult = categoryResult.filter(p => status === 'ALL' || p.status === status)
+    const categoryResult = projects.filter(p =>
+      selectedCategories.length === 0 || (p.educationField !== null && selectedCategories.includes(p.educationField as EducationField))
+    )
+    const statusResult = categoryResult.filter(p =>
+      selectedStatuses.length === 0 || selectedStatuses.includes(p.status as Status)
+    )
     const priceActive = minPrice !== DEFAULT_MIN || maxPrice !== DEFAULT_MAX
     const priceResult = statusResult.filter(p => {
       if (!priceActive) return true
@@ -104,7 +139,7 @@ export default function FilteredProjectGrid({ projects }: Props) {
     if (sort === 'eldste') priceResult.sort((a, b) => a.createdAt.localeCompare(b.createdAt))
     else priceResult.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
     return priceResult
-  }, [status, category, minPrice, maxPrice, sort, projects])
+  }, [selectedStatuses, selectedCategories, minPrice, maxPrice, sort, projects])
 
   const currentPage = Number(searchParams.get('page') ?? '1')
   const pageSize = Number(searchParams.get('pageSize') ?? '10')
@@ -112,8 +147,8 @@ export default function FilteredProjectGrid({ projects }: Props) {
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
   const priceActive = minPrice !== DEFAULT_MIN || maxPrice !== DEFAULT_MAX
-  const statusActiveCount = status !== 'ALL' ? 1 : 0
-  const categoryActiveCount = category !== 'ALL' ? 1 : 0
+  const statusActiveCount = selectedStatuses.length
+  const categoryActiveCount = selectedCategories.length
   const priceActiveCount = priceActive ? 1 : 0
   const activeFilterCount = statusActiveCount + categoryActiveCount + priceActiveCount
 
@@ -124,8 +159,8 @@ export default function FilteredProjectGrid({ projects }: Props) {
       controls: STATUS_OPTIONS.map(opt => (
         <FilterOption
           key={opt.value}
-          active={status === opt.value}
-          onClick={() => setFilter('status', opt.urlValue)}
+          active={opt.value === 'ALL' ? selectedStatuses.length === 0 : selectedStatuses.includes(opt.value as Status)}
+          onClick={() => toggleStatus(opt.value)}
         >
           {opt.label}
         </FilterOption>
@@ -137,8 +172,8 @@ export default function FilteredProjectGrid({ projects }: Props) {
       controls: CATEGORY_OPTIONS.map(opt => (
         <FilterOption
           key={opt.value}
-          active={category === opt.value}
-          onClick={() => setFilter('category', opt.urlValue)}
+          active={opt.value === 'ALL' ? selectedCategories.length === 0 : selectedCategories.includes(opt.value as EducationField)}
+          onClick={() => toggleCategory(opt.value)}
         >
           {opt.label}
         </FilterOption>
