@@ -1,51 +1,72 @@
 "use client"
 
-import { useState, useMemo, useEffect } from 'react'
+import { useMemo, useEffect } from 'react'
 import type { ProductCardData } from '@/app/lib/types'
 import ProductsGrid from './ProductsGrid'
 import { EducationField } from '@/generated/prisma'
-import { FaSliders, FaXmark } from 'react-icons/fa6'
-import { EDUCATION_FIELD_OPTIONS } from '@/app/lib/education-fields'
+import { EDUCATION_FIELD_OPTIONS, CATEGORY_TO_URL, CATEGORY_FROM_URL } from '@/app/lib/education-fields'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Pagination from '../Pagination'
-
+import FilterPanel, { FilterOption } from '@/components/shared/FilterPanel'
 
 export type SortOption = 'newest' | 'oldest' | 'price-asc' | 'price-desc'
-export type CategoryFilter = EducationField | 'ALL'// Allows for future changes in EducationField variations with no big tweaks
+export type CategoryFilter = EducationField | 'ALL'
 export type StatusFilter = 'ALL' | 'DRAFT' | 'PUBLISHED'
+
+const SORT_TO_URL: Record<SortOption, string> = {
+  'newest':     'nyeste',
+  'oldest':     'eldste',
+  'price-asc':  'pris-opp',
+  'price-desc': 'pris-ned',
+}
+const SORT_FROM_URL: Record<string, SortOption> = {
+  nyeste:    'newest',
+  eldste:    'oldest',
+  'pris-opp': 'price-asc',
+  'pris-ned': 'price-desc',
+}
+
+const STATUS_TO_URL: Record<StatusFilter, string> = {
+  ALL:       'alle',
+  DRAFT:     'utkast',
+  PUBLISHED: 'publisert',
+}
+const STATUS_FROM_URL: Record<string, StatusFilter> = {
+  alle:      'ALL',
+  utkast:    'DRAFT',
+  publisert: 'PUBLISHED',
+}
+
+const STATUS_OPTIONS: { value: StatusFilter; urlValue: string; label: string }[] = [
+  { value: 'ALL',       urlValue: 'alle',      label: 'Alle' },
+  { value: 'DRAFT',     urlValue: 'utkast',    label: 'Utkast' },
+  { value: 'PUBLISHED', urlValue: 'publisert', label: 'Publisert' },
+]
+
+const CATEGORY_OPTIONS: { value: CategoryFilter; urlValue: string; label: string }[] = [
+  { value: 'ALL', urlValue: 'alle', label: 'Alle' },
+  ...EDUCATION_FIELD_OPTIONS.map(o => ({ value: o.value, urlValue: CATEGORY_TO_URL[o.value], label: o.label })),
+]
+
+const SORT_OPTIONS: { value: SortOption; urlValue: string; label: string }[] = [
+  { value: 'newest',     urlValue: 'nyeste',   label: 'Nyeste' },
+  { value: 'oldest',     urlValue: 'eldste',   label: 'Eldste' },
+  { value: 'price-asc',  urlValue: 'pris-opp', label: 'Pris ↑' },
+  { value: 'price-desc', urlValue: 'pris-ned', label: 'Pris ↓' },
+]
+
 interface Props {
   products: ProductCardData[]
   isAdmin: boolean
-  sidebarAction?: React.ReactNode
-  extraControls?: React.ReactNode
-  extraFilters?: ((p: ProductCardData) => boolean)[]
 }
 
-const STATUS_OPTIONS: { value: StatusFilter; label: string; }[] = [
-  { value: 'ALL', label: 'Alle' },
-  { value: 'DRAFT', label: 'Utkast'},
-  { value: 'PUBLISHED', label: 'Publisert' }
-]
-const CATEGORY_OPTIONS: { value: CategoryFilter; label: string }[] = [
-  { value: 'ALL', label: 'Alle' },
-  ...EDUCATION_FIELD_OPTIONS,
-]
-
-const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: 'newest',     label: 'Nyeste' },
-  { value: 'oldest',     label: 'Eldste' },
-  { value: 'price-asc',  label: 'Pris ↑' },
-  { value: 'price-desc', label: 'Pris ↓' },
-]
-
-export default function FilteredProductsGrid({ products, isAdmin, sidebarAction, extraControls, extraFilters = [] }: Props) {
+export default function FilteredProductsGrid({ products, isAdmin }: Props) {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const category = (searchParams.get('category') as CategoryFilter) ?? 'ALL'
-  const status = (searchParams.get('status') as StatusFilter) ?? 'ALL'
-  const sort = (searchParams.get('sort') as SortOption) ?? 'newest'  
 
-  const [drawerOpen, setDrawerOpen] = useState(false)
+  const category = CATEGORY_FROM_URL[searchParams.get('category') ?? 'alle'] ?? 'ALL'
+  const status = STATUS_FROM_URL[searchParams.get('status') ?? 'alle'] ?? 'ALL'
+  const sort = SORT_FROM_URL[searchParams.get('sort') ?? 'nyeste'] ?? 'newest'
 
   useEffect(() => {
     const hasFilters = ['category', 'status', 'sort', 'pageSize'].some(k => searchParams.get(k))
@@ -68,184 +89,100 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
 
   const filtered = useMemo(() => {
     const statusResult = products.filter(p => {
-      const productDraft = status === 'DRAFT' ? true : false
-      if (status !== 'ALL' && p.draft !== productDraft) return false
-      return true
+      if (status === 'ALL') return true
+      return p.draft === (status === 'DRAFT')
     })
-
     const result = statusResult.filter(p => {
       if (category !== 'ALL' && p.educationField !== category) return false
-      for (const fn of extraFilters) if (!fn(p)) return false
       return true
     })
-
     switch (sort) {
       case 'newest':     result.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt)); break
       case 'oldest':     result.sort((a, b) => a.publishedAt.localeCompare(b.publishedAt)); break
       case 'price-asc':  result.sort((a, b) => a.price - b.price); break
       case 'price-desc': result.sort((a, b) => b.price - a.price); break
     }
-
     return result
-  }, [products, category, sort, extraFilters, status])
-
-  
-
-  const activeFilterCount = category !== 'ALL' ? 1 : 0
+  }, [products, category, sort, status])
 
   const currentPage = Number(searchParams.get('page') ?? '1')
   const pageSize = Number(searchParams.get('pageSize') ?? '10')
   const maxPage = Math.ceil(filtered.length / pageSize)
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
-  const controlPanel = (
-    <div className="flex flex-col gap-5">
-    {isAdmin && (
-       <div className='flex flex-col gap-2'>
-        <span className='label'>Produkt status</span>
-        <div className='flex flex-col gap-1.5'>
-          {STATUS_OPTIONS.map((stat) => (
-            <button
-              key={stat.value}
-              onClick={() => setFilter('status', stat.value)}
-              className={`btn w-full justify-start ${status === stat.value ? 'btn-primary' : 'btn-outline'}`}
-              >
-              {stat.label}
-            </button>
-          ))}
-        </div>
+  const categoryActiveCount = category !== 'ALL' ? 1 : 0
+  const statusActiveCount = status !== 'ALL' ? 1 : 0
+  const activeFilterCount = categoryActiveCount + (isAdmin ? statusActiveCount : 0)
 
-      </div>
-    )}
-    {isAdmin && (
-       <hr className='border-border' />
-    )}
-
-      <div className="flex flex-col gap-2">
-        <span className="label">Kategori</span>
-        <div className="flex flex-col gap-1.5">
-          {CATEGORY_OPTIONS.map(opt => (
-            <button
-              key={opt.value}
-              onClick={() => setFilter('category', opt.value)}
-              className={`btn w-full justify-start ${category === opt.value ? 'btn-primary' : 'btn-outline'}`}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <hr className="border-border" />
-
-      <div className="flex flex-col gap-2">
-        <span className="label">Sorter</span>
-        <div className="flex flex-col gap-1.5">
-          {SORT_OPTIONS.map(opt => (
-            <button
-              key={opt.value}
-              onClick={() => setFilter('sort', opt.value)}
-              className={`btn w-full justify-start ${sort === opt.value ? 'btn-secondary' : 'btn-outline'}`}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {extraControls && (
-        <>
-          <hr className="border-border" />
-          <div className="flex flex-col gap-2">
-            <span className="label">Ekstra</span>
-            <div className="flex flex-col gap-1.5">{extraControls}</div>
-          </div>
-        </>
-      )}
-
-    </div>
-  )
+  const categories = [
+    ...(isAdmin ? [{
+      label: 'Status',
+      activeCount: statusActiveCount,
+      controls: STATUS_OPTIONS.map(opt => (
+        <FilterOption
+          key={opt.value}
+          active={status === opt.value}
+          onClick={() => setFilter('status', opt.urlValue)}
+        >
+          {opt.label}
+        </FilterOption>
+      )),
+    }] : []),
+    {
+      label: 'Kategori',
+      activeCount: categoryActiveCount,
+      controls: CATEGORY_OPTIONS.map(opt => (
+        <FilterOption
+          key={opt.value}
+          active={category === opt.value}
+          onClick={() => setFilter('category', opt.urlValue)}
+        >
+          {opt.label}
+        </FilterOption>
+      )),
+    },
+    {
+      label: 'Sorter',
+      controls: SORT_OPTIONS.map(opt => (
+        <FilterOption
+          key={opt.value}
+          active={sort === opt.value}
+          onClick={() => setFilter('sort', opt.urlValue)}
+        >
+          {opt.label}
+        </FilterOption>
+      )),
+    },
+  ]
 
   return (
-    <div className="flex gap-8 items-start">
-
-      {/* Grid area */}
-
-      <div className="flex-1 min-w-0 flex flex-col gap-4">
-
-        {/* Mobile controls — hidden on desktop */}
-        <div className="flex flex-col gap-2 lg:hidden">
-          {sidebarAction}
-          <div className="flex items-center justify-between">
-            <p className="small-text">{filtered.length} {filtered.length === 1 ? 'produkt' : 'produkter'}</p>
-            <button onClick={() => setDrawerOpen(true)} className="btn btn-outline gap-2">
-              <FaSliders />
-              Filtre{activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}
-            </button>
-          </div>
-        </div>
-        {filtered.length > 0 ? 
+    <FilterPanel categories={categories} activeFilterCount={activeFilterCount}>
+      {filtered.length > 0 ? (
         <>
-        <div className="flex items-center justify-between px-3 py-2 rounded-sm">
-          <div className="flex items-center gap-2 small-text text-muted">
-            <span>{filtered.length} produkter</span>
-            <span>·</span>
-            <span>Side {currentPage} av {maxPage}</span>
+          <div className="flex items-center justify-between px-3 py-2 rounded-sm">
+            <div className="flex items-center gap-2 small-text text-muted">
+              <span>{filtered.length} {filtered.length === 1 ? 'produkt' : 'produkter'}</span>
+              <span>·</span>
+              <span>Side {currentPage} av {maxPage}</span>
+            </div>
+            <select
+              value={pageSize}
+              onChange={e => setFilter('pageSize', e.target.value)}
+              className="input w-auto py-1 text-sm cursor-pointer"
+            >
+              {[10, 20, 30, 40, 50].map(n => (
+                <option key={n} value={n}>{n} per side</option>
+              ))}
+            </select>
           </div>
-          <select
-            value={pageSize}
-            onChange={e => setFilter('pageSize', e.target.value)}
-            className="input w-auto py-1 text-sm cursor-pointer"
-          >
-            {[10, 20, 30, 40, 50].map(n => (
-              <option key={n} value={n}>{n} per side</option>
-            ))}
-          </select>
-        </div>
-        <ProductsGrid products={paginated} isAdmin={isAdmin} />
-        <div className='mx-auto mt-10'>
-          <Pagination currentPage={currentPage} maxPages={maxPage} />
-        </div>
+          <ProductsGrid products={paginated} isAdmin={isAdmin} />
+          <div className="mx-auto mt-10">
+            <Pagination currentPage={currentPage} maxPages={maxPage} />
+          </div>
         </>
-        : 
-        <p className='mx-auto'>Ingen produkter funnet</p>
-        }
-        
-        
-      </div>
-
-      {/* Desktop sidebar — hidden on mobile */}
-      <aside className="hidden lg:flex flex-col gap-0 w-56 shrink-0 sticky top-28 card">
-        {sidebarAction && (
-          <>
-            {sidebarAction}
-            <hr className="border-border my-5" />
-          </>
-        )}
-        {controlPanel}
-      </aside>
-
-      {/* Mobile backdrop */}
-      <div
-        onClick={() => setDrawerOpen(false)}
-        className={`fixed inset-0 z-59 bg-black/40 lg:hidden transition-opacity duration-300 ${drawerOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-      />
-
-      {/* Mobile drawer */}
-      <aside
-        className={`fixed top-0 right-0 h-full w-72 z-60 bg-bg border-l border-border shadow-xl flex flex-col gap-0 overflow-y-auto lg:hidden transition-transform duration-300 ${drawerOpen ? 'translate-x-0' : 'translate-x-full'}`}
-      >
-        <div className="flex items-center justify-between p-4 border-b border-border sticky top-0 bg-bg">
-          <h2 className="heading-4">Filtre</h2>
-          <button onClick={() => setDrawerOpen(false)} className="btn btn-ghost w-8 h-8 p-0">
-            <FaXmark />
-          </button>
-        </div>
-        <div className="p-5 flex-1">
-          {controlPanel}
-        </div>
-      </aside>
-      
-    </div>
+      ) : (
+        <p className="mx-auto">Ingen produkter funnet</p>
+      )}
+    </FilterPanel>
   )
 }
