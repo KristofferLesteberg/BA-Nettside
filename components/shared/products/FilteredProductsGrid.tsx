@@ -13,24 +13,13 @@ export type SortOption = 'newest' | 'oldest' | 'price-asc' | 'price-desc'
 export type CategoryFilter = EducationField | 'ALL'
 export type StatusFilter = 'ALL' | 'DRAFT' | 'PUBLISHED'
 
-const SORT_TO_URL: Record<SortOption, string> = {
-  'newest':     'nyeste',
-  'oldest':     'eldste',
-  'price-asc':  'pris-opp',
-  'price-desc': 'pris-ned',
-}
 const SORT_FROM_URL: Record<string, SortOption> = {
-  nyeste:    'newest',
-  eldste:    'oldest',
+  nyeste:     'newest',
+  eldste:     'oldest',
   'pris-opp': 'price-asc',
   'pris-ned': 'price-desc',
 }
 
-const STATUS_TO_URL: Record<StatusFilter, string> = {
-  ALL:       'alle',
-  DRAFT:     'utkast',
-  PUBLISHED: 'publisert',
-}
 const STATUS_FROM_URL: Record<string, StatusFilter> = {
   alle:      'ALL',
   utkast:    'DRAFT',
@@ -58,9 +47,10 @@ const SORT_OPTIONS: { value: SortOption; urlValue: string; label: string }[] = [
 interface Props {
   products: ProductCardData[]
   isAdmin: boolean
+  headerAction?: React.ReactNode
 }
 
-export default function FilteredProductsGrid({ products, isAdmin }: Props) {
+export default function FilteredProductsGrid({ products, isAdmin, headerAction }: Props) {
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -157,6 +147,11 @@ export default function FilteredProductsGrid({ products, isAdmin }: Props) {
 
   return (
     <FilterPanel categories={categories} activeFilterCount={activeFilterCount}>
+      {headerAction && (
+        <div className="flex justify-end">
+          {headerAction}
+        </div>
+      )}
       {filtered.length > 0 ? (
         <>
           <div className="flex items-center justify-between px-3 py-2 rounded-sm">

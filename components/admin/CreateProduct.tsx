@@ -10,7 +10,7 @@ export default function CreateProduct() {
     router.push(`/admin/nytt-produkt/${id}`)
   }
   return (
-     <button onClick={handleNewProduct} className="btn btn-primary w-full gap-1.5">
+     <button onClick={handleNewProduct} className="btn btn-primary gap-1.5">
           <HiOutlinePlusSm className="text-base" />
           Ny produkt
      </button>
