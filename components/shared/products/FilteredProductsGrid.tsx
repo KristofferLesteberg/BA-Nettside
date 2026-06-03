@@ -68,6 +68,7 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
 
   const filtered = useMemo(() => {
     const statusResult = products.filter(p => {
+      if (!isAdmin && p.draft) return false
       const productDraft = status === 'DRAFT' ? true : false
       if (status !== 'ALL' && p.draft !== productDraft) return false
       return true
@@ -87,7 +88,7 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
     }
 
     return result
-  }, [products, category, sort, extraFilters, status])
+  }, [products, category, sort, extraFilters, status, isAdmin])
 
   
 
@@ -96,8 +97,13 @@ export default function FilteredProductsGrid({ products, isAdmin, sidebarAction,
   const currentPage = Number(searchParams.get('page') ?? '1')
   const pageSize = Number(searchParams.get('pageSize') ?? '10')
   const maxPage = Math.ceil(filtered.length / pageSize)
+  
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
+  useEffect(() => {
+    console.log("Pagesize " + pageSize)
+    console.log('"paginated' + paginated.length)
+  }, [])
   const controlPanel = (
     <div className="flex flex-col gap-5">
     {isAdmin && (
