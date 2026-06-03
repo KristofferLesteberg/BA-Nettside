@@ -61,7 +61,7 @@ export default function FilteredProjectGrid({ projects }: Props) {
     ? []
     : statusParam.split(',').map(v => STATUS_FROM_URL[v]).filter((v): v is Status => !!v && v !== 'ALL')
 
-  const categoryParam = searchParams.get('category') ?? 'alle'
+  const categoryParam = searchParams.get('linje') ?? 'alle'
   const selectedCategories: EducationField[] = categoryParam === 'alle'
     ? []
     : categoryParam.split(',').map(v => CATEGORY_FROM_URL[v]).filter((v): v is EducationField => !!v && v !== 'ALL')
@@ -81,11 +81,11 @@ export default function FilteredProjectGrid({ projects }: Props) {
   }
 
   function toggleCategory(opt: Category) {
-    if (opt === 'ALL') { setFilter('category', 'alle'); return }
+    if (opt === 'ALL') { setFilter('linje', 'alle'); return }
     const next = selectedCategories.includes(opt as EducationField)
       ? selectedCategories.filter(c => c !== opt)
       : [...selectedCategories, opt as EducationField]
-    setFilter('category', next.length === 0 ? 'alle' : next.map(c => CATEGORY_TO_URL[c]).join(','))
+    setFilter('linje', next.length === 0 ? 'alle' : next.map(c => CATEGORY_TO_URL[c]).join(','))
   }
 
   function setFilter(key: string, value: string) {
@@ -117,7 +117,7 @@ export default function FilteredProjectGrid({ projects }: Props) {
   }
 
   useEffect(() => {
-    const hasFilters = ['status', 'category', 'sort', 'minPrice', 'maxPrice'].some(k => searchParams.get(k))
+    const hasFilters = ['status', 'linje', 'sort', 'minPrice', 'maxPrice'].some(k => searchParams.get(k))
     if (!hasFilters) {
       const saved = sessionStorage.getItem('tabFilters_prosjekter')
       if (saved) router.replace('?' + saved + '&tab=prosjekter')
@@ -167,7 +167,7 @@ export default function FilteredProjectGrid({ projects }: Props) {
       )),
     },
     {
-      label: 'Kategori',
+      label: 'Linje',
       activeCount: categoryActiveCount,
       controls: CATEGORY_OPTIONS.map(opt => (
         <FilterOption
