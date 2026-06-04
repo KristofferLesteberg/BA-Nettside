@@ -1,30 +1,22 @@
 "use client"
 
+import { useId } from 'react'
 
-
-
-
-export default function Checkbox({ checked, callback }: {checked: boolean, callback: Function}) {
+export default function Checkbox({ checked, callback }: { checked: boolean; callback: () => void }) {
+  const id = useId()
 
   return (
-    
-    <div
-      onClick={() => callback()}  
-      className={` flex flex-row ml-auto w-15 h-7 rounded-2xl border border-gray-400 cursor-pointer
-        ${checked ? 'bg-green-500' : 'bg-gray-400'}
-        transition delay-100 duration-300 ease-in-out
-      `}
-      >
-        <div className={`w-1/3 bg-white h-4/5 rounded-full mt-auto mb-auto ml-0.5 shadow shadow-grey-500
-          transition delay-100 duration-300 ease-in-out
-          transform ${checked ? 'translate-x-8' : 'translate-x-0'}
-          `}
-        >
-        
-        </div>
-        
-    </div>
-    
-
+    <label htmlFor={id} className="checkbox-toggle ml-auto">
+      <input
+        id={id}
+        type="checkbox"
+        className="sr-only"
+        checked={checked}
+        onChange={callback}
+      />
+      <span className="toggle-track" aria-hidden="true">
+        <span className="toggle-thumb" />
+      </span>
+    </label>
   )
 }
