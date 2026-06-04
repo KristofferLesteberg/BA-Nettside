@@ -115,7 +115,7 @@ export default function ReviewImageInput({ initialUrl, onChange }: ReviewImageIn
   if (stage === "cropping" && imageSrc) {
     return (
       <div className="flex flex-col gap-4">
-        <div className="relative w-full h-72 rounded-lg overflow-hidden bg-[#111]">
+        <div className="relative w-full h-48 sm:h-72 rounded-lg overflow-hidden bg-canvas-dark">
           <Cropper
             image={imageSrc}
             crop={crop}
@@ -153,7 +153,8 @@ export default function ReviewImageInput({ initialUrl, onChange }: ReviewImageIn
   return (
     <div
       {...getRootProps()}
-      className="bg-surface hover:bg-surface-raised hover:border-secondary transition-colors duration-200 min-h-40 flex group items-center justify-center text-center border-3 border-dashed border-border rounded-lg cursor-pointer"
+      aria-label="Last opp profilbilde – klikk eller dra en fil hit"
+      className="bg-surface hover:bg-surface-raised hover:border-secondary transition-colors duration-200 min-h-40 flex group items-center justify-center text-center border-2 border-dashed border-border rounded-lg cursor-pointer"
     >
       <input {...getInputProps()} />
       <div className="flex flex-col items-center gap-3 text-text-faint p-5 group-hover:text-secondary transition-colors duration-200">

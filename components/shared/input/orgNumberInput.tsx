@@ -132,11 +132,12 @@ export default function OrgNumberInput({inputClassName, value, onChange, setEmai
         type='button'
         onClick={() => getOrgInfo(Number(value))}
         disabled={searching}
+        aria-label="Søk etter organisasjon"
         className="absolute right-1 mt-auto mb-auto mr-3 h-full disabled:opacity-50"
       >
         {searching
           ? <Spinner className="w-4 h-4" />
-          : <IoSearch className='cursor-pointer' title="Søk etter organisasjon" />
+          : <IoSearch aria-hidden="true" className='cursor-pointer' />
         }
       </button>
     </div>

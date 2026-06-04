@@ -113,6 +113,10 @@ const LinjeDropdown = forwardRef<HTMLDivElement, Props>(
         <button
           ref={buttonRef}
           type="button"
+          role="combobox"
+          aria-expanded={menuOpen}
+          aria-haspopup="listbox"
+          aria-controls="linje-listbox"
           onClick={menuOpen ? closeMenu : openMenu}
           onKeyDown={(e) => {
             if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
@@ -122,18 +126,20 @@ const LinjeDropdown = forwardRef<HTMLDivElement, Props>(
           }}
           className="input w-full flex items-center gap-2 cursor-pointer"
         >
-          {icon}
+          {icon && <span aria-hidden="true">{icon}</span>}
           <span className={`flex-1 text-left${!value ? ' text-text-faint' : ''}`}>
             {value
               ? EDUCATION_FIELD_LABELS[value as EducationField]
               : (nullable ? 'Ikke spesifisert' : placeholder)
             }
           </span>
-          <FaChevronDown className={`shrink-0 w-3 h-3 text-text-muted transition-transform duration-150${menuOpen ? ' rotate-180' : ''}`} />
+          <FaChevronDown aria-hidden="true" className={`shrink-0 w-3 h-3 text-text-muted transition-transform duration-150${menuOpen ? ' rotate-180' : ''}`} />
         </button>
 
         {menuMounted && createPortal(
           <div
+            id="linje-listbox"
+            role="listbox"
             ref={panelRef}
             style={panelStyle}
             onKeyDown={handlePanelKeyDown}
@@ -145,12 +151,14 @@ const LinjeDropdown = forwardRef<HTMLDivElement, Props>(
                 key={opt.value}
                 ref={(el) => { optionRefs.current[i] = el }}
                 type="button"
+                role="option"
+                aria-selected={value === opt.value}
                 tabIndex={-1}
                 onClick={() => handleSelect(opt.value)}
                 className={`relative flex items-center gap-2 text-left pl-4 pr-3 py-2 rounded-[calc(var(--radius-md)-2px)] small-text transition-colors hover:bg-surface-raised cursor-pointer${value === opt.value ? ' font-semibold text-text' : ' text-text-muted'}`}
               >
                 {value === opt.value && <span className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-3/5 rounded-full bg-secondary" />}
-                {opt.value && ICONS[opt.value as EducationField]}
+                {opt.value && <span aria-hidden="true">{ICONS[opt.value as EducationField]}</span>}
                 {opt.label}
               </button>
             ))}

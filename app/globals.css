@@ -46,6 +46,7 @@
   /* --- Layout --- */
   --header-height:            5rem;
   --color-overlay-dark:       rgba(0, 0, 0, 0.5);
+  --color-canvas-dark:        #111111;             /* image cropper background */
 
   /* --- On-dark text/surface scale (for footer dark bg) --- */
   --color-text-on-dark:         rgba(255, 255, 255, 0.90);
