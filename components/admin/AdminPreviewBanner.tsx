@@ -31,8 +31,8 @@ export default function AdminPreviewBanner({ productId, isDraft }: AdminPreviewB
     <div
       className="fixed left-0 right-0 z-40 h-12 bg-surface-overlay border-b border-default shadow-b-md transition-transform duration-300"
       style={{
-        top: '5rem',
-        transform: visible ? 'translateY(0)' : 'translateY(-5rem)',
+        top: 'var(--header-height)',
+        transform: visible ? 'translateY(0)' : 'translateY(calc(-1 * var(--header-height)))',
       }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 h-full flex items-center justify-between gap-4">
