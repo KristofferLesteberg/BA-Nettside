@@ -94,7 +94,7 @@ export default function ContactPage() {
         className="card mb-12 pb-1.5"
       >
         <div className="flex items-center gap-2 mb-6">
-          <FaLocationDot className="text-primary text-lg" />
+          <FaLocationDot aria-hidden="true" className="text-primary text-lg" />
           <h2 className="heading-3">Kontaktinformasjon</h2>
         </div>
 
@@ -114,7 +114,7 @@ export default function ContactPage() {
                 className="flex items-center gap-4 py-4 group"
               >
                 <span className="shrink-0 w-10 h-10 rounded-full bg-surface-sunken flex items-center justify-center text-primary text-base transition-colors duration-300 group-hover:bg-primary group-hover:text-white">
-                  <Icon />
+                  <Icon aria-hidden="true" />
                 </span>
                 <div className="min-w-0">
                   <p className="small-text mb-0.5">{label}</p>
@@ -139,7 +139,7 @@ export default function ContactPage() {
         transition={{ duration: 0.5 }}
       >
         <div className="flex items-center gap-2">
-          <FaLocationDot className="text-primary text-lg" />
+          <FaLocationDot aria-hidden="true" className="text-primary text-lg" />
           <h2 className="heading-3">Finn oss</h2>
         </div>
         <p className="body-text mb-4">Østensbuveien 80, 4848 Arendal</p>
