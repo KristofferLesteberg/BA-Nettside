@@ -59,17 +59,17 @@ export default function ReviewForm({ heading, submitLabel, initialValues, onSubm
   }
 
   return (
-    <div className="w-4/5 min-w-120 max-w-230 mx-auto py-10">
+    <div className="form-page-wrapper">
       <form onSubmit={handleSubmit} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
         <BackBtn />
         <h2 className="heading-2">{heading}</h2>
         <p className="text-text-faint italic -mt-4">
-          Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette
+          Feltene merket med <span className="text-error">*</span> må fylles ut før du kan fortsette
         </p>
 
         {/* Name */}
         <div className="space-y-1" ref={nameRef}>
-          <label className="label">Navn <span className="text-red-500">*</span></label>
+          <label className="label">Navn <span className="text-error">*</span></label>
           <input
             type="text"
             className="input"
@@ -80,7 +80,7 @@ export default function ReviewForm({ heading, submitLabel, initialValues, onSubm
         </div>
 
         {/* Role + OrgName */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1">
             <label className="label">Rolle</label>
             <input
@@ -117,7 +117,7 @@ export default function ReviewForm({ heading, submitLabel, initialValues, onSubm
 
         {/* Message */}
         <div className="space-y-1" ref={messageRef}>
-          <label className="label">Anmeldelse <span className="text-red-500">*</span></label>
+          <label className="label">Anmeldelse <span className="text-error">*</span></label>
           <textarea
             className="input min-h-30"
             placeholder="Skriv anmeldelsen her"

@@ -206,7 +206,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
   const isDraft = initialValues?.draft ?? true
 
   return (
-    <div className="w-4/5 min-w-120 max-w-230 mx-auto py-10">
+    <div className="form-page-wrapper">
       {popUpElement}
       <form onSubmit={handleForm} className="card-accented shadow-xl overflow-hidden">
 
@@ -259,7 +259,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
 
           <div className="flex justify-between items-center">
             <p className="text-text-faint italic text-sm">
-              Feltene merket med <span className="text-red-500 italic font-medium">*</span> må fylles ut før du kan fortsette
+              Feltene merket med <span className="text-error italic font-medium">*</span> må fylles ut før du kan fortsette
             </p>
             <button
               type="button"
@@ -274,7 +274,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
           {/* Education Field */}
           <div className="space-y-1" ref={educationFieldRef}>
             <label className="label">
-              Linje <span className="text-red-500 italic">*</span>
+              Linje <span className="text-error italic">*</span>
             </label>
             <LinjeDropdown
               value={educationField}
@@ -286,7 +286,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
           {/* Title */}
           <div className="space-y-1" ref={titleRef}>
             <label className="label">
-              Tittel <span className="text-red-500 italic">*</span>
+              Tittel <span className="text-error italic">*</span>
             </label>
             <div className="relative">
               <input
@@ -347,7 +347,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
           {/* Description */}
           <div className="space-y-1" ref={descriptionRef}>
             <label className="label">
-              Beskrivelse <span className="text-red-500 italic">*</span>
+              Beskrivelse <span className="text-error italic">*</span>
             </label>
             <div className="relative">
               <textarea
@@ -367,7 +367,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
           </div>
 
           {/* Price + Amount */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="label">Pris</label>
               <PriceInput

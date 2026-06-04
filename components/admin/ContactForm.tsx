@@ -34,15 +34,15 @@ export default function ContactForm({ exsitingContact, onSubmit, heading}: Props
   }
 
   return (
-    <div className="w-4/5 min-w-120 max-w-230 mx-auto py-10">
+    <div className="form-page-wrapper">
           <form onSubmit={handleSubmit} className="card-accented space-y-6 shadow-mist-500 shadow-xl">
             <RegretBtn />
             <h2 className="heading-2">{heading}</h2>
             <p className="text-text-faint italic -mt-4">
-              Feltene merket med <span className="text-red-500">*</span> må fylles ut før du kan fortsette
+              Feltene merket med <span className="text-error">*</span> må fylles ut før du kan fortsette
             </p>
             <div className="space-y-1">
-              <label className="label">Navn<span className="text-red-500">*</span></label>
+              <label className="label">Navn<span className="text-error">*</span></label>
               <input
                 type="text"
                 className="input"
@@ -51,7 +51,7 @@ export default function ContactForm({ exsitingContact, onSubmit, heading}: Props
                />
             </div>
             <div className="space-y-1">
-              <label className="label">Mail<span className="text-red-500">*</span></label>
+              <label className="label">Mail<span className="text-error">*</span></label>
               <input
                 type="text"
                 className="input"
@@ -80,7 +80,7 @@ export default function ContactForm({ exsitingContact, onSubmit, heading}: Props
              
             </div>
             <div className="space-y-1">
-              <label className="label">Tittel<span className="text-red-500">*</span></label>
+              <label className="label">Tittel<span className="text-error">*</span></label>
               <input
                 type="text"
                 className="input"
