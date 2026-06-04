@@ -121,7 +121,7 @@ export default function ImageCarousel({
   const translateX  = usesWindow ? -windowStart * STEP_PX : 0
 
   return (
-    <div className={`flex flex-col gap-2 ${className ?? ''}`}>
+    <div role="region" aria-label="Produktbilder" className={`flex flex-col gap-2 ${className ?? ''}`}>
 
       {/* Image row */}
       <div className="flex items-stretch gap-2 flex-1 min-h-0">

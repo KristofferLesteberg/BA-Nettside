@@ -39,6 +39,8 @@ export default function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
 
   return (
     <div
+      role="region"
+      aria-label="Kundeomtaler"
       className="w-full"
       style={{ '--swiper-theme-color': 'var(--color-primary)' } as React.CSSProperties}
     >
@@ -105,7 +107,7 @@ function ReviewCard({ review }: { review: Review }) {
     <article className="card-subtle flex flex-col gap-4 h-full">
 
       <div className="flex-1 flex flex-col gap-3">
-        <FaQuoteLeft className="text-2xl shrink-0 text-primary" />
+        <FaQuoteLeft aria-hidden="true" className="text-2xl shrink-0 text-primary" />
         <p className="body-text leading-relaxed">{review.message}</p>
       </div>
 

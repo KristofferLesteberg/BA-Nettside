@@ -79,16 +79,19 @@ export default function PopUp({ title, subtitle, content, checkbox, onYes, onNo,
     >
       <div
         ref={cardRef}
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="popup-title"
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
         className="card relative bg-surface-overlay shadow-2xl flex flex-col gap-5 p-6 mx-4 w-full max-w-96 md:max-w-2/3 lg:max-w-1/3 animate-fade-in outline-none"
       >
-        <button type="button" onClick={onClose} className="btn btn-outline btn-icon absolute top-3 right-3">
-          <X size={16} />
+        <button type="button" onClick={onClose} aria-label="Lukk" className="btn btn-outline btn-icon absolute top-3 right-3">
+          <X size={16} aria-hidden="true" />
         </button>
 
         <div className="flex flex-col items-center gap-2 pt-4">
-          <p className="heading-3 text-text text-center">{title}</p>
+          <p id="popup-title" className="heading-3 text-text text-center">{title}</p>
           {subtitle && <p className="small-text text-center">{subtitle}</p>}
         </div>
 

@@ -21,7 +21,7 @@ export default function Pagination ({ currentPage, maxPages }: Props) {
   if (maxPages <= 0) return null
 
   return (
-    <div className="flex items-center">
+    <nav role="navigation" aria-label="Paginering" className="flex items-center">
       <div className="flex items-center gap-2">
         <button
           onClick={() => setPage(currentPage - 1)}
@@ -29,7 +29,7 @@ export default function Pagination ({ currentPage, maxPages }: Props) {
           className="btn btn-outline disabled:opacity-40"
           aria-label="Forrige side"
         >
-          <FaChevronLeft />
+          <FaChevronLeft aria-hidden="true" />
           Forrige side
         </button>
         <button
@@ -39,9 +39,9 @@ export default function Pagination ({ currentPage, maxPages }: Props) {
           aria-label="Neste side"
         >
           Neste side
-          <FaChevronRight />
+          <FaChevronRight aria-hidden="true" />
         </button>
       </div>
-    </div>
+    </nav>
   )
 }

@@ -24,17 +24,22 @@ export default function CopyButton ({valueToCopy}: {valueToCopy: string}) {
   }, [copied])
 
   return (
-    <button type="button" className="btn btn-icon relative"
-    onClick={() => {
-      writeClipboardText(valueToCopy).then((success) => {
-        if (success) setCopied(true);
-      });
-    }}>
+    <button
+      type="button"
+      aria-label={copied ? "Kopiert!" : "Kopier"}
+      aria-live="polite"
+      className="btn btn-icon relative"
+      onClick={() => {
+        writeClipboardText(valueToCopy).then((success) => {
+          if (success) setCopied(true);
+        });
+      }}
+    >
       <span className={`transition-opacity duration-150 ${copied ? "opacity-0" : "opacity-100"}`}>
-        <FaCopy />
+        <FaCopy aria-hidden="true" />
       </span>
       <span className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${copied ? "opacity-100" : "opacity-0"}`}>
-        <FaCheck />
+        <FaCheck aria-hidden="true" />
       </span>
     </button>
   )
