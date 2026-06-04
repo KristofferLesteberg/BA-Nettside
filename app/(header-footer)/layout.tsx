@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <>
       <Header />
-      <main className="pt-20 flex-1">
+      <main className="pt-(--header-height) flex-1">
         {children}
       </main>
       <Footer />

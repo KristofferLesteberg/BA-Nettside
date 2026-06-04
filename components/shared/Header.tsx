@@ -63,8 +63,8 @@ export default function Header() {
     <header ref={headerRef} className={`w-full bg-subtle border-b border-border mb-10 fixed top-0 left-0 right-0 z-50
     transition-transform duration-300
     ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        <Link href="/" className="shrink-0 relative h-18 w-48" onClick={() => setOpen(false)}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-(--header-height) flex items-center justify-between">
+        <Link href="/" className="shrink-0 relative h-14 w-40 sm:h-18 sm:w-48" onClick={() => setOpen(false)}>
           <Image
             src="/icons/SamEyde_vgs_rgb.svg"
             alt="Sam Eyde VGS"
