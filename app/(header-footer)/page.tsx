@@ -14,7 +14,7 @@ const page = async () => {
   return (
     <div>
       <section
-        className='relative h-[80vh]'
+        className='relative h-[calc(100vh-5rem)]'
         style={{ backgroundImage: 'url("/static-images/fp-img1.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 30%' }}
       >
         <div className='absolute inset-0 bg-black/50' />
