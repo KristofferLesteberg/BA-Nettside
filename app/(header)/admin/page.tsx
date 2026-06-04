@@ -8,6 +8,7 @@ export const dynamic = 'force-dynamic'
 import { Suspense } from 'react'
 import AdminControlPanel from '@/components/admin/AdminControlPanel'
 import AdminTabManager, { type AdminTab } from '@/components/admin/AdminTabManager'
+import AdminTabBreadcrumb from '@/components/admin/AdminTabBreadcrumb'
 import AdminProductsView from '@/components/admin/AdminProductsView'
 import AdminProjectsView from '@/components/admin/Projects/AdminProjectsView'
 import AdminReviewsView from '@/components/admin/AdminReviewsView'
@@ -70,7 +71,12 @@ const page = async (params: { searchParams: SearchParams }) => {
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-12 flex flex-col gap-6">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="heading-1">Administrator <span className='label text-md'>/ {tabName.tab} </span></h1>
+        <h1 className="heading-1">
+          Administrator{' '}
+          <Suspense fallback={<span className="label text-md">/ {tabName.tab}</span>}>
+            <AdminTabBreadcrumb fallback={typeof tabName.tab === 'string' ? tabName.tab : 'produkter'} />
+          </Suspense>
+        </h1>
         <AdminControlPanel />
       </div>
       <Suspense>

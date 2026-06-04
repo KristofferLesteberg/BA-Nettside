@@ -390,3 +390,18 @@
 @utility animate-dropdown-out {
   animation: dropdown-out 150ms ease forwards;
 }
+
+@keyframes tab-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes tab-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@layer components {
+  .animate-tab-out { animation: tab-fade-out 200ms ease forwards; }
+  .animate-tab-in  { animation: tab-fade-in  200ms ease forwards; }
+}
