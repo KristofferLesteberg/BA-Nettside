@@ -134,12 +134,15 @@ export default function FilteredOrdersGrid({ orders }: Props) {
     <FilterPanel categories={categories} activeFilterCount={statusActiveCount}>
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 small-text text-muted">
-            <span>{filtered.length} {filtered.length === 1 ? "bestilling" : "bestillinger"}</span>
-            <span>·</span>
-            <span>Side {currentPage} av {maxPage}</span>
-          </div>
-          <select
+        {filtered.length > 0 ? (
+          <>
+              <div className="flex items-center gap-2 small-text text-muted">
+                <span>{filtered.length} {filtered.length === 1 ? "bestilling" : "bestillinger"}</span>
+                <span>·</span>
+                <span>Side {currentPage} av {maxPage}</span>
+                
+              </div>
+              <select
             value={pageSize}
             onChange={e => setFilter('sideAntall', e.target.value)}
             className="input w-auto py-1 text-sm cursor-pointer"
@@ -148,6 +151,12 @@ export default function FilteredOrdersGrid({ orders }: Props) {
               <option key={n} value={n}>{n} per side</option>
             ))}
           </select>
+          </>
+              ) : (
+                <p className="mx-auto">Ingen bestillinger funnet</p>
+              )}
+          
+          
         </div>
         <div className="flex flex-col gap-5">
           {paginated.map(order => (
@@ -155,6 +164,7 @@ export default function FilteredOrdersGrid({ orders }: Props) {
           ))}
         </div>
         <div className="mx-auto mt-10">
+        
           <Pagination currentPage={currentPage} maxPages={maxPage} />
         </div>
       </div>

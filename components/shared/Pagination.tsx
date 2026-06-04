@@ -18,7 +18,7 @@ export default function Pagination ({ currentPage, maxPages }: Props) {
     router.replace('?' + params.toString())
   }
 
-  if (maxPages <= 1) return null
+  if (maxPages <= 0) return null
 
   return (
     <div className="flex items-center">
