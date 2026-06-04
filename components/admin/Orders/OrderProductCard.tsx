@@ -221,11 +221,12 @@ export default function OrderCard({ order }: Props) {
             onClick={() => setKontaktOpen(v => !v)}
             className="group flex items-center justify-between w-full py-2 small-text font-medium text-text"
             aria-expanded={kontaktOpen}
+            aria-controls={`order-kontakt-${order.id}`}
           >
             Kontakt
             <FaChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${kontaktOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
           </button>
-          <div className={`grid transition-[grid-template-rows] duration-200 ${kontaktOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+          <div id={`order-kontakt-${order.id}`} className={`grid transition-[grid-template-rows] duration-200 ${kontaktOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
             <div className="overflow-hidden min-h-0">
               <div className="flex flex-col gap-1.5 pb-2">
                 <a href={`mailto:${order.clientEmail}`} className="text-secondary hover:underline flex items-center gap-1.5 small-text">
@@ -248,11 +249,12 @@ export default function OrderCard({ order }: Props) {
           onClick={() => setDescOpen(v => !v)}
           className="group flex items-center justify-between w-full py-2 small-text font-medium text-text"
           aria-expanded={descOpen}
+          aria-controls={`order-desc-${order.id}`}
         >
           Tillegsinformasjon
           <FaChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${descOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
         </button>
-        <div className={`grid transition-[grid-template-rows] duration-200 ${descOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+        <div id={`order-desc-${order.id}`} className={`grid transition-[grid-template-rows] duration-200 ${descOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
           <div className="overflow-hidden min-h-0">
             <div className="pb-2">
               {order.extraDetails ? (
@@ -275,11 +277,12 @@ export default function OrderCard({ order }: Props) {
             onClick={() => setShowProduct(v => !v)}
             className="group flex items-center justify-between w-full py-2 small-text font-medium text-text"
             aria-expanded={showProduct}
+            aria-controls={`order-product-${order.id}`}
           >
             Produktdetaljer
             <FaChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${showProduct ? 'rotate-180' : ''}`} aria-hidden="true" />
           </button>
-          <div className={`grid transition-[grid-template-rows] duration-200 ${showProduct ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+          <div id={`order-product-${order.id}`} className={`grid transition-[grid-template-rows] duration-200 ${showProduct ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
             <div className="overflow-hidden min-h-0">
               <div className="pb-2">
                 <Link
@@ -312,7 +315,7 @@ export default function OrderCard({ order }: Props) {
                       </div>
                       <div className="flex flex-col items-end gap-0.5">
                         <span className="label">Totalt</span>
-                        <p className="small-text font-semibold" style={{ color: 'var(--color-primary)' }}>
+                        <p className="small-text font-semibold text-primary">
                           {formatPrice(Number(order.product.price) * order.amount)}
                         </p>
                       </div>

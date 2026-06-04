@@ -203,7 +203,12 @@ export default function ProjectDrawer({ project, onClose }: Props) {
       />
 
       {/* Drawer */}
-      <aside className={`fixed top-0 right-0 h-full w-full max-w-120 z-52 bg-bg border-l border-border shadow-xl flex flex-col overflow-y-auto transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <aside
+        role="dialog"
+        aria-modal="true"
+        aria-label="Prosjektdetaljer"
+        className={`fixed top-0 right-0 h-full w-full max-w-120 z-52 bg-bg border-l border-border shadow-xl flex flex-col overflow-y-auto transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+      >
         {project && (
           <>
             {/* Header */}
@@ -221,6 +226,7 @@ export default function ProjectDrawer({ project, onClose }: Props) {
                   disabled={isGenerating}
                   className="btn btn-ghost p-2 disabled:opacity-50"
                   title="Last ned PDF"
+                  aria-label="Last ned PDF"
                 >
                   {isGenerating
                     ? <Spinner />
@@ -233,6 +239,7 @@ export default function ProjectDrawer({ project, onClose }: Props) {
                     onClick={menuOpen ? closeMenu : openMenu}
                     className="btn btn-ghost p-2"
                     title="Endre status"
+                    aria-label="Endre status"
                   >
                     <RiProgress3Line className="w-5 h-5" />
                   </button>
@@ -271,8 +278,8 @@ export default function ProjectDrawer({ project, onClose }: Props) {
 
                 <div className="w-px self-stretch bg-border mx-1" />
 
-                <button onClick={onClose} className="btn btn-ghost p-2" title="Lukk">
-                  <FaXmark className="w-5 h-5" />
+                <button onClick={onClose} className="btn btn-ghost p-2" title="Lukk" aria-label="Lukk">
+                  <FaXmark className="w-5 h-5" aria-hidden="true" />
                 </button>
               </div>
             </div>

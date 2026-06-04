@@ -102,11 +102,15 @@ export default function AdminTabManager({ primaryTabs, secondaryTabs }: { primar
     <div className="flex flex-col gap-6">
       {/* Tab bar */}
       <div className="border-b border-default overflow-x-auto overflow-y-hidden">
-        <div className="flex flex-row min-w-max justify-between">
+        <div role="tablist" className="flex flex-row min-w-max justify-between">
           <div>
             {primaryTabs.map((tab, index) => (
               <button
                 key={tab.label}
+                role="tab"
+                aria-selected={indicatorIndex === index}
+                aria-controls={`tabpanel-${tab.label}`}
+                id={`tab-${tab.label}`}
                 onClick={() => handleTabChange(index)}
                 className={`label cursor-pointer px-4 py-2.5 bg-bg hover:bg-surface-raised transition-colors whitespace-nowrap border-b-2 ${indicatorIndex === index ? "text-primary border-b-primary" : "text-text-faint border-b-transparent"}`}
               >
@@ -118,6 +122,10 @@ export default function AdminTabManager({ primaryTabs, secondaryTabs }: { primar
             {secondaryTabs.map((tab, index) => (
               <button
                 key={tab.label}
+                role="tab"
+                aria-selected={indicatorIndex === index + primaryTabs.length}
+                aria-controls={`tabpanel-${tab.label}`}
+                id={`tab-${tab.label}`}
                 onClick={() => handleTabChange(index + primaryTabs.length)}
                 className={`label cursor-pointer px-4 py-2.5 bg-bg hover:bg-surface-raised transition-colors whitespace-nowrap border-b-2 ${indicatorIndex === index + primaryTabs.length ? "text-primary border-b-primary" : "text-text-faint border-b-transparent"}`}
               >
@@ -134,6 +142,9 @@ export default function AdminTabManager({ primaryTabs, secondaryTabs }: { primar
           mounted.has(index) ? (
             <div
               key={tab.label}
+              role="tabpanel"
+              id={`tabpanel-${tab.label}`}
+              aria-labelledby={`tab-${tab.label}`}
               ref={el => { panelRefs.current[index] = el }}
               style={activeIndex !== index ? { display: 'none' } : undefined}
             >

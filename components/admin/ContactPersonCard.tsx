@@ -35,7 +35,7 @@ export default function ContactPersonCard({ person }: Props) {
         <p className="heading-4 truncate">{person.name}</p>
       </div>
 
-      <div className="flex items-center shrink-0">
+      <div className="hidden sm:flex items-center shrink-0">
         <div className="w-px self-stretch bg-border" />
 
         <div className="flex items-center px-4">

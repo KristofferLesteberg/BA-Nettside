@@ -41,7 +41,7 @@ export default function AdminReviewCard({ review }: { review: Review }) {
         <p className="heading-4 truncate">{review.name}</p>
       </div>
 
-      <div className="flex items-center shrink-0">
+      <div className="hidden sm:flex items-center shrink-0">
         <div className="w-px self-stretch bg-border" />
 
         <div className="flex items-center px-4">
