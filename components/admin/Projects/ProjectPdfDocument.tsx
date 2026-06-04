@@ -1,13 +1,14 @@
 import { Document, Page, View, Text, Image, StyleSheet } from '@react-pdf/renderer'
 import { type SerializedProject } from './ProjectCard'
 import { EDUCATION_FIELD_LABELS } from '@/app/lib/education-fields'
+import { BRAND } from '@/app/lib/brand-colors'
 
-const RED         = '#c0392b'
-const BLUE        = '#1a5276'
-const DARK        = '#111827'
-const MUTED       = '#6b7280'
-const SURFACE     = '#f3f4f6'
-const BORDER      = '#e5e7eb'
+const RED     = BRAND.primary
+const BLUE    = BRAND.secondary
+const DARK    = '#111827'
+const MUTED   = BRAND.muted
+const SURFACE = '#f3f4f6'
+const BORDER  = '#e5e7eb'
 
 const STATUS_LABELS: Record<string, string> = {
   NEW:         'Nytt prosjekt',
