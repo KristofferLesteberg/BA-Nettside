@@ -26,7 +26,7 @@ const page = async () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              <h1 className='text-white font-bold' style={{ fontSize: '3.5rem', lineHeight: '1.1', letterSpacing: '-0.02em', fontFamily: 'var(--font-display)' }}>
+              <h1 className='text-white font-bold text-3xl md:text-5xl lg:text-[3.5rem]' style={{ lineHeight: '1.1', letterSpacing: '-0.02em', fontFamily: 'var(--font-display)' }}>
                 Kjøp byggematerialer eller få jobben gjort av fagfolk
               </h1>
             </MotionDiv>
@@ -63,23 +63,23 @@ const page = async () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className='text-center mb-20'
+            className='text-center mb-20 px-6'
           >
             <h1 className='heading-1 text-white'>Vi tilbyr prosjekter og produkter fra to Linjer</h1>
           </MotionDiv>
 
           {/*DESCRIPTION*/}
-          <div className='flex flex-col w-4/5 ml-auto mr-auto'>
+          <div className='flex flex-col w-full px-6 md:w-4/5 md:mx-auto'>
             <MotionDiv
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className='heading-1 p-6 text-white'>Bygg:</h1>
+              <h1 className='heading-1 py-6 text-white'>Bygg:</h1>
               <hr className='border-white/20' />
               <div className='flex flex-col md:flex-row items-center mb-10'>
-                <p className='max-w-1/2 text-center text-white/80'>
+                <p className='w-full md:max-w-1/2 text-center text-white/80 mt-6 leading-relaxed'>
                   På bygg- og anleggsteknikk arbeider vi praktisk med oppgaver innen rørlegging,
                   betong og tømring. Vi produserer og gjennomfører ulike prosjekter på skolen, samt
                   for eksterne samarbeidspartnere.
@@ -95,7 +95,7 @@ const page = async () => {
                   avløpsanlegg. Elevene får erfaring med montering av rør, sanitærutstyr og enkle
                   varmeanlegg, samt arbeid med både nye installasjoner og rehabilitering.
                 </p>
-                <div style={{ backgroundImage: 'url("/static-images/fp-img2.jpg")', backgroundSize: 'auto 95%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-white/10 flex items-center justify-center m-4'>
+                <div style={{ backgroundImage: 'url("/static-images/fp-img2.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-white/10 flex items-center justify-center m-4'>
                 </div>
               </div>
             </MotionDiv>
@@ -106,12 +106,12 @@ const page = async () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className='heading-1 p-6 text-white'>Annlegg:</h1>
+              <h1 className='heading-1 py-6 text-white'>Annlegg:</h1>
               <hr className='border-white/20' />
               <div className='flex flex-col md:flex-row items-center'>
-                <div style={{ backgroundImage: 'url("/static-images/fp-img3.jpg")', backgroundSize: 'auto 95%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-white/10 flex items-center justify-center m-4'>
+                <div style={{ backgroundImage: 'url("/static-images/fp-img3.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-white/10 flex items-center justify-center m-4'>
                 </div>
-                <p className='max-w-1/2 text-center text-white/80'>
+                <p className='w-full md:max-w-1/2 text-center text-white/80 mt-6 leading-relaxed'>
                   Anleggsavdelingen har i perioder behov for anleggsoppdrag utenfor skolen.
                   Oppdragene bør kunne sysselsette 5 anleggsmaskiner samtidig. Skogsrydding med
                   motorsager kan også være aktuelt oppdrag.
