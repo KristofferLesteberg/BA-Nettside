@@ -14,19 +14,19 @@ const page = async () => {
   return (
     <div>
       <section
-        className='relative h-[calc(100vh-5rem)]'
+        className='relative h-[calc(100vh-var(--header-height))]'
         style={{ backgroundImage: 'url("/static-images/fp-img1.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 30%' }}
       >
-        <div className='absolute inset-0 bg-black/50' />
+        <div className='absolute inset-0 bg-overlay-dark' />
         <div className='relative z-10 h-full flex flex-col'>
-          <div className='h-20 shrink-0' />
+          <div className='h-(--header-height) shrink-0' />
           <div className='flex-1 flex flex-col items-center justify-center text-center px-4 pb-10'>
             <MotionDiv
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              <h1 className='text-white font-bold text-3xl md:text-5xl lg:text-[3.5rem]' style={{ lineHeight: '1.1', letterSpacing: '-0.02em', fontFamily: 'var(--font-display)' }}>
+              <h1 className='heading-display text-white'>
                 Kjøp byggematerialer eller få jobben gjort av fagfolk
               </h1>
             </MotionDiv>
@@ -35,7 +35,7 @@ const page = async () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <p className='text-white/80 text-xl mt-4 max-w-2xl'>
+              <p className='text-text-on-dark-muted text-xl mt-4 max-w-2xl'>
                 Velkommen til Sam Eyde VGS – her kan du kjøpe produkter eller bestille prosjekter fra våre elever.
               </p>
             </MotionDiv>
@@ -57,7 +57,7 @@ const page = async () => {
       </section>
 
       <div>
-        <section className='bg-secondary py-20'>
+        <section className='bg-secondary section-padding'>
           <MotionDiv
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -65,7 +65,7 @@ const page = async () => {
             transition={{ duration: 0.5 }}
             className='text-center mb-20 px-6'
           >
-            <h1 className='heading-1 text-white'>Vi tilbyr prosjekter og produkter fra to Linjer</h1>
+            <h1 className='heading-1 text-text-on-dark'>Vi tilbyr prosjekter og produkter fra to Linjer</h1>
           </MotionDiv>
 
           {/*DESCRIPTION*/}
@@ -76,10 +76,10 @@ const page = async () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className='heading-1 py-6 text-white'>Bygg:</h1>
-              <hr className='border-white/20' />
+              <h2 className='heading-1 py-6 text-text-on-dark'>Bygg:</h2>
+              <hr className='border-border-on-dark' />
               <div className='flex flex-col md:flex-row items-center mb-10'>
-                <p className='w-full md:max-w-1/2 text-center text-white/80 mt-6 leading-relaxed'>
+                <p className='w-full md:max-w-1/2 text-center text-text-on-dark-muted mt-6 leading-relaxed'>
                   På bygg- og anleggsteknikk arbeider vi praktisk med oppgaver innen rørlegging,
                   betong og tømring. Vi produserer og gjennomfører ulike prosjekter på skolen, samt
                   for eksterne samarbeidspartnere.
@@ -95,7 +95,7 @@ const page = async () => {
                   avløpsanlegg. Elevene får erfaring med montering av rør, sanitærutstyr og enkle
                   varmeanlegg, samt arbeid med både nye installasjoner og rehabilitering.
                 </p>
-                <div style={{ backgroundImage: 'url("/static-images/fp-img2.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-white/10 flex items-center justify-center m-4'>
+                <div style={{ backgroundImage: 'url("/static-images/fp-img2.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-surface-on-dark flex items-center justify-center m-4'>
                 </div>
               </div>
             </MotionDiv>
@@ -106,12 +106,12 @@ const page = async () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className='heading-1 py-6 text-white'>Annlegg:</h1>
-              <hr className='border-white/20' />
+              <h2 className='heading-1 py-6 text-text-on-dark'>Annlegg:</h2>
+              <hr className='border-border-on-dark' />
               <div className='flex flex-col md:flex-row items-center'>
-                <div style={{ backgroundImage: 'url("/static-images/fp-img3.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-white/10 flex items-center justify-center m-4'>
+                <div style={{ backgroundImage: 'url("/static-images/fp-img3.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-surface-on-dark flex items-center justify-center m-4'>
                 </div>
-                <p className='w-full md:max-w-1/2 text-center text-white/80 mt-6 leading-relaxed'>
+                <p className='w-full md:max-w-1/2 text-center text-text-on-dark-muted mt-6 leading-relaxed'>
                   Anleggsavdelingen har i perioder behov for anleggsoppdrag utenfor skolen.
                   Oppdragene bør kunne sysselsette 5 anleggsmaskiner samtidig. Skogsrydding med
                   motorsager kan også være aktuelt oppdrag.
@@ -128,7 +128,7 @@ const page = async () => {
         </section>
 
         {/* PROCESS CARDS */}
-        <section className='mt-20 mb-40'>
+        <section className='section-padding'>
           <MotionDiv
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -136,7 +136,7 @@ const page = async () => {
             transition={{ duration: 0.5 }}
             className='text-center mb-20'
           >
-            <h1 className='heading-1'>Hvordan går kjøps prosessen</h1>
+            <h2 className='heading-1'>Hvordan går kjøps prosessen</h2>
           </MotionDiv>
           <ProcessCardsGrid />
         </section>
@@ -147,9 +147,9 @@ const page = async () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className='my-40 max-w-7xl mx-auto px-6'
+            className='section-padding max-w-7xl mx-auto px-6'
           >
-            <h1 className='heading-1 text-center mb-20'>Anmeldelser fra våre tidligere kunder</h1>
+            <h2 className='heading-1 text-center mb-20'>Anmeldelser fra våre tidligere kunder</h2>
             <ReviewsCarousel reviews={reviews} />
           </MotionDiv>
         )}
