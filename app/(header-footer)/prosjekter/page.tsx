@@ -78,7 +78,7 @@ export default function Projects() {
         className='relative h-[60vh]'
         style={{ backgroundImage: 'url("/static-images/fp-img2.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 30%' }}
       >
-        <div className='absolute inset-0 bg-black/50' />
+        <div className='absolute inset-0 bg-overlay-dark' />
         <div className='relative z-10 h-full flex flex-col items-center justify-center text-center px-4'>
           <motion.span
             initial={{ opacity: 0, y: 20 }}
@@ -92,8 +92,7 @@ export default function Projects() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.25 }}
-            className='text-white font-bold'
-            style={{ fontSize: '3.5rem', lineHeight: '1.1', letterSpacing: '-0.02em', fontFamily: 'var(--font-display)' }}
+            className='heading-display text-white'
           >
             Få jobben gjort av fagfolk
           </motion.h1>
@@ -101,7 +100,7 @@ export default function Projects() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className='text-white/80 text-xl mt-4 max-w-2xl'
+            className='text-text-on-dark-muted text-xl mt-4 max-w-2xl'
           >
             Vi tar på oss prosjekter innen bygg og anlegg. Fortell oss hva du trenger så gir vi deg et tilbud.
           </motion.p>
@@ -117,7 +116,7 @@ export default function Projects() {
       </section>
 
       {/* How it works */}
-      <section className="py-20 px-4">
+      <section className="section-padding container-px">
         <div className="max-w-5xl mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
@@ -155,7 +154,7 @@ export default function Projects() {
       </section>
 
       {/* Prerequisites */}
-      <section className='max-w-5xl mx-auto px-4 mb-40 text-center'>
+      <section className='max-w-5xl mx-auto px-4 section-padding-sm text-center'>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
