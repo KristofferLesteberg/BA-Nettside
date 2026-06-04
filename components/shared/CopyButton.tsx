@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { FaCopy, FaCheck } from "react-icons/fa";
+import { IconCopy, IconCheck } from "@/app/lib/icons";
 
 export default function CopyButton ({valueToCopy}: {valueToCopy: string}) {
   const [copied, setCopied] = useState<boolean>(false)
@@ -36,10 +36,10 @@ export default function CopyButton ({valueToCopy}: {valueToCopy: string}) {
       }}
     >
       <span className={`transition-opacity duration-150 ${copied ? "opacity-0" : "opacity-100"}`}>
-        <FaCopy aria-hidden="true" />
+        <IconCopy aria-hidden="true" />
       </span>
       <span className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${copied ? "opacity-100" : "opacity-0"}`}>
-        <FaCheck aria-hidden="true" />
+        <IconCheck aria-hidden="true" />
       </span>
     </button>
   )

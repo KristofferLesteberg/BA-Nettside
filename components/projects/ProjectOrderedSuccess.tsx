@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FaCheckCircle, FaEnvelope, FaExternalLinkAlt, FaHome } from 'react-icons/fa'
+import { IconSuccess, IconEmail, IconExternalLink, IconHome } from '@/app/lib/icons'
 import CopyButton from '../shared/CopyButton'
 
 interface Props {
@@ -13,7 +13,7 @@ export default function ProjectOrderedSuccess({ id, email }: Props) {
       <div className="card-accented shadow-xl space-y-6 px-8 py-8">
 
         <div className="flex flex-col items-center text-center gap-3 py-2">
-          <FaCheckCircle className="text-success text-5xl" />
+          <IconSuccess className="text-success text-5xl" />
           <h2 className="heading-2">Forespørsel mottatt!</h2>
           <p className="body-text">
             Takk for din prosjektforespørsel. Vi har mottatt den og vil gå gjennom den så snart som mulig.
@@ -44,7 +44,7 @@ export default function ProjectOrderedSuccess({ id, email }: Props) {
               target='_blank'
               className="btn btn-outline inline-flex items-center gap-2">
                 Se min forespørsel
-                <FaExternalLinkAlt className="text-xs" />
+                <IconExternalLink className="text-xs" />
               </a>
             </div>
 
@@ -63,7 +63,7 @@ export default function ProjectOrderedSuccess({ id, email }: Props) {
         <hr className="border-border" />
 
         <div className="flex items-start gap-3">
-          <FaEnvelope className="text-text-muted mt-1 shrink-0" />
+          <IconEmail className="text-text-muted mt-1 shrink-0" />
           <p className="small-text">
             En bekreftelse er sendt til{' '}
             <span className="font-semibold text-text">{email}</span>.
@@ -72,7 +72,7 @@ export default function ProjectOrderedSuccess({ id, email }: Props) {
         </div>
 
         <Link href="/" className="btn btn-primary w-full justify-center gap-1">
-          <FaHome />Tilbake til forsiden
+          <IconHome />Tilbake til forsiden
         </Link>
 
       </div>

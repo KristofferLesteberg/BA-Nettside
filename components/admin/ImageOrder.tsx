@@ -1,8 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 import { useState, useEffect } from 'react'
-import { IoTrashOutline } from "react-icons/io5"
-import { MdDragHandle } from "react-icons/md"
+import { IconDelete, IconDrag } from "@/app/lib/icons"
 import { useDropzone } from 'react-dropzone'
 import ImagesPreview from '@/components/shared/ImagesPreview'
 
@@ -94,7 +93,7 @@ function SortableItem({ img, onDelete, onImageClick, isLeaving }: {
             className="flex justify-center cursor-grab active:cursor-grabbing
               text-text-faint hover:text-secondary transition-colors duration-200"
           >
-            <MdDragHandle className="text-lg" />
+            <IconDrag className="text-lg" />
           </div>
           <div className="flex justify-end">
             <button
@@ -102,7 +101,7 @@ function SortableItem({ img, onDelete, onImageClick, isLeaving }: {
               onClick={(e) => { e.stopPropagation(); onDelete(img.id) }}
               className="btn btn-icon btn-error"
             >
-              <IoTrashOutline />
+              <IconDelete />
             </button>
           </div>
         </div>

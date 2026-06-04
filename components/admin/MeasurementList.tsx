@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { FaPlus } from "react-icons/fa6"
+import { IconPlus } from "@/app/lib/icons"
 import MeasurementInput from './MeasurementInput'
 import { CSS } from "@dnd-kit/utilities"
 
@@ -19,7 +19,7 @@ import {
 } from "@dnd-kit/sortable"
 
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers"
-import { MdDragIndicator } from "react-icons/md"
+import { IconDrag } from "@/app/lib/icons"
 
 export type Measure = { name: string; value: string; unit: string }
 
@@ -66,7 +66,7 @@ function SortableRow({ m, initialMeasures, onUpdate, onDelete, onRevert }: Sorta
       {...attributes}
       {...listeners}
     >
-      <MdDragIndicator size={18} />
+      <IconDrag size={18} />
     </button>
   )
 
@@ -195,7 +195,7 @@ export default function MeasurementList({
       </DndContext>
 
       <button type="button" className="btn btn-ghost gap-2 text-sm" onClick={addMeasure}>
-        <FaPlus size={12} />
+        <IconPlus size={12} />
         Legg til mål
       </button>
     </div>

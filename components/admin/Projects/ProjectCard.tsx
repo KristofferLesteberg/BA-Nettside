@@ -6,10 +6,13 @@ import { useRouter } from "next/navigation"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
 import { generateProjectPdf } from "@/actions/pdf"
 import { usePopUp } from "@/components/shared/PopUp"
-import { FaInfo, FaFilePdf, FaTrash, FaHelmetSafety, FaRoad, FaWrench, FaCoins, FaCalendarDays, FaChevronDown, FaQuestion, FaEnvelope, FaPhone, FaLocationDot, FaFileInvoice, FaSpinner } from "react-icons/fa6"
-import { GiBrickWall } from "react-icons/gi"
 import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
-import { RiProgress3Line } from "react-icons/ri"
+import {
+  EDUCATION_FIELD_ICONS,
+  IconDetails, IconPdf, IconDelete, IconPrice, IconDate,
+  IconChevronDown, IconUnknown, IconEmail, IconPhone, IconLocation,
+  IconBillingAddress, IconSpinner, IconStatusChange,
+} from "@/app/lib/icons"
 
 export type SerializedProject = Omit<ProjectRequest, 'minPrice' | 'maxPrice' | 'createdAt'> & {
   minPrice: number
@@ -27,13 +30,6 @@ const STATUS_STYLES: Record<Status, string> = {
   NEW:         'badge badge-md badge-status-new',
   IN_PROGRESS: 'badge badge-md badge-status-progress',
   COMPLETE:    'badge badge-md badge-success',
-}
-
-const EDUCATION_ICONS: Record<EducationField, React.ReactNode> = {
-  PLUMBER:      <FaWrench      className="shrink-0" aria-hidden="true" />,
-  CONCRETE:     <GiBrickWall   className="shrink-0" aria-hidden="true" />,
-  CARPENTER:    <FaHelmetSafety className="shrink-0" aria-hidden="true" />,
-  CONSTRUCTION: <FaRoad        className="shrink-0" aria-hidden="true" />,
 }
 
 const ALL_STATUSES: Status[] = ['NEW', 'IN_PROGRESS', 'COMPLETE']
@@ -169,7 +165,7 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
               {STATUS_LABELS[project.status]}
             </span>
             <span className="badge badge-lg badge-neutral gap-1.5">
-              {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" aria-hidden="true" />}
+              {project.educationField ? EDUCATION_FIELD_ICONS[project.educationField] : <IconUnknown className="shrink-0" aria-hidden="true" />}
             {project.educationField ? EDUCATION_FIELD_LABELS[project.educationField] : 'Ingen linje'}
             </span>
           </div>
@@ -188,7 +184,7 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
 
             <div className="w-28 flex justify-center -ml-1.5">
               <span className="badge badge-lg badge-neutral gap-1.5">
-                {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" aria-hidden="true" />}
+                {project.educationField ? EDUCATION_FIELD_ICONS[project.educationField] : <IconUnknown className="shrink-0" aria-hidden="true" />}
                 {project.educationField ? EDUCATION_FIELD_LABELS[project.educationField] : 'Ingen linje'}
               </span>
             </div>
@@ -197,11 +193,11 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
 
             <div className="flex flex-col gap-0.5">
               <span className="flex items-center gap-1.5 small-text text-muted whitespace-nowrap">
-                <FaCalendarDays className="text-text-faint shrink-0" aria-hidden="true" />
+                <IconDate className="text-text-faint shrink-0" aria-hidden="true" />
                 {formatDate(project.createdAt)}
               </span>
               <span className="flex items-center gap-1.5 small-text text-text whitespace-nowrap font-medium">
-                <FaCoins className="text-text-faint shrink-0" aria-hidden="true" />
+                <IconPrice className="text-text-faint shrink-0" aria-hidden="true" />
                 {priceRange}
               </span>
             </div>
@@ -218,7 +214,7 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
             title="Se detaljer"
             aria-label="Se detaljer"
           >
-            <FaInfo className="w-5 h-5" aria-hidden="true" />
+            <IconDetails className="w-5 h-5" aria-hidden="true" />
           </button>
 
           <button
@@ -229,8 +225,8 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
             aria-label="Last ned PDF"
           >
             {isGenerating
-              ? <FaSpinner className="w-5 h-5 animate-spin" aria-hidden="true" />
-              : <FaFilePdf className="w-5 h-5" aria-hidden="true" />
+              ? <IconSpinner className="w-5 h-5 animate-spin" aria-hidden="true" />
+              : <IconPdf className="w-5 h-5" aria-hidden="true" />
             }
           </button>
 
@@ -243,7 +239,7 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
               aria-expanded={menuOpen}
               aria-haspopup="true"
             >
-              <RiProgress3Line className="w-5 h-5" aria-hidden="true" />
+              <IconStatusChange className="w-5 h-5" aria-hidden="true" />
             </button>
 
             {menuMounted && (
@@ -278,7 +274,7 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
             title="Slett prosjekt"
             aria-label="Slett prosjekt"
           >
-            <FaTrash className="w-5 h-5" aria-hidden="true" />
+            <IconDelete className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -294,22 +290,22 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
             aria-controls={`project-details-${project.id}`}
           >
             Detaljer
-            <FaChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${detailsOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+            <IconChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${detailsOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
           </button>
           <div id={`project-details-${project.id}`} className={`grid transition-[grid-template-rows] duration-200 ${detailsOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
             <div className="overflow-hidden min-h-0">
               <div className="flex flex-col gap-1.5 pb-2">
                 <span className="flex items-center gap-1.5 small-text text-muted">
-                  <FaCalendarDays className="text-text-faint shrink-0" aria-hidden="true" />
+                  <IconDate className="text-text-faint shrink-0" aria-hidden="true" />
                   {formatDate(project.createdAt)}
                 </span>
                 <span className="flex items-center gap-1.5 small-text text-text font-medium">
-                  <FaCoins className="text-text-faint shrink-0" aria-hidden="true" />
+                  <IconPrice className="text-text-faint shrink-0" aria-hidden="true" />
                   {priceRange}
                 </span>
                 {project.billingAddress && (
                   <span className="flex items-center gap-1.5 small-text text-muted">
-                    <FaFileInvoice className="text-text-faint shrink-0" aria-hidden="true" />
+                    <IconBillingAddress className="text-text-faint shrink-0" aria-hidden="true" />
                     {project.billingAddress}
                   </span>
                 )}
@@ -327,26 +323,26 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
             aria-controls={`project-kontakt-${project.id}`}
           >
             Kontakt
-            <FaChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${kontaktOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+            <IconChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${kontaktOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
           </button>
           <div id={`project-kontakt-${project.id}`} className={`grid transition-[grid-template-rows] duration-200 ${kontaktOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
             <div className="overflow-hidden min-h-0">
               <div className="flex flex-col gap-1.5 pb-2">
                 {project.clientEmail && (
                   <span className="flex items-center gap-1.5 small-text text-muted">
-                    <FaEnvelope className="text-text-faint shrink-0" aria-hidden="true" />
+                    <IconEmail className="text-text-faint shrink-0" aria-hidden="true" />
                     {project.clientEmail}
                   </span>
                 )}
                 {project.clientPhone && (
                   <span className="flex items-center gap-1.5 small-text text-muted">
-                    <FaPhone className="text-text-faint shrink-0" aria-hidden="true" />
+                    <IconPhone className="text-text-faint shrink-0" aria-hidden="true" />
                     {project.clientPhone}
                   </span>
                 )}
                 {project.address && (
                   <span className="flex items-center gap-1.5 small-text text-muted">
-                    <FaLocationDot className="text-text-faint shrink-0" aria-hidden="true" />
+                    <IconLocation className="text-text-faint shrink-0" aria-hidden="true" />
                     {project.address}
                   </span>
                 )}

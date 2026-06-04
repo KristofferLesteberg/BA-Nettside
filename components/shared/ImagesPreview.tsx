@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from "react"
 import { createPortal } from "react-dom"
 import Image from "next/image"
-import { FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa"
+import { IconChevronLeft, IconChevronRight, IconClose } from "@/app/lib/icons"
 
 const MIN_ZOOM = 1
 const MAX_ZOOM = 5
@@ -196,7 +196,7 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
           className="p-2 rounded-md transition-colors duration-150 text-primary hover:text-primary-hover hover:bg-white/10 active:bg-white/15 cursor-pointer"
           aria-label="Lukk"
         >
-          <FaTimes className="text-lg" />
+          <IconClose className="text-lg" />
         </button>
       </div>
 
@@ -211,7 +211,7 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
             className="w-10 h-24 my-auto flex items-center justify-center shrink-0 transition-colors duration-150 text-primary hover:text-primary-hover hover:bg-white/10 active:bg-white/15 rounded-md cursor-pointer"
             aria-label="Forrige bilde"
           >
-            <FaChevronLeft className="text-xl" />
+            <IconChevronLeft className="text-xl" />
           </button>
         )}
 
@@ -296,7 +296,7 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
             className="w-10 h-24 my-auto flex items-center justify-center shrink-0 transition-colors duration-150 text-primary hover:text-primary-hover hover:bg-white/10 active:bg-white/15 rounded-md cursor-pointer"
             aria-label="Neste bilde"
           >
-            <FaChevronRight className="text-xl" />
+            <IconChevronRight className="text-xl" />
           </button>
         )}
       </div>

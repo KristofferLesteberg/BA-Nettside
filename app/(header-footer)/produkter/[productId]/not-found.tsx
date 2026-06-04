@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { FaBoxOpen } from "react-icons/fa6"
+import { IconProductEmpty } from "@/app/lib/icons"
 import BackBtn from "@/components/shared/BackBtn"
 
 export default function ProductNotFound() {
@@ -15,7 +15,7 @@ export default function ProductNotFound() {
       <div className="flex-1 flex flex-col items-center justify-center text-center gap-6 py-4 mb-10">
 
         <div className="w-20 h-20 rounded-full bg-subtle border border-default flex items-center justify-center">
-          <FaBoxOpen className="text-3xl text-faint" />
+          <IconProductEmpty className="text-3xl text-faint" />
         </div>
 
         <div className="flex flex-col gap-2 max-w-120">

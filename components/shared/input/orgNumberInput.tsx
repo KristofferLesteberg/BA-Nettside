@@ -3,7 +3,7 @@
 import { useRef, useLayoutEffect, useState } from "react"
 import toast from "react-hot-toast";
 import type { E164Number, CountryCode } from 'libphonenumber-js'
-import { IoSearch } from "react-icons/io5";
+import { IconSearch } from "@/app/lib/icons";
 import { Spinner } from "@/components/shared/Spinner";
 
 interface Props {
@@ -137,7 +137,7 @@ export default function OrgNumberInput({inputClassName, value, onChange, setEmai
       >
         {searching
           ? <Spinner className="w-4 h-4" />
-          : <IoSearch aria-hidden="true" className='cursor-pointer' />
+          : <IconSearch aria-hidden="true" className='cursor-pointer' />
         }
       </button>
     </div>

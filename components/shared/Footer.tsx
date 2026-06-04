@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaEnvelope, FaLocationDot, FaFacebook, FaGlobe } from 'react-icons/fa6';
+import { IconEmail, IconLocation, IconFacebook, IconWebsite } from '@/app/lib/icons';
 
 const navLinks = [
   { href: '/produkter',   label: 'Våre Produkter'      },
@@ -60,7 +60,7 @@ export default function Footer() {
                 aria-label="Facebook"
                 className="text-text-on-dark w-9 h-9 rounded-full bg-surface-on-dark hover:bg-surface-on-dark-hover flex items-center justify-center transition-colors duration-150"
               >
-                <FaFacebook className="text-base" />
+                <IconFacebook className="text-base" />
               </a>
               <a
                 href="https://sameyde.vgs.no/"
@@ -69,7 +69,7 @@ export default function Footer() {
                 aria-label="Skolens nettside"
                 className="text-text-on-dark w-9 h-9 rounded-full bg-surface-on-dark hover:bg-surface-on-dark-hover flex items-center justify-center transition-colors duration-150"
               >
-                <FaGlobe className="text-base" />
+                <IconWebsite className="text-base" />
               </a>
             </div>
           </div>
@@ -97,7 +97,7 @@ export default function Footer() {
             <ul className="flex flex-col gap-5">
               {contactEmails.map(({ name, role, email }) => (
                 <li key={email} className="flex items-start gap-3">
-                  <FaEnvelope aria-hidden="true" className="mt-0.5 shrink-0 text-text-on-dark-faint text-sm" />
+                  <IconEmail aria-hidden="true" className="mt-0.5 shrink-0 text-text-on-dark-faint text-sm" />
                   <div>
                     <p className="text-xs text-text-on-dark-faint mb-0.5">{role}</p>
                     <p className="text-sm font-semibold text-text-on-dark">{name}</p>
@@ -112,7 +112,7 @@ export default function Footer() {
               ))}
 
               <li className="flex items-start gap-3">
-                <FaLocationDot aria-hidden="true" className="mt-0.5 shrink-0 text-text-on-dark-faint text-sm" />
+                <IconLocation aria-hidden="true" className="mt-0.5 shrink-0 text-text-on-dark-faint text-sm" />
                 <div>
                   <p className="text-xs text-text-on-dark-faint mb-0.5">Adresse</p>
                   <p className="text-sm font-medium text-text-on-dark">Østensbuveien 80</p>
@@ -127,7 +127,7 @@ export default function Footer() {
         {/* Map */}
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-3">
-            <FaLocationDot aria-hidden="true" className="text-sm text-text-on-dark-faint" />
+            <IconLocation aria-hidden="true" className="text-sm text-text-on-dark-faint" />
             <SectionHeading>Finn oss</SectionHeading>
           </div>
           <div className="rounded-lg overflow-hidden w-full h-48 sm:h-56 md:h-64 opacity-90 hover:opacity-100 transition-opacity duration-200">

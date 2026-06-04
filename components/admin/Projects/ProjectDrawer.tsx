@@ -2,12 +2,13 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
-import { FaXmark, FaHelmetSafety, FaRoad, FaWrench, FaFilePdf, FaTrash, FaQuestion } from "react-icons/fa6"
+import {
+  EDUCATION_FIELD_ICONS,
+  IconClose, IconPdf, IconDelete, IconUnknown, IconStatusChange,
+} from "@/app/lib/icons"
 import { Spinner } from "@/components/shared/Spinner"
-import { GiBrickWall } from "react-icons/gi"
 import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
-import { RiProgress3Line } from "react-icons/ri"
-import { EducationField, Status } from "@/generated/prisma"
+import { Status } from "@/generated/prisma"
 import { deleteProject, updateProjectStatus } from "@/actions/projects"
 import { generateProjectPdf } from "@/actions/pdf"
 import { usePopUp } from "@/components/shared/PopUp"
@@ -24,13 +25,6 @@ const STATUS_STYLES: Record<Status, string> = {
   NEW:         'badge badge-md badge-status-new',
   IN_PROGRESS: 'badge badge-md badge-status-progress',
   COMPLETE:    'badge badge-md badge-success',
-}
-
-const EDUCATION_ICONS: Record<EducationField, React.ReactNode> = {
-  PLUMBER:      <FaWrench       className="shrink-0" />,
-  CONCRETE:     <GiBrickWall    className="shrink-0" />,
-  CARPENTER:    <FaHelmetSafety className="shrink-0" />,
-  CONSTRUCTION: <FaRoad         className="shrink-0" />,
 }
 
 const ALL_STATUSES: Status[] = ['NEW', 'IN_PROGRESS', 'COMPLETE']
@@ -230,7 +224,7 @@ export default function ProjectDrawer({ project, onClose }: Props) {
                 >
                   {isGenerating
                     ? <Spinner />
-                    : <FaFilePdf className="w-5 h-5" />
+                    : <IconPdf className="w-5 h-5" />
                   }
                 </button>
 
@@ -241,7 +235,7 @@ export default function ProjectDrawer({ project, onClose }: Props) {
                     title="Endre status"
                     aria-label="Endre status"
                   >
-                    <RiProgress3Line className="w-5 h-5" />
+                    <IconStatusChange className="w-5 h-5" />
                   </button>
 
                   {menuMounted && (
@@ -273,13 +267,13 @@ export default function ProjectDrawer({ project, onClose }: Props) {
                   className="btn btn-ghost p-2 text-error hover:bg-error-bg"
                   title="Slett prosjekt"
                 >
-                  <FaTrash className="w-5 h-5" />
+                  <IconDelete className="w-5 h-5" />
                 </button>
 
                 <div className="w-px self-stretch bg-border mx-1" />
 
                 <button onClick={onClose} className="btn btn-ghost p-2" title="Lukk" aria-label="Lukk">
-                  <FaXmark className="w-5 h-5" aria-hidden="true" />
+                  <IconClose className="w-5 h-5" aria-hidden="true" />
                 </button>
               </div>
             </div>
@@ -291,7 +285,7 @@ export default function ProjectDrawer({ project, onClose }: Props) {
                   {STATUS_LABELS[currentStatus]}
                 </span>
                 <span className="badge badge-lg badge-neutral gap-1.5">
-                  {project.educationField ? EDUCATION_ICONS[project.educationField] : <FaQuestion className="shrink-0" />}
+                  {project.educationField ? EDUCATION_FIELD_ICONS[project.educationField] : <IconUnknown className="shrink-0" />}
                   {project.educationField ? EDUCATION_FIELD_LABELS[project.educationField] : 'Ingen linje'}
                 </span>
               </div>

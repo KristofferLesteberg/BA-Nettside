@@ -13,11 +13,10 @@ import { useRouter } from 'next/navigation'
 import { getAllContacts } from '@/actions/contact'
 import LinjeDropdown from '../shared/LinjeDropdown'
 import ContactDropdown from '../shared/ContactDropdown'
-import { RotateCcw } from 'lucide-react'
+import { IconRevert, IconWarning, IconSuccess } from '@/app/lib/icons'
 import { isProductPublishable } from '@/app/lib/product-utils'
 import { MeasureItemSchema } from '@/app/lib/schemas'
 import PriceInput from '@/components/shared/input/price-input'
-import { TriangleAlert, CheckCircle2 } from 'lucide-react'
 
 export interface ProductFormValues {
   educationField: string
@@ -218,8 +217,8 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
               : 'bg-success-bg border-success/20 text-success'
           }`}>
             {isDraft
-              ? <TriangleAlert size={15} className="shrink-0" />
-              : <CheckCircle2 size={15} className="shrink-0" />
+              ? <IconWarning size={15} className="shrink-0" />
+              : <IconSuccess size={15} className="shrink-0" />
             }
             <span className="small-text font-medium">
               {isDraft ? 'Utkast — ikke synlig for kunder' : 'Publisert — synlig for kunder'}
@@ -266,7 +265,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
               onClick={() => resetAllFields()}
               className={`btn btn-ghost transition-opacity duration-150 ${isChanged ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             >
-              <RotateCcw size={14} />
+              <IconRevert size={14} />
               Tilbakestill
             </button>
           </div>
@@ -301,7 +300,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
                 onClick={() => setTitle(original.current.title)}
                 className={`absolute right-2 top-1/2 -translate-y-1/2 text-text-faint hover:text-text transition-opacity duration-150 p-0.5 rounded cursor-pointer ${title !== original.current.title ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
               >
-                <RotateCcw size={14} />
+                <IconRevert size={14} />
               </button>
             </div>
           </div>
@@ -322,7 +321,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
                 onClick={() => setContactId(original.current.contactId)}
                 className={`overflow-hidden transition-all duration-150 text-text-faint hover:text-text rounded flex items-center justify-center shrink-0 ${contactId !== original.current.contactId ? 'w-6 h-6 opacity-100 cursor-pointer' : 'w-0 opacity-0 pointer-events-none'}`}
               >
-                <RotateCcw size={14} className="shrink-0" />
+                <IconRevert size={14} className="shrink-0" />
               </button>
             </div>
             {(() => {
@@ -361,7 +360,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
                 onClick={() => setDescription(original.current.description)}
                 className={`absolute right-2 top-2 text-text-faint hover:text-text transition-opacity duration-150 p-0.5 rounded cursor-pointer ${description !== original.current.description ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
               >
-                <RotateCcw size={14} />
+                <IconRevert size={14} />
               </button>
             </div>
           </div>
@@ -396,7 +395,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
                   onClick={() => setAmount(original.current.amount)}
                   className={`overflow-hidden transition-all duration-150 text-text-faint hover:text-text rounded flex items-center justify-center shrink-0 ${amount !== original.current.amount ? 'w-6 h-6 opacity-100 cursor-pointer' : 'w-0 opacity-0 pointer-events-none'}`}
                 >
-                  <RotateCcw size={14} className="shrink-0" />
+                  <IconRevert size={14} className="shrink-0" />
                 </button>
               </div>
             </div>

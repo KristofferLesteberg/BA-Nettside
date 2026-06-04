@@ -12,7 +12,7 @@ import AddressInput from '@/components/shared/input/address-input'
 import LinjeDropdown from '@/components/shared/LinjeDropdown'
 import PriceRange from '@/components/shared/input/price-range'
 import { ProjectRequestPage1Schema, ProjectRequestPage2Schema } from '@/app/lib/schemas'
-import { FaLink } from 'react-icons/fa'
+import { IconLink } from '@/app/lib/icons'
 import BackBtn from '@/components/shared/BackBtn'
 
 type IdentityType = 'private' | 'organization' | ''
@@ -360,7 +360,7 @@ export default function OrderProjectForm({ onSuccess }: Props) {
                           : 'bg-bg text-text-muted border-border-strong hover:bg-surface hover:text-secondary hover:border-secondary'
                       }`}
                     >
-                      <FaLink />
+                      <IconLink />
                     </button>
                     <div className="flex-1 space-y-1.5">
                       <label className="label">Fakturaadresse <span className="text-error">*</span></label>

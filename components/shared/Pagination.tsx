@@ -1,7 +1,7 @@
 "use client"
 
 import { useSearchParams, useRouter } from "next/navigation"
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
+import { IconChevronLeft, IconChevronRight } from '@/app/lib/icons'
 
 interface Props {
   currentPage: number
@@ -29,7 +29,7 @@ export default function Pagination ({ currentPage, maxPages }: Props) {
           className="btn btn-outline disabled:opacity-40"
           aria-label="Forrige side"
         >
-          <FaChevronLeft aria-hidden="true" />
+          <IconChevronLeft aria-hidden="true" />
           Forrige side
         </button>
         <button
@@ -39,7 +39,7 @@ export default function Pagination ({ currentPage, maxPages }: Props) {
           aria-label="Neste side"
         >
           Neste side
-          <FaChevronRight aria-hidden="true" />
+          <IconChevronRight aria-hidden="true" />
         </button>
       </div>
     </nav>

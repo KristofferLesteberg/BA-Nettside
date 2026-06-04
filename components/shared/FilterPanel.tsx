@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react'
-import { FaSliders, FaXmark, FaChevronDown, FaCheck, FaArrowsRotate } from 'react-icons/fa6'
+import { IconFilter, IconClose, IconChevronDown, IconCheck, IconReset } from '@/app/lib/icons'
 
 export type FilterCategory = {
   label: string
@@ -33,7 +33,7 @@ function AccordionSection({ label, controls, activeCount }: FilterCategory) {
             </span>
           )}
         </div>
-        <FaChevronDown
+        <IconChevronDown
           className={`text-text-faint text-xs transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         />
       </button>
@@ -72,7 +72,7 @@ export function FilterOption({
       }`}
     >
       <span className="w-3 h-3 shrink-0 flex items-center justify-center">
-        {active && <FaCheck className="text-[10px]" />}
+        {active && <IconCheck className="text-[10px]" />}
       </span>
       <span>{children}</span>
     </button>
@@ -87,7 +87,7 @@ export default function FilterPanel({ categories, activeFilterCount, onReset, ch
       onClick={onReset}
       className="flex items-center gap-1.5 text-xs text-text-faint hover:text-primary transition-colors font-medium cursor-pointer"
     >
-      <FaArrowsRotate className="text-[9px]" />
+      <IconReset className="text-[9px]" />
       Nullstill
     </button>
   ) : null
@@ -112,7 +112,7 @@ export default function FilterPanel({ categories, activeFilterCount, onReset, ch
             onClick={() => setDrawerOpen(true)}
             className="btn btn-outline gap-2"
           >
-            <FaSliders className="text-sm" />
+            <IconFilter className="text-sm" />
             Filtre{activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}
           </button>
         </div>
@@ -152,7 +152,7 @@ export default function FilterPanel({ categories, activeFilterCount, onReset, ch
             {resetButton}
           </div>
           <button onClick={() => setDrawerOpen(false)} className="btn btn-ghost w-8 h-8 p-0">
-            <FaXmark />
+            <IconClose />
           </button>
         </div>
         <div className="p-4 flex-1">

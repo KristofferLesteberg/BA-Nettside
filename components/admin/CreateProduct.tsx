@@ -1,7 +1,7 @@
 "use client"
 import { useRouter } from "next/navigation"
 import { createDraftProduct } from "@/actions/products"
-import { HiOutlinePlusSm } from "react-icons/hi"
+import { IconPlus } from "@/app/lib/icons"
 export default function CreateProduct() {
   const router = useRouter()
   const handleNewProduct = async () => {
@@ -11,7 +11,7 @@ export default function CreateProduct() {
   }
   return (
      <button onClick={handleNewProduct} className="btn btn-primary gap-1.5">
-          <HiOutlinePlusSm className="text-base" />
+          <IconPlus className="text-base" />
           Ny produkt
      </button>
   )

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { HiOutlinePlusSm } from 'react-icons/hi'
+import { IconPlus } from '@/app/lib/icons'
 import { getAllReviews } from '@/actions/reviews'
 import AdminReviewCard from '@/components/admin/AdminReviewCard'
 
@@ -11,7 +11,7 @@ export default async function AdminReviewsView() {
       <div className="flex items-center justify-between mb-6">
         <div></div>
         <Link href="/admin/ny-anmeldelse" className="btn btn-primary gap-1.5">
-          <HiOutlinePlusSm className="text-base" />
+          <IconPlus className="text-base" />
           Ny anmeldelse
         </Link>
       </div>

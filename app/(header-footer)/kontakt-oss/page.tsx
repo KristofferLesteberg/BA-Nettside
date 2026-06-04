@@ -1,6 +1,6 @@
 "use client"
-import { FaEnvelope, FaFacebook, FaGlobe, FaLocationDot } from 'react-icons/fa6';
-import { IconType } from 'react-icons';
+import { IconEmail, IconFacebook, IconWebsite, IconLocation } from '@/app/lib/icons';
+import type { IconType } from 'react-icons';
 import { motion, type Variants } from 'motion/react';
 
 interface ContactItem {
@@ -12,31 +12,31 @@ interface ContactItem {
 
 const contactItems: ContactItem[] = [
   {
-    Icon: FaEnvelope,
+    Icon: IconEmail,
     label: 'Trine Nicolaisen, avdelingsleder Bygg- og anleggsteknikk',
     value: 'Trine.Nicolaisen@sameyde.vgs.no',
     href: 'mailto:Trine.Nicolaisen@sameyde.vgs.no',
   },
   {
-    Icon: FaEnvelope,
+    Icon: IconEmail,
     label: 'Dagfinn Rike, avdelingsleder Anleggsteknikk',
     value: 'dagfinn.brokka.rike@sameyde.vgs.no',
     href: 'mailto:dagfinn.brokka.rike@sameyde.vgs.no',
   },
   {
-    Icon: FaEnvelope,
+    Icon: IconEmail,
     label: 'Skolens E-post',
     value: 'kontakt@sameyde.vgs.no',
     href: 'mailto:elever@sameyde.vgs.no',
   },
   {
-    Icon: FaFacebook,
+    Icon: IconFacebook,
     label: 'Facebook',
     value: 'Sam Eyde VGS',
     href: 'https://www.facebook.com/sameydevgs',
   },
   {
-    Icon: FaGlobe,
+    Icon: IconWebsite,
     label: 'Nettside',
     value: 'sameyde.vgs.no',
     href: 'https://sameyde.vgs.no/',
@@ -94,7 +94,7 @@ export default function ContactPage() {
         className="card mb-12 pb-1.5"
       >
         <div className="flex items-center gap-2 mb-6">
-          <FaLocationDot aria-hidden="true" className="text-primary text-lg" />
+          <IconLocation aria-hidden="true" className="text-primary text-lg" />
           <h2 className="heading-3">Kontaktinformasjon</h2>
         </div>
 
@@ -139,7 +139,7 @@ export default function ContactPage() {
         transition={{ duration: 0.5 }}
       >
         <div className="flex items-center gap-2">
-          <FaLocationDot aria-hidden="true" className="text-primary text-lg" />
+          <IconLocation aria-hidden="true" className="text-primary text-lg" />
           <h2 className="heading-3">Finn oss</h2>
         </div>
         <p className="body-text mb-4">Østensbuveien 80, 4848 Arendal</p>

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import type { Swiper as SwiperType } from 'swiper'
-import { FaChevronLeft, FaChevronRight, FaImage } from 'react-icons/fa'
+import { IconChevronLeft, IconChevronRight, IconImagePlaceholder } from '@/app/lib/icons'
 
 const MAX_VISIBLE = 7
 const SLOT_PX     = 18                                                        // reserved width per dot slot
@@ -110,7 +110,7 @@ export default function ImageCarousel({
   if (images.length === 0) {
     return (
       <div className={`flex flex-col items-center justify-center gap-3 card-subtle rounded-2xl border-default ${className ?? ''}`}>
-        <FaImage className="text-5xl text-faint" />
+        <IconImagePlaceholder className="text-5xl text-faint" />
         <p className="small-text text-faint">Ingen bilder tilgjengelig</p>
       </div>
     )
@@ -132,7 +132,7 @@ export default function ImageCarousel({
             className="w-10 h-1/3 my-auto flex items-center justify-center shrink-0 text-primary hover:text-primary-hover hover:bg-surface-sunken active:bg-surface-sunken rounded-md transition-colors duration-250 cursor-pointer"
             aria-label="Forrige bilde"
           >
-            <FaChevronLeft className="text-xl" />
+            <IconChevronLeft className="text-xl" />
           </button>
         )}
 
@@ -163,7 +163,7 @@ export default function ImageCarousel({
             className="w-10 h-1/3 my-auto flex items-center justify-center shrink-0 text-primary hover:text-primary-hover hover:bg-surface-sunken active:bg-surface-sunken rounded-md transition-colors duration-250 cursor-pointer"
             aria-label="Neste bilde"
           >
-            <FaChevronRight className="text-xl" />
+            <IconChevronRight className="text-xl" />
           </button>
         )}
 

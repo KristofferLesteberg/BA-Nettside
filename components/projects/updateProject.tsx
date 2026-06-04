@@ -13,7 +13,7 @@ import AddressInput from '../shared/input/address-input'
 import BackBtn from '@/components/shared/BackBtn'
 import { usePopUp } from '@/components/shared/PopUp'
 import { updateProject } from '@/actions/projects'
-import { FaEdit, FaUndo } from 'react-icons/fa'
+import { IconEdit, IconRevert } from '@/app/lib/icons'
 import { EDUCATION_FIELD_LABELS } from '@/app/lib/education-fields'
 import LinjeDropdown from '@/components/shared/LinjeDropdown'
 
@@ -96,7 +96,7 @@ function EditBtn({ field, active, onUnlock, onLock, onCancel, changed, onUndo }:
         disabled={blocked}
         className="btn btn-ghost p-1.5 py-1 text-sm gap-1 transition-opacity duration-150 disabled:opacity-30"
       >
-        <FaEdit className="text-xs" /> Rediger
+        <IconEdit className="text-xs" /> Rediger
       </button>
       {/* Always rendered so CSS transition handles both appear and disappear. */}
       <button
@@ -108,7 +108,7 @@ function EditBtn({ field, active, onUnlock, onLock, onCancel, changed, onUndo }:
           changed ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'
         }`}
       >
-        <FaUndo className="text-xs" /> Angre
+        <IconRevert className="text-xs" /> Angre
       </button>
     </div>
   )

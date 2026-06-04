@@ -1,7 +1,7 @@
 "use client"
 import { useState, useRef, useEffect, forwardRef } from "react"
 import { createPortal } from "react-dom"
-import { FaChevronDown } from "react-icons/fa6"
+import { IconChevronDown } from "@/app/lib/icons"
 import type { ContactPerson } from "@/generated/prisma"
 
 interface Props {
@@ -114,7 +114,7 @@ const ContactDropdown = forwardRef<HTMLDivElement, Props>(
           <span className={`flex-1 text-left${!value ? ' text-text-faint' : ''}`}>
             {selected ? selected.name : placeholder}
           </span>
-          <FaChevronDown className={`shrink-0 w-3 h-3 text-text-muted transition-transform duration-150${menuOpen ? ' rotate-180' : ''}`} />
+          <IconChevronDown className={`shrink-0 w-3 h-3 text-text-muted transition-transform duration-150${menuOpen ? ' rotate-180' : ''}`} />
         </button>
 
         {menuMounted && createPortal(

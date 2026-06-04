@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { MdOutlineModeEdit } from "react-icons/md"
+import { IconEdit } from "@/app/lib/icons"
 import BackBtn from "@/components/shared/BackBtn"
 
 
@@ -44,7 +44,7 @@ export default function AdminPreviewBanner({ productId, isDraft }: AdminPreviewB
           <span className="small-text text-faint">Forhåndsvisning</span>
         </div>
         <Link href={`/admin/oppdater-produkt/${productId}`} className="btn btn-primary gap-1.5 text-sm">
-          <MdOutlineModeEdit />
+          <IconEdit />
           Rediger
         </Link>
       </div>

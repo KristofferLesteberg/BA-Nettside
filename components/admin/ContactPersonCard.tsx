@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 import { deleteContactPerson } from "@/actions/contact"
 import { usePopUp } from "../shared/PopUp"
-import { FaPen, FaTrash, FaEnvelope, FaPhone, FaBriefcase } from "react-icons/fa6"
+import { IconEdit, IconDelete, IconEmail, IconPhone, IconRole } from "@/app/lib/icons"
 
 interface Props {
   person: ContactPerson
@@ -41,7 +41,7 @@ export default function ContactPersonCard({ person }: Props) {
         <div className="flex items-center px-4">
           <div className="flex flex-col gap-0.5 w-52">
             <span className="label flex items-center gap-1">
-              <FaEnvelope className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+              <IconEmail className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
               E-post
             </span>
             <span className="small-text text-muted truncate">{person.email}</span>
@@ -51,7 +51,7 @@ export default function ContactPersonCard({ person }: Props) {
 
           <div className="flex flex-col gap-0.5 w-36">
             <span className="label flex items-center gap-1">
-              <FaPhone className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+              <IconPhone className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
               Telefon
             </span>
             <span className="small-text text-muted truncate">{person.phone}</span>
@@ -61,7 +61,7 @@ export default function ContactPersonCard({ person }: Props) {
 
           <div className="flex flex-col gap-0.5 w-32">
             <span className="label flex items-center gap-1">
-              <FaBriefcase className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+              <IconRole className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
               Tittel
             </span>
             <span className="small-text text-muted truncate">{person.title}</span>
@@ -73,7 +73,7 @@ export default function ContactPersonCard({ person }: Props) {
 
       <div className="flex items-center gap-0.5 shrink-0">
         <Link href={`/admin/oppdater-kontakt/${person.id}`} className="btn btn-ghost p-2" aria-label="Rediger kontaktperson">
-          <FaPen className="w-5 h-5" aria-hidden="true" />
+          <IconEdit className="w-5 h-5" aria-hidden="true" />
         </Link>
         <button
           className="btn btn-ghost p-2 text-error hover:bg-error-bg"
@@ -86,7 +86,7 @@ export default function ContactPersonCard({ person }: Props) {
             onYes: deletePerson
           })}
         >
-          <FaTrash className="w-5 h-5" aria-hidden="true" />
+          <IconDelete className="w-5 h-5" aria-hidden="true" />
         </button>
       </div>
     </div>

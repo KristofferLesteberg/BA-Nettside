@@ -1,17 +1,9 @@
 "use client"
 import { useState, useRef, useEffect, forwardRef } from "react"
 import { createPortal } from "react-dom"
-import { FaWrench, FaHelmetSafety, FaRoad, FaChevronDown } from "react-icons/fa6"
-import { GiBrickWall } from "react-icons/gi"
 import type { EducationField } from "@/generated/prisma"
 import { EDUCATION_FIELD_LABELS, EDUCATION_FIELD_OPTIONS } from "@/app/lib/education-fields"
-
-const ICONS: Record<EducationField, React.ReactNode> = {
-  PLUMBER:      <FaWrench       className="shrink-0" />,
-  CONCRETE:     <GiBrickWall    className="shrink-0" />,
-  CARPENTER:    <FaHelmetSafety className="shrink-0" />,
-  CONSTRUCTION: <FaRoad         className="shrink-0" />,
-}
+import { EDUCATION_FIELD_ICONS, IconChevronDown } from "@/app/lib/icons"
 
 interface Props {
   value: string
@@ -106,7 +98,7 @@ const LinjeDropdown = forwardRef<HTMLDivElement, Props>(
       else if (ref) (ref as { current: HTMLDivElement | null }).current = node
     }
 
-    const icon = value ? ICONS[value as EducationField] : null
+    const icon = value ? EDUCATION_FIELD_ICONS[value as EducationField] : null
 
     return (
       <div ref={mergeRef} className={className}>
@@ -126,14 +118,14 @@ const LinjeDropdown = forwardRef<HTMLDivElement, Props>(
           }}
           className="input w-full flex items-center gap-2 cursor-pointer"
         >
-          {icon && <span aria-hidden="true">{icon}</span>}
+          {icon}
           <span className={`flex-1 text-left${!value ? ' text-text-faint' : ''}`}>
             {value
               ? EDUCATION_FIELD_LABELS[value as EducationField]
               : (nullable ? 'Ikke spesifisert' : placeholder)
             }
           </span>
-          <FaChevronDown aria-hidden="true" className={`shrink-0 w-3 h-3 text-text-muted transition-transform duration-150${menuOpen ? ' rotate-180' : ''}`} />
+          <IconChevronDown aria-hidden="true" className={`shrink-0 w-3 h-3 text-text-muted transition-transform duration-150${menuOpen ? ' rotate-180' : ''}`} />
         </button>
 
         {menuMounted && createPortal(
@@ -158,7 +150,7 @@ const LinjeDropdown = forwardRef<HTMLDivElement, Props>(
                 className={`relative flex items-center gap-2 text-left pl-4 pr-3 py-2 rounded-[calc(var(--radius-md)-2px)] small-text transition-colors hover:bg-surface-raised cursor-pointer${value === opt.value ? ' font-semibold text-text' : ' text-text-muted'}`}
               >
                 {value === opt.value && <span className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-3/5 rounded-full bg-secondary" />}
-                {opt.value && <span aria-hidden="true">{ICONS[opt.value as EducationField]}</span>}
+                {opt.value && EDUCATION_FIELD_ICONS[opt.value as EducationField]}
                 {opt.label}
               </button>
             ))}

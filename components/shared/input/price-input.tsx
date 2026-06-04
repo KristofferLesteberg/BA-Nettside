@@ -1,6 +1,6 @@
 "use client"
 
-import { RotateCcw } from 'lucide-react'
+import { IconRevert } from '@/app/lib/icons'
 
 interface PriceInputProps {
   value: string
@@ -58,7 +58,7 @@ export default function PriceInput({
           aria-label="Tilbakestill pris"
           className={`overflow-hidden transition-all duration-150 text-text-faint hover:text-text rounded flex items-center justify-center ${onRevert ? 'w-4 opacity-100 cursor-pointer' : 'w-0 opacity-0 pointer-events-none'}`}
         >
-          <RotateCcw size={14} className="shrink-0" />
+          <IconRevert size={14} className="shrink-0" />
         </button>
       </div>
     </div>

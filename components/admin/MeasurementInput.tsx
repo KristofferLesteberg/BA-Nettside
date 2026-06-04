@@ -1,9 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { IoTrashOutline } from "react-icons/io5";
-import { RotateCcw } from "lucide-react"
-import { IoClose } from "react-icons/io5"
+import { IconDelete, IconRevert, IconClose } from "@/app/lib/icons"
 import type { Measure } from "./MeasurementList"
 import type { ReactNode } from "react"
 
@@ -60,7 +58,7 @@ function UnitDropdown({ value, onChange }: { value: string; onChange: (v: string
         title="Tilbake til forhåndsdefinerte enheter"
         className={`absolute right-1.5 top-1/2 -translate-y-1/2 rounded transition-all duration-150 text-text-faint hover:text-text hover:bg-surface-raised cursor-pointer p-0.5 ${customMode ? '' : 'opacity-0 pointer-events-none'}`}
       >
-        <IoClose size={14} />
+        <IconClose size={14} />
       </button>
     </div>
   )
@@ -115,7 +113,7 @@ export default function MeasurementInput({ name, value, unit, onChange, onDelete
         title="Tilbakestill mål"
         className={`overflow-hidden transition-all duration-150 text-text-faint hover:text-text rounded flex items-center justify-center shrink-0 ${canRevert ? 'w-6 h-6 opacity-100 cursor-pointer' : 'w-0 opacity-0 pointer-events-none'}`}
       >
-        <RotateCcw size={14} className="shrink-0" />
+        <IconRevert size={14} className="shrink-0" />
       </button>
 
       <button
@@ -123,7 +121,7 @@ export default function MeasurementInput({ name, value, unit, onChange, onDelete
         className="btn btn-error btn-icon shrink-0"
         onClick={onDelete}
       >
-        <IoTrashOutline />
+        <IconDelete />
       </button>
     </div>
   )

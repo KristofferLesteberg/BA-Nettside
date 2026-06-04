@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
-import { FaBars, FaXmark } from 'react-icons/fa6';
+import { IconMenuOpen, IconClose } from '@/app/lib/icons';
 import { AnimatePresence, motion } from 'motion/react';
 
 const navLinks = [
@@ -97,7 +97,7 @@ export default function Header() {
           aria-label={open ? 'Lukk meny' : 'Åpne meny'}
           aria-expanded={open}
         >
-          {open ? <FaXmark /> : <FaBars />}
+          {open ? <IconClose /> : <IconMenuOpen />}
         </button>
       </div>
 

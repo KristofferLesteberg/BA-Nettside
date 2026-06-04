@@ -6,18 +6,9 @@ import Carousel from "@/components/shared/ImageCarousel"
 import ImagesPreview from "@/components/shared/ImagesPreview"
 import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
 import { formatPrice } from "@/app/lib/product-utils"
-import { FaEnvelope, FaPhone } from "react-icons/fa"
-import { FaWrench, FaHelmetSafety, FaRoad } from "react-icons/fa6"
-import { GiBrickWall } from "react-icons/gi"
 import type { getProductById } from "@/actions/products"
 import type { EducationField } from "@/generated/prisma"
-
-const FIELD_ICONS: Record<EducationField, React.ReactNode> = {
-  PLUMBER:      <FaWrench       className="shrink-0" />,
-  CONCRETE:     <GiBrickWall    className="shrink-0" />,
-  CARPENTER:    <FaHelmetSafety className="shrink-0" />,
-  CONSTRUCTION: <FaRoad         className="shrink-0" />,
-}
+import { IconEmail, IconPhone, EDUCATION_FIELD_ICONS } from "@/app/lib/icons"
 
 type Product = NonNullable<Awaited<ReturnType<typeof getProductById>>>
 type StoredMeasure = { name: string; value: string; unit: string }
@@ -84,7 +75,7 @@ export default function ProductDetail({ product }: { product: Product }) {
             <div className="flex flex-col gap-1.5">
               {product.educationField && (
                 <span className="badge badge-neutral self-start flex items-center gap-1.5">
-                  {FIELD_ICONS[product.educationField]}
+                  {EDUCATION_FIELD_ICONS[product.educationField]}
                   {EDUCATION_FIELD_LABELS[product.educationField]}
                 </span>
               )}
@@ -204,7 +195,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                       className="flex items-center gap-2 small-text hover:underline"
                       style={{ color: "var(--color-text)" }}
                     >
-                      <FaEnvelope className="text-primary shrink-0" />
+                      <IconEmail className="text-primary shrink-0" />
                       {contact.email}
                     </a>
                     <a
@@ -212,7 +203,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                       className="flex items-center gap-2 small-text hover:underline"
                       style={{ color: "var(--color-text)" }}
                     >
-                      <FaPhone className="text-primary shrink-0" />
+                      <IconPhone className="text-primary shrink-0" />
                       {contact.phone}
                     </a>
                   </div>

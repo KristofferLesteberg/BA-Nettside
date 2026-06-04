@@ -1,6 +1,6 @@
 import { getAllContacts } from "@/actions/contact"
 import Link from "next/link"
-import { HiOutlinePlusSm } from 'react-icons/hi'
+import { IconPlus } from '@/app/lib/icons'
 import ContactPersonCard from "./ContactPersonCard"
 
 
@@ -13,7 +13,7 @@ export default async function ContactPersonView() {
       <div></div>
         <div className="">
           <Link href={"/admin/ny-kontakt"} className="btn btn-primary gap-1.5">
-            <HiOutlinePlusSm className="text-base" />
+            <IconPlus className="text-base" />
             Ny kontakt person
           </Link>
         </div>

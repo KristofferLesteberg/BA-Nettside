@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { X } from 'lucide-react'
+import { IconClose } from '@/app/lib/icons'
 
 interface PopUpConfig {
   title:     string
@@ -87,7 +87,7 @@ export default function PopUp({ title, subtitle, content, checkbox, onYes, onNo,
         className="card relative bg-surface-overlay shadow-2xl flex flex-col gap-5 p-6 mx-4 w-full max-w-96 md:max-w-2/3 lg:max-w-1/3 animate-fade-in outline-none"
       >
         <button type="button" onClick={onClose} aria-label="Lukk" className="btn btn-outline btn-icon absolute top-3 right-3">
-          <X size={16} aria-hidden="true" />
+          <IconClose size={16} aria-hidden="true" />
         </button>
 
         <div className="flex flex-col items-center gap-2 pt-4">

@@ -2,7 +2,7 @@
 
 import { signOut } from "next-auth/react"
 import { usePopUp } from "../shared/PopUp"
-import { FaSignOutAlt } from "react-icons/fa";
+import { IconSignOut } from "@/app/lib/icons";
 
 export default function AdminControlPanel() {
   const { open: openPopUp, element: popUpElement } = usePopUp()
@@ -20,7 +20,7 @@ export default function AdminControlPanel() {
         })}
         className="btn btn-error py-1.5"
       >
-        <FaSignOutAlt className="mr-1"/>
+        <IconSignOut className="mr-1"/>
         Logg ut
       </button>
     </div>

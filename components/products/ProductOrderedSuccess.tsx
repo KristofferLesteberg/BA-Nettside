@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FaCheckCircle, FaEnvelope, FaHome } from 'react-icons/fa'
+import { IconSuccess, IconEmail, IconHome } from '@/app/lib/icons'
 import CopyButton from '../shared/CopyButton'
 
 interface Props {
@@ -15,7 +15,7 @@ export default function ProductOrderedSuccess({ id, email, amount, productTitle 
       <div className="card-accented shadow-xl space-y-6 px-8 py-8">
 
         <div className="flex flex-col items-center text-center gap-3 py-2">
-          <FaCheckCircle className="text-success text-5xl" />
+          <IconSuccess className="text-success text-5xl" />
           <h2 className="heading-2">Bestilling mottatt!</h2>
           <p className="body-text">
             Takk for din bestilling av{' '}
@@ -52,7 +52,7 @@ export default function ProductOrderedSuccess({ id, email, amount, productTitle 
         <hr className="border-border" />
 
         <div className="flex items-start gap-3">
-          <FaEnvelope className="text-text-muted mt-1 shrink-0" />
+          <IconEmail className="text-text-muted mt-1 shrink-0" />
           <p className="small-text">
             En bekreftelse er sendt til{' '}
             <span className="font-semibold text-text">{email}</span>.
@@ -61,7 +61,7 @@ export default function ProductOrderedSuccess({ id, email, amount, productTitle 
         </div>
 
         <Link href="/" className="btn btn-primary w-full justify-center gap-1">
-          <FaHome /> Tilbake til forsiden
+          <IconHome /> Tilbake til forsiden
         </Link>
 
       </div>

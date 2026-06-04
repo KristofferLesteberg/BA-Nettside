@@ -11,10 +11,7 @@ import toast from 'react-hot-toast'
 import { deleteProduct, publishProduct } from '@/actions/products'
 import { getOrdersByProductId } from '@/actions/orderProduct'
 
-import { BsThreeDots } from "react-icons/bs"
-import { MdOutlineModeEdit, MdOutlinePublish, MdOutlineUnpublished } from "react-icons/md"
-import { FaRegTrashCan } from "react-icons/fa6"
-import { Loader2 } from 'lucide-react'
+import { IconMenuDots, IconEdit, IconPublish, IconUnpublish, IconDelete, IconSpinner } from "@/app/lib/icons"
 import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
 import { isProductPublishable, formatPrice } from "@/app/lib/product-utils"
 
@@ -111,7 +108,7 @@ function DeleteProduct({ productID, openPopUp }: {
       disabled={fetching}
       className="btn btn-ghost w-full justify-start gap-2 text-lg text-error hover:bg-error-bg disabled:opacity-60"
     >
-      {fetching ? <Loader2 size={18} className="animate-spin" /> : <FaRegTrashCan />}
+      {fetching ? <IconSpinner size={18} className="animate-spin" /> : <IconDelete />}
       Slett
     </button>
   )
@@ -148,7 +145,7 @@ function Publish({ productID, openPopUp, publish, canPublish }: {
       disabled={publish && !canPublish}
       className="btn btn-ghost w-full justify-start gap-2 text-lg text-secondary hover:bg-error-bg whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed"
     >
-      {publish ? <MdOutlinePublish /> : <MdOutlineUnpublished />}
+      {publish ? <IconPublish /> : <IconUnpublish />}
       {publish ? "Publiser" : "Gjør utkast"}
     </button>
   )
@@ -233,7 +230,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
                 className="btn btn-ghost w-8 h-8 p-0"
                 aria-label="Alternativer"
               >
-                <BsThreeDots />
+                <IconMenuDots />
               </button>
 
               {(open || closing) && (
@@ -246,7 +243,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
                     onClick={() => closeMenu()}
                     className="btn btn-ghost w-full justify-start gap-2 text-lg"
                   >
-                    <MdOutlineModeEdit />
+                    <IconEdit />
                     Rediger
                   </Link>
                   <hr className="border-border my-1" />

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { FaPen, FaTrash, FaUser, FaBuilding, FaQuoteLeft } from 'react-icons/fa6'
+import { IconEdit, IconDelete, IconPerson, IconOrg, IconQuote } from '@/app/lib/icons'
 import { deleteReview } from '@/actions/reviews'
 import { usePopUp } from '@/components/shared/PopUp'
 import type { getAllReviews } from '@/actions/reviews'
@@ -47,7 +47,7 @@ export default function AdminReviewCard({ review }: { review: Review }) {
         <div className="flex items-center px-4">
           <div className="flex flex-col gap-0.5 w-36">
             <span className="label flex items-center gap-1">
-              <FaUser className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+              <IconPerson className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
               Rolle
             </span>
             <span className="small-text text-muted truncate">{review.role ?? '—'}</span>
@@ -57,7 +57,7 @@ export default function AdminReviewCard({ review }: { review: Review }) {
 
           <div className="flex flex-col gap-0.5 w-40">
             <span className="label flex items-center gap-1">
-              <FaBuilding className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+              <IconOrg className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
               Organisasjon
             </span>
             <span className="small-text text-muted truncate">
@@ -73,7 +73,7 @@ export default function AdminReviewCard({ review }: { review: Review }) {
 
           <div className="flex flex-col gap-0.5 w-64">
             <span className="label flex items-center gap-1">
-              <FaQuoteLeft className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+              <IconQuote className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
               Melding
             </span>
             <span className="small-text text-muted truncate">{review.message}</span>
@@ -85,7 +85,7 @@ export default function AdminReviewCard({ review }: { review: Review }) {
 
       <div className="flex items-center gap-0.5 shrink-0">
         <Link href={`/admin/oppdater-anmeldelse/${review.id}`} className="btn btn-ghost p-2" aria-label="Rediger anmeldelse">
-          <FaPen className="w-5 h-5" aria-hidden="true" />
+          <IconEdit className="w-5 h-5" aria-hidden="true" />
         </Link>
         <button
           className="btn btn-ghost p-2 text-error hover:bg-error-bg"
@@ -98,7 +98,7 @@ export default function AdminReviewCard({ review }: { review: Review }) {
             onYes: handleDelete,
           })}
         >
-          <FaTrash className="w-5 h-5" aria-hidden="true" />
+          <IconDelete className="w-5 h-5" aria-hidden="true" />
         </button>
       </div>
     </div>

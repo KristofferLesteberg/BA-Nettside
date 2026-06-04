@@ -2,13 +2,13 @@
 import { motion, type Variants } from 'motion/react'
 import React from 'react'
 import {
-  FaMagnifyingGlass,
-  FaCartShopping,
-  FaClipboardCheck,
-  FaCircleCheck,
-  FaTruck,
-  FaFileContract,
-} from 'react-icons/fa6'
+  IconSearch,
+  IconStepOrder,
+  IconStepApprove,
+  IconSuccess,
+  IconStepDeliver,
+  IconStepAgreement,
+} from '@/app/lib/icons'
 
 const container: Variants = {
   hidden: {},
@@ -52,7 +52,7 @@ export default function ProcessCardsGrid() {
 
         <motion.div variants={item}>
           <ProcessCard
-            icon={FaMagnifyingGlass}
+            icon={IconSearch}
             title='Bla gjennom produkter'
             description='Finn det du trenger i vårt utvalg av byggematerialer og ferdige produkter.'
           />
@@ -77,7 +77,7 @@ export default function ProcessCardsGrid() {
 
         <motion.div variants={item}>
           <ProcessCard
-            icon={FaCartShopping}
+            icon={IconStepOrder}
             title='Legg inn bestilling'
             description='Send inn en bestilling direkte via nettsiden – enkelt og raskt.'
           />
@@ -102,7 +102,7 @@ export default function ProcessCardsGrid() {
 
         <motion.div variants={item}>
           <ProcessCard
-            icon={FaClipboardCheck}
+            icon={IconStepApprove}
             title='Lærer godkjenner'
             description='En faglærer gjennomgår bestillingen og bekrefter at den kan gjennomføres.'
           />
@@ -135,7 +135,7 @@ export default function ProcessCardsGrid() {
         <div className='lg:order-5 flex flex-col'>
           <motion.div variants={item}>
             <ProcessCard
-              icon={FaFileContract}
+              icon={IconStepAgreement}
               title='Enighet'
               description='Kunde, lærer og elev blir enig om pris, levering og kontrakt'
             />
@@ -162,7 +162,7 @@ export default function ProcessCardsGrid() {
         <div className='lg:order-3 flex flex-col'>
           <motion.div variants={item}>
             <ProcessCard
-              icon={FaCircleCheck}
+              icon={IconSuccess}
               title='Kvalitetskontroll'
               description='Produktet gjennomgår en grundig sjekk før det godkjennes for levering.'
             />
@@ -189,7 +189,7 @@ export default function ProcessCardsGrid() {
         <div className='lg:order-1 flex flex-col'>
           <motion.div variants={item}>
             <ProcessCard
-              icon={FaTruck}
+              icon={IconStepDeliver}
               title='Levering / henting'
               description='Du henter produktet på skolen, eller vi avtaler levering.'
             />

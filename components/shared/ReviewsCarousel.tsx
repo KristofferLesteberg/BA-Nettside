@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination, Autoplay } from 'swiper/modules'
 import type { Swiper as SwiperType } from 'swiper'
-import { FaQuoteLeft, FaExternalLinkAlt, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import { IconQuote, IconExternalLink, IconChevronLeft, IconChevronRight } from '@/app/lib/icons'
 
 interface Review {
   id:      number
@@ -53,7 +53,7 @@ export default function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
             style={{ height: btnHeight }}
             aria-label="Forrige"
           >
-            <FaChevronLeft className="text-xl" />
+            <IconChevronLeft className="text-xl" />
           </button>
         )}
 
@@ -89,7 +89,7 @@ export default function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
             style={{ height: btnHeight }}
             aria-label="Neste"
           >
-            <FaChevronRight className="text-xl" />
+            <IconChevronRight className="text-xl" />
           </button>
         )}
 
@@ -107,7 +107,7 @@ function ReviewCard({ review }: { review: Review }) {
     <article className="card-subtle flex flex-col gap-4 h-full">
 
       <div className="flex-1 flex flex-col gap-3">
-        <FaQuoteLeft aria-hidden="true" className="text-2xl shrink-0 text-primary" />
+        <IconQuote aria-hidden="true" className="text-2xl shrink-0 text-primary" />
         <p className="body-text leading-relaxed">{review.message}</p>
       </div>
 
@@ -145,7 +145,7 @@ function ReviewCard({ review }: { review: Review }) {
                     className="header-link inline-flex items-center gap-1"
                   >
                     {review.orgName}
-                    <FaExternalLinkAlt className="text-[10px] opacity-60" />
+                    <IconExternalLink className="text-[10px] opacity-60" />
                   </a>
                 ) : (
                   <span>{review.orgName}</span>

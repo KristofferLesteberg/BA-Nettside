@@ -6,8 +6,10 @@ import { useRouter } from "next/navigation"
 import { useState, useRef, useEffect } from "react"
 import { usePopUp } from "@/components/shared/PopUp"
 import toast from "react-hot-toast"
-import { FaTrash, FaEnvelope, FaPhone, FaBoxesStacked, FaBox, FaChevronDown, FaCircleInfo } from "react-icons/fa6"
-import { RiProgress3Line } from "react-icons/ri"
+import {
+  IconDelete, IconEmail, IconPhone, IconProductQty, IconProduct,
+  IconChevronDown, IconInfo, IconStatusChange,
+} from "@/app/lib/icons"
 import { formatPrice } from "@/app/lib/product-utils"
 
 type OrderWithProduct = Awaited<ReturnType<typeof getAllOrders>>[number]
@@ -112,7 +114,7 @@ export default function OrderCard({ order }: Props) {
             </span>
             {order.product && (
               <span className="badge badge-lg badge-neutral gap-1.5">
-                <FaBox className="shrink-0" aria-hidden="true" />
+                <IconProduct className="shrink-0" aria-hidden="true" />
                 <span className="truncate max-w-32">{order.product.title}</span>
               </span>
             )}
@@ -133,7 +135,7 @@ export default function OrderCard({ order }: Props) {
             {order.product && (
               <div className="flex justify-center -ml-1.5">
                 <span className="badge badge-lg badge-neutral gap-1.5 max-w-48">
-                  <FaBox className="shrink-0" aria-hidden="true" />
+                  <IconProduct className="shrink-0" aria-hidden="true" />
                   <span className="truncate">{order.product.title}</span>
                 </span>
               </div>
@@ -143,11 +145,11 @@ export default function OrderCard({ order }: Props) {
 
             <div className="flex flex-col gap-0.5">
               <a href={`mailto:${order.clientEmail}`} className="text-secondary hover:underline flex items-center gap-1.5 small-text whitespace-nowrap">
-                <FaEnvelope className="text-text-faint shrink-0" aria-hidden="true" />
+                <IconEmail className="text-text-faint shrink-0" aria-hidden="true" />
                 {order.clientEmail}
               </a>
               <a href={`tel:${order.clientPhone}`} className="text-secondary hover:underline flex items-center gap-1.5 small-text whitespace-nowrap">
-                <FaPhone className="text-text-faint shrink-0" aria-hidden="true" />
+                <IconPhone className="text-text-faint shrink-0" aria-hidden="true" />
                 {order.clientPhone}
               </a>
             </div>
@@ -155,7 +157,7 @@ export default function OrderCard({ order }: Props) {
             <div className="w-px self-stretch bg-border mx-1" />
 
             <span className="flex items-center gap-1.5 small-text text-text font-medium whitespace-nowrap">
-              <FaBoxesStacked className="text-text-faint shrink-0 w-4 h-4" aria-hidden="true" />
+              <IconProductQty className="text-text-faint shrink-0 w-4 h-4" aria-hidden="true" />
               {order.amount} stk
             </span>
           </div>
@@ -174,7 +176,7 @@ export default function OrderCard({ order }: Props) {
               aria-expanded={menuOpen}
               aria-haspopup="true"
             >
-              <RiProgress3Line className="w-5 h-5" aria-hidden="true" />
+              <IconStatusChange className="w-5 h-5" aria-hidden="true" />
             </button>
 
             {menuMounted && (
@@ -209,7 +211,7 @@ export default function OrderCard({ order }: Props) {
             title="Slett bestilling"
             aria-label="Slett bestilling"
           >
-            <FaTrash className="w-5 h-5" aria-hidden="true" />
+            <IconDelete className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -224,17 +226,17 @@ export default function OrderCard({ order }: Props) {
             aria-controls={`order-kontakt-${order.id}`}
           >
             Kontakt
-            <FaChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${kontaktOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+            <IconChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${kontaktOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
           </button>
           <div id={`order-kontakt-${order.id}`} className={`grid transition-[grid-template-rows] duration-200 ${kontaktOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
             <div className="overflow-hidden min-h-0">
               <div className="flex flex-col gap-1.5 pb-2">
                 <a href={`mailto:${order.clientEmail}`} className="text-secondary hover:underline flex items-center gap-1.5 small-text">
-                  <FaEnvelope className="text-text-faint shrink-0" aria-hidden="true" />
+                  <IconEmail className="text-text-faint shrink-0" aria-hidden="true" />
                   {order.clientEmail}
                 </a>
                 <a href={`tel:${order.clientPhone}`} className="text-secondary hover:underline flex items-center gap-1.5 small-text">
-                  <FaPhone className="text-text-faint shrink-0" aria-hidden="true" />
+                  <IconPhone className="text-text-faint shrink-0" aria-hidden="true" />
                   {order.clientPhone}
                 </a>
               </div>
@@ -252,7 +254,7 @@ export default function OrderCard({ order }: Props) {
           aria-controls={`order-desc-${order.id}`}
         >
           Tillegsinformasjon
-          <FaChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${descOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+          <IconChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${descOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
         </button>
         <div id={`order-desc-${order.id}`} className={`grid transition-[grid-template-rows] duration-200 ${descOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
           <div className="overflow-hidden min-h-0">
@@ -261,7 +263,7 @@ export default function OrderCard({ order }: Props) {
                 <p className="small-text text-muted">{order.extraDetails}</p>
               ) : (
                 <span className="flex items-center gap-1.5 small-text text-faint italic">
-                  <FaCircleInfo className="shrink-0" aria-hidden="true" />
+                  <IconInfo className="shrink-0" aria-hidden="true" />
                   Ingen tillegsinformasjon oppgitt
                 </span>
               )}
@@ -280,7 +282,7 @@ export default function OrderCard({ order }: Props) {
             aria-controls={`order-product-${order.id}`}
           >
             Produktdetaljer
-            <FaChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${showProduct ? 'rotate-180' : ''}`} aria-hidden="true" />
+            <IconChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${showProduct ? 'rotate-180' : ''}`} aria-hidden="true" />
           </button>
           <div id={`order-product-${order.id}`} className={`grid transition-[grid-template-rows] duration-200 ${showProduct ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
             <div className="overflow-hidden min-h-0">
@@ -298,7 +300,7 @@ export default function OrderCard({ order }: Props) {
                     />
                   ) : (
                     <div className="w-16 h-16 rounded-md bg-muted shrink-0 flex items-center justify-center">
-                      <FaBox className="text-text-faint text-lg" aria-hidden="true" />
+                      <IconProduct className="text-text-faint text-lg" aria-hidden="true" />
                     </div>
                   )}
 
