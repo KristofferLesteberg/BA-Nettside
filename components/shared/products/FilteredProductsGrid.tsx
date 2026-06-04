@@ -73,7 +73,7 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
   const sort = SORT_FROM_URL[searchParams.get('sort') ?? 'nyeste'] ?? 'newest'
 
   useEffect(() => {
-    const hasFilters = ['linje', 'status', 'sort', 'pageSize'].some(k => searchParams.get(k))
+    const hasFilters = ['linje', 'status', 'sort', 'sideAntall'].some(k => searchParams.get(k))
     if (!hasFilters) {
       const saved = sessionStorage.getItem('tabFilters_produkter')
       if (saved) router.replace('?' + saved + '&tab=produkter')
@@ -99,7 +99,7 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
   function setFilter(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString())
     params.set(key, value)
-    params.set('page', '1')
+    params.set('side', '1')
     const qs = params.toString()
     const forStorage = new URLSearchParams(qs)
     forStorage.delete('tab')
@@ -125,8 +125,8 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
     return result
   }, [products, selectedCategories, sort, selectedStatuses])
 
-  const currentPage = Number(searchParams.get('page') ?? '1')
-  const pageSize = Number(searchParams.get('pageSize') ?? '10')
+  const currentPage = Number(searchParams.get('side') ?? '1')
+  const pageSize = Number(searchParams.get('sideAntall') ?? '10')
   const maxPage = Math.ceil(filtered.length / pageSize)
   
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
@@ -193,7 +193,7 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
             </div>
             <select
               value={pageSize}
-              onChange={e => setFilter('pageSize', e.target.value)}
+              onChange={e => setFilter('sideAntall', e.target.value)}
               className="input w-auto py-1 text-sm cursor-pointer"
             >
               {[10, 20, 30, 40, 50].map(n => (

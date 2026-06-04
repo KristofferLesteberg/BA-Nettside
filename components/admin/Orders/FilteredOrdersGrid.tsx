@@ -13,6 +13,7 @@ export type { OrderWithProduct }
 export type OrderStatusFilter = PrismaOrderStatus | "ALL"
 export type SortOption = "nyeste" | "eldste"
 
+
 interface Props {
   orders: OrderWithProduct[]
 }
@@ -30,6 +31,7 @@ const STATUS_FROM_URL: Record<string, OrderStatusFilter> = {
   "i-kontakt": "IN_CONTACT",
   ferdig:      "COMPLETED",
 }
+
 
 const STATUS_TO_URL: Record<OrderStatusFilter, string> = {
   ALL:        "alle",
@@ -63,6 +65,8 @@ export default function FilteredOrdersGrid({ orders }: Props) {
   }
 
   function setFilter(key: string, value: string) {
+    console.log(key)
+    console.log(value)
     const params = new URLSearchParams(searchParams.toString())
     params.set(key, value)
     const qs = params.toString()
@@ -78,6 +82,7 @@ export default function FilteredOrdersGrid({ orders }: Props) {
       const saved = sessionStorage.getItem('tabFilters_bestillinger')
       if (saved) router.replace('?' + saved + '&tab=bestillinger')
     }
+  
   }, [])
 
   const filtered = useMemo(() => {
@@ -89,9 +94,10 @@ export default function FilteredOrdersGrid({ orders }: Props) {
     return result
   }, [orders, selectedStatuses, sort])
 
-  const currentPage = Number(searchParams.get('page') ?? '1')
-  const pageSize = Number(searchParams.get('pageSize') ?? '10')
+  const currentPage = Number(searchParams.get('side') ?? '1')
+  const pageSize = Number(searchParams.get('sideAntall') ?? '10')
   const maxPage = Math.ceil(filtered.length / pageSize)
+
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
   const statusActiveCount = selectedStatuses.length
@@ -135,7 +141,7 @@ export default function FilteredOrdersGrid({ orders }: Props) {
           </div>
           <select
             value={pageSize}
-            onChange={e => setFilter('pageSize', e.target.value)}
+            onChange={e => setFilter('sideAntall', e.target.value)}
             className="input w-auto py-1 text-sm cursor-pointer"
           >
             {[10, 20, 30, 40, 50].map(n => (

@@ -14,7 +14,7 @@ export default function Pagination ({ currentPage, maxPages }: Props) {
 
   function setPage(newPage: number) {
     const params = new URLSearchParams(searchParams.toString())
-    params.set('page', String(newPage))
+    params.set('side', String(newPage))
     router.replace('?' + params.toString())
   }
 
