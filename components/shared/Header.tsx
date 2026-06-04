@@ -3,8 +3,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaBars, FaXmark } from 'react-icons/fa6';
+import { AnimatePresence, motion } from 'motion/react';
 
 const navLinks = [
   { href: '/produkter',    label: 'Våre Produkter'      },
@@ -17,26 +18,49 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(true);
   const pathname = usePathname();
+  const headerRef = useRef<HTMLElement>(null);
+  const openRef = useRef(false);
+
+  useEffect(() => { openRef.current = open; }, [open]);
 
   let lastScrollY = 0;
 
   const scrollHeader = () => {
     const currentScrollY = window.scrollY;
-    setVisible(currentScrollY < lastScrollY || currentScrollY < 20);
+    if (openRef.current) {
+      setOpen(false);
+      setVisible(false);
+    } else {
+      setVisible(currentScrollY < lastScrollY || currentScrollY < 20);
+    }
     // eslint-disable-next-line react-hooks/immutability
     lastScrollY = currentScrollY;
   }
 
   useEffect(() => {
     window.addEventListener('scroll', scrollHeader);
-
     return () => {
       window.removeEventListener('scroll', scrollHeader);
     }
   }, [])
 
+  useEffect(() => {
+    if (!open) return;
+    const handleOutside = (e: MouseEvent | TouchEvent) => {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutside);
+    document.addEventListener('touchstart', handleOutside, { passive: true });
+    return () => {
+      document.removeEventListener('mousedown', handleOutside);
+      document.removeEventListener('touchstart', handleOutside);
+    };
+  }, [open])
+
   return (
-    <header className={`w-full bg-subtle border-b border-border mb-10 fixed top-0 left-0 right-0 z-50
+    <header ref={headerRef} className={`w-full bg-subtle border-b border-border mb-10 fixed top-0 left-0 right-0 z-50
     transition-transform duration-300
     ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -78,24 +102,32 @@ export default function Header() {
       </div>
 
       {/* Mobile nav */}
-      {open && (
-        <nav className="md:hidden border-t border-border bg-subtle px-4 py-3 flex flex-col gap-1">
-          {navLinks.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setOpen(false)}
-              className={`px-3 py-2.5 rounded-md text-sm font-medium transition-colors duration-150 ${
-                pathname === href
-                  ? 'bg-surface-raised text-primary'
-                  : 'text-text hover:bg-surface-raised'
-              }`}
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.nav
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="md:hidden border-t border-border bg-subtle px-4 py-3 flex flex-col gap-1 overflow-hidden"
+          >
+            {navLinks.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className={`px-3 py-2.5 rounded-md text-sm font-medium transition-colors duration-150 ${
+                  pathname === href
+                    ? 'bg-surface-raised text-primary'
+                    : 'text-text hover:bg-surface-raised'
+                }`}
+              >
+                {label}
+              </Link>
+            ))}
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
