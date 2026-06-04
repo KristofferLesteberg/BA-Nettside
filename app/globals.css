@@ -333,27 +333,33 @@
 
 /* rc-slider theme overrides */
 .rc-slider-rail {
-  background-color: var(--color-border);
-  height: 6px;
+  background-color: var(--color-border) !important;
+  height: 6px !important;
 }
-.rc-slider-track {
-  background-color: var(--color-primary);
-  height: 6px;
+.rc-slider-track,
+.rc-slider-tracks {
+  background-color: var(--color-primary) !important;
+  height: 6px !important;
 }
 .rc-slider-handle {
-  width: 18px;
-  height: 18px;
-  margin-top: -6px;
-  border: 2px solid var(--color-primary);
-  background-color: var(--color-bg);
-  opacity: 1;
-  box-shadow: none;
+  width: 18px !important;
+  height: 18px !important;
+  margin-top: -6px !important;
+  border: 2px solid var(--color-primary) !important;
+  background-color: var(--color-bg) !important;
+  opacity: 1 !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 .rc-slider-handle:hover,
 .rc-slider-handle:focus,
+.rc-slider-handle:focus-visible,
+.rc-slider-handle-click-focused:focus,
+.rc-slider-handle:active,
 .rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
-  border-color: var(--color-primary-hover);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 20%, transparent);
+  border-color: var(--color-primary-hover) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.2) !important;
 }
 
 /* Equal-height slides for the reviews carousel */

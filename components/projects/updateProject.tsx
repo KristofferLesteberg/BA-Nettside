@@ -336,9 +336,8 @@ export default function UpdateProjectForm({
               {activeField === 'budget' ? (
                 <div className="animate-fade-in">
                   <PriceRange
-                    min={values.minPrice}
-                    max={values.maxPrice}
-                    onChange={(lo, hi) => setValues(prev => ({ ...prev, minPrice: lo, maxPrice: hi }))}
+                    value={[Number(values.minPrice), Number(values.maxPrice)]}
+                    onCommit={(lo, hi) => setValues(prev => ({ ...prev, minPrice: String(lo), maxPrice: String(hi) }))}
                   />
                 </div>
               ) : (

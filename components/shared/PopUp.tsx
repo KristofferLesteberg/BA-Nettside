@@ -1,13 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 
 interface PopUpConfig {
   title:     string
   subtitle?: string
+  content?:  ReactNode
+  checkbox?: { label: string; defaultChecked?: boolean }
   yesLabel?: string
   noLabel?:  string
-  onYes:     () => void
+  onYes:     (checkboxChecked?: boolean) => void
   onNo?:     () => void
 }
 
@@ -53,8 +55,13 @@ interface PopUpProp extends PopUpConfig {
   visible: boolean
 }
 
-export default function PopUp({ title, subtitle, onYes, onNo, onClose, yesLabel, noLabel, visible }: PopUpProp) {
+export default function PopUp({ title, subtitle, content, checkbox, onYes, onNo, onClose, yesLabel, noLabel, visible }: PopUpProp) {
   const cardRef = useRef<HTMLDivElement>(null)
+  const [checked, setChecked] = useState(checkbox?.defaultChecked ?? false)
+
+  useEffect(() => {
+    setChecked(checkbox?.defaultChecked ?? false)
+  }, [checkbox])
 
   useEffect(() => {
     cardRef.current?.focus()
@@ -85,11 +92,25 @@ export default function PopUp({ title, subtitle, onYes, onNo, onClose, yesLabel,
           {subtitle && <p className="small-text text-center">{subtitle}</p>}
         </div>
 
+        {content}
+
+        {checkbox && (
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={checked}
+              onChange={(e) => setChecked(e.target.checked)}
+              className="w-4 h-4 accent-primary shrink-0"
+            />
+            <span className="small-text">{checkbox.label}</span>
+          </label>
+        )}
+
         <div className="flex gap-3">
           <button type="button" onClick={() => { onClose(); onNo?.(); }} className="btn btn-outline p-2 flex-1">
             {noLabel}
           </button>
-          <button type="button" onClick={() => { onClose(); onYes(); }} className="btn btn-primary p-2 flex-1">
+          <button type="button" onClick={() => { onClose(); onYes(checkbox ? checked : undefined); }} className="btn btn-primary p-2 flex-1">
             {yesLabel}
           </button>
         </div>

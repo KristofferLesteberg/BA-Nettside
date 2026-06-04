@@ -9,10 +9,12 @@ import { usePopUp } from "@/components/shared/PopUp"
 
 import toast from 'react-hot-toast'
 import { deleteProduct, publishProduct } from '@/actions/products'
+import { getOrdersByProductId } from '@/actions/orderProduct'
 
 import { BsThreeDots } from "react-icons/bs"
 import { MdOutlineModeEdit, MdOutlinePublish, MdOutlineUnpublished } from "react-icons/md"
 import { FaRegTrashCan } from "react-icons/fa6"
+import { Loader2 } from 'lucide-react'
 import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
 import { isProductPublishable, formatPrice } from "@/app/lib/product-utils"
 
@@ -33,15 +35,46 @@ interface ProductCardProps {
   isAdmin: boolean
 }
 
+type OrderSummary = Awaited<ReturnType<typeof getOrdersByProductId>>[number]
+
+const STATUS_LABELS: Record<string, string> = {
+  NEW: 'Ny',
+  IN_CONTACT: 'Kontaktet',
+  COMPLETED: 'Fullført',
+}
+
+const STATUS_BADGE: Record<string, string> = {
+  NEW: 'badge-status-new',
+  IN_CONTACT: 'badge-status-progress',
+  COMPLETED: 'badge-success',
+}
+
+function OrderList({ orders }: { orders: OrderSummary[] }) {
+  return (
+    <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
+      {orders.map(order => (
+        <div key={order.id} className="flex items-center justify-between gap-2 px-3 py-2 bg-sunken rounded">
+          <span className="small-text font-medium truncate">{order.clientName}</span>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="small-text text-muted">{order.amount} stk</span>
+            <span className={`badge ${STATUS_BADGE[order.status]}`}>{STATUS_LABELS[order.status]}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function DeleteProduct({ productID, openPopUp }: {
   productID: number
   openPopUp: ReturnType<typeof usePopUp>['open']
 }) {
   const router = useRouter()
+  const [fetching, setFetching] = useState(false)
 
-  const handleDelete = async () => {
+  const handleDelete = async (deleteOrders?: boolean) => {
     try {
-      await toast.promise(deleteProduct(productID), {
+      await toast.promise(deleteProduct(productID, deleteOrders ?? false), {
         loading: 'Sletter produkt…',
         success: 'Produkt slettet',
         error: 'Kunne ikke slette produktet',
@@ -50,17 +83,35 @@ function DeleteProduct({ productID, openPopUp }: {
     } catch {}
   }
 
-  return (
-    <button
-      onClick={() => openPopUp({
+  const handleClick = async () => {
+    setFetching(true)
+    try {
+      const orders = await getOrdersByProductId(productID)
+      openPopUp({
         title: "Vil du slette produktet?",
+        subtitle: orders.length > 0
+          ? `Dette produktet har ${orders.length} tilknyttede bestillinger. Sletting kan ikke angres.`
+          : undefined,
+        content: orders.length > 0 ? <OrderList orders={orders} /> : undefined,
+        checkbox: orders.length > 0
+          ? { label: `Slett alle tilknyttede bestillinger (${orders.length} stk)`, defaultChecked: false }
+          : undefined,
         yesLabel: "Slett",
         noLabel: "Avbryt",
         onYes: handleDelete,
-      })}
-      className="btn btn-ghost w-full justify-start gap-2 text-lg text-error hover:bg-error-bg"
+      })
+    } finally {
+      setFetching(false)
+    }
+  }
+
+  return (
+    <button
+      onClick={handleClick}
+      disabled={fetching}
+      className="btn btn-ghost w-full justify-start gap-2 text-lg text-error hover:bg-error-bg disabled:opacity-60"
     >
-      <FaRegTrashCan />
+      {fetching ? <Loader2 size={18} className="animate-spin" /> : <FaRegTrashCan />}
       Slett
     </button>
   )
