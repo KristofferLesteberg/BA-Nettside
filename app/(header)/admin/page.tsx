@@ -33,7 +33,7 @@ const page = async (params: { searchParams: SearchParams }) => {
   const tabName = await params.searchParams
   
   
-  const tabs: AdminTab[] = [
+  const primaryTabs: AdminTab[] = [
     {
       label: "produkter",
       content: <AdminProductsView />,
@@ -49,6 +49,10 @@ const page = async (params: { searchParams: SearchParams }) => {
       content: <AdminProjectsView />,
       count: projects
     },
+    
+  ]
+
+  const secondaryTab: AdminTab[] = [
     {
       label: "kontakt personer",
       content: <AdminContactPersonView />,
@@ -70,7 +74,7 @@ const page = async (params: { searchParams: SearchParams }) => {
         <AdminControlPanel />
       </div>
       <Suspense>
-        <AdminTabManager tabs={tabs} />
+        <AdminTabManager primaryTabs={primaryTabs} secondaryTabs={secondaryTab}/>
       </Suspense>
     </section>
   )
