@@ -9,7 +9,7 @@ export default async function AdminReviewsView() {
   return (
     <>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="heading-2">Anmeldelser — {reviews.length}</h2>
+        <div></div>
         <Link href="/admin/ny-anmeldelse" className="btn btn-primary gap-1.5">
           <HiOutlinePlusSm className="text-base" />
           Ny anmeldelse
@@ -20,7 +20,7 @@ export default async function AdminReviewsView() {
         <p className="text-text-faint italic">Ingen anmeldelser lagt til ennå.</p>
       )}
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         {reviews.map((review) => (
           <AdminReviewCard key={review.id} review={review} />
         ))}

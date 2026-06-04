@@ -19,7 +19,7 @@ export default async function ContactPersonView() {
         </div>
       </div>
       <div>
-        <div className="w-6xl ml-auto mr-auto grid grid-cols-1 gap-5">
+        <div className="w-6xl ml-auto mr-auto grid grid-cols-1 gap-3">
         {contactPersons.map((project) => (
           <ContactPersonCard person={project} key={project.id} />
         ))}

@@ -1,4 +1,6 @@
+
 export const dynamic = 'force-dynamic'
+
 // Forces NextJS to not prerender this page statically
 // Is useful since the DB file that NEXT tries to acces doesnt exist yet
 // P.S. Claude - "ur welcome buddy".
@@ -17,12 +19,19 @@ import { getAllProducts } from '@/actions/products'
 import { getAllReviews } from '@/actions/reviews'
 import { getAllContacts } from '@/actions/contact'
 
-const page = async () => {
+
+
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+const page = async (params: { searchParams: SearchParams }) => {
   const orders = (await getAllOrders()).length
   const projects = (await getAllProjects()).length
   const products = (await getAllProducts()).length
   const reviews = (await getAllReviews()).length
   const contactPersons = (await getAllContacts()).length
+
+  const tabName = await params.searchParams
+  
   
   const tabs: AdminTab[] = [
     {
@@ -52,10 +61,12 @@ const page = async () => {
     }
   ]
 
+
+
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-12 flex flex-col gap-6">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="heading-1">Admin</h1>
+        <h1 className="heading-1">Administrator <span className='label text-md'>/ {tabName.tab} </span></h1>
         <AdminControlPanel />
       </div>
       <Suspense>

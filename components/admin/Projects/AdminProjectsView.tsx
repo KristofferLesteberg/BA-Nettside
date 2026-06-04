@@ -15,7 +15,6 @@ export default async function AdminProjectsView() {
 
   return (
     <>
-      <h1 className="heading-2 mb-10">Prosjekter - {convertedProject.length}</h1>
       <FilteredProjectGrid projects={convertedProject} />
     </>
   )

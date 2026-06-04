@@ -28,7 +28,7 @@ export default function ContactPersonCard({ person }: Props) {
   }
 
   return (
-    <div className="card card-subtle py-3 px-5 flex items-center" role="article">
+    <div className="card card-subtle py-4 px-5 flex items-center" role="article">
       {popUpElement}
 
       <div className="flex-1 min-w-0">
