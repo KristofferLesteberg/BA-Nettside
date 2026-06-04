@@ -56,8 +56,8 @@ const page = async () => {
         </div>
       </section>
 
-      <div className='mt-30'>
-        <section className='mt-30'>
+      <div>
+        <section className='bg-secondary py-20'>
           <MotionDiv
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -65,7 +65,7 @@ const page = async () => {
             transition={{ duration: 0.5 }}
             className='text-center mb-20'
           >
-            <h1 className='heading-1'>Vi tilbyr prosjekter og produkter fra to Linjer</h1>
+            <h1 className='heading-1 text-white'>Vi tilbyr prosjekter og produkter fra to Linjer</h1>
           </MotionDiv>
 
           {/*DESCRIPTION*/}
@@ -76,10 +76,10 @@ const page = async () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className='heading-1 p-6'>Bygg:</h1>
-              <hr />
+              <h1 className='heading-1 p-6 text-white'>Bygg:</h1>
+              <hr className='border-white/20' />
               <div className='flex flex-col md:flex-row items-center mb-10'>
-                <p className='max-w-1/2 text-center'>
+                <p className='max-w-1/2 text-center text-white/80'>
                   På bygg- og anleggsteknikk arbeider vi praktisk med oppgaver innen rørlegging,
                   betong og tømring. Vi produserer og gjennomfører ulike prosjekter på skolen, samt
                   for eksterne samarbeidspartnere.
@@ -95,7 +95,7 @@ const page = async () => {
                   avløpsanlegg. Elevene får erfaring med montering av rør, sanitærutstyr og enkle
                   varmeanlegg, samt arbeid med både nye installasjoner og rehabilitering.
                 </p>
-                <div style={{ backgroundImage: 'url("/static-images/fp-img2.jpg")', backgroundSize: 'auto 95%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-yellow-100 flex items-center justify-center m-4'>
+                <div style={{ backgroundImage: 'url("/static-images/fp-img2.jpg")', backgroundSize: 'auto 95%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-white/10 flex items-center justify-center m-4'>
                 </div>
               </div>
             </MotionDiv>
@@ -106,12 +106,12 @@ const page = async () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className='heading-1 p-6'>Annlegg:</h1>
-              <hr />
+              <h1 className='heading-1 p-6 text-white'>Annlegg:</h1>
+              <hr className='border-white/20' />
               <div className='flex flex-col md:flex-row items-center'>
-                <div style={{ backgroundImage: 'url("/static-images/fp-img3.jpg")', backgroundSize: 'auto 95%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-red-100 flex items-center justify-center m-4'>
+                <div style={{ backgroundImage: 'url("/static-images/fp-img3.jpg")', backgroundSize: 'auto 95%', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }} className='w-full md:w-1/2 h-64 md:h-80 rounded-lg bg-white/10 flex items-center justify-center m-4'>
                 </div>
-                <p className='max-w-1/2 text-center'>
+                <p className='max-w-1/2 text-center text-white/80'>
                   Anleggsavdelingen har i perioder behov for anleggsoppdrag utenfor skolen.
                   Oppdragene bør kunne sysselsette 5 anleggsmaskiner samtidig. Skogsrydding med
                   motorsager kan også være aktuelt oppdrag.
