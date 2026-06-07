@@ -55,7 +55,7 @@ export async function createProductOrder(data: unknown) {
   const ProductOrder = await prisma.productOrder.create({ 
     data: parsed
   })
-  await sendOrderEmail(parsed)
+  await sendOrderEmail({ ...parsed, orderId: ProductOrder.id })
   revalidatePath("/admin")
   return ProductOrder
 }

@@ -91,6 +91,7 @@ export async function createProject(data: unknown) {
   })
   try {
     await sendProjectEmail({
+      projectId: project.id,
       clientForename: rest.clientForename,
       clientSurname: rest.clientSurname,
       clientEmail: rest.clientEmail,
@@ -116,7 +117,7 @@ export async function updateProject(id: string, data: unknown) {
     where: { id },
     data: { ...rest, educationField: (educationField as EducationField) ?? null },
   })
-  await sendProjectEmail(rest)
+  await sendProjectEmail({ ...rest, projectId: id })
   revalidatePath('/admin?tab=prosjekter')
 }
 
