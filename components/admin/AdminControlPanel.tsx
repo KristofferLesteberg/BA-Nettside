@@ -18,10 +18,10 @@ export default function AdminControlPanel() {
           noLabel: "Nei, bli værende",
           onYes: () => signOut({ callbackUrl: '/' })
         })}
-        className="btn btn-error py-1.5"
+        className="btn btn-ghost text-error hover:bg-error-bg whitespace-nowrap gap-2"
       >
-        <IconSignOut className="mr-1"/>
-        Logg ut
+        <IconSignOut />
+        <span className="hidden sm:inline">Logg ut</span>
       </button>
     </div>
   )
