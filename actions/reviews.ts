@@ -38,13 +38,15 @@ export async function createReview(formData: FormData) {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
 
-  const data = ReviewCreateSchema.parse({
+  const result = ReviewCreateSchema.safeParse({
     name:    formData.get('name'),
     role:    formData.get('role')    || undefined,
     orgName: formData.get('orgName') || undefined,
     orgURL:  formData.get('orgURL')  || undefined,
     message: formData.get('message'),
   })
+  if (!result.success) throw new Error(result.error.issues[0].message)
+  const data = result.data
 
   const review = await prisma.clientReview.create({ data })
 
@@ -66,13 +68,15 @@ export async function updateReview(id: number, formData: FormData) {
   const existing = await prisma.clientReview.findUnique({ where: { id } })
   if (!existing) throw new Error('Anmeldelse ikke funnet')
 
-  const data = ReviewUpdateSchema.parse({
+  const result = ReviewUpdateSchema.safeParse({
     name:    formData.get('name')    || undefined,
     role:    formData.get('role')    || undefined,
     orgName: formData.get('orgName') || undefined,
     orgURL:  formData.get('orgURL')  || undefined,
     message: formData.get('message') || undefined,
   })
+  if (!result.success) throw new Error(result.error.issues[0].message)
+  const data = result.data
 
   let imageId = existing.imageId
   const imageFile = formData.get('image') as File | null

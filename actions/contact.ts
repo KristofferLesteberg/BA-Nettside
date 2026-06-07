@@ -43,12 +43,14 @@ export async function createContactPerson(formData: FormData) {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
 
-  const data = ContactPersonCreateSchema.parse({
+  const result = ContactPersonCreateSchema.safeParse({
     name:  formData.get('name'),
     email: formData.get('email'),
     phone: formData.get('phone'),
     title: formData.get('title'),
   })
+  if (!result.success) throw new Error(result.error.issues[0].message)
+  const data = result.data
 
   const contact = await prisma.contactPerson.create({ data })
 
@@ -63,12 +65,14 @@ export async function updateContactPerson(id: number, formData: FormData) {
   const existing = await prisma.contactPerson.findUnique({ where: { id } })
   if (!existing) throw new Error('Kontaktperson ikke funnet')
 
-  const data = ContactPersonUpdateSchema.parse({
+  const result = ContactPersonUpdateSchema.safeParse({
     name:  formData.get('name')  || undefined,
     email: formData.get('email') || undefined,
     phone: formData.get('phone') || undefined,
     title: formData.get('title') || undefined,
   })
+  if (!result.success) throw new Error(result.error.issues[0].message)
+  const data = result.data
 
   await prisma.contactPerson.update({ where: { id }, data })
 
