@@ -7,7 +7,6 @@ import ImagesPreview from "@/components/shared/ImagesPreview"
 import { EDUCATION_FIELD_LABELS } from "@/app/lib/education-fields"
 import { formatPrice } from "@/app/lib/product-utils"
 import type { getProductById } from "@/actions/products"
-import type { EducationField } from "@/generated/prisma"
 import { IconEmail, IconPhone, EDUCATION_FIELD_ICONS } from "@/app/lib/icons"
 
 type Product = NonNullable<Awaited<ReturnType<typeof getProductById>>>
@@ -185,27 +184,41 @@ export default function ProductDetail({ product }: { product: Product }) {
                       <p className="font-semibold text-base truncate" style={{ color: "var(--color-text)" }}>
                         {contact.name}
                       </p>
-                      <p className="small-text text-faint">{contact.title}</p>
+                      <p className="small-text text-faint">{contact.title || '—'}</p>
                     </div>
                   </div>
                   <hr className="border-default" />
                   <div className="flex flex-col gap-2">
-                    <a
-                      href={`mailto:${contact.email}`}
-                      className="flex items-center gap-2 small-text hover:underline"
-                      style={{ color: "var(--color-text)" }}
-                    >
-                      <IconEmail className="text-primary shrink-0" />
-                      {contact.email}
-                    </a>
-                    <a
-                      href={`tel:${contact.phone}`}
-                      className="flex items-center gap-2 small-text hover:underline"
-                      style={{ color: "var(--color-text)" }}
-                    >
-                      <IconPhone className="text-primary shrink-0" />
-                      {contact.phone}
-                    </a>
+                    {contact.email ? (
+                      <a
+                        href={`mailto:${contact.email}`}
+                        className="flex items-center gap-2 small-text hover:underline"
+                        style={{ color: "var(--color-text)" }}
+                      >
+                        <IconEmail className="text-primary shrink-0" />
+                        {contact.email}
+                      </a>
+                    ) : (
+                      <span className="flex items-center gap-2 small-text text-faint">
+                        <IconEmail className="text-primary shrink-0" />
+                        —
+                      </span>
+                    )}
+                    {contact.phone ? (
+                      <a
+                        href={`tel:${contact.phone}`}
+                        className="flex items-center gap-2 small-text hover:underline"
+                        style={{ color: "var(--color-text)" }}
+                      >
+                        <IconPhone className="text-primary shrink-0" />
+                        {contact.phone}
+                      </a>
+                    ) : (
+                      <span className="flex items-center gap-2 small-text text-faint">
+                        <IconPhone className="text-primary shrink-0" />
+                        —
+                      </span>
+                    )}
                   </div>
                 </div>
               ) : (
