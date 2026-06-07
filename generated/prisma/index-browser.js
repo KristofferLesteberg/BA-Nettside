@@ -127,6 +127,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   amount: 'amount',
   publishedAt: 'publishedAt',
   draft: 'draft',
+  isSeeded: 'isSeeded',
   contactPersonId: 'contactPersonId'
 };
 
@@ -152,6 +153,7 @@ exports.Prisma.ProjectRequestScalarFieldEnum = {
   address: 'address',
   billingAddress: 'billingAddress',
   status: 'status',
+  isSeeded: 'isSeeded',
   createdAt: 'createdAt'
 };
 
@@ -163,6 +165,7 @@ exports.Prisma.ClientReviewScalarFieldEnum = {
   orgURL: 'orgURL',
   imageId: 'imageId',
   message: 'message',
+  isSeeded: 'isSeeded',
   createdAt: 'createdAt'
 };
 
@@ -171,7 +174,8 @@ exports.Prisma.ContactPersonScalarFieldEnum = {
   name: 'name',
   email: 'email',
   phone: 'phone',
-  title: 'title'
+  title: 'title',
+  isSeeded: 'isSeeded'
 };
 
 exports.Prisma.ProductOrderScalarFieldEnum = {
@@ -182,7 +186,14 @@ exports.Prisma.ProductOrderScalarFieldEnum = {
   amount: 'amount',
   extraDetails: 'extraDetails',
   status: 'status',
+  isSeeded: 'isSeeded',
   productId: 'productId'
+};
+
+exports.Prisma.AppConfigScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.EmailQueueScalarFieldEnum = {
@@ -247,6 +258,7 @@ exports.Prisma.ModelName = {
   ClientReview: 'ClientReview',
   ContactPerson: 'ContactPerson',
   ProductOrder: 'ProductOrder',
+  AppConfig: 'AppConfig',
   EmailQueue: 'EmailQueue'
 };
 

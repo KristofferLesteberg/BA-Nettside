@@ -44,6 +44,11 @@ export type ContactPerson = $Result.DefaultSelection<Prisma.$ContactPersonPayloa
  */
 export type ProductOrder = $Result.DefaultSelection<Prisma.$ProductOrderPayload>
 /**
+ * Model AppConfig
+ * 
+ */
+export type AppConfig = $Result.DefaultSelection<Prisma.$AppConfigPayload>
+/**
  * Model EmailQueue
  * 
  */
@@ -274,6 +279,16 @@ export class PrismaClient<
     * ```
     */
   get productOrder(): Prisma.ProductOrderDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.appConfig`: Exposes CRUD operations for the **AppConfig** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AppConfigs
+    * const appConfigs = await prisma.appConfig.findMany()
+    * ```
+    */
+  get appConfig(): Prisma.AppConfigDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.emailQueue`: Exposes CRUD operations for the **EmailQueue** model.
@@ -724,6 +739,7 @@ export namespace Prisma {
     ClientReview: 'ClientReview',
     ContactPerson: 'ContactPerson',
     ProductOrder: 'ProductOrder',
+    AppConfig: 'AppConfig',
     EmailQueue: 'EmailQueue'
   };
 
@@ -740,7 +756,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "product" | "productImage" | "projectRequest" | "clientReview" | "contactPerson" | "productOrder" | "emailQueue"
+      modelProps: "product" | "productImage" | "projectRequest" | "clientReview" | "contactPerson" | "productOrder" | "appConfig" | "emailQueue"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1188,6 +1204,80 @@ export namespace Prisma {
           }
         }
       }
+      AppConfig: {
+        payload: Prisma.$AppConfigPayload<ExtArgs>
+        fields: Prisma.AppConfigFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AppConfigFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppConfigPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AppConfigFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppConfigPayload>
+          }
+          findFirst: {
+            args: Prisma.AppConfigFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppConfigPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AppConfigFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppConfigPayload>
+          }
+          findMany: {
+            args: Prisma.AppConfigFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppConfigPayload>[]
+          }
+          create: {
+            args: Prisma.AppConfigCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppConfigPayload>
+          }
+          createMany: {
+            args: Prisma.AppConfigCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AppConfigCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppConfigPayload>[]
+          }
+          delete: {
+            args: Prisma.AppConfigDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppConfigPayload>
+          }
+          update: {
+            args: Prisma.AppConfigUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppConfigPayload>
+          }
+          deleteMany: {
+            args: Prisma.AppConfigDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AppConfigUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AppConfigUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppConfigPayload>[]
+          }
+          upsert: {
+            args: Prisma.AppConfigUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppConfigPayload>
+          }
+          aggregate: {
+            args: Prisma.AppConfigAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAppConfig>
+          }
+          groupBy: {
+            args: Prisma.AppConfigGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AppConfigGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AppConfigCountArgs<ExtArgs>
+            result: $Utils.Optional<AppConfigCountAggregateOutputType> | number
+          }
+        }
+      }
       EmailQueue: {
         payload: Prisma.$EmailQueuePayload<ExtArgs>
         fields: Prisma.EmailQueueFieldRefs
@@ -1376,6 +1466,7 @@ export namespace Prisma {
     clientReview?: ClientReviewOmit
     contactPerson?: ContactPersonOmit
     productOrder?: ProductOrderOmit
+    appConfig?: AppConfigOmit
     emailQueue?: EmailQueueOmit
   }
 
@@ -1562,6 +1653,7 @@ export namespace Prisma {
     amount: number | null
     publishedAt: Date | null
     draft: boolean | null
+    isSeeded: boolean | null
     contactPersonId: number | null
   }
 
@@ -1574,6 +1666,7 @@ export namespace Prisma {
     amount: number | null
     publishedAt: Date | null
     draft: boolean | null
+    isSeeded: boolean | null
     contactPersonId: number | null
   }
 
@@ -1587,6 +1680,7 @@ export namespace Prisma {
     amount: number
     publishedAt: number
     draft: number
+    isSeeded: number
     contactPersonId: number
     _all: number
   }
@@ -1615,6 +1709,7 @@ export namespace Prisma {
     amount?: true
     publishedAt?: true
     draft?: true
+    isSeeded?: true
     contactPersonId?: true
   }
 
@@ -1627,6 +1722,7 @@ export namespace Prisma {
     amount?: true
     publishedAt?: true
     draft?: true
+    isSeeded?: true
     contactPersonId?: true
   }
 
@@ -1640,6 +1736,7 @@ export namespace Prisma {
     amount?: true
     publishedAt?: true
     draft?: true
+    isSeeded?: true
     contactPersonId?: true
     _all?: true
   }
@@ -1740,6 +1837,7 @@ export namespace Prisma {
     amount: number
     publishedAt: Date
     draft: boolean
+    isSeeded: boolean
     contactPersonId: number | null
     _count: ProductCountAggregateOutputType | null
     _avg: ProductAvgAggregateOutputType | null
@@ -1772,6 +1870,7 @@ export namespace Prisma {
     amount?: boolean
     publishedAt?: boolean
     draft?: boolean
+    isSeeded?: boolean
     contactPersonId?: boolean
     images?: boolean | Product$imagesArgs<ExtArgs>
     contactPerson?: boolean | Product$contactPersonArgs<ExtArgs>
@@ -1789,6 +1888,7 @@ export namespace Prisma {
     amount?: boolean
     publishedAt?: boolean
     draft?: boolean
+    isSeeded?: boolean
     contactPersonId?: boolean
     contactPerson?: boolean | Product$contactPersonArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
@@ -1803,6 +1903,7 @@ export namespace Prisma {
     amount?: boolean
     publishedAt?: boolean
     draft?: boolean
+    isSeeded?: boolean
     contactPersonId?: boolean
     contactPerson?: boolean | Product$contactPersonArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
@@ -1817,10 +1918,11 @@ export namespace Prisma {
     amount?: boolean
     publishedAt?: boolean
     draft?: boolean
+    isSeeded?: boolean
     contactPersonId?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "educationField" | "title" | "description" | "price" | "measures" | "amount" | "publishedAt" | "draft" | "contactPersonId", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "educationField" | "title" | "description" | "price" | "measures" | "amount" | "publishedAt" | "draft" | "isSeeded" | "contactPersonId", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     images?: boolean | Product$imagesArgs<ExtArgs>
     contactPerson?: boolean | Product$contactPersonArgs<ExtArgs>
@@ -1851,6 +1953,7 @@ export namespace Prisma {
       amount: number
       publishedAt: Date
       draft: boolean
+      isSeeded: boolean
       contactPersonId: number | null
     }, ExtArgs["result"]["product"]>
     composites: {}
@@ -2287,6 +2390,7 @@ export namespace Prisma {
     readonly amount: FieldRef<"Product", 'Int'>
     readonly publishedAt: FieldRef<"Product", 'DateTime'>
     readonly draft: FieldRef<"Product", 'Boolean'>
+    readonly isSeeded: FieldRef<"Product", 'Boolean'>
     readonly contactPersonId: FieldRef<"Product", 'Int'>
   }
     
@@ -3883,6 +3987,7 @@ export namespace Prisma {
     address: string | null
     billingAddress: string | null
     status: $Enums.Status | null
+    isSeeded: boolean | null
     createdAt: Date | null
   }
 
@@ -3902,6 +4007,7 @@ export namespace Prisma {
     address: string | null
     billingAddress: string | null
     status: $Enums.Status | null
+    isSeeded: boolean | null
     createdAt: Date | null
   }
 
@@ -3921,6 +4027,7 @@ export namespace Prisma {
     address: number
     billingAddress: number
     status: number
+    isSeeded: number
     createdAt: number
     _all: number
   }
@@ -3952,6 +4059,7 @@ export namespace Prisma {
     address?: true
     billingAddress?: true
     status?: true
+    isSeeded?: true
     createdAt?: true
   }
 
@@ -3971,6 +4079,7 @@ export namespace Prisma {
     address?: true
     billingAddress?: true
     status?: true
+    isSeeded?: true
     createdAt?: true
   }
 
@@ -3990,6 +4099,7 @@ export namespace Prisma {
     address?: true
     billingAddress?: true
     status?: true
+    isSeeded?: true
     createdAt?: true
     _all?: true
   }
@@ -4096,6 +4206,7 @@ export namespace Prisma {
     address: string
     billingAddress: string
     status: $Enums.Status
+    isSeeded: boolean
     createdAt: Date
     _count: ProjectRequestCountAggregateOutputType | null
     _avg: ProjectRequestAvgAggregateOutputType | null
@@ -4134,6 +4245,7 @@ export namespace Prisma {
     address?: boolean
     billingAddress?: boolean
     status?: boolean
+    isSeeded?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["projectRequest"]>
 
@@ -4153,6 +4265,7 @@ export namespace Prisma {
     address?: boolean
     billingAddress?: boolean
     status?: boolean
+    isSeeded?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["projectRequest"]>
 
@@ -4172,6 +4285,7 @@ export namespace Prisma {
     address?: boolean
     billingAddress?: boolean
     status?: boolean
+    isSeeded?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["projectRequest"]>
 
@@ -4191,10 +4305,11 @@ export namespace Prisma {
     address?: boolean
     billingAddress?: boolean
     status?: boolean
+    isSeeded?: boolean
     createdAt?: boolean
   }
 
-  export type ProjectRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "educationField" | "title" | "description" | "minPrice" | "maxPrice" | "clientForename" | "clientSurname" | "clientEmail" | "clientPhone" | "organizationName" | "organizationNumber" | "address" | "billingAddress" | "status" | "createdAt", ExtArgs["result"]["projectRequest"]>
+  export type ProjectRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "educationField" | "title" | "description" | "minPrice" | "maxPrice" | "clientForename" | "clientSurname" | "clientEmail" | "clientPhone" | "organizationName" | "organizationNumber" | "address" | "billingAddress" | "status" | "isSeeded" | "createdAt", ExtArgs["result"]["projectRequest"]>
 
   export type $ProjectRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ProjectRequest"
@@ -4215,6 +4330,7 @@ export namespace Prisma {
       address: string
       billingAddress: string
       status: $Enums.Status
+      isSeeded: boolean
       createdAt: Date
     }, ExtArgs["result"]["projectRequest"]>
     composites: {}
@@ -4654,6 +4770,7 @@ export namespace Prisma {
     readonly address: FieldRef<"ProjectRequest", 'String'>
     readonly billingAddress: FieldRef<"ProjectRequest", 'String'>
     readonly status: FieldRef<"ProjectRequest", 'Status'>
+    readonly isSeeded: FieldRef<"ProjectRequest", 'Boolean'>
     readonly createdAt: FieldRef<"ProjectRequest", 'DateTime'>
   }
     
@@ -5052,6 +5169,7 @@ export namespace Prisma {
     orgURL: string | null
     imageId: string | null
     message: string | null
+    isSeeded: boolean | null
     createdAt: Date | null
   }
 
@@ -5063,6 +5181,7 @@ export namespace Prisma {
     orgURL: string | null
     imageId: string | null
     message: string | null
+    isSeeded: boolean | null
     createdAt: Date | null
   }
 
@@ -5074,6 +5193,7 @@ export namespace Prisma {
     orgURL: number
     imageId: number
     message: number
+    isSeeded: number
     createdAt: number
     _all: number
   }
@@ -5095,6 +5215,7 @@ export namespace Prisma {
     orgURL?: true
     imageId?: true
     message?: true
+    isSeeded?: true
     createdAt?: true
   }
 
@@ -5106,6 +5227,7 @@ export namespace Prisma {
     orgURL?: true
     imageId?: true
     message?: true
+    isSeeded?: true
     createdAt?: true
   }
 
@@ -5117,6 +5239,7 @@ export namespace Prisma {
     orgURL?: true
     imageId?: true
     message?: true
+    isSeeded?: true
     createdAt?: true
     _all?: true
   }
@@ -5215,6 +5338,7 @@ export namespace Prisma {
     orgURL: string | null
     imageId: string | null
     message: string
+    isSeeded: boolean
     createdAt: Date
     _count: ClientReviewCountAggregateOutputType | null
     _avg: ClientReviewAvgAggregateOutputType | null
@@ -5245,6 +5369,7 @@ export namespace Prisma {
     orgURL?: boolean
     imageId?: boolean
     message?: boolean
+    isSeeded?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["clientReview"]>
 
@@ -5256,6 +5381,7 @@ export namespace Prisma {
     orgURL?: boolean
     imageId?: boolean
     message?: boolean
+    isSeeded?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["clientReview"]>
 
@@ -5267,6 +5393,7 @@ export namespace Prisma {
     orgURL?: boolean
     imageId?: boolean
     message?: boolean
+    isSeeded?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["clientReview"]>
 
@@ -5278,10 +5405,11 @@ export namespace Prisma {
     orgURL?: boolean
     imageId?: boolean
     message?: boolean
+    isSeeded?: boolean
     createdAt?: boolean
   }
 
-  export type ClientReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "role" | "orgName" | "orgURL" | "imageId" | "message" | "createdAt", ExtArgs["result"]["clientReview"]>
+  export type ClientReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "role" | "orgName" | "orgURL" | "imageId" | "message" | "isSeeded" | "createdAt", ExtArgs["result"]["clientReview"]>
 
   export type $ClientReviewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ClientReview"
@@ -5294,6 +5422,7 @@ export namespace Prisma {
       orgURL: string | null
       imageId: string | null
       message: string
+      isSeeded: boolean
       createdAt: Date
     }, ExtArgs["result"]["clientReview"]>
     composites: {}
@@ -5725,6 +5854,7 @@ export namespace Prisma {
     readonly orgURL: FieldRef<"ClientReview", 'String'>
     readonly imageId: FieldRef<"ClientReview", 'String'>
     readonly message: FieldRef<"ClientReview", 'String'>
+    readonly isSeeded: FieldRef<"ClientReview", 'Boolean'>
     readonly createdAt: FieldRef<"ClientReview", 'DateTime'>
   }
     
@@ -6121,6 +6251,7 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     title: string | null
+    isSeeded: boolean | null
   }
 
   export type ContactPersonMaxAggregateOutputType = {
@@ -6129,6 +6260,7 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     title: string | null
+    isSeeded: boolean | null
   }
 
   export type ContactPersonCountAggregateOutputType = {
@@ -6137,6 +6269,7 @@ export namespace Prisma {
     email: number
     phone: number
     title: number
+    isSeeded: number
     _all: number
   }
 
@@ -6155,6 +6288,7 @@ export namespace Prisma {
     email?: true
     phone?: true
     title?: true
+    isSeeded?: true
   }
 
   export type ContactPersonMaxAggregateInputType = {
@@ -6163,6 +6297,7 @@ export namespace Prisma {
     email?: true
     phone?: true
     title?: true
+    isSeeded?: true
   }
 
   export type ContactPersonCountAggregateInputType = {
@@ -6171,6 +6306,7 @@ export namespace Prisma {
     email?: true
     phone?: true
     title?: true
+    isSeeded?: true
     _all?: true
   }
 
@@ -6266,6 +6402,7 @@ export namespace Prisma {
     email: string
     phone: string
     title: string
+    isSeeded: boolean
     _count: ContactPersonCountAggregateOutputType | null
     _avg: ContactPersonAvgAggregateOutputType | null
     _sum: ContactPersonSumAggregateOutputType | null
@@ -6293,6 +6430,7 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     title?: boolean
+    isSeeded?: boolean
     product?: boolean | ContactPerson$productArgs<ExtArgs>
     _count?: boolean | ContactPersonCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["contactPerson"]>
@@ -6303,6 +6441,7 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     title?: boolean
+    isSeeded?: boolean
   }, ExtArgs["result"]["contactPerson"]>
 
   export type ContactPersonSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6311,6 +6450,7 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     title?: boolean
+    isSeeded?: boolean
   }, ExtArgs["result"]["contactPerson"]>
 
   export type ContactPersonSelectScalar = {
@@ -6319,9 +6459,10 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     title?: boolean
+    isSeeded?: boolean
   }
 
-  export type ContactPersonOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "title", ExtArgs["result"]["contactPerson"]>
+  export type ContactPersonOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "title" | "isSeeded", ExtArgs["result"]["contactPerson"]>
   export type ContactPersonInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ContactPerson$productArgs<ExtArgs>
     _count?: boolean | ContactPersonCountOutputTypeDefaultArgs<ExtArgs>
@@ -6340,6 +6481,7 @@ export namespace Prisma {
       email: string
       phone: string
       title: string
+      isSeeded: boolean
     }, ExtArgs["result"]["contactPerson"]>
     composites: {}
   }
@@ -6769,6 +6911,7 @@ export namespace Prisma {
     readonly email: FieldRef<"ContactPerson", 'String'>
     readonly phone: FieldRef<"ContactPerson", 'String'>
     readonly title: FieldRef<"ContactPerson", 'String'>
+    readonly isSeeded: FieldRef<"ContactPerson", 'Boolean'>
   }
     
 
@@ -7234,6 +7377,7 @@ export namespace Prisma {
     amount: number | null
     extraDetails: string | null
     status: $Enums.OrderStatus | null
+    isSeeded: boolean | null
     productId: number | null
   }
 
@@ -7245,6 +7389,7 @@ export namespace Prisma {
     amount: number | null
     extraDetails: string | null
     status: $Enums.OrderStatus | null
+    isSeeded: boolean | null
     productId: number | null
   }
 
@@ -7256,6 +7401,7 @@ export namespace Prisma {
     amount: number
     extraDetails: number
     status: number
+    isSeeded: number
     productId: number
     _all: number
   }
@@ -7281,6 +7427,7 @@ export namespace Prisma {
     amount?: true
     extraDetails?: true
     status?: true
+    isSeeded?: true
     productId?: true
   }
 
@@ -7292,6 +7439,7 @@ export namespace Prisma {
     amount?: true
     extraDetails?: true
     status?: true
+    isSeeded?: true
     productId?: true
   }
 
@@ -7303,6 +7451,7 @@ export namespace Prisma {
     amount?: true
     extraDetails?: true
     status?: true
+    isSeeded?: true
     productId?: true
     _all?: true
   }
@@ -7401,6 +7550,7 @@ export namespace Prisma {
     amount: number
     extraDetails: string | null
     status: $Enums.OrderStatus
+    isSeeded: boolean
     productId: number | null
     _count: ProductOrderCountAggregateOutputType | null
     _avg: ProductOrderAvgAggregateOutputType | null
@@ -7431,6 +7581,7 @@ export namespace Prisma {
     amount?: boolean
     extraDetails?: boolean
     status?: boolean
+    isSeeded?: boolean
     productId?: boolean
     product?: boolean | ProductOrder$productArgs<ExtArgs>
   }, ExtArgs["result"]["productOrder"]>
@@ -7443,6 +7594,7 @@ export namespace Prisma {
     amount?: boolean
     extraDetails?: boolean
     status?: boolean
+    isSeeded?: boolean
     productId?: boolean
     product?: boolean | ProductOrder$productArgs<ExtArgs>
   }, ExtArgs["result"]["productOrder"]>
@@ -7455,6 +7607,7 @@ export namespace Prisma {
     amount?: boolean
     extraDetails?: boolean
     status?: boolean
+    isSeeded?: boolean
     productId?: boolean
     product?: boolean | ProductOrder$productArgs<ExtArgs>
   }, ExtArgs["result"]["productOrder"]>
@@ -7467,10 +7620,11 @@ export namespace Prisma {
     amount?: boolean
     extraDetails?: boolean
     status?: boolean
+    isSeeded?: boolean
     productId?: boolean
   }
 
-  export type ProductOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientName" | "clientEmail" | "clientPhone" | "amount" | "extraDetails" | "status" | "productId", ExtArgs["result"]["productOrder"]>
+  export type ProductOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientName" | "clientEmail" | "clientPhone" | "amount" | "extraDetails" | "status" | "isSeeded" | "productId", ExtArgs["result"]["productOrder"]>
   export type ProductOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductOrder$productArgs<ExtArgs>
   }
@@ -7494,6 +7648,7 @@ export namespace Prisma {
       amount: number
       extraDetails: string | null
       status: $Enums.OrderStatus
+      isSeeded: boolean
       productId: number | null
     }, ExtArgs["result"]["productOrder"]>
     composites: {}
@@ -7926,6 +8081,7 @@ export namespace Prisma {
     readonly amount: FieldRef<"ProductOrder", 'Int'>
     readonly extraDetails: FieldRef<"ProductOrder", 'String'>
     readonly status: FieldRef<"ProductOrder", 'OrderStatus'>
+    readonly isSeeded: FieldRef<"ProductOrder", 'Boolean'>
     readonly productId: FieldRef<"ProductOrder", 'Int'>
   }
     
@@ -8360,6 +8516,978 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ProductOrderInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AppConfig
+   */
+
+  export type AggregateAppConfig = {
+    _count: AppConfigCountAggregateOutputType | null
+    _min: AppConfigMinAggregateOutputType | null
+    _max: AppConfigMaxAggregateOutputType | null
+  }
+
+  export type AppConfigMinAggregateOutputType = {
+    key: string | null
+    value: string | null
+    updatedAt: Date | null
+  }
+
+  export type AppConfigMaxAggregateOutputType = {
+    key: string | null
+    value: string | null
+    updatedAt: Date | null
+  }
+
+  export type AppConfigCountAggregateOutputType = {
+    key: number
+    value: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AppConfigMinAggregateInputType = {
+    key?: true
+    value?: true
+    updatedAt?: true
+  }
+
+  export type AppConfigMaxAggregateInputType = {
+    key?: true
+    value?: true
+    updatedAt?: true
+  }
+
+  export type AppConfigCountAggregateInputType = {
+    key?: true
+    value?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AppConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppConfig to aggregate.
+     */
+    where?: AppConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppConfigs to fetch.
+     */
+    orderBy?: AppConfigOrderByWithRelationInput | AppConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AppConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AppConfigs
+    **/
+    _count?: true | AppConfigCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AppConfigMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AppConfigMaxAggregateInputType
+  }
+
+  export type GetAppConfigAggregateType<T extends AppConfigAggregateArgs> = {
+        [P in keyof T & keyof AggregateAppConfig]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAppConfig[P]>
+      : GetScalarType<T[P], AggregateAppConfig[P]>
+  }
+
+
+
+
+  export type AppConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AppConfigWhereInput
+    orderBy?: AppConfigOrderByWithAggregationInput | AppConfigOrderByWithAggregationInput[]
+    by: AppConfigScalarFieldEnum[] | AppConfigScalarFieldEnum
+    having?: AppConfigScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AppConfigCountAggregateInputType | true
+    _min?: AppConfigMinAggregateInputType
+    _max?: AppConfigMaxAggregateInputType
+  }
+
+  export type AppConfigGroupByOutputType = {
+    key: string
+    value: string
+    updatedAt: Date
+    _count: AppConfigCountAggregateOutputType | null
+    _min: AppConfigMinAggregateOutputType | null
+    _max: AppConfigMaxAggregateOutputType | null
+  }
+
+  type GetAppConfigGroupByPayload<T extends AppConfigGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AppConfigGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AppConfigGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AppConfigGroupByOutputType[P]>
+            : GetScalarType<T[P], AppConfigGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AppConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    key?: boolean
+    value?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appConfig"]>
+
+  export type AppConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    key?: boolean
+    value?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appConfig"]>
+
+  export type AppConfigSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    key?: boolean
+    value?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appConfig"]>
+
+  export type AppConfigSelectScalar = {
+    key?: boolean
+    value?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AppConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"key" | "value" | "updatedAt", ExtArgs["result"]["appConfig"]>
+
+  export type $AppConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AppConfig"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      key: string
+      value: string
+      updatedAt: Date
+    }, ExtArgs["result"]["appConfig"]>
+    composites: {}
+  }
+
+  type AppConfigGetPayload<S extends boolean | null | undefined | AppConfigDefaultArgs> = $Result.GetResult<Prisma.$AppConfigPayload, S>
+
+  type AppConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AppConfigFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AppConfigCountAggregateInputType | true
+    }
+
+  export interface AppConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AppConfig'], meta: { name: 'AppConfig' } }
+    /**
+     * Find zero or one AppConfig that matches the filter.
+     * @param {AppConfigFindUniqueArgs} args - Arguments to find a AppConfig
+     * @example
+     * // Get one AppConfig
+     * const appConfig = await prisma.appConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AppConfigFindUniqueArgs>(args: SelectSubset<T, AppConfigFindUniqueArgs<ExtArgs>>): Prisma__AppConfigClient<$Result.GetResult<Prisma.$AppConfigPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AppConfig that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AppConfigFindUniqueOrThrowArgs} args - Arguments to find a AppConfig
+     * @example
+     * // Get one AppConfig
+     * const appConfig = await prisma.appConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AppConfigFindUniqueOrThrowArgs>(args: SelectSubset<T, AppConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AppConfigClient<$Result.GetResult<Prisma.$AppConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AppConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppConfigFindFirstArgs} args - Arguments to find a AppConfig
+     * @example
+     * // Get one AppConfig
+     * const appConfig = await prisma.appConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AppConfigFindFirstArgs>(args?: SelectSubset<T, AppConfigFindFirstArgs<ExtArgs>>): Prisma__AppConfigClient<$Result.GetResult<Prisma.$AppConfigPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AppConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppConfigFindFirstOrThrowArgs} args - Arguments to find a AppConfig
+     * @example
+     * // Get one AppConfig
+     * const appConfig = await prisma.appConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AppConfigFindFirstOrThrowArgs>(args?: SelectSubset<T, AppConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma__AppConfigClient<$Result.GetResult<Prisma.$AppConfigPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AppConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AppConfigs
+     * const appConfigs = await prisma.appConfig.findMany()
+     * 
+     * // Get first 10 AppConfigs
+     * const appConfigs = await prisma.appConfig.findMany({ take: 10 })
+     * 
+     * // Only select the `key`
+     * const appConfigWithKeyOnly = await prisma.appConfig.findMany({ select: { key: true } })
+     * 
+     */
+    findMany<T extends AppConfigFindManyArgs>(args?: SelectSubset<T, AppConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AppConfig.
+     * @param {AppConfigCreateArgs} args - Arguments to create a AppConfig.
+     * @example
+     * // Create one AppConfig
+     * const AppConfig = await prisma.appConfig.create({
+     *   data: {
+     *     // ... data to create a AppConfig
+     *   }
+     * })
+     * 
+     */
+    create<T extends AppConfigCreateArgs>(args: SelectSubset<T, AppConfigCreateArgs<ExtArgs>>): Prisma__AppConfigClient<$Result.GetResult<Prisma.$AppConfigPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AppConfigs.
+     * @param {AppConfigCreateManyArgs} args - Arguments to create many AppConfigs.
+     * @example
+     * // Create many AppConfigs
+     * const appConfig = await prisma.appConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AppConfigCreateManyArgs>(args?: SelectSubset<T, AppConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AppConfigs and returns the data saved in the database.
+     * @param {AppConfigCreateManyAndReturnArgs} args - Arguments to create many AppConfigs.
+     * @example
+     * // Create many AppConfigs
+     * const appConfig = await prisma.appConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AppConfigs and only return the `key`
+     * const appConfigWithKeyOnly = await prisma.appConfig.createManyAndReturn({
+     *   select: { key: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AppConfigCreateManyAndReturnArgs>(args?: SelectSubset<T, AppConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppConfigPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AppConfig.
+     * @param {AppConfigDeleteArgs} args - Arguments to delete one AppConfig.
+     * @example
+     * // Delete one AppConfig
+     * const AppConfig = await prisma.appConfig.delete({
+     *   where: {
+     *     // ... filter to delete one AppConfig
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AppConfigDeleteArgs>(args: SelectSubset<T, AppConfigDeleteArgs<ExtArgs>>): Prisma__AppConfigClient<$Result.GetResult<Prisma.$AppConfigPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AppConfig.
+     * @param {AppConfigUpdateArgs} args - Arguments to update one AppConfig.
+     * @example
+     * // Update one AppConfig
+     * const appConfig = await prisma.appConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AppConfigUpdateArgs>(args: SelectSubset<T, AppConfigUpdateArgs<ExtArgs>>): Prisma__AppConfigClient<$Result.GetResult<Prisma.$AppConfigPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AppConfigs.
+     * @param {AppConfigDeleteManyArgs} args - Arguments to filter AppConfigs to delete.
+     * @example
+     * // Delete a few AppConfigs
+     * const { count } = await prisma.appConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AppConfigDeleteManyArgs>(args?: SelectSubset<T, AppConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AppConfigs
+     * const appConfig = await prisma.appConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AppConfigUpdateManyArgs>(args: SelectSubset<T, AppConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppConfigs and returns the data updated in the database.
+     * @param {AppConfigUpdateManyAndReturnArgs} args - Arguments to update many AppConfigs.
+     * @example
+     * // Update many AppConfigs
+     * const appConfig = await prisma.appConfig.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AppConfigs and only return the `key`
+     * const appConfigWithKeyOnly = await prisma.appConfig.updateManyAndReturn({
+     *   select: { key: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AppConfigUpdateManyAndReturnArgs>(args: SelectSubset<T, AppConfigUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppConfigPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AppConfig.
+     * @param {AppConfigUpsertArgs} args - Arguments to update or create a AppConfig.
+     * @example
+     * // Update or create a AppConfig
+     * const appConfig = await prisma.appConfig.upsert({
+     *   create: {
+     *     // ... data to create a AppConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AppConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AppConfigUpsertArgs>(args: SelectSubset<T, AppConfigUpsertArgs<ExtArgs>>): Prisma__AppConfigClient<$Result.GetResult<Prisma.$AppConfigPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AppConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppConfigCountArgs} args - Arguments to filter AppConfigs to count.
+     * @example
+     * // Count the number of AppConfigs
+     * const count = await prisma.appConfig.count({
+     *   where: {
+     *     // ... the filter for the AppConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends AppConfigCountArgs>(
+      args?: Subset<T, AppConfigCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AppConfigCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AppConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AppConfigAggregateArgs>(args: Subset<T, AppConfigAggregateArgs>): Prisma.PrismaPromise<GetAppConfigAggregateType<T>>
+
+    /**
+     * Group by AppConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AppConfigGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AppConfigGroupByArgs['orderBy'] }
+        : { orderBy?: AppConfigGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AppConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAppConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AppConfig model
+   */
+  readonly fields: AppConfigFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AppConfig.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AppConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AppConfig model
+   */
+  interface AppConfigFieldRefs {
+    readonly key: FieldRef<"AppConfig", 'String'>
+    readonly value: FieldRef<"AppConfig", 'String'>
+    readonly updatedAt: FieldRef<"AppConfig", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AppConfig findUnique
+   */
+  export type AppConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppConfig
+     */
+    select?: AppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppConfig
+     */
+    omit?: AppConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which AppConfig to fetch.
+     */
+    where: AppConfigWhereUniqueInput
+  }
+
+  /**
+   * AppConfig findUniqueOrThrow
+   */
+  export type AppConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppConfig
+     */
+    select?: AppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppConfig
+     */
+    omit?: AppConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which AppConfig to fetch.
+     */
+    where: AppConfigWhereUniqueInput
+  }
+
+  /**
+   * AppConfig findFirst
+   */
+  export type AppConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppConfig
+     */
+    select?: AppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppConfig
+     */
+    omit?: AppConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which AppConfig to fetch.
+     */
+    where?: AppConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppConfigs to fetch.
+     */
+    orderBy?: AppConfigOrderByWithRelationInput | AppConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppConfigs.
+     */
+    cursor?: AppConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppConfigs.
+     */
+    distinct?: AppConfigScalarFieldEnum | AppConfigScalarFieldEnum[]
+  }
+
+  /**
+   * AppConfig findFirstOrThrow
+   */
+  export type AppConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppConfig
+     */
+    select?: AppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppConfig
+     */
+    omit?: AppConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which AppConfig to fetch.
+     */
+    where?: AppConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppConfigs to fetch.
+     */
+    orderBy?: AppConfigOrderByWithRelationInput | AppConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppConfigs.
+     */
+    cursor?: AppConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppConfigs.
+     */
+    distinct?: AppConfigScalarFieldEnum | AppConfigScalarFieldEnum[]
+  }
+
+  /**
+   * AppConfig findMany
+   */
+  export type AppConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppConfig
+     */
+    select?: AppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppConfig
+     */
+    omit?: AppConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which AppConfigs to fetch.
+     */
+    where?: AppConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppConfigs to fetch.
+     */
+    orderBy?: AppConfigOrderByWithRelationInput | AppConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AppConfigs.
+     */
+    cursor?: AppConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppConfigs.
+     */
+    distinct?: AppConfigScalarFieldEnum | AppConfigScalarFieldEnum[]
+  }
+
+  /**
+   * AppConfig create
+   */
+  export type AppConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppConfig
+     */
+    select?: AppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppConfig
+     */
+    omit?: AppConfigOmit<ExtArgs> | null
+    /**
+     * The data needed to create a AppConfig.
+     */
+    data: XOR<AppConfigCreateInput, AppConfigUncheckedCreateInput>
+  }
+
+  /**
+   * AppConfig createMany
+   */
+  export type AppConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AppConfigs.
+     */
+    data: AppConfigCreateManyInput | AppConfigCreateManyInput[]
+  }
+
+  /**
+   * AppConfig createManyAndReturn
+   */
+  export type AppConfigCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppConfig
+     */
+    select?: AppConfigSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppConfig
+     */
+    omit?: AppConfigOmit<ExtArgs> | null
+    /**
+     * The data used to create many AppConfigs.
+     */
+    data: AppConfigCreateManyInput | AppConfigCreateManyInput[]
+  }
+
+  /**
+   * AppConfig update
+   */
+  export type AppConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppConfig
+     */
+    select?: AppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppConfig
+     */
+    omit?: AppConfigOmit<ExtArgs> | null
+    /**
+     * The data needed to update a AppConfig.
+     */
+    data: XOR<AppConfigUpdateInput, AppConfigUncheckedUpdateInput>
+    /**
+     * Choose, which AppConfig to update.
+     */
+    where: AppConfigWhereUniqueInput
+  }
+
+  /**
+   * AppConfig updateMany
+   */
+  export type AppConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AppConfigs.
+     */
+    data: XOR<AppConfigUpdateManyMutationInput, AppConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which AppConfigs to update
+     */
+    where?: AppConfigWhereInput
+    /**
+     * Limit how many AppConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppConfig updateManyAndReturn
+   */
+  export type AppConfigUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppConfig
+     */
+    select?: AppConfigSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppConfig
+     */
+    omit?: AppConfigOmit<ExtArgs> | null
+    /**
+     * The data used to update AppConfigs.
+     */
+    data: XOR<AppConfigUpdateManyMutationInput, AppConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which AppConfigs to update
+     */
+    where?: AppConfigWhereInput
+    /**
+     * Limit how many AppConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppConfig upsert
+   */
+  export type AppConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppConfig
+     */
+    select?: AppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppConfig
+     */
+    omit?: AppConfigOmit<ExtArgs> | null
+    /**
+     * The filter to search for the AppConfig to update in case it exists.
+     */
+    where: AppConfigWhereUniqueInput
+    /**
+     * In case the AppConfig found by the `where` argument doesn't exist, create a new AppConfig with this data.
+     */
+    create: XOR<AppConfigCreateInput, AppConfigUncheckedCreateInput>
+    /**
+     * In case the AppConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AppConfigUpdateInput, AppConfigUncheckedUpdateInput>
+  }
+
+  /**
+   * AppConfig delete
+   */
+  export type AppConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppConfig
+     */
+    select?: AppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppConfig
+     */
+    omit?: AppConfigOmit<ExtArgs> | null
+    /**
+     * Filter which AppConfig to delete.
+     */
+    where: AppConfigWhereUniqueInput
+  }
+
+  /**
+   * AppConfig deleteMany
+   */
+  export type AppConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppConfigs to delete
+     */
+    where?: AppConfigWhereInput
+    /**
+     * Limit how many AppConfigs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppConfig without action
+   */
+  export type AppConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppConfig
+     */
+    select?: AppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppConfig
+     */
+    omit?: AppConfigOmit<ExtArgs> | null
   }
 
 
@@ -9455,6 +10583,7 @@ export namespace Prisma {
     amount: 'amount',
     publishedAt: 'publishedAt',
     draft: 'draft',
+    isSeeded: 'isSeeded',
     contactPersonId: 'contactPersonId'
   };
 
@@ -9486,6 +10615,7 @@ export namespace Prisma {
     address: 'address',
     billingAddress: 'billingAddress',
     status: 'status',
+    isSeeded: 'isSeeded',
     createdAt: 'createdAt'
   };
 
@@ -9500,6 +10630,7 @@ export namespace Prisma {
     orgURL: 'orgURL',
     imageId: 'imageId',
     message: 'message',
+    isSeeded: 'isSeeded',
     createdAt: 'createdAt'
   };
 
@@ -9511,7 +10642,8 @@ export namespace Prisma {
     name: 'name',
     email: 'email',
     phone: 'phone',
-    title: 'title'
+    title: 'title',
+    isSeeded: 'isSeeded'
   };
 
   export type ContactPersonScalarFieldEnum = (typeof ContactPersonScalarFieldEnum)[keyof typeof ContactPersonScalarFieldEnum]
@@ -9525,10 +10657,20 @@ export namespace Prisma {
     amount: 'amount',
     extraDetails: 'extraDetails',
     status: 'status',
+    isSeeded: 'isSeeded',
     productId: 'productId'
   };
 
   export type ProductOrderScalarFieldEnum = (typeof ProductOrderScalarFieldEnum)[keyof typeof ProductOrderScalarFieldEnum]
+
+
+  export const AppConfigScalarFieldEnum: {
+    key: 'key',
+    value: 'value',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AppConfigScalarFieldEnum = (typeof AppConfigScalarFieldEnum)[keyof typeof AppConfigScalarFieldEnum]
 
 
   export const EmailQueueScalarFieldEnum: {
@@ -9684,6 +10826,7 @@ export namespace Prisma {
     amount?: IntFilter<"Product"> | number
     publishedAt?: DateTimeFilter<"Product"> | Date | string
     draft?: BoolFilter<"Product"> | boolean
+    isSeeded?: BoolFilter<"Product"> | boolean
     contactPersonId?: IntNullableFilter<"Product"> | number | null
     images?: ProductImageListRelationFilter
     contactPerson?: XOR<ContactPersonNullableScalarRelationFilter, ContactPersonWhereInput> | null
@@ -9700,6 +10843,7 @@ export namespace Prisma {
     amount?: SortOrder
     publishedAt?: SortOrder
     draft?: SortOrder
+    isSeeded?: SortOrder
     contactPersonId?: SortOrderInput | SortOrder
     images?: ProductImageOrderByRelationAggregateInput
     contactPerson?: ContactPersonOrderByWithRelationInput
@@ -9719,6 +10863,7 @@ export namespace Prisma {
     amount?: IntFilter<"Product"> | number
     publishedAt?: DateTimeFilter<"Product"> | Date | string
     draft?: BoolFilter<"Product"> | boolean
+    isSeeded?: BoolFilter<"Product"> | boolean
     contactPersonId?: IntNullableFilter<"Product"> | number | null
     images?: ProductImageListRelationFilter
     contactPerson?: XOR<ContactPersonNullableScalarRelationFilter, ContactPersonWhereInput> | null
@@ -9735,6 +10880,7 @@ export namespace Prisma {
     amount?: SortOrder
     publishedAt?: SortOrder
     draft?: SortOrder
+    isSeeded?: SortOrder
     contactPersonId?: SortOrderInput | SortOrder
     _count?: ProductCountOrderByAggregateInput
     _avg?: ProductAvgOrderByAggregateInput
@@ -9756,6 +10902,7 @@ export namespace Prisma {
     amount?: IntWithAggregatesFilter<"Product"> | number
     publishedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     draft?: BoolWithAggregatesFilter<"Product"> | boolean
+    isSeeded?: BoolWithAggregatesFilter<"Product"> | boolean
     contactPersonId?: IntNullableWithAggregatesFilter<"Product"> | number | null
   }
 
@@ -9825,6 +10972,7 @@ export namespace Prisma {
     address?: StringFilter<"ProjectRequest"> | string
     billingAddress?: StringFilter<"ProjectRequest"> | string
     status?: EnumStatusFilter<"ProjectRequest"> | $Enums.Status
+    isSeeded?: BoolFilter<"ProjectRequest"> | boolean
     createdAt?: DateTimeFilter<"ProjectRequest"> | Date | string
   }
 
@@ -9844,6 +10992,7 @@ export namespace Prisma {
     address?: SortOrder
     billingAddress?: SortOrder
     status?: SortOrder
+    isSeeded?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -9866,6 +11015,7 @@ export namespace Prisma {
     address?: StringFilter<"ProjectRequest"> | string
     billingAddress?: StringFilter<"ProjectRequest"> | string
     status?: EnumStatusFilter<"ProjectRequest"> | $Enums.Status
+    isSeeded?: BoolFilter<"ProjectRequest"> | boolean
     createdAt?: DateTimeFilter<"ProjectRequest"> | Date | string
   }, "id">
 
@@ -9885,6 +11035,7 @@ export namespace Prisma {
     address?: SortOrder
     billingAddress?: SortOrder
     status?: SortOrder
+    isSeeded?: SortOrder
     createdAt?: SortOrder
     _count?: ProjectRequestCountOrderByAggregateInput
     _avg?: ProjectRequestAvgOrderByAggregateInput
@@ -9912,6 +11063,7 @@ export namespace Prisma {
     address?: StringWithAggregatesFilter<"ProjectRequest"> | string
     billingAddress?: StringWithAggregatesFilter<"ProjectRequest"> | string
     status?: EnumStatusWithAggregatesFilter<"ProjectRequest"> | $Enums.Status
+    isSeeded?: BoolWithAggregatesFilter<"ProjectRequest"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"ProjectRequest"> | Date | string
   }
 
@@ -9926,6 +11078,7 @@ export namespace Prisma {
     orgURL?: StringNullableFilter<"ClientReview"> | string | null
     imageId?: StringNullableFilter<"ClientReview"> | string | null
     message?: StringFilter<"ClientReview"> | string
+    isSeeded?: BoolFilter<"ClientReview"> | boolean
     createdAt?: DateTimeFilter<"ClientReview"> | Date | string
   }
 
@@ -9937,6 +11090,7 @@ export namespace Prisma {
     orgURL?: SortOrderInput | SortOrder
     imageId?: SortOrderInput | SortOrder
     message?: SortOrder
+    isSeeded?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -9951,6 +11105,7 @@ export namespace Prisma {
     orgURL?: StringNullableFilter<"ClientReview"> | string | null
     imageId?: StringNullableFilter<"ClientReview"> | string | null
     message?: StringFilter<"ClientReview"> | string
+    isSeeded?: BoolFilter<"ClientReview"> | boolean
     createdAt?: DateTimeFilter<"ClientReview"> | Date | string
   }, "id">
 
@@ -9962,6 +11117,7 @@ export namespace Prisma {
     orgURL?: SortOrderInput | SortOrder
     imageId?: SortOrderInput | SortOrder
     message?: SortOrder
+    isSeeded?: SortOrder
     createdAt?: SortOrder
     _count?: ClientReviewCountOrderByAggregateInput
     _avg?: ClientReviewAvgOrderByAggregateInput
@@ -9981,6 +11137,7 @@ export namespace Prisma {
     orgURL?: StringNullableWithAggregatesFilter<"ClientReview"> | string | null
     imageId?: StringNullableWithAggregatesFilter<"ClientReview"> | string | null
     message?: StringWithAggregatesFilter<"ClientReview"> | string
+    isSeeded?: BoolWithAggregatesFilter<"ClientReview"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"ClientReview"> | Date | string
   }
 
@@ -9993,6 +11150,7 @@ export namespace Prisma {
     email?: StringFilter<"ContactPerson"> | string
     phone?: StringFilter<"ContactPerson"> | string
     title?: StringFilter<"ContactPerson"> | string
+    isSeeded?: BoolFilter<"ContactPerson"> | boolean
     product?: ProductListRelationFilter
   }
 
@@ -10002,6 +11160,7 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     title?: SortOrder
+    isSeeded?: SortOrder
     product?: ProductOrderByRelationAggregateInput
   }
 
@@ -10014,6 +11173,7 @@ export namespace Prisma {
     email?: StringFilter<"ContactPerson"> | string
     phone?: StringFilter<"ContactPerson"> | string
     title?: StringFilter<"ContactPerson"> | string
+    isSeeded?: BoolFilter<"ContactPerson"> | boolean
     product?: ProductListRelationFilter
   }, "id">
 
@@ -10023,6 +11183,7 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     title?: SortOrder
+    isSeeded?: SortOrder
     _count?: ContactPersonCountOrderByAggregateInput
     _avg?: ContactPersonAvgOrderByAggregateInput
     _max?: ContactPersonMaxOrderByAggregateInput
@@ -10039,6 +11200,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"ContactPerson"> | string
     phone?: StringWithAggregatesFilter<"ContactPerson"> | string
     title?: StringWithAggregatesFilter<"ContactPerson"> | string
+    isSeeded?: BoolWithAggregatesFilter<"ContactPerson"> | boolean
   }
 
   export type ProductOrderWhereInput = {
@@ -10052,6 +11214,7 @@ export namespace Prisma {
     amount?: IntFilter<"ProductOrder"> | number
     extraDetails?: StringNullableFilter<"ProductOrder"> | string | null
     status?: EnumOrderStatusFilter<"ProductOrder"> | $Enums.OrderStatus
+    isSeeded?: BoolFilter<"ProductOrder"> | boolean
     productId?: IntNullableFilter<"ProductOrder"> | number | null
     product?: XOR<ProductNullableScalarRelationFilter, ProductWhereInput> | null
   }
@@ -10064,6 +11227,7 @@ export namespace Prisma {
     amount?: SortOrder
     extraDetails?: SortOrderInput | SortOrder
     status?: SortOrder
+    isSeeded?: SortOrder
     productId?: SortOrderInput | SortOrder
     product?: ProductOrderByWithRelationInput
   }
@@ -10079,6 +11243,7 @@ export namespace Prisma {
     amount?: IntFilter<"ProductOrder"> | number
     extraDetails?: StringNullableFilter<"ProductOrder"> | string | null
     status?: EnumOrderStatusFilter<"ProductOrder"> | $Enums.OrderStatus
+    isSeeded?: BoolFilter<"ProductOrder"> | boolean
     productId?: IntNullableFilter<"ProductOrder"> | number | null
     product?: XOR<ProductNullableScalarRelationFilter, ProductWhereInput> | null
   }, "id">
@@ -10091,6 +11256,7 @@ export namespace Prisma {
     amount?: SortOrder
     extraDetails?: SortOrderInput | SortOrder
     status?: SortOrder
+    isSeeded?: SortOrder
     productId?: SortOrderInput | SortOrder
     _count?: ProductOrderCountOrderByAggregateInput
     _avg?: ProductOrderAvgOrderByAggregateInput
@@ -10110,7 +11276,50 @@ export namespace Prisma {
     amount?: IntWithAggregatesFilter<"ProductOrder"> | number
     extraDetails?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
     status?: EnumOrderStatusWithAggregatesFilter<"ProductOrder"> | $Enums.OrderStatus
+    isSeeded?: BoolWithAggregatesFilter<"ProductOrder"> | boolean
     productId?: IntNullableWithAggregatesFilter<"ProductOrder"> | number | null
+  }
+
+  export type AppConfigWhereInput = {
+    AND?: AppConfigWhereInput | AppConfigWhereInput[]
+    OR?: AppConfigWhereInput[]
+    NOT?: AppConfigWhereInput | AppConfigWhereInput[]
+    key?: StringFilter<"AppConfig"> | string
+    value?: StringFilter<"AppConfig"> | string
+    updatedAt?: DateTimeFilter<"AppConfig"> | Date | string
+  }
+
+  export type AppConfigOrderByWithRelationInput = {
+    key?: SortOrder
+    value?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppConfigWhereUniqueInput = Prisma.AtLeast<{
+    key?: string
+    AND?: AppConfigWhereInput | AppConfigWhereInput[]
+    OR?: AppConfigWhereInput[]
+    NOT?: AppConfigWhereInput | AppConfigWhereInput[]
+    value?: StringFilter<"AppConfig"> | string
+    updatedAt?: DateTimeFilter<"AppConfig"> | Date | string
+  }, "key">
+
+  export type AppConfigOrderByWithAggregationInput = {
+    key?: SortOrder
+    value?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AppConfigCountOrderByAggregateInput
+    _max?: AppConfigMaxOrderByAggregateInput
+    _min?: AppConfigMinOrderByAggregateInput
+  }
+
+  export type AppConfigScalarWhereWithAggregatesInput = {
+    AND?: AppConfigScalarWhereWithAggregatesInput | AppConfigScalarWhereWithAggregatesInput[]
+    OR?: AppConfigScalarWhereWithAggregatesInput[]
+    NOT?: AppConfigScalarWhereWithAggregatesInput | AppConfigScalarWhereWithAggregatesInput[]
+    key?: StringWithAggregatesFilter<"AppConfig"> | string
+    value?: StringWithAggregatesFilter<"AppConfig"> | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AppConfig"> | Date | string
   }
 
   export type EmailQueueWhereInput = {
@@ -10191,6 +11400,7 @@ export namespace Prisma {
     amount: number
     publishedAt?: Date | string
     draft?: boolean
+    isSeeded?: boolean
     images?: ProductImageCreateNestedManyWithoutProductInput
     contactPerson?: ContactPersonCreateNestedOneWithoutProductInput
     orders?: ProductOrderCreateNestedManyWithoutProductInput
@@ -10206,6 +11416,7 @@ export namespace Prisma {
     amount: number
     publishedAt?: Date | string
     draft?: boolean
+    isSeeded?: boolean
     contactPersonId?: number | null
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     orders?: ProductOrderUncheckedCreateNestedManyWithoutProductInput
@@ -10220,6 +11431,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draft?: BoolFieldUpdateOperationsInput | boolean
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     images?: ProductImageUpdateManyWithoutProductNestedInput
     contactPerson?: ContactPersonUpdateOneWithoutProductNestedInput
     orders?: ProductOrderUpdateManyWithoutProductNestedInput
@@ -10235,6 +11447,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draft?: BoolFieldUpdateOperationsInput | boolean
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     contactPersonId?: NullableIntFieldUpdateOperationsInput | number | null
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     orders?: ProductOrderUncheckedUpdateManyWithoutProductNestedInput
@@ -10250,6 +11463,7 @@ export namespace Prisma {
     amount: number
     publishedAt?: Date | string
     draft?: boolean
+    isSeeded?: boolean
     contactPersonId?: number | null
   }
 
@@ -10262,6 +11476,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draft?: BoolFieldUpdateOperationsInput | boolean
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProductUncheckedUpdateManyInput = {
@@ -10274,6 +11489,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draft?: BoolFieldUpdateOperationsInput | boolean
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     contactPersonId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -10334,6 +11550,7 @@ export namespace Prisma {
     address: string
     billingAddress: string
     status?: $Enums.Status
+    isSeeded?: boolean
     createdAt?: Date | string
   }
 
@@ -10353,6 +11570,7 @@ export namespace Prisma {
     address: string
     billingAddress: string
     status?: $Enums.Status
+    isSeeded?: boolean
     createdAt?: Date | string
   }
 
@@ -10372,6 +11590,7 @@ export namespace Prisma {
     address?: StringFieldUpdateOperationsInput | string
     billingAddress?: StringFieldUpdateOperationsInput | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10391,6 +11610,7 @@ export namespace Prisma {
     address?: StringFieldUpdateOperationsInput | string
     billingAddress?: StringFieldUpdateOperationsInput | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10410,6 +11630,7 @@ export namespace Prisma {
     address: string
     billingAddress: string
     status?: $Enums.Status
+    isSeeded?: boolean
     createdAt?: Date | string
   }
 
@@ -10429,6 +11650,7 @@ export namespace Prisma {
     address?: StringFieldUpdateOperationsInput | string
     billingAddress?: StringFieldUpdateOperationsInput | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10448,6 +11670,7 @@ export namespace Prisma {
     address?: StringFieldUpdateOperationsInput | string
     billingAddress?: StringFieldUpdateOperationsInput | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10458,6 +11681,7 @@ export namespace Prisma {
     orgURL?: string | null
     imageId?: string | null
     message: string
+    isSeeded?: boolean
     createdAt?: Date | string
   }
 
@@ -10469,6 +11693,7 @@ export namespace Prisma {
     orgURL?: string | null
     imageId?: string | null
     message: string
+    isSeeded?: boolean
     createdAt?: Date | string
   }
 
@@ -10479,6 +11704,7 @@ export namespace Prisma {
     orgURL?: NullableStringFieldUpdateOperationsInput | string | null
     imageId?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10490,6 +11716,7 @@ export namespace Prisma {
     orgURL?: NullableStringFieldUpdateOperationsInput | string | null
     imageId?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10501,6 +11728,7 @@ export namespace Prisma {
     orgURL?: string | null
     imageId?: string | null
     message: string
+    isSeeded?: boolean
     createdAt?: Date | string
   }
 
@@ -10511,6 +11739,7 @@ export namespace Prisma {
     orgURL?: NullableStringFieldUpdateOperationsInput | string | null
     imageId?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10522,6 +11751,7 @@ export namespace Prisma {
     orgURL?: NullableStringFieldUpdateOperationsInput | string | null
     imageId?: NullableStringFieldUpdateOperationsInput | string | null
     message?: StringFieldUpdateOperationsInput | string
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10530,6 +11760,7 @@ export namespace Prisma {
     email: string
     phone: string
     title: string
+    isSeeded?: boolean
     product?: ProductCreateNestedManyWithoutContactPersonInput
   }
 
@@ -10539,6 +11770,7 @@ export namespace Prisma {
     email: string
     phone: string
     title: string
+    isSeeded?: boolean
     product?: ProductUncheckedCreateNestedManyWithoutContactPersonInput
   }
 
@@ -10547,6 +11779,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     product?: ProductUpdateManyWithoutContactPersonNestedInput
   }
 
@@ -10556,6 +11789,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     product?: ProductUncheckedUpdateManyWithoutContactPersonNestedInput
   }
 
@@ -10565,6 +11799,7 @@ export namespace Prisma {
     email: string
     phone: string
     title: string
+    isSeeded?: boolean
   }
 
   export type ContactPersonUpdateManyMutationInput = {
@@ -10572,6 +11807,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ContactPersonUncheckedUpdateManyInput = {
@@ -10580,6 +11816,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProductOrderCreateInput = {
@@ -10589,6 +11826,7 @@ export namespace Prisma {
     amount: number
     extraDetails?: string | null
     status?: $Enums.OrderStatus
+    isSeeded?: boolean
     product?: ProductCreateNestedOneWithoutOrdersInput
   }
 
@@ -10600,6 +11838,7 @@ export namespace Prisma {
     amount: number
     extraDetails?: string | null
     status?: $Enums.OrderStatus
+    isSeeded?: boolean
     productId?: number | null
   }
 
@@ -10610,6 +11849,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     product?: ProductUpdateOneWithoutOrdersNestedInput
   }
 
@@ -10621,6 +11861,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     productId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -10632,6 +11873,7 @@ export namespace Prisma {
     amount: number
     extraDetails?: string | null
     status?: $Enums.OrderStatus
+    isSeeded?: boolean
     productId?: number | null
   }
 
@@ -10642,6 +11884,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProductOrderUncheckedUpdateManyInput = {
@@ -10652,7 +11895,50 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     productId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type AppConfigCreateInput = {
+    key: string
+    value: string
+    updatedAt?: Date | string
+  }
+
+  export type AppConfigUncheckedCreateInput = {
+    key: string
+    value: string
+    updatedAt?: Date | string
+  }
+
+  export type AppConfigUpdateInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppConfigUncheckedUpdateInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppConfigCreateManyInput = {
+    key: string
+    value: string
+    updatedAt?: Date | string
+  }
+
+  export type AppConfigUpdateManyMutationInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppConfigUncheckedUpdateManyInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EmailQueueCreateInput = {
@@ -10860,6 +12146,7 @@ export namespace Prisma {
     amount?: SortOrder
     publishedAt?: SortOrder
     draft?: SortOrder
+    isSeeded?: SortOrder
     contactPersonId?: SortOrder
   }
 
@@ -10879,6 +12166,7 @@ export namespace Prisma {
     amount?: SortOrder
     publishedAt?: SortOrder
     draft?: SortOrder
+    isSeeded?: SortOrder
     contactPersonId?: SortOrder
   }
 
@@ -10891,6 +12179,7 @@ export namespace Prisma {
     amount?: SortOrder
     publishedAt?: SortOrder
     draft?: SortOrder
+    isSeeded?: SortOrder
     contactPersonId?: SortOrder
   }
 
@@ -11089,6 +12378,7 @@ export namespace Prisma {
     address?: SortOrder
     billingAddress?: SortOrder
     status?: SortOrder
+    isSeeded?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -11113,6 +12403,7 @@ export namespace Prisma {
     address?: SortOrder
     billingAddress?: SortOrder
     status?: SortOrder
+    isSeeded?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -11132,6 +12423,7 @@ export namespace Prisma {
     address?: SortOrder
     billingAddress?: SortOrder
     status?: SortOrder
+    isSeeded?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -11175,6 +12467,7 @@ export namespace Prisma {
     orgURL?: SortOrder
     imageId?: SortOrder
     message?: SortOrder
+    isSeeded?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -11190,6 +12483,7 @@ export namespace Prisma {
     orgURL?: SortOrder
     imageId?: SortOrder
     message?: SortOrder
+    isSeeded?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -11201,6 +12495,7 @@ export namespace Prisma {
     orgURL?: SortOrder
     imageId?: SortOrder
     message?: SortOrder
+    isSeeded?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -11224,6 +12519,7 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     title?: SortOrder
+    isSeeded?: SortOrder
   }
 
   export type ContactPersonAvgOrderByAggregateInput = {
@@ -11236,6 +12532,7 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     title?: SortOrder
+    isSeeded?: SortOrder
   }
 
   export type ContactPersonMinOrderByAggregateInput = {
@@ -11244,6 +12541,7 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     title?: SortOrder
+    isSeeded?: SortOrder
   }
 
   export type ContactPersonSumOrderByAggregateInput = {
@@ -11270,6 +12568,7 @@ export namespace Prisma {
     amount?: SortOrder
     extraDetails?: SortOrder
     status?: SortOrder
+    isSeeded?: SortOrder
     productId?: SortOrder
   }
 
@@ -11287,6 +12586,7 @@ export namespace Prisma {
     amount?: SortOrder
     extraDetails?: SortOrder
     status?: SortOrder
+    isSeeded?: SortOrder
     productId?: SortOrder
   }
 
@@ -11298,6 +12598,7 @@ export namespace Prisma {
     amount?: SortOrder
     extraDetails?: SortOrder
     status?: SortOrder
+    isSeeded?: SortOrder
     productId?: SortOrder
   }
 
@@ -11315,6 +12616,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumOrderStatusFilter<$PrismaModel>
     _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
+  export type AppConfigCountOrderByAggregateInput = {
+    key?: SortOrder
+    value?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppConfigMaxOrderByAggregateInput = {
+    key?: SortOrder
+    value?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppConfigMinOrderByAggregateInput = {
+    key?: SortOrder
+    value?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -11932,6 +13251,7 @@ export namespace Prisma {
     email: string
     phone: string
     title: string
+    isSeeded?: boolean
   }
 
   export type ContactPersonUncheckedCreateWithoutProductInput = {
@@ -11940,6 +13260,7 @@ export namespace Prisma {
     email: string
     phone: string
     title: string
+    isSeeded?: boolean
   }
 
   export type ContactPersonCreateOrConnectWithoutProductInput = {
@@ -11954,6 +13275,7 @@ export namespace Prisma {
     amount: number
     extraDetails?: string | null
     status?: $Enums.OrderStatus
+    isSeeded?: boolean
   }
 
   export type ProductOrderUncheckedCreateWithoutProductInput = {
@@ -11964,6 +13286,7 @@ export namespace Prisma {
     amount: number
     extraDetails?: string | null
     status?: $Enums.OrderStatus
+    isSeeded?: boolean
   }
 
   export type ProductOrderCreateOrConnectWithoutProductInput = {
@@ -12016,6 +13339,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ContactPersonUncheckedUpdateWithoutProductInput = {
@@ -12024,6 +13348,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProductOrderUpsertWithWhereUniqueWithoutProductInput = {
@@ -12053,6 +13378,7 @@ export namespace Prisma {
     amount?: IntFilter<"ProductOrder"> | number
     extraDetails?: StringNullableFilter<"ProductOrder"> | string | null
     status?: EnumOrderStatusFilter<"ProductOrder"> | $Enums.OrderStatus
+    isSeeded?: BoolFilter<"ProductOrder"> | boolean
     productId?: IntNullableFilter<"ProductOrder"> | number | null
   }
 
@@ -12065,6 +13391,7 @@ export namespace Prisma {
     amount: number
     publishedAt?: Date | string
     draft?: boolean
+    isSeeded?: boolean
     contactPerson?: ContactPersonCreateNestedOneWithoutProductInput
     orders?: ProductOrderCreateNestedManyWithoutProductInput
   }
@@ -12079,6 +13406,7 @@ export namespace Prisma {
     amount: number
     publishedAt?: Date | string
     draft?: boolean
+    isSeeded?: boolean
     contactPersonId?: number | null
     orders?: ProductOrderUncheckedCreateNestedManyWithoutProductInput
   }
@@ -12108,6 +13436,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draft?: BoolFieldUpdateOperationsInput | boolean
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     contactPerson?: ContactPersonUpdateOneWithoutProductNestedInput
     orders?: ProductOrderUpdateManyWithoutProductNestedInput
   }
@@ -12122,6 +13451,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draft?: BoolFieldUpdateOperationsInput | boolean
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     contactPersonId?: NullableIntFieldUpdateOperationsInput | number | null
     orders?: ProductOrderUncheckedUpdateManyWithoutProductNestedInput
   }
@@ -12135,6 +13465,7 @@ export namespace Prisma {
     amount: number
     publishedAt?: Date | string
     draft?: boolean
+    isSeeded?: boolean
     images?: ProductImageCreateNestedManyWithoutProductInput
     orders?: ProductOrderCreateNestedManyWithoutProductInput
   }
@@ -12149,6 +13480,7 @@ export namespace Prisma {
     amount: number
     publishedAt?: Date | string
     draft?: boolean
+    isSeeded?: boolean
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
     orders?: ProductOrderUncheckedCreateNestedManyWithoutProductInput
   }
@@ -12191,6 +13523,7 @@ export namespace Prisma {
     amount?: IntFilter<"Product"> | number
     publishedAt?: DateTimeFilter<"Product"> | Date | string
     draft?: BoolFilter<"Product"> | boolean
+    isSeeded?: BoolFilter<"Product"> | boolean
     contactPersonId?: IntNullableFilter<"Product"> | number | null
   }
 
@@ -12203,6 +13536,7 @@ export namespace Prisma {
     amount: number
     publishedAt?: Date | string
     draft?: boolean
+    isSeeded?: boolean
     images?: ProductImageCreateNestedManyWithoutProductInput
     contactPerson?: ContactPersonCreateNestedOneWithoutProductInput
   }
@@ -12217,6 +13551,7 @@ export namespace Prisma {
     amount: number
     publishedAt?: Date | string
     draft?: boolean
+    isSeeded?: boolean
     contactPersonId?: number | null
     images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
   }
@@ -12246,6 +13581,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draft?: BoolFieldUpdateOperationsInput | boolean
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     images?: ProductImageUpdateManyWithoutProductNestedInput
     contactPerson?: ContactPersonUpdateOneWithoutProductNestedInput
   }
@@ -12260,6 +13596,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draft?: BoolFieldUpdateOperationsInput | boolean
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     contactPersonId?: NullableIntFieldUpdateOperationsInput | number | null
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
   }
@@ -12277,6 +13614,7 @@ export namespace Prisma {
     amount: number
     extraDetails?: string | null
     status?: $Enums.OrderStatus
+    isSeeded?: boolean
   }
 
   export type ProductImageUpdateWithoutProductInput = {
@@ -12301,6 +13639,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProductOrderUncheckedUpdateWithoutProductInput = {
@@ -12311,6 +13650,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProductOrderUncheckedUpdateManyWithoutProductInput = {
@@ -12321,6 +13661,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ProductCreateManyContactPersonInput = {
@@ -12333,6 +13674,7 @@ export namespace Prisma {
     amount: number
     publishedAt?: Date | string
     draft?: boolean
+    isSeeded?: boolean
   }
 
   export type ProductUpdateWithoutContactPersonInput = {
@@ -12344,6 +13686,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draft?: BoolFieldUpdateOperationsInput | boolean
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     images?: ProductImageUpdateManyWithoutProductNestedInput
     orders?: ProductOrderUpdateManyWithoutProductNestedInput
   }
@@ -12358,6 +13701,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draft?: BoolFieldUpdateOperationsInput | boolean
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
     orders?: ProductOrderUncheckedUpdateManyWithoutProductNestedInput
   }
@@ -12372,6 +13716,7 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draft?: BoolFieldUpdateOperationsInput | boolean
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
   }
 
 

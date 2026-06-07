@@ -38,6 +38,7 @@ model Product {
   amount Int
   publishedAt DateTime @default(now())
   draft Boolean @default(true)
+  isSeeded Boolean @default(false)
   images         ProductImage[]
   contactPersonId Int?
   contactPerson ContactPerson? @relation(fields: [contactPersonId], references: [id])
@@ -69,6 +70,7 @@ model ProjectRequest {
   address String
   billingAddress String
   status Status @default(NEW)
+  isSeeded Boolean @default(false)
   createdAt DateTime @default(now())
 
   @@index ([clientEmail])
@@ -84,15 +86,17 @@ model ClientReview {
   orgURL    String?
   imageId   String?
   message   String
+  isSeeded  Boolean  @default(false)
   createdAt DateTime @default(now())
 }
 
 model ContactPerson {
   id Int @id @default(autoincrement())
   name String
-  email String 
+  email String
   phone String
   title String
+  isSeeded Boolean @default(false)
   product Product[]
 }
 
@@ -104,8 +108,15 @@ model ProductOrder {
   amount Int
   extraDetails String?
   status OrderStatus @default(NEW)
+  isSeeded Boolean @default(false)
   productId Int?
   product Product? @relation(fields: [productId], references: [id])
+}
+
+model AppConfig {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
 }
 
 model EmailQueue {
