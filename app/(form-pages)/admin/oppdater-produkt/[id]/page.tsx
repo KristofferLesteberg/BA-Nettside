@@ -1,98 +1,37 @@
-"use client"
-
-import { use, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import toast from 'react-hot-toast'
+import { notFound, redirect } from 'next/navigation'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/lib/auth'
+import { getProductById } from '@/actions/products'
 import { Measure } from '@/components/admin/MeasurementList'
-import ProductForm, { ProductFormValues } from '@/components/admin/ProductForm'
-import { getProductById, updateProduct, addImageToProduct } from '@/actions/products'
+import UpdateProductClient from './UpdateProductClient'
 
-interface LoadedProduct {
-  title: string
-  educationField: string
-  description: string
-  price: string
-  amount: string
-  measures: Measure[]
-  existingImages: { id: string; url: string }[]
-  contactId: string
-  draft: boolean
-}
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const session = await getServerSession(authOptions)
+  if (!session) redirect('/admin/login')
 
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
-  const productId = parseInt(use(params).id)
-  const router = useRouter()
-  const [loaded, setLoaded] = useState<LoadedProduct | null>(null)
-  const [error, setError] = useState(false)
+  const productId = parseInt((await params).id)
+  if (Number.isNaN(productId)) notFound()
 
-  useEffect(() => {
-    if (Number.isNaN(productId)) { setError(true); return }
+  const product = await getProductById(productId)
+  if (!product) notFound()
 
-    const load = async () => {
-      try {
-        const product = await getProductById(productId)
-        if (!product) { setError(true); return }
-
-        setLoaded({
-          title:          product.title,
-          educationField: product.educationField ?? '',
-          description:    product.description,
-          price:          Number(product.price).toString(),
-          amount:         String(product.amount),
-          measures:       Array.isArray(product.measures)
-                            ? (product.measures as Measure[])
-                            : Object.entries((product.measures ?? {}) as Record<string, string>)
-                                .map(([name, value]) => ({ name, value, unit: "" })),
-          existingImages: product.images.map(img => ({ id: img.id, url: `/images/med-res/${img.id}.webp` })),
-          contactId: product.contactPersonId ? String(product.contactPersonId) : '',
-          draft: product.draft,
-        })
-      } catch {
-        toast.error("Kunne ikke laste produktet")
-        setError(true)
-      }
-    }
-
-    load()
-  }, [productId])
-
-  const handleSubmit = async ({ educationField, title, description, price, amount, measures, images, contactId }: ProductFormValues) => {
-    const formData = new FormData()
-    formData.append("educationField", educationField)
-    formData.append("title", title)
-    formData.append("description", description)
-    formData.append("price", price || "0")
-    formData.append("amount", amount || "0")
-    formData.append("measures", JSON.stringify(measures))
-    formData.append("contactId", contactId)
-
-    formData.append("imageIds", JSON.stringify(images.map(img => img.id)))
-
-    try {
-      await updateProduct(productId, formData)
-      toast.success("Produkt oppdatert")
-      router.push("/admin?tab=produkter")
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Kunne ikke oppdatere produktet")
-    }
-  }
-
-  if (error)   return <p className="mt-10 text-center text-text-muted">Ingen produkt funnet.</p>
-  if (!loaded) return <p className="mt-10 text-center text-text-muted">Laster...</p>
+  const measures: Measure[] = Array.isArray(product.measures)
+    ? (product.measures as unknown as Measure[])
+    : Object.entries((product.measures ?? {}) as Record<string, string>)
+        .map(([name, value]) => ({ name, value, unit: '' }))
 
   return (
-    <ProductForm
-      mode="update"
-      heading={`Oppdater ${loaded.title}`}
-      submitLabel={loaded.draft ? 'Oppdater annonse og publiser' : 'Oppdater annonse'}
-      initialValues={loaded}
+    <UpdateProductClient
       productId={productId}
-      onSubmit={handleSubmit}
-      onNewImage={async (file) => {
-        const formData = new FormData()
-        formData.append('image', file)
-        return addImageToProduct(productId, formData)
-      }}
+      title={product.title}
+      educationField={product.educationField ?? ''}
+      description={product.description}
+      price={Number(product.price).toString()}
+      amount={String(product.amount)}
+      measures={measures}
+      existingImages={product.images.map(img => ({ id: img.id, url: `/images/med-res/${img.id}.webp` }))}
+      contactId={product.contactPersonId ? String(product.contactPersonId) : ''}
+      draft={product.draft}
     />
   )
 }
