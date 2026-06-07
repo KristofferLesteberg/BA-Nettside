@@ -60,6 +60,7 @@ export async function verifyProjectClient(id: string, forename: string, surname:
   if (!nameMatch || !emailMatch) return null
 
   return {
+    status:             project.status as string,
     educationField:     project.educationField ?? '',
     title:              project.title,
     description:        project.description,
@@ -74,6 +75,29 @@ export async function verifyProjectClient(id: string, forename: string, surname:
     address:            project.address,
     billingAddress:     project.billingAddress,
   }
+}
+
+export async function updateProjectClient(
+  id: string,
+  credentials: { forename: string; surname: string; email: string },
+  data: unknown
+) {
+  const project = await prisma.projectRequest.findUnique({ where: { id } })
+  if (!project) throw new Error('Prosjektet ble ikke funnet')
+
+  const nameMatch =
+    project.clientForename.trim().toLowerCase() === credentials.forename.trim().toLowerCase() &&
+    project.clientSurname.trim().toLowerCase()  === credentials.surname.trim().toLowerCase()
+  const emailMatch = project.clientEmail.trim().toLowerCase() === credentials.email.trim().toLowerCase()
+  if (!nameMatch || !emailMatch) throw new Error('Ikke autorisert')
+
+  if (project.status !== 'NEW') throw new Error('Prosjektet kan ikke lenger redigeres')
+
+  const { educationField, ...rest } = ProjectRequestCreateSchema.parse(data)
+  await prisma.projectRequest.update({
+    where: { id },
+    data: { ...rest, educationField: (educationField as EducationField) ?? null },
+  })
 }
 
 export async function getAllProjects() {

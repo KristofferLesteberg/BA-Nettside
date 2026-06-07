@@ -9,7 +9,8 @@ import UpdateProjectForm from './updateProject'
 import BackBtn from '@/components/shared/BackBtn'
 import Link from 'next/link'
 
-type FormValues = {
+type VerifyResult = {
+  status: string
   educationField: string
   title: string
   description: string
@@ -36,6 +37,8 @@ function clearCache(id: string) {
   localStorage.removeItem(cacheKey(id))
 }
 
+type Credentials = { forename: string; surname: string; email: string }
+
 export default function ClientVerificationGate({ id }: { id: string }) {
   const router = useRouter()
   const [forename, setForename] = useState('')
@@ -43,7 +46,8 @@ export default function ClientVerificationGate({ id }: { id: string }) {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [autoVerifying, setAutoVerifying] = useState(true)
-  const [initialValues, setInitialValues] = useState<FormValues | null>(null)
+  const [verifyResult, setVerifyResult] = useState<VerifyResult | null>(null)
+  const [credentials, setCredentials] = useState<Credentials | null>(null)
 
   useEffect(() => {
     const raw = localStorage.getItem(cacheKey(id))
@@ -57,7 +61,8 @@ export default function ClientVerificationGate({ id }: { id: string }) {
     verifyProjectClient(id, cached.forename, cached.surname, cached.email)
       .then(result => {
         if (result) {
-          setInitialValues(result)
+          setVerifyResult(result)
+          setCredentials({ forename: cached.forename, surname: cached.surname, email: cached.email })
         } else {
           clearCache(id)
         }
@@ -74,8 +79,8 @@ export default function ClientVerificationGate({ id }: { id: string }) {
     )
   }
 
-  if (initialValues) {
-    return <UpdateProjectForm id={id} initialValues={initialValues} />
+  if (verifyResult && credentials) {
+    return <UpdateProjectForm id={id} initialValues={verifyResult} status={verifyResult.status} credentials={credentials} />
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -95,7 +100,8 @@ export default function ClientVerificationGate({ id }: { id: string }) {
         }
       )
       saveCache(id, forename, surname, email)
-      setInitialValues(result)
+      setVerifyResult(result)
+      setCredentials({ forename, surname, email })
     } catch {} finally {
       setLoading(false)
     }
@@ -103,7 +109,7 @@ export default function ClientVerificationGate({ id }: { id: string }) {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-16 bg-page">
-      <div className="w-full max-w-96 md:max-w-2/3 lg:max-w-3/5 space-y-6">
+      <div className="w-full max-w-120 mx-auto space-y-6">
 
         <BackBtn text='←  Forside' handleOnClick={() => router.push('/')} />
 
