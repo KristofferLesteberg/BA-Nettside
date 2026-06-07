@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from 'react'
-import { useParams } from 'next/navigation'
 import OrderProductForm from '@/components/products/OrderProductForm'
 import ProductOrderedSuccess from '@/components/products/ProductOrderedSuccess'
 
@@ -22,10 +21,7 @@ interface OrderedState {
   contactPerson: ContactPerson | null
 }
 
-export default function BestillProduktPage() {
-  const params = useParams()
-  const productId = Number(params.id) || 0
-
+export default function BestillClient({ productId }: { productId: number }) {
   const [ordered, setOrdered] = useState<OrderedState | null>(null)
 
   if (ordered) return (
@@ -39,5 +35,6 @@ export default function BestillProduktPage() {
       contactPerson={ordered.contactPerson}
     />
   )
+
   return <OrderProductForm productId={productId} onSuccess={setOrdered} />
 }

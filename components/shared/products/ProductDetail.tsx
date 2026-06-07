@@ -87,7 +87,7 @@ export default function ProductDetail({ product }: { product: Product }) {
             {/* CTA */}
             <div className="flex flex-col gap-3">
               {product.amount > 0 ? (
-                <Link className="btn btn-primary" href={`/bestill-produkt/${product.id}`}>
+                <Link className="btn btn-primary" href={`/produkter/${product.id}/bestill`}>
                   Bestill
                 </Link>
               ) : (
