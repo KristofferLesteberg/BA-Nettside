@@ -1,58 +1,26 @@
-"use client"
-import ContactForm from "@/components/admin/ContactForm";
+import { notFound, redirect } from 'next/navigation'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/lib/auth'
+import { prisma } from '@/app/lib/prisma'
+import UpdateContactClient from './UpdateContactClient'
 
-import { updateContactPerson } from "@/actions/contact";
-import { getContactById } from "@/actions/contact";
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const session = await getServerSession(authOptions)
+  if (!session) redirect('/admin/login')
 
-import { ApiResponse } from "@/app/lib/api-response";
-import { ContactPerson } from "@/generated/prisma";
-import { useRouter } from "next/navigation";
-import { useEffect, useState, use } from "react";
-import toast from "react-hot-toast";
+  const contactId = parseInt((await params).id)
+  if (Number.isNaN(contactId)) notFound()
 
-type ContactFormData = Omit<ContactPerson, 'id' | 'products'>
+  const contact = await prisma.contactPerson.findUnique({ where: { id: contactId } })
+  if (!contact) notFound()
 
-
-
-export default function UpdateContact({ params }: { params: Promise<{ id: string }> }) {
-  const router = useRouter()
-
-  const [contact, setContact] = useState<ContactFormData | undefined>(undefined)
-  const contactId = parseInt(use(params).id)
-
-  useEffect(() => {
-      
-    const getContact = async () => {
-      try {
-        const contact = await getContactById(contactId)
-        setContact(contact)
-      } catch(error) {
-        toast.error("Kunne ikke laste kontaktperson")
-      }
-    }
-
-    getContact()
-  }, [contactId])
-
-  const handleUpdate = async ( {name, email, phone, title }: ContactFormData) => {
-    const formData = new FormData()
-    formData.append("name", name)
-    formData.append("email", email)
-    formData.append("phone", phone)
-    formData.append("title", title)
-
-    try {
-      await updateContactPerson(contactId, formData)
-      toast.success("Oppdatert kontakt informasjonen")
-      router.push("/admin?tab=kontakt personer")
-    } catch(error) {
-      toast.error(error instanceof Error ? error.message : "Kunne ikke oppdatere kontakt informasjonen")
-    }
-  }
-
-  if(!contact) return <p>Laster...</p>
   return (
-    <ContactForm heading={"Rediger kontaktinformasjonen"} exsitingContact={contact} onSubmit={handleUpdate} />
+    <UpdateContactClient
+      contactId={contactId}
+      name={contact.name}
+      email={contact.email}
+      phone={contact.phone}
+      title={contact.title}
+    />
   )
-
 }
