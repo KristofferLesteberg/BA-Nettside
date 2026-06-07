@@ -60,7 +60,7 @@ export default function UpdateProductClient({
       mode="update"
       heading={`Oppdater ${title}`}
       submitLabel={submitLabel}
-      initialValues={{ title, educationField, description, price, amount, measures, existingImages, contactId }}
+      initialValues={{ title, educationField, description, price, amount, measures, existingImages, contactId, draft }}
       productId={productId}
       onSubmit={handleSubmit}
       onNewImage={async (file) => {

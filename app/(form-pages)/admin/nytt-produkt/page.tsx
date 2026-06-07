@@ -1,24 +1,38 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
-import { Spinner } from '@/components/shared/Spinner'
 import ProductForm, { ProductFormValues } from '@/components/admin/ProductForm'
-import { createDraftProduct, updateProduct, addImageToProduct } from '@/actions/products'
+import { cleanupEmptyDrafts, createDraftProduct, updateProduct, addImageToProduct } from '@/actions/products'
 
 export default function NyttProduktPage() {
   const router = useRouter()
   const [productId, setProductId] = useState<number | null>(null)
 
-  useEffect(() => {
-    createDraftProduct()
-      .then(({ id }) => setProductId(id))
-      .catch(() => toast.error('Kunne ikke opprette produktutkast'))
+  useEffect(() => { cleanupEmptyDrafts().catch(() => {}) }, [])
+  const productIdRef = useRef<number | null>(null)
+  const draftCreationRef = useRef<Promise<number> | null>(null)
+
+  const ensureDraft = useCallback(async (): Promise<number> => {
+    if (productIdRef.current !== null) return productIdRef.current
+    if (!draftCreationRef.current) {
+      draftCreationRef.current = createDraftProduct()
+        .then(({ id }) => {
+          productIdRef.current = id
+          setProductId(id)
+          return id
+        })
+        .catch((err) => {
+          draftCreationRef.current = null
+          throw err
+        })
+    }
+    return draftCreationRef.current
   }, [])
 
   const handleSubmit = async ({ educationField, title, description, price, amount, measures, images, contactId }: ProductFormValues) => {
-    if (productId === null) return
+    const id = await ensureDraft()
     const formData = new FormData()
     formData.append('educationField', educationField)
     formData.append('title', title)
@@ -30,20 +44,12 @@ export default function NyttProduktPage() {
     formData.append('imageIds', JSON.stringify(images.map(img => img.id)))
 
     try {
-      await updateProduct(productId, formData)
+      await updateProduct(id, formData)
       toast.success('Produkt opprettet!')
       router.push('/admin?tab=produkter')
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Kunne ikke opprette produktet')
     }
-  }
-
-  if (productId === null) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spinner />
-      </div>
-    )
   }
 
   return (
@@ -53,6 +59,7 @@ export default function NyttProduktPage() {
       submitLabel="Opprett annonse"
       onSubmit={handleSubmit}
       productId={productId}
+      ensureDraft={ensureDraft}
       initialValues={{
         title: '',
         educationField: '',
@@ -64,9 +71,10 @@ export default function NyttProduktPage() {
         contactId: '',
       }}
       onNewImage={async (file) => {
+        const id = await ensureDraft()
         const formData = new FormData()
         formData.append('image', file)
-        return addImageToProduct(productId, formData)
+        return addImageToProduct(id, formData)
       }}
     />
   )

@@ -75,6 +75,22 @@ export async function getProductById(id: number) {
   }
 }
 
+export async function cleanupEmptyDrafts() {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+
+  await prisma.product.deleteMany({
+    where: {
+      draft: true,
+      title: '',
+      description: '',
+      price: 0,
+      amount: 0,
+      images: { none: {} },
+    },
+  })
+}
+
 export async function createDraftProduct() {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
@@ -88,7 +104,7 @@ export async function createDraftProduct() {
     }
   })
   revalidatePath("/admin")
-  return { id: draftProduct.id}
+  return { id: draftProduct.id }
 }
 
 export async function updateProduct(id: number, formData: FormData, publish = true) {

@@ -34,7 +34,8 @@ interface ProductFormProps {
   heading: string
   submitLabel: string
 
-  productId: number
+  productId: number | null
+  ensureDraft?: () => Promise<number>
   initialValues?: {
     educationField?: string
     title?: string
@@ -50,7 +51,7 @@ interface ProductFormProps {
   onSubmit: (values: ProductFormValues) => Promise<void>
 }
 
-export default function ProductForm({ mode, heading, submitLabel, productId, initialValues, onNewImage, onSubmit }: ProductFormProps) {
+export default function ProductForm({ mode, heading, submitLabel, productId, ensureDraft, initialValues, onNewImage, onSubmit }: ProductFormProps) {
   const router = useRouter()
 
   const [contactPersons, setContactPersons] = useState<ContactPerson[] | null>(null)
@@ -165,7 +166,7 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
 
   const handleSaveChanges = async () => {
     try {
-      await toast.promise(updateProduct(productId, buildFormData(), !initialValues?.draft), {
+      await toast.promise(updateProduct(productId!, buildFormData(), !initialValues?.draft), {
         loading: 'Lagrer endringer…',
         success: 'Endringer lagret',
         error: 'Kunne ikke lagre endringene',
@@ -180,7 +181,8 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
     const formData = buildFormData()
     setSaving(true)
     try {
-      await toast.promise(updateProduct(productId, formData, false), {
+      const id = ensureDraft ? await ensureDraft() : productId!
+      await toast.promise(updateProduct(id, formData, false), {
         loading: 'Lagrer utkast…',
         success: 'Utkast lagret',
         error: 'Kunne ikke lagre produktet som utkast',
@@ -240,17 +242,20 @@ export default function ProductForm({ mode, heading, submitLabel, productId, ini
             }
             {!isChanged && mode === 'update' && <BackBtn handleOnClick={() => router.back()} />}
 
-            {isChanged && mode === 'create' &&
-              <BackBtn handleOnClick={() => openPopUp({
-                title:   'Vil du lagre som utkast?',
-                yesLabel: 'Ja',
-                noLabel:  'Nei',
-                onNo:  () => { deleteProduct(productId); setTimeout(() => router.back(), 1000) },
-                onYes: () => router.back(),
-              })} />
-            }
-            {!isChanged && mode === 'create' && (
-              <BackBtn handleOnClick={() => { deleteProduct(productId); setTimeout(() => router.back(), 1000) }} />
+            {mode === 'create' && (
+              <BackBtn handleOnClick={() => {
+                if (!isChanged) { router.back(); return }
+                openPopUp({
+                  title:   'Vil du lagre som utkast?',
+                  yesLabel: 'Ja',
+                  noLabel:  'Nei',
+                  onNo:  () => {
+                    if (productId !== null) deleteProduct(productId)
+                    setTimeout(() => router.back(), productId !== null ? 1000 : 0)
+                  },
+                  onYes: () => router.back(),
+                })
+              }} />
             )}
           </div>
 
