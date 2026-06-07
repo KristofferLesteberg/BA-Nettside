@@ -304,9 +304,9 @@ export default function OrderCard({ order }: Props) {
                     </div>
                   )}
 
-                  <div className="flex flex-1 items-center justify-between gap-4 flex-wrap">
-                    <p className="body-text font-medium">{order.product.title}</p>
-                    <div className="flex gap-4 shrink-0 flex-wrap">
+                  <div className="flex flex-1 min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="body-text font-medium min-w-0 truncate">{order.product.title}</p>
+                    <div className="flex gap-4 flex-wrap shrink-0">
                       <div className="flex flex-col items-end gap-0.5">
                         <span className="label">Antall</span>
                         <p className="small-text">{order.amount} stk</p>

@@ -82,8 +82,8 @@ export default function OrderProductForm({ productId, onSuccess }: Props) {
                 />
               </div>
             )}
-            <div>
-              <h3 className="heading-4">{product.title}</h3>
+            <div className="min-w-0">
+              <h3 className="heading-4 truncate">{product.title}</h3>
               <p className="small-text">{formatPrice(product.price)}</p>
               <p className="small-text">På lager: {product.amount} stk</p>
             </div>
