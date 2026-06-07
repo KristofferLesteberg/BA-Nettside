@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { IconEdit } from "@/app/lib/icons"
+import { IconEdit, IconPreview } from "@/app/lib/icons"
 import BackBtn from "@/components/shared/BackBtn"
 
 
@@ -29,6 +29,8 @@ export default function AdminPreviewBanner({ productId, isDraft }: AdminPreviewB
 
   return (
     <div
+      role="region"
+      aria-label="Administratorforhåndsvisning"
       className="fixed left-0 right-0 z-40 h-12 bg-surface-overlay border-b border-default shadow-b-md transition-transform duration-300"
       style={{
         top: 'var(--header-height)',
@@ -36,16 +38,23 @@ export default function AdminPreviewBanner({ productId, isDraft }: AdminPreviewB
       }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 h-full flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 min-w-0">
           <BackBtn handleOnClick={() => router.push('/admin?tab=produkter')} />
-          <span className={`badge ${isDraft ? "badge-info" : "badge-success"}`}>
+          <span className={`badge shrink-0 ${isDraft ? "badge-info" : "badge-success"}`}>
             {isDraft ? "Utkast" : "Publisert"}
           </span>
-          <span className="small-text text-faint">Forhåndsvisning</span>
+          <span className="flex items-center gap-1.5" aria-hidden="true">
+            <IconPreview className="sm:hidden w-3.5 h-3.5 text-text-faint" />
+          </span>
+          <span className="small-text text-faint sr-only sm:not-sr-only">Forhåndsvisning</span>
         </div>
-        <Link href={`/admin/oppdater-produkt/${productId}`} className="btn btn-primary gap-1.5 text-sm">
-          <IconEdit />
-          Rediger
+        <Link
+          href={`/admin/oppdater-produkt/${productId}`}
+          className="btn btn-primary gap-1.5 text-sm shrink-0"
+          aria-label="Rediger produkt"
+        >
+          <IconEdit aria-hidden="true" />
+          <span className="hidden sm:inline">Rediger</span>
         </Link>
       </div>
     </div>

@@ -24,6 +24,7 @@ export { FaEllipsis              as IconMenuDots      } from 'react-icons/fa6'
 export { FaArrowUpRightFromSquare as IconExternalLink } from 'react-icons/fa6'
 export { FaLink                  as IconLink          } from 'react-icons/fa6'
 export { FaEye                   as IconPublish       } from 'react-icons/fa6'
+export { FaEye                   as IconPreview       } from 'react-icons/fa6'
 export { FaEyeSlash              as IconUnpublish     } from 'react-icons/fa6'
 export { FaSpinner               as IconSpinner       } from 'react-icons/fa6'
 
