@@ -178,7 +178,7 @@ export default function OrderProjectForm({ onSuccess }: Props) {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className="w-4/5 min-w-120 max-w-230 mx-auto py-10 overflow-hidden">
+    <div className="form-page-wrapper overflow-hidden">
       <div className="card-accented shadow-xl px-8 py-8 space-y-6">
 
         {/* Header: back btn + progress dots */}
