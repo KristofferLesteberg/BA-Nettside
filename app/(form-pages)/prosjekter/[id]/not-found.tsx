@@ -13,7 +13,7 @@ export default function ProjectNotFound() {
           <h1 className="heading-2">Prosjekt ikke funnet</h1>
           <p className="body-text">
             Sjekk at du har riktig lenke. Finner du ikke frem?{' '}
-            <Link href="/kontakt-oss">Ta kontakt med oss</Link> så hjelper vi deg.
+            <Link href="/kontakt-oss" className="text-primary underline">Ta kontakt med oss</Link> så hjelper vi deg.
           </p>
         </div>
       </div>
