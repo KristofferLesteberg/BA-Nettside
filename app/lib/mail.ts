@@ -2,7 +2,7 @@ import nodemailer from "nodemailer"
 import { prisma } from "@/app/lib/prisma"
 
 interface MailProps {
-  body: string
+  html: string
   subject: string
   email: string
 }
@@ -20,22 +20,22 @@ function createTransporter() {
   })
 }
 
-async function deliver(queueId: string, to: string, subject: string, body: string) {
+async function deliver(queueId: string, to: string, subject: string, html: string) {
   const transporter = createTransporter()
-  await transporter.sendMail({ from: process.env.MAIL_USER, to, subject, text: body })
+  await transporter.sendMail({ from: process.env.MAIL_USER, to, subject, html })
   await prisma.emailQueue.update({
     where: { id: queueId },
     data: { status: "SENT", lastAttemptAt: new Date() },
   })
 }
 
-export async function sendMail({ body, subject, email }: MailProps) {
+export async function sendMail({ html, subject, email }: MailProps) {
   const queued = await prisma.emailQueue.create({
-    data: { to: email, subject, body },
+    data: { to: email, subject, body: html },
   })
 
   try {
-    await deliver(queued.id, email, subject, body)
+    await deliver(queued.id, email, subject, html)
     // SMTP is up — opportunistically flush any previously stuck emails
     flushEmailQueue().catch((err) => console.error("flushEmailQueue failed:", err))
   } catch (err) {
