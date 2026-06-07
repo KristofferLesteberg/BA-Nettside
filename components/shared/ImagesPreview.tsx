@@ -33,8 +33,13 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
 
   const lastPointer = useRef({ x: 0, y: 0 })
   const imgContainerRef = useRef<HTMLDivElement>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const returnFocusRef = useRef<HTMLElement | null>(null)
+  const canCloseRef = useRef(false)
   const containerSizeRef = useRef({ w: 0, h: 0 })
   const naturalDimsRef = useRef<{ w: number; h: number } | null>(null)
+  const renderedDimsRef = useRef<{ rw: number; rh: number } | null>(null)
   const currentImageIdRef = useRef(imageIds[index])
 
   const loadedIndices = useMemo(() => {
@@ -70,6 +75,18 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
     resetView()
   }, [resetView])
 
+  const clampPan = useCallback((px: number, py: number, z: number) => {
+    const { w: cw, h: ch } = containerSizeRef.current
+    const rd = renderedDimsRef.current
+    if (!rd || !cw || !ch) return { x: px, y: py }
+    const maxX = Math.max(0, (rd.rw * z - cw) / 2)
+    const maxY = Math.max(0, (rd.rh * z - ch) / 2)
+    return {
+      x: Math.min(maxX, Math.max(-maxX, px)),
+      y: Math.min(maxY, Math.max(-maxY, py)),
+    }
+  }, [])
+
   const recalcHotspot = useCallback((imageId: string) => {
     const nat = naturalDimsRef.current
     const { w: cw, h: ch } = containerSizeRef.current
@@ -80,11 +97,19 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
     } else {
       rh = ch; rw = ch * nat.w / nat.h
     }
+    renderedDimsRef.current = { rw, rh }
     setImageHotspot({ imageId, top: (ch - rh) / 2, left: (cw - rw) / 2, w: rw, h: rh })
   }, [])
 
   useEffect(() => {
+    returnFocusRef.current = document.activeElement as HTMLElement
     requestAnimationFrame(() => setIsVisible(true))
+    closeButtonRef.current?.focus()
+    const id = setTimeout(() => { canCloseRef.current = true }, 300)
+    return () => {
+      clearTimeout(id)
+      returnFocusRef.current?.focus()
+    }
   }, [])
 
   // Reset natural dims ref when image changes — only ref mutations, no setState
@@ -113,6 +138,21 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
       if (e.key === "Escape") handleClose()
       if (e.key === "ArrowLeft") prev()
       if (e.key === "ArrowRight") next()
+      if (e.key === "Tab") {
+        const focusable = Array.from(
+          dialogRef.current?.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          ) ?? []
+        )
+        if (focusable.length === 0) return
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus() }
+        } else {
+          if (document.activeElement === last) { e.preventDefault(); first.focus() }
+        }
+      }
     }
     window.addEventListener("keydown", onKey)
 
@@ -131,14 +171,18 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
       const factor = 1 - e.deltaY * 0.002
       setZoom(z => {
         const next = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, z * factor))
-        if (next <= MIN_ZOOM) setPan({ x: 0, y: 0 })
+        if (next <= MIN_ZOOM) {
+          setPan({ x: 0, y: 0 })
+        } else {
+          setPan(p => clampPan(p.x, p.y, next))
+        }
         return next
       })
     }
 
     el.addEventListener("wheel", onWheel, { passive: false })
     return () => el.removeEventListener("wheel", onWheel)
-  }, [])
+  }, [clampPan])
 
   function onPointerDown(e: React.PointerEvent) {
     setIsDragging(true)
@@ -151,7 +195,7 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
     const dx = e.clientX - lastPointer.current.x
     const dy = e.clientY - lastPointer.current.y
     lastPointer.current = { x: e.clientX, y: e.clientY }
-    setPan(p => ({ x: p.x + dx, y: p.y + dy }))
+    setPan(p => clampPan(p.x + dx, p.y + dy, zoom))
   }
 
   function onPointerUp() {
@@ -177,37 +221,37 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
 
   return createPortal(
     <div
-      className={`fixed inset-0 z-50 flex flex-col bg-black/90 transition-all duration-200 origin-center ${
+      ref={dialogRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Bildeforhåndsvisning"
+      tabIndex={-1}
+      className={`fixed inset-0 z-50 flex flex-col bg-black/90 transition-all duration-200 origin-center outline-none ${
         isVisible ? "opacity-100 scale-100" : "opacity-0 scale-[0.98]"
       }`}
-      onClick={handleClose}
+      onClick={() => { if (canCloseRef.current) handleClose() }}
     >
 
       {/* Header */}
-      <div
-        className="flex items-center justify-between px-4 py-3 shrink-0"
-        onClick={e => e.stopPropagation()}
-      >
-        <span className="small-text text-white/40">
+      <div className="flex items-center justify-between px-4 py-3 shrink-0">
+        <span className="small-text text-white/40" aria-live="polite">
           {showNav ? `${index + 1} / ${imageIds.length}` : ""}
         </span>
         <button
-          onClick={handleClose}
+          ref={closeButtonRef}
+          onClick={e => { e.stopPropagation(); handleClose() }}
           className="p-2 rounded-md transition-colors duration-150 text-primary hover:text-primary-hover hover:bg-white/10 active:bg-white/15 cursor-pointer"
-          aria-label="Lukk"
+          aria-label="Lukk bildeforhåndsvisning"
         >
           <IconClose className="text-lg" />
         </button>
       </div>
 
       {/* Main image row */}
-      <div
-        className="flex-1 flex items-center justify-center min-h-0 px-2 gap-2"
-        onClick={e => e.stopPropagation()}
-      >
+      <div className="flex-1 flex items-center justify-center min-h-0 px-2 gap-2">
         {showNav && (
           <button
-            onClick={prev}
+            onClick={e => { e.stopPropagation(); prev() }}
             className="w-10 h-24 my-auto flex items-center justify-center shrink-0 transition-colors duration-150 text-primary hover:text-primary-hover hover:bg-white/10 active:bg-white/15 rounded-md cursor-pointer"
             aria-label="Forrige bilde"
           >
@@ -218,8 +262,6 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
         <div
           ref={imgContainerRef}
           className="relative flex-1 h-full overflow-hidden"
-          onClick={e => e.stopPropagation()}
-          onDoubleClick={onDoubleClick}
         >
           {/* All loaded images stacked — opacity transition provides cross-fade */}
           {imageIds.map((id, i) =>
@@ -263,8 +305,10 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
           {/* Drag overlay when zoomed — covers full container so pan works past original bounds */}
           {zoom > 1 && (
             <div
+              aria-hidden="true"
               className="absolute inset-0"
               style={{ cursor: isDragging ? "grabbing" : "grab", zIndex: 2 }}
+              onClick={e => e.stopPropagation()}
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}
               onPointerUp={onPointerUp}
@@ -276,6 +320,7 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
           {/* Cursor hotspot at zoom=1 — restricted to actual rendered image bounds */}
           {zoom <= 1 && hotspot && (
             <div
+              aria-hidden="true"
               className="absolute"
               style={{
                 top: hotspot.top,
@@ -285,6 +330,7 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
                 cursor: "zoom-in",
                 zIndex: 2,
               }}
+              onClick={e => e.stopPropagation()}
               onDoubleClick={onDoubleClick}
             />
           )}
@@ -292,7 +338,7 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
 
         {showNav && (
           <button
-            onClick={next}
+            onClick={e => { e.stopPropagation(); next() }}
             className="w-10 h-24 my-auto flex items-center justify-center shrink-0 transition-colors duration-150 text-primary hover:text-primary-hover hover:bg-white/10 active:bg-white/15 rounded-md cursor-pointer"
             aria-label="Neste bilde"
           >
@@ -303,10 +349,7 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
 
       {/* Thumbnail strip with sliding window */}
       {showNav && (
-        <div
-          className="flex justify-center py-3 px-4 shrink-0"
-          onClick={e => e.stopPropagation()}
-        >
+        <div className="flex justify-center py-3 px-4 shrink-0">
           <div style={{ overflow: "hidden", width: usesThumbWindow ? THUMB_CLIP : undefined }}>
             <div
               className="flex"
@@ -319,7 +362,7 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
               {imageIds.map((id, i) => (
                 <button
                   key={id}
-                  onClick={() => goTo(i)}
+                  onClick={e => { e.stopPropagation(); goTo(i) }}
                   style={{ width: THUMB_SIZE, height: THUMB_SIZE, flexShrink: 0 }}
                   className={`relative rounded-lg overflow-hidden border-2 transition-all duration-300 cursor-pointer ${
                     i === index
