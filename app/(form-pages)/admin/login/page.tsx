@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn, signOut } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useState, Suspense, useEffect } from 'react';
 import BackBtn from '@/components/shared/BackBtn';
 import toast from 'react-hot-toast';
@@ -21,7 +21,6 @@ function OAuthError() {
 }
 
 export default function LoginForm() {
-  const router = useRouter()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
@@ -46,7 +45,7 @@ export default function LoginForm() {
           error: 'Feil brukernavn eller passord',
         }
       )
-      router.push('/admin')
+      window.location.href = '/admin'
     } catch {} finally {
       setLoading(false)
     }
@@ -57,7 +56,7 @@ export default function LoginForm() {
       <div className="w-full max-w-180">
 
         <div className="mb-4">
-          <BackBtn handleOnClick={() => router.push('/')} />
+          <BackBtn handleOnClick={() => { window.location.href = '/' }} />
         </div>
 
         <div className="card card-accented overflow-hidden">
