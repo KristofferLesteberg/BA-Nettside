@@ -32,7 +32,10 @@ export default function ContactPersonCard({ person }: Props) {
       {popUpElement}
 
       <div className="flex items-center gap-3">
-        <p className="heading-4 truncate flex-1 min-w-0">{person.name}</p>
+        <div className="flex items-center gap-2 flex-1 min-w-0">
+          <p className="heading-4 truncate">{person.name}</p>
+          {person.isSeeded && <span className="badge badge-neutral shrink-0">Testdata</span>}
+        </div>
 
         <div className="hidden sm:flex items-center self-stretch shrink-0">
           <div className="w-px self-stretch bg-border" />

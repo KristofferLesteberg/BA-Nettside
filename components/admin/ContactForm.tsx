@@ -7,7 +7,7 @@ import PhoneInputWithCountrySelect from 'react-phone-number-input'
 import { parsePhoneNumberWithError } from 'libphonenumber-js'
 import type { E164Number, CountryCode } from 'libphonenumber-js'
 
-type ContactFormData = Omit<ContactPerson, 'id' | 'products'>
+type ContactFormData = Omit<ContactPerson, 'id' | 'products' | 'isSeeded'>
 
 interface Props {
   exsitingContact? : ContactFormData,

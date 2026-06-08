@@ -217,9 +217,14 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
 
         {/* Title + admin menu */}
         <div className="flex items-start justify-between gap-2">
-          <span className="heading-4 group-hover:text-primary transition-colors duration-150 leading-snug">
-            {product.title}
-          </span>
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="heading-4 group-hover:text-primary transition-colors duration-150 leading-snug">
+              {product.title}
+            </span>
+            {isAdmin && product.isSeeded && (
+              <span className="badge badge-neutral shrink-0">Testdata</span>
+            )}
+          </div>
 
           {isAdmin && (
             // z-[2] keeps the admin menu above the stretched link

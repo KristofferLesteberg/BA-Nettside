@@ -39,7 +39,10 @@ export default function AdminReviewCard({ review }: { review: Review }) {
           )}
         </div>
 
-        <p className="heading-4 truncate flex-1 min-w-0">{review.name}</p>
+        <div className="flex items-center gap-2 flex-1 min-w-0">
+          <p className="heading-4 truncate">{review.name}</p>
+          {review.isSeeded && <span className="badge badge-neutral shrink-0">Testdata</span>}
+        </div>
 
         <div className="hidden sm:flex items-center self-stretch shrink-0">
           <div className="w-px self-stretch bg-border" />

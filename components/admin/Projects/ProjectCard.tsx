@@ -152,7 +152,10 @@ const ProjectCard = ({ project, onView }: { project: SerializedProject; onView: 
       <div className="flex items-center">
         {/* Left: title, client, id */}
         <div className="flex-1 min-w-0">
-          <p className="heading-4 truncate">{project.title}</p>
+          <div className="flex items-center gap-2 min-w-0">
+            <p className="heading-4 truncate">{project.title}</p>
+            {project.isSeeded && <span className="badge badge-neutral shrink-0">Testdata</span>}
+          </div>
           <p className="small-text text-muted truncate">
             {project.clientForename} {project.clientSurname}
             {project.organizationName && (

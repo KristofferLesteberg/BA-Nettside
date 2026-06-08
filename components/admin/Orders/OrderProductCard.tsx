@@ -106,7 +106,10 @@ export default function OrderCard({ order }: Props) {
 
         {/* Left: name, id, mobile badges */}
         <div className="flex-1 min-w-0">
-          <p className="heading-4 truncate">{order.clientName}</p>
+          <div className="flex items-center gap-2 min-w-0">
+            <p className="heading-4 truncate">{order.clientName}</p>
+            {order.isSeeded && <span className="badge badge-neutral shrink-0">Testdata</span>}
+          </div>
           <p className="small-text text-faint font-mono mt-0.5">#{order.id}</p>
           <div className="md:hidden flex items-center gap-2 flex-wrap mt-1.5">
             <span className={STATUS_STYLES[order.status]}>
