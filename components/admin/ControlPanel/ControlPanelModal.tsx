@@ -87,33 +87,41 @@ export default function ControlPanelModal({ open, onClose }: Props) {
 
   return createPortal(
     <div
-      ref={modalRef}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="control-panel-title"
-      className={`fixed inset-0 z-50 bg-bg overflow-y-auto ${isClosing ? 'animate-popup-out' : 'animate-fade-in'}`}
+      className={`fixed inset-0 z-50 sm:flex sm:items-center sm:justify-center sm:bg-black/50 ${isClosing ? 'animate-popup-out' : 'animate-popup-in'}`}
+      onClick={onClose}
     >
-      {/* Sticky header */}
-      <div className="sticky top-0 z-10 bg-surface border-b border-default shadow-b-md">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 flex items-center justify-between py-4">
-          <h1 id="control-panel-title" className="heading-3">Kontrollpanel</h1>
-          <button
-            onClick={onClose}
-            className="btn btn-outline btn-icon"
-            aria-label="Lukk kontrollpanel"
-          >
-            <IconClose size={16} aria-hidden="true" />
-          </button>
+      <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="control-panel-title"
+        className="w-full h-full bg-bg flex flex-col overflow-hidden sm:w-4/5 sm:h-4/5 sm:max-w-225 sm:rounded-xl sm:shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="shrink-0 bg-surface border-b border-default shadow-b-md">
+          <div className="px-4 sm:px-6 flex items-center justify-between py-4">
+            <h1 id="control-panel-title" className="heading-3">Kontrollpanel</h1>
+            <button
+              onClick={onClose}
+              className="btn btn-outline btn-icon"
+              aria-label="Lukk kontrollpanel"
+            >
+              <IconClose size={16} aria-hidden="true" />
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* Scrollable content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 flex flex-col gap-10">
-        <SeedSection />
-        <hr className="border-default" aria-hidden="true" />
-        <ConfigSection />
-        <hr className="border-default" aria-hidden="true" />
-        <DeleteSection />
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="px-4 sm:px-6 py-10 flex flex-col gap-10">
+            <SeedSection />
+            <hr className="border-default" aria-hidden="true" />
+            <ConfigSection />
+            <hr className="border-default" aria-hidden="true" />
+            <DeleteSection />
+          </div>
+        </div>
       </div>
     </div>,
     document.body
