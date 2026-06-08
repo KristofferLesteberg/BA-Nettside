@@ -27,7 +27,10 @@ export async function saveAppConfig(
   await requireSession()
 
   for (const [key, value] of Object.entries(values)) {
-    if (value !== undefined) {
+    if (value === undefined) continue
+    if (value === '') {
+      await prisma.appConfig.deleteMany({ where: { key } })
+    } else {
       await setAppConfig(key as never, value)
     }
   }

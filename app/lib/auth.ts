@@ -44,16 +44,26 @@ export const authOptions: NextAuthOptions = {
       return true
     },
     async jwt({ token, account }) {
-      // On first sign-in, stamp the expiry from the configured lifetime
+      // On first sign-in, stamp the custom expiry from the configured lifetime.
+      // We use a custom field (sessionExp) rather than token.exp because NextAuth's
+      // internal encode() calls jose's .setExpirationTime(now + maxAge) after the
+      // callback returns, overwriting whatever token.exp was set to.
       if (account) {
         const lifetimeStr = await getAppConfig(CONFIG_KEYS.SESSION_LIFETIME_SECONDS)
         const lifetime = Number(lifetimeStr ?? 3600)
-        token.exp = Math.floor(Date.now() / 1000) + lifetime
+        token.sessionExp = Math.floor(Date.now() / 1000) + lifetime
+      }
+
+      // Enforce the configured session lifetime
+      if (typeof token.sessionExp === 'number') {
+        if (Math.floor(Date.now() / 1000) > token.sessionExp) {
+          return null as unknown as typeof token
+        }
       }
 
       // Drop sessions issued before the last invalidation bump
       const invalidatedAt = await getAppConfig(CONFIG_KEYS.SESSION_INVALIDATED_AT)
-      if (invalidatedAt && typeof token.iat === 'number') {
+      if (typeof token.iat === 'number' && invalidatedAt) {
         if (token.iat * 1000 < new Date(invalidatedAt).getTime()) {
           return null as unknown as typeof token
         }
@@ -64,7 +74,7 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 60 * 24 * 7, // outer cookie TTL — actual expiry is controlled by token.exp above
+    maxAge: 60 * 60 * 24 * 7, // outer cookie TTL — actual expiry is controlled by token.sessionExp in the jwt callback
   },
   pages: {
     signIn: '/admin/login',

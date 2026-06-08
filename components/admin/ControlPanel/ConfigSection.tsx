@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { signOut } from 'next-auth/react'
 import toast from 'react-hot-toast'
 import { getAllAppConfig, saveAppConfig } from '@/actions/controlPanel'
 import { usePopUp } from '@/components/shared/PopUp'
@@ -11,12 +12,11 @@ const K = {
   SESSION_LIFETIME:   'session_lifetime_seconds',
   USERNAME:           'admin_username',
   PASSWORD:           'admin_password',
-  EMAIL_ALLOWLIST:    'admin_email_allowlist',
   NOTIFICATION_EMAIL: 'notification_email',
   EMAIL_RETRIES:      'email_max_retry_attempts',
 } as const
 
-const SESSION_SENSITIVE = new Set([K.USERNAME, K.PASSWORD, K.EMAIL_ALLOWLIST, K.SESSION_LIFETIME])
+const SESSION_SENSITIVE = new Set([K.USERNAME, K.PASSWORD, K.SESSION_LIFETIME])
 
 type ConfigMap = Record<string, string>
 
@@ -32,12 +32,15 @@ function FieldLabel({ htmlFor, label, info }: { htmlFor: string; label: string; 
 export default function ConfigSection() {
   const { open: openPopUp, element: popUpElement } = usePopUp()
   const [config, setConfig] = useState<ConfigMap>({})
+  const [initialConfig, setInitialConfig] = useState<ConfigMap>({})
   const [loading, setLoading] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
 
   useEffect(() => {
     getAllAppConfig().then((c) => {
-      setConfig(Object.fromEntries(Object.entries(c).map(([k, v]) => [k, v ?? ''])))
+      const map = Object.fromEntries(Object.entries(c).map(([k, v]) => [k, v ?? '']))
+      setConfig(map)
+      setInitialConfig(map)
       setLoading(false)
     })
   }, [])
@@ -46,14 +49,20 @@ export default function ConfigSection() {
     setConfig((prev) => ({ ...prev, [key]: value }))
 
   const handleSave = () => {
-    const touchesSession = Object.keys(config).some((k) => SESSION_SENSITIVE.has(k as never))
+    const touchesSession = Object.keys(config).some(
+      (k) => SESSION_SENSITIVE.has(k as never) && config[k] !== initialConfig[k]
+    )
 
-    const doSave = (invalidate: boolean) =>
-      toast.promise(saveAppConfig(config, invalidate), {
-        loading: 'Lagrer innstillinger…',
-        success: 'Innstillinger lagret!',
-        error: (e: Error) => e.message ?? 'Noe gikk galt',
-      })
+    const doSave = async (invalidate: boolean) => {
+      try {
+        await toast.promise(saveAppConfig(config, invalidate), {
+          loading: 'Lagrer innstillinger…',
+          success: 'Innstillinger lagret!',
+          error: (e: Error) => e.message ?? 'Noe gikk galt',
+        })
+        if (invalidate) signOut({ callbackUrl: '/admin/login' })
+      } catch {}
+    }
 
     if (touchesSession) {
       openPopUp({
@@ -148,21 +157,6 @@ export default function ConfigSection() {
               {showPassword ? 'Skjul' : 'Vis'}
             </button>
           </div>
-        </div>
-
-        <div>
-          <FieldLabel
-            htmlFor="cfg-allowlist"
-            label="Tillatte Google-kontoer"
-            info="E-postadressene som kan logge inn på admin-siden via Google. Skriv adressene adskilt med komma. Kun disse kontoene får tilgang."
-          />
-          <textarea
-            id="cfg-allowlist"
-            rows={3}
-            className="input resize-none"
-            value={config[K.EMAIL_ALLOWLIST] ?? ''}
-            onChange={(e) => update(K.EMAIL_ALLOWLIST, e.target.value)}
-          />
         </div>
 
         <div>

@@ -37,12 +37,15 @@ export default function LoginForm() {
             await signOut({ redirect: false })
             result = await signIn("credentials", { username, password, redirect: false })
           }
-          if (result?.error) throw new Error()
+          if (result?.error) throw new Error(result.error)
         })(),
         {
           loading: 'Logger inn…',
           success: 'Innlogging vellykket',
-          error: 'Feil brukernavn eller passord',
+          error: (e: Error) =>
+            e.message === 'CredentialsSignin'
+              ? 'Feil brukernavn eller passord'
+              : 'Noe gikk galt. Prøv igjen.',
         }
       )
       window.location.href = '/admin'
