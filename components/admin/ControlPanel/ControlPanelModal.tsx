@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { IconClose } from '@/app/lib/icons'
 import SeedSection from './SeedSection'
@@ -14,6 +14,24 @@ interface Props {
 
 export default function ControlPanelModal({ open, onClose }: Props) {
   const modalRef = useRef<HTMLDivElement>(null)
+  const [shouldRender, setShouldRender] = useState(false)
+  const [isClosing, setIsClosing] = useState(false)
+  const wasOpenRef = useRef(false)
+
+  useEffect(() => {
+    if (open) {
+      wasOpenRef.current = true
+      setShouldRender(true)
+      setIsClosing(false)
+    } else if (wasOpenRef.current) {
+      setIsClosing(true)
+      const t = setTimeout(() => {
+        setShouldRender(false)
+        setIsClosing(false)
+      }, 200)
+      return () => clearTimeout(t)
+    }
+  }, [open])
 
   useEffect(() => {
     if (!open) return
@@ -65,7 +83,7 @@ export default function ControlPanelModal({ open, onClose }: Props) {
     }
   }, [open, onClose])
 
-  if (!open || typeof document === 'undefined') return null
+  if (!shouldRender || typeof document === 'undefined') return null
 
   return createPortal(
     <div
@@ -73,7 +91,7 @@ export default function ControlPanelModal({ open, onClose }: Props) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="control-panel-title"
-      className="fixed inset-0 z-50 bg-bg overflow-y-auto animate-fade-in"
+      className={`fixed inset-0 z-50 bg-bg overflow-y-auto ${isClosing ? 'animate-popup-out' : 'animate-fade-in'}`}
     >
       {/* Sticky header */}
       <div className="sticky top-0 z-10 bg-surface border-b border-default shadow-b-md">
