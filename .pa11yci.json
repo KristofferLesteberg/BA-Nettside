@@ -1,0 +1,29 @@
+{
+  "urls": [
+    "http://localhost:3000",
+    "http://localhost:3000/produkter",
+    "http://localhost:3000/produkter/35",
+    "http://localhost:3000/prosjekter",
+    "http://localhost:3000/kontakt-oss",
+
+    "http://localhost:3000/admin",
+    "http://localhost:3000/admin?tab=bestillinger",
+    "http://localhost:3000/admin?tab=prosjekter",
+    "http://localhost:3000/admin?tab=kontakt%20personer",
+    "http://localhost:3000/admin?tab=anmeldelser",
+    "http://localhost:3000/admin/login",
+    "http://localhost:3000/admin/nytt-produkt",
+    "http://localhost:3000/admin/ny-anmeldelse",
+    "http://localhost:3000/admin/ny-kontakt",
+    "http://localhost:3000/admin/oppdater-produkt/35",
+    "http://localhost:3000/admin/oppdater-anmeldelse/3",
+    "http://localhost:3000/admin/oppdater-kontakt/2",
+    "http://localhost:3000/admin/preview-produkt/35"
+  ],
+  "defaults": {
+    "standard": "WCAG2AA",
+    "runners": ["axe", "htmlcs"],
+    "timeout": 30000,
+    "wait": 1000
+  }
+}
