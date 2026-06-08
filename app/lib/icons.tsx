@@ -29,6 +29,7 @@ export { FaEyeSlash              as IconUnpublish     } from 'react-icons/fa6'
 export { FaSpinner               as IconSpinner       } from 'react-icons/fa6'
 
 export { FaArrowRightFromBracket as IconSignOut    } from 'react-icons/fa6'
+export { FaGear                  as IconSettings   } from 'react-icons/fa6'
 
 // ── Navigation / chrome ───────────────────────────────────────────────────────
 export { FaChevronDown  as IconChevronDown  } from 'react-icons/fa6'
