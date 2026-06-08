@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { getAllAppConfig, saveAppConfig } from '@/actions/controlPanel'
 import { usePopUp } from '@/components/shared/PopUp'
+import { InfoPopover } from './InfoPopover'
 
 // These match the CONFIG_KEYS values in app/lib/app-config.ts
 const K = {
@@ -18,6 +19,15 @@ const K = {
 const SESSION_SENSITIVE = new Set([K.USERNAME, K.PASSWORD, K.EMAIL_ALLOWLIST, K.SESSION_LIFETIME])
 
 type ConfigMap = Record<string, string>
+
+function FieldLabel({ htmlFor, label, info }: { htmlFor: string; label: string; info: string }) {
+  return (
+    <div className="flex items-center gap-1.5 mb-1">
+      <label htmlFor={htmlFor} className="label">{label}</label>
+      <InfoPopover content={info} />
+    </div>
+  )
+}
 
 export default function ConfigSection() {
   const { open: openPopUp, element: popUpElement } = usePopUp()
@@ -80,11 +90,13 @@ export default function ConfigSection() {
         miljøvariabelen.
       </p>
 
-      <div className="flex flex-col gap-5 max-w-xl">
+      <div className="flex flex-col gap-5 max-w-120">
         <div>
-          <label htmlFor="cfg-lifetime" className="label mb-1 block">
-            Sesjonslevetid (sekunder)
-          </label>
+          <FieldLabel
+            htmlFor="cfg-lifetime"
+            label="Sesjonslevetid (sekunder)"
+            info="Bestemmer hvor lenge du forblir innlogget. Verdien er i sekunder – 3600 tilsvarer 1 time. Endringen gjelder neste gang du logger inn."
+          />
           <input
             id="cfg-lifetime"
             type="number"
@@ -96,7 +108,11 @@ export default function ConfigSection() {
         </div>
 
         <div>
-          <label htmlFor="cfg-username" className="label mb-1 block">Brukernavn</label>
+          <FieldLabel
+            htmlFor="cfg-username"
+            label="Brukernavn"
+            info="Brukernavnet du logger inn med på admin-siden. Endringer trer i kraft neste gang du logger inn."
+          />
           <input
             id="cfg-username"
             type="text"
@@ -108,7 +124,11 @@ export default function ConfigSection() {
         </div>
 
         <div>
-          <label htmlFor="cfg-password" className="label mb-1 block">Passord</label>
+          <FieldLabel
+            htmlFor="cfg-password"
+            label="Passord"
+            info="Passordet du logger inn med på admin-siden. Endringer trer i kraft neste gang du logger inn."
+          />
           <div className="flex gap-2">
             <input
               id="cfg-password"
@@ -130,10 +150,11 @@ export default function ConfigSection() {
         </div>
 
         <div>
-          <label htmlFor="cfg-allowlist" className="label mb-1 block">
-            Tillatte Google-kontoer
-          </label>
-          <p className="small-text text-muted mb-1">Kommaseparert liste med e-postadresser</p>
+          <FieldLabel
+            htmlFor="cfg-allowlist"
+            label="Tillatte Google-kontoer"
+            info="E-postadressene som kan logge inn på admin-siden via Google. Skriv adressene adskilt med komma. Kun disse kontoene får tilgang."
+          />
           <textarea
             id="cfg-allowlist"
             rows={3}
@@ -144,10 +165,11 @@ export default function ConfigSection() {
         </div>
 
         <div>
-          <label htmlFor="cfg-notification" className="label mb-1 block">Varslingsadresse</label>
-          <p className="small-text text-muted mb-1">
-            Mottar e-post ved nye bestillinger og prosjektforespørsler
-          </p>
+          <FieldLabel
+            htmlFor="cfg-notification"
+            label="Varslingsadresse"
+            info="E-postadressen som mottar beskjed når noen sender inn en ny bestilling eller prosjektforespørsel via nettstedet."
+          />
           <input
             id="cfg-notification"
             type="email"
@@ -158,7 +180,11 @@ export default function ConfigSection() {
         </div>
 
         <div>
-          <label htmlFor="cfg-retries" className="label mb-1 block">Maks e-postforsøk</label>
+          <FieldLabel
+            htmlFor="cfg-retries"
+            label="Maks e-postforsøk"
+            info="Antall ganger systemet prøver å sende en e-post på nytt dersom noe går galt. Høyere tall gir flere forsøk før det gis opp."
+          />
           <input
             id="cfg-retries"
             type="number"

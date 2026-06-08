@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { IconWarning } from '@/app/lib/icons'
+import { InfoPopover } from './InfoPopover'
 import {
   deleteSeededProducts,
   deleteSeededOrders,
@@ -34,12 +35,49 @@ const CATEGORIES: {
   label: string
   deleteSeeded: () => Promise<void>
   deleteAll: () => Promise<void>
+  seedInfo: string
+  allInfo: string
 }[] = [
-  { key: 'products', label: 'Produkter',      deleteSeeded: deleteSeededProducts,       deleteAll: deleteAllProducts },
-  { key: 'orders',   label: 'Bestillinger',   deleteSeeded: deleteSeededOrders,         deleteAll: deleteAllOrders },
-  { key: 'projects', label: 'Prosjekter',     deleteSeeded: deleteSeededProjects,       deleteAll: deleteAllProjects },
-  { key: 'reviews',  label: 'Anmeldelser',    deleteSeeded: deleteSeededReviews,        deleteAll: deleteAllReviews },
-  { key: 'contacts', label: 'Kontaktpersoner',deleteSeeded: deleteSeededContactPersons, deleteAll: deleteAllContactPersons },
+  {
+    key: 'products',
+    label: 'Produkter',
+    deleteSeeded: deleteSeededProducts,
+    deleteAll: deleteAllProducts,
+    seedInfo: 'Fjerner kun produkter som er merket som testdata. Vanlige produkter på nettstedet berøres ikke.',
+    allInfo: 'Fjerner alle produkter fra nettstedet permanent. Dette kan ikke angres.',
+  },
+  {
+    key: 'orders',
+    label: 'Bestillinger',
+    deleteSeeded: deleteSeededOrders,
+    deleteAll: deleteAllOrders,
+    seedInfo: 'Fjerner kun bestillinger som er merket som testdata. Vanlige bestillinger berøres ikke.',
+    allInfo: 'Fjerner alle bestillinger permanent. Dette kan ikke angres.',
+  },
+  {
+    key: 'projects',
+    label: 'Prosjekter',
+    deleteSeeded: deleteSeededProjects,
+    deleteAll: deleteAllProjects,
+    seedInfo: 'Fjerner kun prosjektforespørsler som er merket som testdata. Vanlige forespørsler berøres ikke.',
+    allInfo: 'Fjerner alle prosjektforespørsler permanent. Dette kan ikke angres.',
+  },
+  {
+    key: 'reviews',
+    label: 'Anmeldelser',
+    deleteSeeded: deleteSeededReviews,
+    deleteAll: deleteAllReviews,
+    seedInfo: 'Fjerner kun anmeldelser som er merket som testdata. Anmeldelsene på forsiden berøres ikke.',
+    allInfo: 'Fjerner alle anmeldelser fra forsiden permanent. Dette kan ikke angres.',
+  },
+  {
+    key: 'contacts',
+    label: 'Kontaktpersoner',
+    deleteSeeded: deleteSeededContactPersons,
+    deleteAll: deleteAllContactPersons,
+    seedInfo: 'Fjerner kun kontaktpersoner som er merket som testdata. Vanlige kontaktpersoner berøres ikke.',
+    allInfo: 'Fjerner alle kontaktpersoner permanent. Produkter som viste en kontaktperson vil mangle denne informasjonen. Dette kan ikke angres.',
+  },
 ]
 
 function ConfirmInput({
@@ -117,24 +155,32 @@ export default function DeleteSection() {
       <p className="small-text text-muted mb-6">Sletting er permanent og kan ikke angres.</p>
 
       <div className="flex flex-col">
-        {CATEGORIES.map(({ key, label, deleteSeeded, deleteAll }) => (
+        {CATEGORIES.map(({ key, label, deleteSeeded, deleteAll, seedInfo, allInfo }) => (
           <div key={key} className="py-4 border-b border-default">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="label w-36 shrink-0">{label}</span>
-              <button
-                className="btn btn-outline small-text"
-                onClick={() => handleSeededDelete(label, deleteSeeded)}
-              >
-                Slett testdata
-              </button>
-              <button
-                className="btn btn-error small-text"
-                onClick={() => toggle(key)}
-                aria-expanded={activeConfirm === key}
-                aria-controls={`confirm-${key}`}
-              >
-                Slett alt
-              </button>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <span className="label w-44 shrink-0">{label}</span>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1.5">
+                  <button
+                    className="btn btn-outline small-text"
+                    onClick={() => handleSeededDelete(label, deleteSeeded)}
+                  >
+                    Slett testdata
+                  </button>
+                  <InfoPopover content={seedInfo} align="right" />
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    className="btn btn-error small-text"
+                    onClick={() => toggle(key)}
+                    aria-expanded={activeConfirm === key}
+                    aria-controls={`confirm-${key}`}
+                  >
+                    Slett alt
+                  </button>
+                  <InfoPopover content={allInfo} align="right" />
+                </div>
+              </div>
             </div>
             {activeConfirm === key && (
               <div id={`confirm-${key}`}>
@@ -150,28 +196,42 @@ export default function DeleteSection() {
 
         {/* Cross-category nukes */}
         <div className="py-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="label w-36 shrink-0">Alle kategorier</span>
-            <button
-              className="btn btn-outline small-text"
-              onClick={() =>
-                toast.promise(deleteAllSeeded(), {
-                  loading: 'Sletter all testdata…',
-                  success: 'All testdata slettet!',
-                  error: (e: Error) => e.message ?? 'Noe gikk galt',
-                })
-              }
-            >
-              Slett all testdata
-            </button>
-            <button
-              className="btn btn-error small-text"
-              onClick={() => toggle('all')}
-              aria-expanded={activeConfirm === 'all'}
-              aria-controls="confirm-all"
-            >
-              Slett absolutt alt
-            </button>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <span className="label w-44 shrink-0">Alle kategorier</span>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5">
+                <button
+                  className="btn btn-outline small-text"
+                  onClick={() =>
+                    toast.promise(deleteAllSeeded(), {
+                      loading: 'Sletter all testdata…',
+                      success: 'All testdata slettet!',
+                      error: (e: Error) => e.message ?? 'Noe gikk galt',
+                    })
+                  }
+                >
+                  Slett all testdata
+                </button>
+                <InfoPopover
+                  content="Fjerner all testdata fra nettstedet på én gang. Vanlig innhold berøres ikke."
+                  align="right"
+                />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <button
+                  className="btn btn-error small-text"
+                  onClick={() => toggle('all')}
+                  aria-expanded={activeConfirm === 'all'}
+                  aria-controls="confirm-all"
+                >
+                  Slett absolutt alt
+                </button>
+                <InfoPopover
+                  content="Fjerner absolutt alt innhold fra nettstedet permanent – produkter, bestillinger, prosjekter, anmeldelser og kontaktpersoner. Dette kan ikke angres."
+                  align="right"
+                />
+              </div>
+            </div>
           </div>
           {activeConfirm === 'all' && (
             <div id="confirm-all">

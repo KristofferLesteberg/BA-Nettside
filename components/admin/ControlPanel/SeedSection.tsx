@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { seedProducts, seedContactPersons, seedReviews, seedProjects, seedOrders } from '@/actions/seed'
+import { InfoPopover } from './InfoPopover'
 
 function NumberInput({
   id,
@@ -33,21 +34,19 @@ function NumberInput({
 
 function SeedRow({
   title,
+  info,
   onSeed,
   children,
 }: {
   title: string
+  info: string
   onSeed: () => Promise<void>
   children: React.ReactNode
 }) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-4 py-4 border-b border-default last:border-0">
-      <div className="flex flex-wrap items-end gap-4">
-        <span className="label w-36 shrink-0">{title}</span>
-        {children}
-      </div>
+    <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-end sm:justify-between gap-3 sm:gap-4 py-4 border-b border-default last:border-0">
       <button
-        className="btn btn-secondary whitespace-nowrap"
+        className="btn btn-secondary whitespace-nowrap self-start sm:order-last"
         onClick={() =>
           toast.promise(onSeed(), {
             loading: `Genererer ${title.toLowerCase()}…`,
@@ -58,6 +57,13 @@ function SeedRow({
       >
         Generer
       </button>
+      <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-end gap-3 sm:gap-4">
+        <div className="flex items-center gap-1.5 sm:w-44 sm:shrink-0">
+          <span className="label">{title}</span>
+          <InfoPopover content={info} />
+        </div>
+        {children}
+      </div>
     </div>
   )
 }
@@ -82,6 +88,7 @@ export default function SeedSection() {
       <div>
         <SeedRow
           title="Produkter"
+          info="Lager testprodukter på nettstedet. Publiserte testprodukter vil vises for besøkende, utkast er ikke synlige."
           onSeed={() => seedProducts({ publishedCount: productPublished, draftCount: productDraft })}
         >
           <NumberInput
@@ -92,7 +99,7 @@ export default function SeedSection() {
           />
           <NumberInput
             id="seed-draft"
-            label="Kladd"
+            label="Utkast"
             value={productDraft}
             onChange={setProductDraft}
           />
@@ -100,6 +107,7 @@ export default function SeedSection() {
 
         <SeedRow
           title="Kontaktpersoner"
+          info="Lager testkontaktpersoner som kan knyttes til produkter og vises på nettstedet."
           onSeed={() => seedContactPersons({ count: contacts })}
         >
           <NumberInput id="seed-contacts" label="Antall" value={contacts} onChange={setContacts} />
@@ -107,6 +115,7 @@ export default function SeedSection() {
 
         <SeedRow
           title="Anmeldelser"
+          info="Lager testanmeldelser som vil vises i anmeldelsesseksjonen på forsiden."
           onSeed={() => seedReviews({ count: reviews })}
         >
           <NumberInput id="seed-reviews" label="Antall" value={reviews} onChange={setReviews} />
@@ -114,6 +123,7 @@ export default function SeedSection() {
 
         <SeedRow
           title="Prosjekter"
+          info="Lager testprosjektforespørsler. Kryss av «Send e-poster» om du vil at det sendes e-postvarsler underveis."
           onSeed={() => seedProjects({ count: projects, sendEmails: projectEmails })}
         >
           <NumberInput id="seed-projects" label="Antall" value={projects} onChange={setProjects} />
@@ -130,6 +140,7 @@ export default function SeedSection() {
 
         <SeedRow
           title="Bestillinger"
+          info="Lager testbestillinger. Kryss av «Send e-poster» om du vil at det sendes e-postvarsler underveis."
           onSeed={() => seedOrders({ count: orders, sendEmails: orderEmails })}
         >
           <NumberInput id="seed-orders" label="Antall" value={orders} onChange={setOrders} />
