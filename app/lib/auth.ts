@@ -1,7 +1,8 @@
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
-import { getAppConfig, CONFIG_KEYS } from '@/app/lib/app-config'
+import { getAppConfig } from '@/app/lib/app-config'
+import { CONFIG_KEYS } from '@/app/lib/app-config-keys'
 
 export const authOptions: NextAuthOptions = {
   providers: [

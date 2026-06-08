@@ -6,7 +6,7 @@ import { ContactPerson } from "@/generated/prisma"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 
-type ContactFormData = Omit<ContactPerson, 'id' | 'products'>
+type ContactFormData = Omit<ContactPerson, 'id' | 'products' | 'isSeeded'>
 
 export default function NewContact() {
   const router = useRouter()

@@ -1,24 +1,13 @@
 'use server'
 
 import { prisma } from '@/app/lib/prisma'
-
-export const CONFIG_KEYS = {
-  SESSION_LIFETIME_SECONDS: 'session_lifetime_seconds',
-  ADMIN_USERNAME: 'admin_username',
-  ADMIN_PASSWORD: 'admin_password',
-  ADMIN_EMAIL_ALLOWLIST: 'admin_email_allowlist',
-  NOTIFICATION_EMAIL: 'notification_email',
-  EMAIL_MAX_RETRY_ATTEMPTS: 'email_max_retry_attempts',
-  SESSION_INVALIDATED_AT: 'session_invalidated_at',
-} as const
-
-export type ConfigKey = (typeof CONFIG_KEYS)[keyof typeof CONFIG_KEYS]
+import { CONFIG_KEYS, type ConfigKey } from '@/app/lib/app-config-keys'
 
 const ENV_FALLBACKS: Partial<Record<ConfigKey, () => string | undefined>> = {
-  [CONFIG_KEYS.ADMIN_USERNAME]: () => process.env.ADMIN_USERNAME,
-  [CONFIG_KEYS.ADMIN_PASSWORD]: () => process.env.ADMIN_PASSWORD,
+  [CONFIG_KEYS.ADMIN_USERNAME]:        () => process.env.ADMIN_USERNAME,
+  [CONFIG_KEYS.ADMIN_PASSWORD]:        () => process.env.ADMIN_PASSWORD,
   [CONFIG_KEYS.ADMIN_EMAIL_ALLOWLIST]: () => process.env.ADMIN_EMAILS,
-  [CONFIG_KEYS.NOTIFICATION_EMAIL]: () => process.env.ADMIN_EMAIL,
+  [CONFIG_KEYS.NOTIFICATION_EMAIL]:    () => process.env.ADMIN_EMAIL,
 }
 
 const HARDCODED_FALLBACKS: Partial<Record<ConfigKey, string>> = {
