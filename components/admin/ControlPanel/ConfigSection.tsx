@@ -19,6 +19,7 @@ const K = {
   USERNAME:           'admin_username',
   PASSWORD:           'admin_password',
   EMAIL_RETRIES:      'email_max_retry_attempts',
+  HIDE_TEST_DATA:     'hide_test_data',
 } as const
 
 const SESSION_SENSITIVE = new Set([K.USERNAME, K.PASSWORD, K.SESSION_LIFETIME])
@@ -302,6 +303,24 @@ export default function ConfigSection() {
             value={config[K.EMAIL_RETRIES] ?? ''}
             onChange={(e) => update(K.EMAIL_RETRIES, e.target.value)}
           />
+        </div>
+
+        <div>
+          <div className="flex items-center gap-3">
+            <input
+              id="cfg-hide-test-data"
+              type="checkbox"
+              className="w-4 h-4 accent-primary shrink-0"
+              checked={config[K.HIDE_TEST_DATA] === 'true'}
+              onChange={(e) => update(K.HIDE_TEST_DATA, e.target.checked ? 'true' : 'false')}
+            />
+            <div className="flex items-center gap-1.5">
+              <label htmlFor="cfg-hide-test-data" className="label cursor-pointer">
+                Skjul testdata for besøkende
+              </label>
+              <InfoPopover content="Når aktivert skjules produkter, anmeldelser og andre elementer merket som testdata for besøkende. Administratorer ser alltid alt." />
+            </div>
+          </div>
         </div>
 
         <NotificationRecipientsList />

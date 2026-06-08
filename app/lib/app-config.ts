@@ -12,6 +12,7 @@ const ENV_FALLBACKS: Partial<Record<ConfigKey, () => string | undefined>> = {
 const HARDCODED_FALLBACKS: Partial<Record<ConfigKey, string>> = {
   [CONFIG_KEYS.SESSION_LIFETIME_SECONDS]: '3600',
   [CONFIG_KEYS.EMAIL_MAX_RETRY_ATTEMPTS]: '5',
+  [CONFIG_KEYS.HIDE_TEST_DATA]:           'false',
 }
 
 export async function getAppConfig(key: ConfigKey): Promise<string | undefined> {

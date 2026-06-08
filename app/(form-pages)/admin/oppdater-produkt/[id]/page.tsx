@@ -12,7 +12,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const productId = parseInt((await params).id)
   if (Number.isNaN(productId)) notFound()
 
-  const product = await getProductById(productId)
+  const product = await getProductById(productId, true)
   if (!product) notFound()
 
   const measures: Measure[] = Array.isArray(product.measures)

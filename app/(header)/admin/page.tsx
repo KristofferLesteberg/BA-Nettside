@@ -27,8 +27,8 @@ type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 const page = async (params: { searchParams: SearchParams }) => {
   const orders = (await getAllOrders()).length
   const projects = (await getAllProjects()).length
-  const products = (await getAllProducts()).length
-  const reviews = (await getAllReviews()).length
+  const products = (await getAllProducts(true)).length
+  const reviews = (await getAllReviews(true)).length
   const contactPersons = (await getAllContacts()).length
 
   const tabName = await params.searchParams

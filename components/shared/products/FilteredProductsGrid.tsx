@@ -66,7 +66,7 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
     : categoryParam.split(',').map(v => CATEGORY_FROM_URL[v]).filter((v): v is EducationField => !!v && v !== 'ALL')
 
   const statusParam = searchParams.get('status') ?? 'alle'
-  const selectedStatuses: Array<'DRAFT' | 'PUBLISHED'> = statusParam === 'alle'
+  const selectedStatuses: Array<'DRAFT' | 'PUBLISHED'> = (!isAdmin || statusParam === 'alle')
     ? []
     : statusParam.split(',').map(v => STATUS_FROM_URL[v]).filter((v): v is 'DRAFT' | 'PUBLISHED' => !!v && v !== 'ALL')
 
@@ -76,7 +76,11 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
     const hasFilters = ['linje', 'status', 'sort', 'sideAntall'].some(k => searchParams.get(k))
     if (!hasFilters) {
       const saved = sessionStorage.getItem('tabFilters_produkter')
-      if (saved) router.replace('?' + saved + '&tab=produkter')
+      if (saved) {
+        const params = new URLSearchParams(saved)
+        if (!isAdmin) params.delete('status')
+        router.replace('?' + params.toString() + '&tab=produkter')
+      }
     }
   }, [])
 
@@ -108,7 +112,8 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
   }
 
   const filtered = useMemo(() => {
-    const statusResult = products.filter(p => {
+    const base = isAdmin ? products : products.filter(p => !p.draft)
+    const statusResult = base.filter(p => {
       if (selectedStatuses.length === 0) return true
       return selectedStatuses.some(s => p.draft === (s === 'DRAFT'))
     })

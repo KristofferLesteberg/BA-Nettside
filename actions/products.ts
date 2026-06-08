@@ -5,9 +5,17 @@ import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth'
 import { prisma } from '@/app/lib/prisma'
 import { authOptions } from '@/app/lib/auth'
+import { getAppConfig } from '@/app/lib/app-config'
+import { CONFIG_KEYS } from '@/app/lib/app-config-keys'
 import { uploadProductImages, syncProductImages, deleteAllProductImages, uploadProductImage } from '@/app/lib/images'
 import type { EducationField } from '@/generated/prisma'
 import { err } from '@/app/lib/api-response'
+
+async function publicProductWhere(isAdminContext: boolean) {
+  if (isAdminContext) return undefined
+  const hideSeeded = (await getAppConfig(CONFIG_KEYS.HIDE_TEST_DATA)) === 'true'
+  return { draft: false, ...(hideSeeded ? { isSeeded: false } : {}) }
+}
 
 // ─── Schemas ─────────────────────────────────────────────────────────────────
 
@@ -43,8 +51,10 @@ const ProductUpdateSchema = ProductCreateSchema.partial()
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
 
-export async function getAllProducts() {
+export async function getAllProducts(isAdminContext = false) {
+  const where = await publicProductWhere(isAdminContext)
   const products = await prisma.product.findMany({
+    where,
     include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } },
     orderBy: { publishedAt: 'desc' },
   })
@@ -57,9 +67,10 @@ export async function getAllProducts() {
   }))
 }
 
-export async function getProductById(id: number) {
+export async function getProductById(id: number, isAdminContext = false) {
+  const publicWhere = await publicProductWhere(isAdminContext)
   const product = await prisma.product.findUnique({
-    where: { id },
+    where: { id, ...publicWhere },
     include: {
       images: { orderBy: { sortOrder: 'asc' } },
       contactPerson: true,

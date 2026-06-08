@@ -18,7 +18,7 @@ export default async function AdminPreviewProductPage({
   const productId = parseInt((await params).id)
   if (Number.isNaN(productId)) notFound()
 
-  const product = await getProductById(productId)
+  const product = await getProductById(productId, true)
   if (!product) notFound()
 
   return (

@@ -5,6 +5,8 @@ import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth'
 import { prisma } from '@/app/lib/prisma'
 import { authOptions } from '@/app/lib/auth'
+import { getAppConfig } from '@/app/lib/app-config'
+import { CONFIG_KEYS } from '@/app/lib/app-config-keys'
 import { uploadReviewImage, deleteReviewImage } from '@/app/lib/images'
 
 // ─── Schemas ─────────────────────────────────────────────────────────────────
@@ -21,8 +23,12 @@ const ReviewUpdateSchema = ReviewCreateSchema.partial()
 
 // ─── Actions ─────────────────────────────────────────────────────────────────
 
-export async function getAllReviews() {
-  return prisma.clientReview.findMany({ orderBy: { createdAt: 'desc' } })
+export async function getAllReviews(isAdminContext = false) {
+  const hideSeeded = !isAdminContext && (await getAppConfig(CONFIG_KEYS.HIDE_TEST_DATA)) === 'true'
+  return prisma.clientReview.findMany({
+    where: hideSeeded ? { isSeeded: false } : undefined,
+    orderBy: { createdAt: 'desc' },
+  })
 }
 
 export async function getReviewById(id: number) {

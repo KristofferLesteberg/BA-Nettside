@@ -4,7 +4,7 @@ import { getAllReviews } from '@/actions/reviews'
 import AdminReviewCard from '@/components/admin/AdminReviewCard'
 
 export default async function AdminReviewsView() {
-  const reviews = await getAllReviews()
+  const reviews = await getAllReviews(true)
 
   return (
     <>
