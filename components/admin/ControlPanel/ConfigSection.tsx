@@ -1,18 +1,23 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { signOut } from 'next-auth/react'
 import toast from 'react-hot-toast'
 import { getAllAppConfig, saveAppConfig } from '@/actions/controlPanel'
+import {
+  getNotificationRecipients,
+  addNotificationRecipient,
+  deleteNotificationRecipient,
+} from '@/actions/notificationRecipients'
 import { usePopUp } from '@/components/shared/PopUp'
 import { InfoPopover } from './InfoPopover'
+import { IconDelete, IconPlus } from '@/app/lib/icons'
 
 // These match the CONFIG_KEYS values in app/lib/app-config.ts
 const K = {
   SESSION_LIFETIME:   'session_lifetime_seconds',
   USERNAME:           'admin_username',
   PASSWORD:           'admin_password',
-  NOTIFICATION_EMAIL: 'notification_email',
   EMAIL_RETRIES:      'email_max_retry_attempts',
 } as const
 
@@ -20,11 +25,134 @@ const SESSION_SENSITIVE = new Set([K.USERNAME, K.PASSWORD, K.SESSION_LIFETIME])
 
 type ConfigMap = Record<string, string>
 
+interface Recipient {
+  id: number
+  name: string
+  email: string
+}
+
 function FieldLabel({ htmlFor, label, info }: { htmlFor: string; label: string; info: string }) {
   return (
     <div className="flex items-center gap-1.5 mb-1">
       <label htmlFor={htmlFor} className="label">{label}</label>
       <InfoPopover content={info} />
+    </div>
+  )
+}
+
+function NotificationRecipientsList() {
+  const [recipients, setRecipients] = useState<Recipient[]>([])
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [adding, setAdding] = useState(false)
+  const nameRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    getNotificationRecipients().then(setRecipients)
+  }, [])
+
+  const handleAdd = async () => {
+    if (!name.trim() || !email.trim()) return
+    setAdding(true)
+    try {
+      const created = await toast.promise(
+        addNotificationRecipient(name.trim(), email.trim()),
+        {
+          loading: 'Legger til…',
+          success: 'Mottaker lagt til',
+          error: (e: Error) => e.message ?? 'Noe gikk galt',
+        }
+      )
+      setRecipients((prev) => [...prev, created])
+      setName('')
+      setEmail('')
+      nameRef.current?.focus()
+    } catch {
+      // toast already shows the error
+    } finally {
+      setAdding(false)
+    }
+  }
+
+  const handleDelete = async (id: number) => {
+    try {
+      await toast.promise(deleteNotificationRecipient(id), {
+        loading: 'Sletter…',
+        success: 'Mottaker fjernet',
+        error: (e: Error) => e.message ?? 'Noe gikk galt',
+      })
+      setRecipients((prev) => prev.filter((r) => r.id !== id))
+    } catch {
+      // toast already shows the error
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleAdd()
+  }
+
+  return (
+    <div>
+      <div className="flex items-center gap-1.5 mb-1">
+        <span className="label">Varslingsmottakere for prosjektforespørsler</span>
+        <InfoPopover content="Disse personene mottar e-post når noen sender inn en ny prosjektforespørsel. Produktbestillinger uten kontaktperson varsler også denne listen." />
+      </div>
+
+      {recipients.length > 0 && (
+        <ul className="mb-3 flex flex-col gap-1.5" aria-label="Varslingsmottakere">
+          {recipients.map((r) => (
+            <li key={r.id} className="flex items-center justify-between gap-3 px-3 py-2 rounded-[--radius-md] bg-sunken border border-default">
+              <span className="text-sm truncate">
+                <span className="font-medium">{r.name}</span>
+                <span className="text-muted ml-2">{r.email}</span>
+              </span>
+              <button
+                type="button"
+                className="btn btn-ghost btn-icon shrink-0 text-error hover:bg-error-bg"
+                onClick={() => handleDelete(r.id)}
+                aria-label={`Fjern ${r.name}`}
+              >
+                <IconDelete size={14} aria-hidden="true" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {recipients.length === 0 && (
+        <p className="small-text text-muted mb-3">Ingen mottakere lagt til ennå.</p>
+      )}
+
+      <div className="flex items-center gap-2">
+        <input
+          ref={nameRef}
+          type="text"
+          placeholder="Navn"
+          className="input w-36 shrink-0"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          onKeyDown={handleKeyDown}
+          aria-label="Navn på ny mottaker"
+        />
+        <input
+          type="email"
+          placeholder="E-postadresse"
+          className="input flex-1"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={handleKeyDown}
+          aria-label="E-postadresse til ny mottaker"
+        />
+        <button
+          type="button"
+          className="btn btn-outline btn-icon shrink-0"
+          onClick={handleAdd}
+          disabled={adding || !name.trim() || !email.trim()}
+          aria-label="Legg til mottaker"
+        >
+          <IconPlus size={14} aria-hidden="true" />
+        </button>
+      </div>
     </div>
   )
 }
@@ -161,21 +289,6 @@ export default function ConfigSection() {
 
         <div>
           <FieldLabel
-            htmlFor="cfg-notification"
-            label="Varslingsadresse"
-            info="E-postadressen som mottar beskjed når noen sender inn en ny bestilling eller prosjektforespørsel via nettstedet."
-          />
-          <input
-            id="cfg-notification"
-            type="email"
-            className="input"
-            value={config[K.NOTIFICATION_EMAIL] ?? ''}
-            onChange={(e) => update(K.NOTIFICATION_EMAIL, e.target.value)}
-          />
-        </div>
-
-        <div>
-          <FieldLabel
             htmlFor="cfg-retries"
             label="Maks e-postforsøk"
             info="Antall ganger systemet prøver å sende en e-post på nytt dersom noe går galt. Høyere tall gir flere forsøk før det gis opp."
@@ -190,6 +303,8 @@ export default function ConfigSection() {
             onChange={(e) => update(K.EMAIL_RETRIES, e.target.value)}
           />
         </div>
+
+        <NotificationRecipientsList />
 
         <button onClick={handleSave} className="btn btn-primary self-start mt-2">
           Lagre innstillinger
