@@ -190,6 +190,13 @@ exports.Prisma.ProductOrderScalarFieldEnum = {
   productId: 'productId'
 };
 
+exports.Prisma.NotificationRecipientScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.AppConfigScalarFieldEnum = {
   key: 'key',
   value: 'value',
@@ -258,6 +265,7 @@ exports.Prisma.ModelName = {
   ClientReview: 'ClientReview',
   ContactPerson: 'ContactPerson',
   ProductOrder: 'ProductOrder',
+  NotificationRecipient: 'NotificationRecipient',
   AppConfig: 'AppConfig',
   EmailQueue: 'EmailQueue'
 };

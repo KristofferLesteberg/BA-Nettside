@@ -44,6 +44,11 @@ export type ContactPerson = $Result.DefaultSelection<Prisma.$ContactPersonPayloa
  */
 export type ProductOrder = $Result.DefaultSelection<Prisma.$ProductOrderPayload>
 /**
+ * Model NotificationRecipient
+ * 
+ */
+export type NotificationRecipient = $Result.DefaultSelection<Prisma.$NotificationRecipientPayload>
+/**
  * Model AppConfig
  * 
  */
@@ -279,6 +284,16 @@ export class PrismaClient<
     * ```
     */
   get productOrder(): Prisma.ProductOrderDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.notificationRecipient`: Exposes CRUD operations for the **NotificationRecipient** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NotificationRecipients
+    * const notificationRecipients = await prisma.notificationRecipient.findMany()
+    * ```
+    */
+  get notificationRecipient(): Prisma.NotificationRecipientDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.appConfig`: Exposes CRUD operations for the **AppConfig** model.
@@ -739,6 +754,7 @@ export namespace Prisma {
     ClientReview: 'ClientReview',
     ContactPerson: 'ContactPerson',
     ProductOrder: 'ProductOrder',
+    NotificationRecipient: 'NotificationRecipient',
     AppConfig: 'AppConfig',
     EmailQueue: 'EmailQueue'
   };
@@ -756,7 +772,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "product" | "productImage" | "projectRequest" | "clientReview" | "contactPerson" | "productOrder" | "appConfig" | "emailQueue"
+      modelProps: "product" | "productImage" | "projectRequest" | "clientReview" | "contactPerson" | "productOrder" | "notificationRecipient" | "appConfig" | "emailQueue"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1204,6 +1220,80 @@ export namespace Prisma {
           }
         }
       }
+      NotificationRecipient: {
+        payload: Prisma.$NotificationRecipientPayload<ExtArgs>
+        fields: Prisma.NotificationRecipientFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NotificationRecipientFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationRecipientPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NotificationRecipientFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationRecipientPayload>
+          }
+          findFirst: {
+            args: Prisma.NotificationRecipientFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationRecipientPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NotificationRecipientFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationRecipientPayload>
+          }
+          findMany: {
+            args: Prisma.NotificationRecipientFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationRecipientPayload>[]
+          }
+          create: {
+            args: Prisma.NotificationRecipientCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationRecipientPayload>
+          }
+          createMany: {
+            args: Prisma.NotificationRecipientCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NotificationRecipientCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationRecipientPayload>[]
+          }
+          delete: {
+            args: Prisma.NotificationRecipientDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationRecipientPayload>
+          }
+          update: {
+            args: Prisma.NotificationRecipientUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationRecipientPayload>
+          }
+          deleteMany: {
+            args: Prisma.NotificationRecipientDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NotificationRecipientUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NotificationRecipientUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationRecipientPayload>[]
+          }
+          upsert: {
+            args: Prisma.NotificationRecipientUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationRecipientPayload>
+          }
+          aggregate: {
+            args: Prisma.NotificationRecipientAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotificationRecipient>
+          }
+          groupBy: {
+            args: Prisma.NotificationRecipientGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotificationRecipientGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NotificationRecipientCountArgs<ExtArgs>
+            result: $Utils.Optional<NotificationRecipientCountAggregateOutputType> | number
+          }
+        }
+      }
       AppConfig: {
         payload: Prisma.$AppConfigPayload<ExtArgs>
         fields: Prisma.AppConfigFieldRefs
@@ -1466,6 +1556,7 @@ export namespace Prisma {
     clientReview?: ClientReviewOmit
     contactPerson?: ContactPersonOmit
     productOrder?: ProductOrderOmit
+    notificationRecipient?: NotificationRecipientOmit
     appConfig?: AppConfigOmit
     emailQueue?: EmailQueueOmit
   }
@@ -8520,6 +8611,1025 @@ export namespace Prisma {
 
 
   /**
+   * Model NotificationRecipient
+   */
+
+  export type AggregateNotificationRecipient = {
+    _count: NotificationRecipientCountAggregateOutputType | null
+    _avg: NotificationRecipientAvgAggregateOutputType | null
+    _sum: NotificationRecipientSumAggregateOutputType | null
+    _min: NotificationRecipientMinAggregateOutputType | null
+    _max: NotificationRecipientMaxAggregateOutputType | null
+  }
+
+  export type NotificationRecipientAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type NotificationRecipientSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type NotificationRecipientMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    email: string | null
+    createdAt: Date | null
+  }
+
+  export type NotificationRecipientMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    email: string | null
+    createdAt: Date | null
+  }
+
+  export type NotificationRecipientCountAggregateOutputType = {
+    id: number
+    name: number
+    email: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type NotificationRecipientAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type NotificationRecipientSumAggregateInputType = {
+    id?: true
+  }
+
+  export type NotificationRecipientMinAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    createdAt?: true
+  }
+
+  export type NotificationRecipientMaxAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    createdAt?: true
+  }
+
+  export type NotificationRecipientCountAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type NotificationRecipientAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NotificationRecipient to aggregate.
+     */
+    where?: NotificationRecipientWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationRecipients to fetch.
+     */
+    orderBy?: NotificationRecipientOrderByWithRelationInput | NotificationRecipientOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NotificationRecipientWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationRecipients from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationRecipients.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NotificationRecipients
+    **/
+    _count?: true | NotificationRecipientCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: NotificationRecipientAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: NotificationRecipientSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NotificationRecipientMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NotificationRecipientMaxAggregateInputType
+  }
+
+  export type GetNotificationRecipientAggregateType<T extends NotificationRecipientAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotificationRecipient]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotificationRecipient[P]>
+      : GetScalarType<T[P], AggregateNotificationRecipient[P]>
+  }
+
+
+
+
+  export type NotificationRecipientGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationRecipientWhereInput
+    orderBy?: NotificationRecipientOrderByWithAggregationInput | NotificationRecipientOrderByWithAggregationInput[]
+    by: NotificationRecipientScalarFieldEnum[] | NotificationRecipientScalarFieldEnum
+    having?: NotificationRecipientScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NotificationRecipientCountAggregateInputType | true
+    _avg?: NotificationRecipientAvgAggregateInputType
+    _sum?: NotificationRecipientSumAggregateInputType
+    _min?: NotificationRecipientMinAggregateInputType
+    _max?: NotificationRecipientMaxAggregateInputType
+  }
+
+  export type NotificationRecipientGroupByOutputType = {
+    id: number
+    name: string
+    email: string
+    createdAt: Date
+    _count: NotificationRecipientCountAggregateOutputType | null
+    _avg: NotificationRecipientAvgAggregateOutputType | null
+    _sum: NotificationRecipientSumAggregateOutputType | null
+    _min: NotificationRecipientMinAggregateOutputType | null
+    _max: NotificationRecipientMaxAggregateOutputType | null
+  }
+
+  type GetNotificationRecipientGroupByPayload<T extends NotificationRecipientGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificationRecipientGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NotificationRecipientGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NotificationRecipientGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificationRecipientGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NotificationRecipientSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["notificationRecipient"]>
+
+  export type NotificationRecipientSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["notificationRecipient"]>
+
+  export type NotificationRecipientSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["notificationRecipient"]>
+
+  export type NotificationRecipientSelectScalar = {
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    createdAt?: boolean
+  }
+
+  export type NotificationRecipientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "createdAt", ExtArgs["result"]["notificationRecipient"]>
+
+  export type $NotificationRecipientPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NotificationRecipient"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      email: string
+      createdAt: Date
+    }, ExtArgs["result"]["notificationRecipient"]>
+    composites: {}
+  }
+
+  type NotificationRecipientGetPayload<S extends boolean | null | undefined | NotificationRecipientDefaultArgs> = $Result.GetResult<Prisma.$NotificationRecipientPayload, S>
+
+  type NotificationRecipientCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificationRecipientFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NotificationRecipientCountAggregateInputType | true
+    }
+
+  export interface NotificationRecipientDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NotificationRecipient'], meta: { name: 'NotificationRecipient' } }
+    /**
+     * Find zero or one NotificationRecipient that matches the filter.
+     * @param {NotificationRecipientFindUniqueArgs} args - Arguments to find a NotificationRecipient
+     * @example
+     * // Get one NotificationRecipient
+     * const notificationRecipient = await prisma.notificationRecipient.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificationRecipientFindUniqueArgs>(args: SelectSubset<T, NotificationRecipientFindUniqueArgs<ExtArgs>>): Prisma__NotificationRecipientClient<$Result.GetResult<Prisma.$NotificationRecipientPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one NotificationRecipient that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotificationRecipientFindUniqueOrThrowArgs} args - Arguments to find a NotificationRecipient
+     * @example
+     * // Get one NotificationRecipient
+     * const notificationRecipient = await prisma.notificationRecipient.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificationRecipientFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificationRecipientFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificationRecipientClient<$Result.GetResult<Prisma.$NotificationRecipientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NotificationRecipient that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationRecipientFindFirstArgs} args - Arguments to find a NotificationRecipient
+     * @example
+     * // Get one NotificationRecipient
+     * const notificationRecipient = await prisma.notificationRecipient.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificationRecipientFindFirstArgs>(args?: SelectSubset<T, NotificationRecipientFindFirstArgs<ExtArgs>>): Prisma__NotificationRecipientClient<$Result.GetResult<Prisma.$NotificationRecipientPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NotificationRecipient that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationRecipientFindFirstOrThrowArgs} args - Arguments to find a NotificationRecipient
+     * @example
+     * // Get one NotificationRecipient
+     * const notificationRecipient = await prisma.notificationRecipient.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificationRecipientFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificationRecipientFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificationRecipientClient<$Result.GetResult<Prisma.$NotificationRecipientPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more NotificationRecipients that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationRecipientFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NotificationRecipients
+     * const notificationRecipients = await prisma.notificationRecipient.findMany()
+     * 
+     * // Get first 10 NotificationRecipients
+     * const notificationRecipients = await prisma.notificationRecipient.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const notificationRecipientWithIdOnly = await prisma.notificationRecipient.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NotificationRecipientFindManyArgs>(args?: SelectSubset<T, NotificationRecipientFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationRecipientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a NotificationRecipient.
+     * @param {NotificationRecipientCreateArgs} args - Arguments to create a NotificationRecipient.
+     * @example
+     * // Create one NotificationRecipient
+     * const NotificationRecipient = await prisma.notificationRecipient.create({
+     *   data: {
+     *     // ... data to create a NotificationRecipient
+     *   }
+     * })
+     * 
+     */
+    create<T extends NotificationRecipientCreateArgs>(args: SelectSubset<T, NotificationRecipientCreateArgs<ExtArgs>>): Prisma__NotificationRecipientClient<$Result.GetResult<Prisma.$NotificationRecipientPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many NotificationRecipients.
+     * @param {NotificationRecipientCreateManyArgs} args - Arguments to create many NotificationRecipients.
+     * @example
+     * // Create many NotificationRecipients
+     * const notificationRecipient = await prisma.notificationRecipient.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NotificationRecipientCreateManyArgs>(args?: SelectSubset<T, NotificationRecipientCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NotificationRecipients and returns the data saved in the database.
+     * @param {NotificationRecipientCreateManyAndReturnArgs} args - Arguments to create many NotificationRecipients.
+     * @example
+     * // Create many NotificationRecipients
+     * const notificationRecipient = await prisma.notificationRecipient.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NotificationRecipients and only return the `id`
+     * const notificationRecipientWithIdOnly = await prisma.notificationRecipient.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NotificationRecipientCreateManyAndReturnArgs>(args?: SelectSubset<T, NotificationRecipientCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationRecipientPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a NotificationRecipient.
+     * @param {NotificationRecipientDeleteArgs} args - Arguments to delete one NotificationRecipient.
+     * @example
+     * // Delete one NotificationRecipient
+     * const NotificationRecipient = await prisma.notificationRecipient.delete({
+     *   where: {
+     *     // ... filter to delete one NotificationRecipient
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NotificationRecipientDeleteArgs>(args: SelectSubset<T, NotificationRecipientDeleteArgs<ExtArgs>>): Prisma__NotificationRecipientClient<$Result.GetResult<Prisma.$NotificationRecipientPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one NotificationRecipient.
+     * @param {NotificationRecipientUpdateArgs} args - Arguments to update one NotificationRecipient.
+     * @example
+     * // Update one NotificationRecipient
+     * const notificationRecipient = await prisma.notificationRecipient.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NotificationRecipientUpdateArgs>(args: SelectSubset<T, NotificationRecipientUpdateArgs<ExtArgs>>): Prisma__NotificationRecipientClient<$Result.GetResult<Prisma.$NotificationRecipientPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more NotificationRecipients.
+     * @param {NotificationRecipientDeleteManyArgs} args - Arguments to filter NotificationRecipients to delete.
+     * @example
+     * // Delete a few NotificationRecipients
+     * const { count } = await prisma.notificationRecipient.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NotificationRecipientDeleteManyArgs>(args?: SelectSubset<T, NotificationRecipientDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NotificationRecipients.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationRecipientUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NotificationRecipients
+     * const notificationRecipient = await prisma.notificationRecipient.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NotificationRecipientUpdateManyArgs>(args: SelectSubset<T, NotificationRecipientUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NotificationRecipients and returns the data updated in the database.
+     * @param {NotificationRecipientUpdateManyAndReturnArgs} args - Arguments to update many NotificationRecipients.
+     * @example
+     * // Update many NotificationRecipients
+     * const notificationRecipient = await prisma.notificationRecipient.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more NotificationRecipients and only return the `id`
+     * const notificationRecipientWithIdOnly = await prisma.notificationRecipient.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NotificationRecipientUpdateManyAndReturnArgs>(args: SelectSubset<T, NotificationRecipientUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationRecipientPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one NotificationRecipient.
+     * @param {NotificationRecipientUpsertArgs} args - Arguments to update or create a NotificationRecipient.
+     * @example
+     * // Update or create a NotificationRecipient
+     * const notificationRecipient = await prisma.notificationRecipient.upsert({
+     *   create: {
+     *     // ... data to create a NotificationRecipient
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NotificationRecipient we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificationRecipientUpsertArgs>(args: SelectSubset<T, NotificationRecipientUpsertArgs<ExtArgs>>): Prisma__NotificationRecipientClient<$Result.GetResult<Prisma.$NotificationRecipientPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of NotificationRecipients.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationRecipientCountArgs} args - Arguments to filter NotificationRecipients to count.
+     * @example
+     * // Count the number of NotificationRecipients
+     * const count = await prisma.notificationRecipient.count({
+     *   where: {
+     *     // ... the filter for the NotificationRecipients we want to count
+     *   }
+     * })
+    **/
+    count<T extends NotificationRecipientCountArgs>(
+      args?: Subset<T, NotificationRecipientCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotificationRecipientCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NotificationRecipient.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationRecipientAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NotificationRecipientAggregateArgs>(args: Subset<T, NotificationRecipientAggregateArgs>): Prisma.PrismaPromise<GetNotificationRecipientAggregateType<T>>
+
+    /**
+     * Group by NotificationRecipient.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationRecipientGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NotificationRecipientGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NotificationRecipientGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationRecipientGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NotificationRecipientGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationRecipientGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NotificationRecipient model
+   */
+  readonly fields: NotificationRecipientFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NotificationRecipient.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificationRecipientClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NotificationRecipient model
+   */
+  interface NotificationRecipientFieldRefs {
+    readonly id: FieldRef<"NotificationRecipient", 'Int'>
+    readonly name: FieldRef<"NotificationRecipient", 'String'>
+    readonly email: FieldRef<"NotificationRecipient", 'String'>
+    readonly createdAt: FieldRef<"NotificationRecipient", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NotificationRecipient findUnique
+   */
+  export type NotificationRecipientFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationRecipient
+     */
+    select?: NotificationRecipientSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationRecipient
+     */
+    omit?: NotificationRecipientOmit<ExtArgs> | null
+    /**
+     * Filter, which NotificationRecipient to fetch.
+     */
+    where: NotificationRecipientWhereUniqueInput
+  }
+
+  /**
+   * NotificationRecipient findUniqueOrThrow
+   */
+  export type NotificationRecipientFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationRecipient
+     */
+    select?: NotificationRecipientSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationRecipient
+     */
+    omit?: NotificationRecipientOmit<ExtArgs> | null
+    /**
+     * Filter, which NotificationRecipient to fetch.
+     */
+    where: NotificationRecipientWhereUniqueInput
+  }
+
+  /**
+   * NotificationRecipient findFirst
+   */
+  export type NotificationRecipientFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationRecipient
+     */
+    select?: NotificationRecipientSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationRecipient
+     */
+    omit?: NotificationRecipientOmit<ExtArgs> | null
+    /**
+     * Filter, which NotificationRecipient to fetch.
+     */
+    where?: NotificationRecipientWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationRecipients to fetch.
+     */
+    orderBy?: NotificationRecipientOrderByWithRelationInput | NotificationRecipientOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NotificationRecipients.
+     */
+    cursor?: NotificationRecipientWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationRecipients from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationRecipients.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NotificationRecipients.
+     */
+    distinct?: NotificationRecipientScalarFieldEnum | NotificationRecipientScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationRecipient findFirstOrThrow
+   */
+  export type NotificationRecipientFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationRecipient
+     */
+    select?: NotificationRecipientSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationRecipient
+     */
+    omit?: NotificationRecipientOmit<ExtArgs> | null
+    /**
+     * Filter, which NotificationRecipient to fetch.
+     */
+    where?: NotificationRecipientWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationRecipients to fetch.
+     */
+    orderBy?: NotificationRecipientOrderByWithRelationInput | NotificationRecipientOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NotificationRecipients.
+     */
+    cursor?: NotificationRecipientWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationRecipients from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationRecipients.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NotificationRecipients.
+     */
+    distinct?: NotificationRecipientScalarFieldEnum | NotificationRecipientScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationRecipient findMany
+   */
+  export type NotificationRecipientFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationRecipient
+     */
+    select?: NotificationRecipientSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationRecipient
+     */
+    omit?: NotificationRecipientOmit<ExtArgs> | null
+    /**
+     * Filter, which NotificationRecipients to fetch.
+     */
+    where?: NotificationRecipientWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationRecipients to fetch.
+     */
+    orderBy?: NotificationRecipientOrderByWithRelationInput | NotificationRecipientOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NotificationRecipients.
+     */
+    cursor?: NotificationRecipientWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationRecipients from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationRecipients.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NotificationRecipients.
+     */
+    distinct?: NotificationRecipientScalarFieldEnum | NotificationRecipientScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationRecipient create
+   */
+  export type NotificationRecipientCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationRecipient
+     */
+    select?: NotificationRecipientSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationRecipient
+     */
+    omit?: NotificationRecipientOmit<ExtArgs> | null
+    /**
+     * The data needed to create a NotificationRecipient.
+     */
+    data: XOR<NotificationRecipientCreateInput, NotificationRecipientUncheckedCreateInput>
+  }
+
+  /**
+   * NotificationRecipient createMany
+   */
+  export type NotificationRecipientCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NotificationRecipients.
+     */
+    data: NotificationRecipientCreateManyInput | NotificationRecipientCreateManyInput[]
+  }
+
+  /**
+   * NotificationRecipient createManyAndReturn
+   */
+  export type NotificationRecipientCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationRecipient
+     */
+    select?: NotificationRecipientSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationRecipient
+     */
+    omit?: NotificationRecipientOmit<ExtArgs> | null
+    /**
+     * The data used to create many NotificationRecipients.
+     */
+    data: NotificationRecipientCreateManyInput | NotificationRecipientCreateManyInput[]
+  }
+
+  /**
+   * NotificationRecipient update
+   */
+  export type NotificationRecipientUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationRecipient
+     */
+    select?: NotificationRecipientSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationRecipient
+     */
+    omit?: NotificationRecipientOmit<ExtArgs> | null
+    /**
+     * The data needed to update a NotificationRecipient.
+     */
+    data: XOR<NotificationRecipientUpdateInput, NotificationRecipientUncheckedUpdateInput>
+    /**
+     * Choose, which NotificationRecipient to update.
+     */
+    where: NotificationRecipientWhereUniqueInput
+  }
+
+  /**
+   * NotificationRecipient updateMany
+   */
+  export type NotificationRecipientUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NotificationRecipients.
+     */
+    data: XOR<NotificationRecipientUpdateManyMutationInput, NotificationRecipientUncheckedUpdateManyInput>
+    /**
+     * Filter which NotificationRecipients to update
+     */
+    where?: NotificationRecipientWhereInput
+    /**
+     * Limit how many NotificationRecipients to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NotificationRecipient updateManyAndReturn
+   */
+  export type NotificationRecipientUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationRecipient
+     */
+    select?: NotificationRecipientSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationRecipient
+     */
+    omit?: NotificationRecipientOmit<ExtArgs> | null
+    /**
+     * The data used to update NotificationRecipients.
+     */
+    data: XOR<NotificationRecipientUpdateManyMutationInput, NotificationRecipientUncheckedUpdateManyInput>
+    /**
+     * Filter which NotificationRecipients to update
+     */
+    where?: NotificationRecipientWhereInput
+    /**
+     * Limit how many NotificationRecipients to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NotificationRecipient upsert
+   */
+  export type NotificationRecipientUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationRecipient
+     */
+    select?: NotificationRecipientSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationRecipient
+     */
+    omit?: NotificationRecipientOmit<ExtArgs> | null
+    /**
+     * The filter to search for the NotificationRecipient to update in case it exists.
+     */
+    where: NotificationRecipientWhereUniqueInput
+    /**
+     * In case the NotificationRecipient found by the `where` argument doesn't exist, create a new NotificationRecipient with this data.
+     */
+    create: XOR<NotificationRecipientCreateInput, NotificationRecipientUncheckedCreateInput>
+    /**
+     * In case the NotificationRecipient was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificationRecipientUpdateInput, NotificationRecipientUncheckedUpdateInput>
+  }
+
+  /**
+   * NotificationRecipient delete
+   */
+  export type NotificationRecipientDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationRecipient
+     */
+    select?: NotificationRecipientSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationRecipient
+     */
+    omit?: NotificationRecipientOmit<ExtArgs> | null
+    /**
+     * Filter which NotificationRecipient to delete.
+     */
+    where: NotificationRecipientWhereUniqueInput
+  }
+
+  /**
+   * NotificationRecipient deleteMany
+   */
+  export type NotificationRecipientDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NotificationRecipients to delete
+     */
+    where?: NotificationRecipientWhereInput
+    /**
+     * Limit how many NotificationRecipients to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * NotificationRecipient without action
+   */
+  export type NotificationRecipientDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationRecipient
+     */
+    select?: NotificationRecipientSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationRecipient
+     */
+    omit?: NotificationRecipientOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model AppConfig
    */
 
@@ -10664,6 +11774,16 @@ export namespace Prisma {
   export type ProductOrderScalarFieldEnum = (typeof ProductOrderScalarFieldEnum)[keyof typeof ProductOrderScalarFieldEnum]
 
 
+  export const NotificationRecipientScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    email: 'email',
+    createdAt: 'createdAt'
+  };
+
+  export type NotificationRecipientScalarFieldEnum = (typeof NotificationRecipientScalarFieldEnum)[keyof typeof NotificationRecipientScalarFieldEnum]
+
+
   export const AppConfigScalarFieldEnum: {
     key: 'key',
     value: 'value',
@@ -11278,6 +12398,55 @@ export namespace Prisma {
     status?: EnumOrderStatusWithAggregatesFilter<"ProductOrder"> | $Enums.OrderStatus
     isSeeded?: BoolWithAggregatesFilter<"ProductOrder"> | boolean
     productId?: IntNullableWithAggregatesFilter<"ProductOrder"> | number | null
+  }
+
+  export type NotificationRecipientWhereInput = {
+    AND?: NotificationRecipientWhereInput | NotificationRecipientWhereInput[]
+    OR?: NotificationRecipientWhereInput[]
+    NOT?: NotificationRecipientWhereInput | NotificationRecipientWhereInput[]
+    id?: IntFilter<"NotificationRecipient"> | number
+    name?: StringFilter<"NotificationRecipient"> | string
+    email?: StringFilter<"NotificationRecipient"> | string
+    createdAt?: DateTimeFilter<"NotificationRecipient"> | Date | string
+  }
+
+  export type NotificationRecipientOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NotificationRecipientWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    email?: string
+    AND?: NotificationRecipientWhereInput | NotificationRecipientWhereInput[]
+    OR?: NotificationRecipientWhereInput[]
+    NOT?: NotificationRecipientWhereInput | NotificationRecipientWhereInput[]
+    name?: StringFilter<"NotificationRecipient"> | string
+    createdAt?: DateTimeFilter<"NotificationRecipient"> | Date | string
+  }, "id" | "email">
+
+  export type NotificationRecipientOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    createdAt?: SortOrder
+    _count?: NotificationRecipientCountOrderByAggregateInput
+    _avg?: NotificationRecipientAvgOrderByAggregateInput
+    _max?: NotificationRecipientMaxOrderByAggregateInput
+    _min?: NotificationRecipientMinOrderByAggregateInput
+    _sum?: NotificationRecipientSumOrderByAggregateInput
+  }
+
+  export type NotificationRecipientScalarWhereWithAggregatesInput = {
+    AND?: NotificationRecipientScalarWhereWithAggregatesInput | NotificationRecipientScalarWhereWithAggregatesInput[]
+    OR?: NotificationRecipientScalarWhereWithAggregatesInput[]
+    NOT?: NotificationRecipientScalarWhereWithAggregatesInput | NotificationRecipientScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"NotificationRecipient"> | number
+    name?: StringWithAggregatesFilter<"NotificationRecipient"> | string
+    email?: StringWithAggregatesFilter<"NotificationRecipient"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"NotificationRecipient"> | Date | string
   }
 
   export type AppConfigWhereInput = {
@@ -11897,6 +13066,52 @@ export namespace Prisma {
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
     productId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type NotificationRecipientCreateInput = {
+    name: string
+    email: string
+    createdAt?: Date | string
+  }
+
+  export type NotificationRecipientUncheckedCreateInput = {
+    id?: number
+    name: string
+    email: string
+    createdAt?: Date | string
+  }
+
+  export type NotificationRecipientUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationRecipientUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationRecipientCreateManyInput = {
+    id?: number
+    name: string
+    email: string
+    createdAt?: Date | string
+  }
+
+  export type NotificationRecipientUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationRecipientUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AppConfigCreateInput = {
@@ -12616,6 +13831,35 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumOrderStatusFilter<$PrismaModel>
     _max?: NestedEnumOrderStatusFilter<$PrismaModel>
+  }
+
+  export type NotificationRecipientCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NotificationRecipientAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type NotificationRecipientMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NotificationRecipientMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NotificationRecipientSumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type AppConfigCountOrderByAggregateInput = {
