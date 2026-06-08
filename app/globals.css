@@ -24,7 +24,7 @@
   /* --- Text --- */
   --color-text:             #1a1a1a;
   --color-text-muted:       #5f6368;
-  --color-text-faint:       #9aa0a6;
+  --color-text-faint:       #6B7280;
   --color-text-on-primary:  #ffffff;
   --color-link:             oklch(37.3% 0.034 259.733);
   --color-link-hover:       oklch(21% 0.034 264.665);
@@ -188,7 +188,7 @@
     font-weight:    700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color:          var(--color-text-faint);
+    color:          var(--color-text-muted);
   }
   .heading-display { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; font-family: var(--font-display); }
   .heading-1 { font-size: clamp(1.75rem, 4vw, 2.25rem); font-weight: 700; letter-spacing: -0.02em; font-family: var(--font-display); }

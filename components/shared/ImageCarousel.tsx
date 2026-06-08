@@ -7,7 +7,7 @@ import type { Swiper as SwiperType } from 'swiper'
 import { IconChevronLeft, IconChevronRight, IconImagePlaceholder } from '@/app/lib/icons'
 
 const MAX_VISIBLE = 7
-const SLOT_PX     = 18                                                        // reserved width per dot slot
+const SLOT_PX     = 24                                                        // reserved width per dot slot (≥24px for WCAG touch target)
 const GAP_PX      = 4                                                         // 4px
 const STEP_PX     = SLOT_PX + GAP_PX                                          // 22px per step
 const CLIP_PX     = MAX_VISIBLE * SLOT_PX + (MAX_VISIBLE - 1) * GAP_PX       // 150px visible window
@@ -23,7 +23,7 @@ const DOT_CLASSES: Record<DotSize, string> = {
 
 // Computes the clip-path inset that rounds just the visible image content corners,
 // not the full element box (which is larger due to object-contain letterboxing).
-function ContainedImage({ src, sizes }: { src: string; sizes: string }) {
+function ContainedImage({ src, sizes, priority }: { src: string; sizes: string; priority?: boolean }) {
   const outerRef    = useRef<HTMLDivElement>(null)
   const naturalRef  = useRef<{ w: number; h: number } | null>(null)
   const [clipPath, setClipPath] = useState('')
@@ -69,6 +69,7 @@ function ContainedImage({ src, sizes }: { src: string; sizes: string }) {
         className="object-contain"
         style={clipPath ? { clipPath } : undefined}
         onLoad={handleLoad}
+        priority={priority}
       />
     </div>
   )
@@ -146,11 +147,12 @@ export default function ImageCarousel({
             speed={500}
             className={`image-swiper absolute inset-0 rounded-2xl overflow-hidden bg-surface-sunken${onImageClick ? ' cursor-zoom-in' : ''}`}
           >
-            {images.map((imageId) => (
+            {images.map((imageId, index) => (
               <SwiperSlide key={imageId}>
                 <ContainedImage
                   src={`/images/med-res/${imageId}.webp`}
                   sizes={sizes}
+                  priority={index === 0}
                 />
               </SwiperSlide>
             ))}

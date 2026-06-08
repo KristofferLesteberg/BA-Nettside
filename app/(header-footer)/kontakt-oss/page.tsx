@@ -75,14 +75,9 @@ export default function ContactPage() {
         >
           Kontakt oss
         </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="body-text"
-        >
+        <p className="body-text">
           Ta gjerne kontakt med oss – vi svarer så raskt vi kan.
-        </motion.p>
+        </p>
       </div>
 
       {/* Contact options */}

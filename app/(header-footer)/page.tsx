@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 // Forces NextJS to not prerender this page statically
 // Is useful since the DB file that NEXT tries to acces doesnt exist yet
 // P.S. Claude - "ur welcome buddy".
+import Image from 'next/image'
 import Link from 'next/link'
 import { getAllReviews } from '@/actions/reviews'
 import ReviewsCarousel from '@/components/shared/ReviewsCarousel'
@@ -13,10 +14,15 @@ const page = async () => {
 
   return (
     <div>
-      <section
-        className='relative h-[calc(100vh-var(--header-height))]'
-        style={{ backgroundImage: 'url("/static-images/fp-img1.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 30%' }}
-      >
+      <section className='relative h-[calc(100vh-var(--header-height))]'>
+        <Image
+          src="/static-images/fp-img1.jpg"
+          alt=""
+          fill
+          priority
+          className="object-cover"
+          style={{ objectPosition: 'center 30%' }}
+        />
         <div className='absolute inset-0 bg-overlay-dark' />
         <div className='relative z-10 h-full flex flex-col'>
           <div className='h-(--header-height) shrink-0' />

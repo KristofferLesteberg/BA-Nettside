@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "audit": "npm run build && lhci autorun",
+    "audit:a11y": "start-server-and-test start http://localhost:3000 pa11y-ci",
+    "audit:all": "npm run build && lhci autorun && start-server-and-test start http://localhost:3000 pa11y-ci"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -42,6 +45,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.15.1",
     "@tailwindcss/postcss": "^4",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20",
@@ -53,8 +57,10 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "pa11y-ci": "^4.1.1",
     "postcss": "^8.5.8",
     "prisma": "^7.8.0",
+    "start-server-and-test": "^3.0.8",
     "tailwindcss": "^4.2.2",
     "tsx": "^4.21.0",
     "typescript": "^5"

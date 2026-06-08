@@ -151,7 +151,7 @@ export default function FilterPanel({ categories, activeFilterCount, onReset, ch
             <h2 className="heading-4">Filtre</h2>
             {resetButton}
           </div>
-          <button onClick={() => setDrawerOpen(false)} className="btn btn-ghost w-8 h-8 p-0">
+          <button onClick={() => setDrawerOpen(false)} className="btn btn-ghost w-8 h-8 p-0" aria-label="Lukk filter">
             <IconClose />
           </button>
         </div>

@@ -200,7 +200,7 @@ export default function ProductCard({ product, isAdmin }: ProductCardProps) {
             className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center small-text text-faint">
+          <div className="w-full h-full flex items-center justify-center small-text text-muted">
             Ingen bilde
           </div>
         )}

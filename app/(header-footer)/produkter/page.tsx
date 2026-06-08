@@ -14,8 +14,8 @@ export default async function ProductsPage() {
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-12 flex flex-col gap-6">
 
       <nav aria-label="Brødsmulesti" className="flex items-center gap-1.5 small-text">
-        <Link href="/" className="text-faint hover:text-text transition-colors duration-150">Hjem</Link>
-        <span className="text-faint">/</span>
+        <Link href="/" className="text-muted hover:text-text transition-colors duration-150">Hjem</Link>
+        <span className="text-muted">/</span>
         <span className="text-muted">Produkter</span>
       </nav>
 

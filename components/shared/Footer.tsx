@@ -23,9 +23,9 @@ const contactEmails = [
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-xs font-bold uppercase tracking-[0.12em] text-text-on-dark-faint mb-5">
+    <h2 className="text-xs font-bold uppercase tracking-[0.12em] text-text-on-dark-muted mb-5">
       {children}
-    </h3>
+    </h2>
   );
 }
 
@@ -99,11 +99,11 @@ export default function Footer() {
                 <li key={email} className="flex items-start gap-3">
                   <IconEmail aria-hidden="true" className="mt-0.5 shrink-0 text-text-on-dark-faint text-sm" />
                   <div>
-                    <p className="text-xs text-text-on-dark-faint mb-0.5">{role}</p>
+                    <p className="text-xs text-text-on-dark-muted mb-0.5">{role}</p>
                     <p className="text-sm font-semibold text-text-on-dark">{name}</p>
                     <a
                       href={`mailto:${email}`}
-                      className="text-xs text-text-on-dark-faint hover:text-text-on-dark hover:underline transition-colors duration-150 break-all"
+                      className="text-xs text-text-on-dark-muted hover:text-text-on-dark hover:underline transition-colors duration-150 break-all"
                     >
                       {email}
                     </a>
@@ -114,7 +114,7 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <IconLocation aria-hidden="true" className="mt-0.5 shrink-0 text-text-on-dark-faint text-sm" />
                 <div>
-                  <p className="text-xs text-text-on-dark-faint mb-0.5">Adresse</p>
+                  <p className="text-xs text-text-on-dark-muted mb-0.5">Adresse</p>
                   <p className="text-sm font-medium text-text-on-dark">Østensbuveien 80</p>
                   <p className="text-sm text-text-on-dark-muted">4848 Arendal</p>
                 </div>
@@ -142,21 +142,21 @@ export default function Footer() {
             href="https://www.openstreetmap.org/?#map=17/58.481789/8.722233"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-text-on-dark-faint inline-block mt-2 text-xs hover:text-text-on-dark hover:underline transition-colors duration-150"
+            className="text-text-on-dark-muted inline-block mt-2 text-xs hover:text-text-on-dark hover:underline transition-colors duration-150"
           >
             Åpne i kart ↗<span className="sr-only"> (åpnes i ny fane)</span>
           </a>
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-border-on-dark pt-6 flex flex-col gap-2 text-xs text-text-on-dark-faint">
+        <div className="border-t border-border-on-dark pt-6 flex flex-col gap-2 text-xs text-text-on-dark-muted">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <p>© {new Date().getFullYear()} Sam Eyde VGS · Bygg- og anleggsteknikk</p>
             <a
               href="https://sameyde.vgs.no/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-on-dark-faint hover:text-text-on-dark transition-colors duration-150"
+              className="text-text-on-dark-muted hover:text-text-on-dark transition-colors duration-150"
             >
               sameyde.vgs.no ↗
             </a>

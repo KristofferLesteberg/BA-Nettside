@@ -199,6 +199,7 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
             <select
               value={pageSize}
               onChange={e => setFilter('sideAntall', e.target.value)}
+              aria-label="Antall produkter per side"
               className="input w-auto py-1 text-sm cursor-pointer"
             >
               {[12, 24, 36, 48].map(n => (
