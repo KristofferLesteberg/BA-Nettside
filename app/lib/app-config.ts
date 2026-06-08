@@ -7,7 +7,6 @@ const ENV_FALLBACKS: Partial<Record<ConfigKey, () => string | undefined>> = {
   [CONFIG_KEYS.ADMIN_USERNAME]:        () => process.env.ADMIN_USERNAME,
   [CONFIG_KEYS.ADMIN_PASSWORD]:        () => process.env.ADMIN_PASSWORD,
   [CONFIG_KEYS.ADMIN_EMAIL_ALLOWLIST]: () => process.env.ADMIN_EMAILS,
-  [CONFIG_KEYS.NOTIFICATION_EMAIL]:    () => process.env.ADMIN_EMAIL,
 }
 
 const HARDCODED_FALLBACKS: Partial<Record<ConfigKey, string>> = {

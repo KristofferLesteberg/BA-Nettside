@@ -3,7 +3,6 @@ export const CONFIG_KEYS = {
   ADMIN_USERNAME:           'admin_username',
   ADMIN_PASSWORD:           'admin_password',
   ADMIN_EMAIL_ALLOWLIST:    'admin_email_allowlist',
-  NOTIFICATION_EMAIL:       'notification_email',
   EMAIL_MAX_RETRY_ATTEMPTS: 'email_max_retry_attempts',
   SESSION_INVALIDATED_AT:   'session_invalidated_at',
 } as const
