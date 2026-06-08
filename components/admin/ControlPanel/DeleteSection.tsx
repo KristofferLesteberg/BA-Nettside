@@ -93,9 +93,11 @@ function ConfirmInput({
   const required = PHRASES[phraseKey]
   const matches = value === required
 
+  const descId = `confirm-desc-${phraseKey}`
+
   return (
     <div className="mt-2 p-3 rounded-sm bg-error-bg border border-error/30 flex flex-col gap-2">
-      <p className="small-text text-error">
+      <p id={descId} className="small-text text-error">
         Skriv <strong>{required}</strong> for å bekrefte. Du kan ikke lime inn.
       </p>
       <div className="flex flex-wrap gap-2">
@@ -107,6 +109,7 @@ function ConfirmInput({
           onPaste={(e) => e.preventDefault()}
           placeholder={required}
           aria-label={`Skriv "${required}" for å bekrefte`}
+          aria-describedby={descId}
           autoComplete="off"
           spellCheck={false}
         />
@@ -167,7 +170,7 @@ export default function DeleteSection() {
                   >
                     Slett testdata
                   </button>
-                  <InfoPopover content={seedInfo} align="right" />
+                  <InfoPopover content={seedInfo} />
                 </div>
                 <div className="flex items-center gap-1.5">
                   <button
@@ -178,7 +181,7 @@ export default function DeleteSection() {
                   >
                     Slett alt
                   </button>
-                  <InfoPopover content={allInfo} align="right" />
+                  <InfoPopover content={allInfo} />
                 </div>
               </div>
             </div>
@@ -214,8 +217,7 @@ export default function DeleteSection() {
                 </button>
                 <InfoPopover
                   content="Fjerner all testdata fra nettstedet på én gang. Vanlig innhold berøres ikke."
-                  align="right"
-                />
+                                 />
               </div>
               <div className="flex items-center gap-1.5">
                 <button
@@ -228,8 +230,7 @@ export default function DeleteSection() {
                 </button>
                 <InfoPopover
                   content="Fjerner absolutt alt innhold fra nettstedet permanent – produkter, bestillinger, prosjekter, anmeldelser og kontaktpersoner. Dette kan ikke angres."
-                  align="right"
-                />
+                                 />
               </div>
             </div>
           </div>

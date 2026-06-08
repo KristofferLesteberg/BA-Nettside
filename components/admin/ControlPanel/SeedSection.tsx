@@ -47,6 +47,7 @@ function SeedRow({
     <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-end sm:justify-between gap-3 sm:gap-4 py-4 border-b border-default last:border-0">
       <button
         className="btn btn-secondary whitespace-nowrap self-start sm:order-last"
+        aria-label={`Generer ${title.toLowerCase()}`}
         onClick={() =>
           toast.promise(onSeed(), {
             loading: `Genererer ${title.toLowerCase()}…`,

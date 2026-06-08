@@ -74,9 +74,9 @@ export default function ConfigSection() {
 
   if (loading) {
     return (
-      <section aria-labelledby="config-heading">
+      <section aria-labelledby="config-heading" aria-busy="true">
         <h2 id="config-heading" className="heading-3 mb-6">Systeminnstillinger</h2>
-        <p className="small-text text-muted">Laster innstillinger…</p>
+        <p className="small-text text-muted" aria-live="polite">Laster innstillinger…</p>
       </section>
     )
   }
@@ -143,6 +143,7 @@ export default function ConfigSection() {
               className="btn btn-outline whitespace-nowrap"
               onClick={() => setShowPassword((p) => !p)}
               aria-label={showPassword ? 'Skjul passord' : 'Vis passord'}
+              aria-pressed={showPassword}
             >
               {showPassword ? 'Skjul' : 'Vis'}
             </button>
