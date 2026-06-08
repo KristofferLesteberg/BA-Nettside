@@ -185,6 +185,7 @@ exports.Prisma.ProductOrderScalarFieldEnum = {
   clientPhone: 'clientPhone',
   amount: 'amount',
   extraDetails: 'extraDetails',
+  notes: 'notes',
   status: 'status',
   isSeeded: 'isSeeded',
   productId: 'productId'

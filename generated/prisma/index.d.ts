@@ -7467,6 +7467,7 @@ export namespace Prisma {
     clientPhone: string | null
     amount: number | null
     extraDetails: string | null
+    notes: string | null
     status: $Enums.OrderStatus | null
     isSeeded: boolean | null
     productId: number | null
@@ -7479,6 +7480,7 @@ export namespace Prisma {
     clientPhone: string | null
     amount: number | null
     extraDetails: string | null
+    notes: string | null
     status: $Enums.OrderStatus | null
     isSeeded: boolean | null
     productId: number | null
@@ -7491,6 +7493,7 @@ export namespace Prisma {
     clientPhone: number
     amount: number
     extraDetails: number
+    notes: number
     status: number
     isSeeded: number
     productId: number
@@ -7517,6 +7520,7 @@ export namespace Prisma {
     clientPhone?: true
     amount?: true
     extraDetails?: true
+    notes?: true
     status?: true
     isSeeded?: true
     productId?: true
@@ -7529,6 +7533,7 @@ export namespace Prisma {
     clientPhone?: true
     amount?: true
     extraDetails?: true
+    notes?: true
     status?: true
     isSeeded?: true
     productId?: true
@@ -7541,6 +7546,7 @@ export namespace Prisma {
     clientPhone?: true
     amount?: true
     extraDetails?: true
+    notes?: true
     status?: true
     isSeeded?: true
     productId?: true
@@ -7640,6 +7646,7 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails: string | null
+    notes: string | null
     status: $Enums.OrderStatus
     isSeeded: boolean
     productId: number | null
@@ -7671,6 +7678,7 @@ export namespace Prisma {
     clientPhone?: boolean
     amount?: boolean
     extraDetails?: boolean
+    notes?: boolean
     status?: boolean
     isSeeded?: boolean
     productId?: boolean
@@ -7684,6 +7692,7 @@ export namespace Prisma {
     clientPhone?: boolean
     amount?: boolean
     extraDetails?: boolean
+    notes?: boolean
     status?: boolean
     isSeeded?: boolean
     productId?: boolean
@@ -7697,6 +7706,7 @@ export namespace Prisma {
     clientPhone?: boolean
     amount?: boolean
     extraDetails?: boolean
+    notes?: boolean
     status?: boolean
     isSeeded?: boolean
     productId?: boolean
@@ -7710,12 +7720,13 @@ export namespace Prisma {
     clientPhone?: boolean
     amount?: boolean
     extraDetails?: boolean
+    notes?: boolean
     status?: boolean
     isSeeded?: boolean
     productId?: boolean
   }
 
-  export type ProductOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientName" | "clientEmail" | "clientPhone" | "amount" | "extraDetails" | "status" | "isSeeded" | "productId", ExtArgs["result"]["productOrder"]>
+  export type ProductOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientName" | "clientEmail" | "clientPhone" | "amount" | "extraDetails" | "notes" | "status" | "isSeeded" | "productId", ExtArgs["result"]["productOrder"]>
   export type ProductOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductOrder$productArgs<ExtArgs>
   }
@@ -7738,6 +7749,7 @@ export namespace Prisma {
       clientPhone: string
       amount: number
       extraDetails: string | null
+      notes: string | null
       status: $Enums.OrderStatus
       isSeeded: boolean
       productId: number | null
@@ -8171,6 +8183,7 @@ export namespace Prisma {
     readonly clientPhone: FieldRef<"ProductOrder", 'String'>
     readonly amount: FieldRef<"ProductOrder", 'Int'>
     readonly extraDetails: FieldRef<"ProductOrder", 'String'>
+    readonly notes: FieldRef<"ProductOrder", 'String'>
     readonly status: FieldRef<"ProductOrder", 'OrderStatus'>
     readonly isSeeded: FieldRef<"ProductOrder", 'Boolean'>
     readonly productId: FieldRef<"ProductOrder", 'Int'>
@@ -11766,6 +11779,7 @@ export namespace Prisma {
     clientPhone: 'clientPhone',
     amount: 'amount',
     extraDetails: 'extraDetails',
+    notes: 'notes',
     status: 'status',
     isSeeded: 'isSeeded',
     productId: 'productId'
@@ -12333,6 +12347,7 @@ export namespace Prisma {
     clientPhone?: StringFilter<"ProductOrder"> | string
     amount?: IntFilter<"ProductOrder"> | number
     extraDetails?: StringNullableFilter<"ProductOrder"> | string | null
+    notes?: StringNullableFilter<"ProductOrder"> | string | null
     status?: EnumOrderStatusFilter<"ProductOrder"> | $Enums.OrderStatus
     isSeeded?: BoolFilter<"ProductOrder"> | boolean
     productId?: IntNullableFilter<"ProductOrder"> | number | null
@@ -12346,6 +12361,7 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
     status?: SortOrder
     isSeeded?: SortOrder
     productId?: SortOrderInput | SortOrder
@@ -12362,6 +12378,7 @@ export namespace Prisma {
     clientPhone?: StringFilter<"ProductOrder"> | string
     amount?: IntFilter<"ProductOrder"> | number
     extraDetails?: StringNullableFilter<"ProductOrder"> | string | null
+    notes?: StringNullableFilter<"ProductOrder"> | string | null
     status?: EnumOrderStatusFilter<"ProductOrder"> | $Enums.OrderStatus
     isSeeded?: BoolFilter<"ProductOrder"> | boolean
     productId?: IntNullableFilter<"ProductOrder"> | number | null
@@ -12375,6 +12392,7 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
     status?: SortOrder
     isSeeded?: SortOrder
     productId?: SortOrderInput | SortOrder
@@ -12395,6 +12413,7 @@ export namespace Prisma {
     clientPhone?: StringWithAggregatesFilter<"ProductOrder"> | string
     amount?: IntWithAggregatesFilter<"ProductOrder"> | number
     extraDetails?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
     status?: EnumOrderStatusWithAggregatesFilter<"ProductOrder"> | $Enums.OrderStatus
     isSeeded?: BoolWithAggregatesFilter<"ProductOrder"> | boolean
     productId?: IntNullableWithAggregatesFilter<"ProductOrder"> | number | null
@@ -12994,6 +13013,7 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
+    notes?: string | null
     status?: $Enums.OrderStatus
     isSeeded?: boolean
     product?: ProductCreateNestedOneWithoutOrdersInput
@@ -13006,6 +13026,7 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
+    notes?: string | null
     status?: $Enums.OrderStatus
     isSeeded?: boolean
     productId?: number | null
@@ -13017,6 +13038,7 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
     product?: ProductUpdateOneWithoutOrdersNestedInput
@@ -13029,6 +13051,7 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
     productId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -13041,6 +13064,7 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
+    notes?: string | null
     status?: $Enums.OrderStatus
     isSeeded?: boolean
     productId?: number | null
@@ -13052,6 +13076,7 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -13063,6 +13088,7 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
     productId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -13782,6 +13808,7 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrder
+    notes?: SortOrder
     status?: SortOrder
     isSeeded?: SortOrder
     productId?: SortOrder
@@ -13800,6 +13827,7 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrder
+    notes?: SortOrder
     status?: SortOrder
     isSeeded?: SortOrder
     productId?: SortOrder
@@ -13812,6 +13840,7 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrder
+    notes?: SortOrder
     status?: SortOrder
     isSeeded?: SortOrder
     productId?: SortOrder
@@ -14518,6 +14547,7 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
+    notes?: string | null
     status?: $Enums.OrderStatus
     isSeeded?: boolean
   }
@@ -14529,6 +14559,7 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
+    notes?: string | null
     status?: $Enums.OrderStatus
     isSeeded?: boolean
   }
@@ -14621,6 +14652,7 @@ export namespace Prisma {
     clientPhone?: StringFilter<"ProductOrder"> | string
     amount?: IntFilter<"ProductOrder"> | number
     extraDetails?: StringNullableFilter<"ProductOrder"> | string | null
+    notes?: StringNullableFilter<"ProductOrder"> | string | null
     status?: EnumOrderStatusFilter<"ProductOrder"> | $Enums.OrderStatus
     isSeeded?: BoolFilter<"ProductOrder"> | boolean
     productId?: IntNullableFilter<"ProductOrder"> | number | null
@@ -14857,6 +14889,7 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
+    notes?: string | null
     status?: $Enums.OrderStatus
     isSeeded?: boolean
   }
@@ -14882,6 +14915,7 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -14893,6 +14927,7 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
   }
@@ -14904,6 +14939,7 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
   }

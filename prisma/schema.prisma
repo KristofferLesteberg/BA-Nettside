@@ -107,6 +107,7 @@ model ProductOrder {
   clientPhone String
   amount Int
   extraDetails String?
+  notes String?
   status OrderStatus @default(NEW)
   isSeeded Boolean @default(false)
   productId Int?
