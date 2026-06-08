@@ -23,9 +23,9 @@ const contactEmails = [
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-xs font-bold uppercase tracking-[0.12em] text-text-on-dark-muted mb-5">
+    <h2 className="text-xs font-bold uppercase tracking-[0.12em] text-text-on-dark-muted mb-5">
       {children}
-    </h3>
+    </h2>
   );
 }
 

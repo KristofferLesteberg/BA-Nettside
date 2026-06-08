@@ -1,6 +1,7 @@
 "use client"
 import { ReactNode, useEffect, useState } from 'react'
 import { motion, AnimatePresence, type Variants } from 'motion/react'
+import Image from 'next/image'
 import Link from 'next/link'
 import Checkbox from '@/components/shared/checkbox'
 
@@ -74,10 +75,15 @@ export default function Projects() {
 
   return (
     <div>
-      <section
-        className='relative h-[60vh]'
-        style={{ backgroundImage: 'url("/static-images/fp-img2.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 30%' }}
-      >
+      <section className='relative h-[60vh]'>
+        <Image
+          src="/static-images/fp-img2.jpg"
+          alt=""
+          fill
+          priority
+          className="object-cover"
+          style={{ objectPosition: 'center 30%' }}
+        />
         <div className='absolute inset-0 bg-overlay-dark' />
         <div className='relative z-10 h-full flex flex-col items-center justify-center text-center px-4'>
           <motion.span
