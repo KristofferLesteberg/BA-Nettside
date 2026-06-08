@@ -144,7 +144,7 @@ export default function ProcessCardsGrid() {
 
         <div className='lg:order-4 lg:flex lg:items-center'>
           <div className='hidden lg:flex justify-center items-center w-30 xl:w-40'>
-            <svg width='100%' height='24' viewBox='0 0 200 24' fill='none'
+            <svg width='100%' height='24' viewBox='0 0 200 24' fill='none' className="text-primary"
               stroke='currentColor' strokeWidth='4' strokeLinecap='round' strokeLinejoin='round'>
               <line x1='199' y1='12' x2='12' y2='12' strokeDasharray='11 16'/>
               <polyline points='19 5 12 12 19 19'/>
@@ -171,7 +171,7 @@ export default function ProcessCardsGrid() {
 
         <div className='lg:order-2 lg:flex lg:items-center'>
           <div className='hidden lg:flex justify-center items-center w-30 xl:w-40'>
-            <svg width='100%' height='24' viewBox='0 0 200 24' fill='none'
+            <svg width='100%' height='24' viewBox='0 0 200 24' fill='none' className="text-primary"
               stroke='currentColor' strokeWidth='4' strokeLinecap='round' strokeLinejoin='round'>
               <line x1='199' y1='12' x2='12' y2='12' strokeDasharray='11 16'/>
               <polyline points='19 5 12 12 19 19'/>
