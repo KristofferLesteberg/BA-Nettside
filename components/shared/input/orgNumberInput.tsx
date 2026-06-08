@@ -114,6 +114,9 @@ export default function OrgNumberInput({inputClassName, value, onChange, setEmai
       const newRaw = value.slice(0, rawPos) + value.slice(rawPos + 1)
       cursorRef.current = rawToFormattedPos(rawPos, newRaw.length)
       onChange({ target: { value: newRaw } })
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      if (value.length === 9 && !searching) getOrgInfo(Number(value))
     }
   }
 
