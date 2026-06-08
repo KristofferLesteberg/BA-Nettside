@@ -131,7 +131,7 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
   }, [products, selectedCategories, sort, selectedStatuses])
 
   const currentPage = Number(searchParams.get('side') ?? '1')
-  const pageSize = Number(searchParams.get('sideAntall') ?? '10')
+  const pageSize = Number(searchParams.get('sideAntall') ?? '12')
   const maxPage = Math.ceil(filtered.length / pageSize)
   
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
@@ -201,7 +201,7 @@ export default function FilteredProductsGrid({ products, isAdmin, headerAction }
               onChange={e => setFilter('sideAntall', e.target.value)}
               className="input w-auto py-1 text-sm cursor-pointer"
             >
-              {[10, 20, 30, 40, 50].map(n => (
+              {[12, 24, 36, 48].map(n => (
                 <option key={n} value={n}>{n} per side</option>
               ))}
             </select>
