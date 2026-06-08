@@ -27,6 +27,11 @@ interface sendProjectEmailProps {
   maxPrice: number
 }
 
+async function getNotificationEmails(): Promise<string[]> {
+  const recipients = await prisma.notificationRecipient.findMany({ orderBy: { createdAt: 'asc' } })
+  return recipients.map((r) => r.email)
+}
+
 // ─── Order email ──────────────────────────────────────────────────────────────
 
 export async function sendOrderEmail(order: sendOrderEmailProps) {
@@ -35,8 +40,8 @@ export async function sendOrderEmail(order: sendOrderEmailProps) {
     include: { contactPerson: true },
   })
 
-  const adminEmail = process.env.ADMIN_EMAIL
-  const adminRecipient = product?.contactPerson?.email || adminEmail
+  const contactEmail = product?.contactPerson?.email
+  const adminRecipients = contactEmail ? [contactEmail] : await getNotificationEmails()
   const productTitle = product?.title ?? `Produkt #${order.productId}`
   const pricePerUnit = product ? Number(product.price) : 0
   const total = pricePerUnit * order.amount
@@ -64,7 +69,7 @@ export async function sendOrderEmail(order: sendOrderEmailProps) {
       : '—'),
   ].join('') : null
 
-  if (adminRecipient) {
+  if (adminRecipients.length > 0) {
     const adminBody = [
       emailParagraph('Du har mottatt en ny produktbestilling.'),
       emailSection('Ordreoversikt', orderRows),
@@ -74,11 +79,13 @@ export async function sendOrderEmail(order: sendOrderEmailProps) {
       emailParagraph(`<a href="${process.env.NEXTAUTH_URL}admin" style="color:#1a5276;">Gå til administrasjonspanelet →</a>`),
     ].join('')
 
-    await sendMail({
-      email: adminRecipient,
-      subject: `Ny produktbestilling – ${order.clientName}`,
-      html: emailShell(`Ny bestilling: ${productTitle}`, adminBody),
-    })
+    await Promise.all(adminRecipients.map((email) =>
+      sendMail({
+        email,
+        subject: `Ny produktbestilling – ${order.clientName}`,
+        html: emailShell(`Ny bestilling: ${productTitle}`, adminBody),
+      })
+    ))
   }
 
   const clientBody = [
@@ -102,7 +109,7 @@ export async function sendOrderEmail(order: sendOrderEmailProps) {
 // ─── Project email ────────────────────────────────────────────────────────────
 
 export async function sendProjectEmail(project: sendProjectEmailProps) {
-  const adminEmail = process.env.ADMIN_EMAIL
+  const adminRecipients = await getNotificationEmails()
   const clientName = `${project.clientForename} ${project.clientSurname}`
 
   const projectRows = [
@@ -118,7 +125,7 @@ export async function sendProjectEmail(project: sendProjectEmailProps) {
     emailRow('Telefon', `<a href="tel:${project.clientPhone}" style="color:#1a5276;">${project.clientPhone}</a>`),
   ].join('')
 
-  if (adminEmail) {
+  if (adminRecipients.length > 0) {
     const adminBody = [
       emailParagraph('Du har mottatt en ny prosjektforespørsel.'),
       emailSection('Prosjektdetaljer', projectRows),
@@ -127,11 +134,13 @@ export async function sendProjectEmail(project: sendProjectEmailProps) {
       emailParagraph(`<a href="${process.env.NEXTAUTH_URL}admin" style="color:#1a5276;">Gå til administrasjonspanelet →</a>`),
     ].join('')
 
-    await sendMail({
-      email: adminEmail,
-      subject: `Ny prosjektforespørsel – ${project.title}`,
-      html: emailShell(`Ny forespørsel: ${project.title}`, adminBody),
-    })
+    await Promise.all(adminRecipients.map((email) =>
+      sendMail({
+        email,
+        subject: `Ny prosjektforespørsel – ${project.title}`,
+        html: emailShell(`Ny forespørsel: ${project.title}`, adminBody),
+      })
+    ))
   }
 
   const clientBody = [
