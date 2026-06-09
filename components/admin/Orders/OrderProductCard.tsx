@@ -235,7 +235,7 @@ export default function OrderCard({ order }: Props) {
         <div className="border-t border-border">
           <button
             onClick={() => setKontaktOpen(v => !v)}
-            className="group flex items-center justify-between w-full py-2 small-text font-medium text-text"
+            className="group flex items-center justify-between w-full py-2 small-text font-medium text-text cursor-pointer"
             aria-expanded={kontaktOpen}
             aria-controls={`order-kontakt-${order.id}`}
           >
@@ -263,7 +263,7 @@ export default function OrderCard({ order }: Props) {
       <div className="mt-2 border-t border-border">
         <button
           onClick={() => setDescOpen(v => !v)}
-          className="group flex items-center justify-between w-full py-2 small-text font-medium text-text"
+          className="group flex items-center justify-between w-full py-2 small-text font-medium text-text cursor-pointer"
           aria-expanded={descOpen}
           aria-controls={`order-desc-${order.id}`}
         >
@@ -293,7 +293,7 @@ export default function OrderCard({ order }: Props) {
         <div className="mt-2 border-t border-border">
           <button
             onClick={() => setShowProduct(v => !v)}
-            className="group flex items-center justify-between w-full py-2 small-text font-medium text-text"
+            className="group flex items-center justify-between w-full py-2 small-text font-medium text-text cursor-pointer"
             aria-expanded={showProduct}
             aria-controls={`order-product-${order.id}`}
           >
@@ -375,9 +375,9 @@ export default function OrderCard({ order }: Props) {
                     </div>
 
                     {snapshotContact && (
-                      <div className="mt-3 pt-3 border-t border-border ">
+                      <div className="mt-3 pt-3 border-t border-border">
                         {/* Desktop row */}
-                        <div className="hidden sm:flex items-center">
+                        <div className="hidden sm:flex items-center cursor-pointer">
                           <div className="self-center shrink-0 pl-2 pr-6 py-0.5">
                             <span className="label">Kontaktperson</span>
                           </div>
@@ -459,7 +459,7 @@ export default function OrderCard({ order }: Props) {
       <div className="mt-2 border-t border-border">
         <button
           onClick={() => setNotesOpen(v => !v)}
-          className="group flex items-center justify-between w-full py-2 small-text font-medium text-text"
+          className="group flex items-center justify-between w-full py-2 small-text font-medium text-text cursor-pointer"
           aria-expanded={notesOpen}
           aria-controls={`order-notes-${order.id}`}
         >
