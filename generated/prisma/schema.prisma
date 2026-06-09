@@ -102,19 +102,20 @@ model ContactPerson {
 }
 
 model ProductOrder {
-  id            Int         @id @default(autoincrement())
-  clientName    String
-  clientEmail   String
-  clientPhone   String
-  amount        Int
-  extraDetails  String?
-  notes         String?
-  status        OrderStatus @default(NEW)
-  isSeeded      Boolean     @default(false)
-  productId     Int?
-  product       Product?    @relation(fields: [productId], references: [id])
-  snapshotTitle String?
-  snapshotPrice Decimal?
+  id              Int         @id @default(autoincrement())
+  clientName      String
+  clientEmail     String
+  clientPhone     String
+  amount          Int
+  extraDetails    String?
+  notes           String?
+  status          OrderStatus @default(NEW)
+  isSeeded        Boolean     @default(false)
+  productId       Int?
+  product         Product?    @relation(fields: [productId], references: [id])
+  snapshotTitle   String?
+  snapshotPrice   Decimal?
+  snapshotContact Json?
 }
 
 model NotificationRecipient {

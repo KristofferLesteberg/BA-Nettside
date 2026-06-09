@@ -114,6 +114,8 @@ model ProductOrder {
   product Product? @relation(fields: [productId], references: [id])
   snapshotTitle String?
   snapshotPrice Decimal?
+  snapshotContact Json?
+
 }
 
 model NotificationRecipient {
