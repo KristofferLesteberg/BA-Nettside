@@ -8,7 +8,7 @@ import { usePopUp } from "@/components/shared/PopUp"
 import toast from "react-hot-toast"
 import {
   IconDelete, IconEmail, IconPhone, IconProductQty, IconProduct,
-  IconChevronDown, IconInfo, IconStatusChange,
+  IconChevronDown, IconInfo, IconStatusChange, IconPerson, IconRole,
 } from "@/app/lib/icons"
 import { formatPrice } from "@/app/lib/product-utils"
 
@@ -100,6 +100,13 @@ export default function OrderCard({ order }: Props) {
 
   const thumbnail = order.product?.images?.[0]?.id
   const productTitle = order.product?.title ?? order.snapshotTitle
+  const snapshotContact = order.snapshotContact as {
+  name: string
+  email: string
+  phone: string
+  title: string
+} | null
+
 
   return (
     <div className="card card-subtle py-3 px-5" role="article">
@@ -334,36 +341,114 @@ export default function OrderCard({ order }: Props) {
                     </div>
                   </Link>
                 ) : (
-                  <div className="card flex items-center gap-4 opacity-70">
-                    <div className="w-16 h-16 rounded-md bg-muted shrink-0 flex items-center justify-center">
-                      <IconProduct className="text-text-faint text-lg" aria-hidden="true" />
-                    </div>
-                    <div className="flex flex-1 min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <p className="body-text font-medium min-w-0 truncate">{productTitle}</p>
-                        <span className="badge badge-neutral shrink-0">Slettet</span>
+                  <div className="card opacity-70">
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 rounded-md bg-muted shrink-0 flex items-center justify-center">
+                        <IconProduct className="text-text-faint text-lg" aria-hidden="true" />
                       </div>
-                      <div className="flex gap-4 flex-wrap shrink-0">
-                        <div className="flex flex-col items-end gap-0.5">
-                          <span className="label">Antall</span>
-                          <p className="small-text">{order.amount} stk</p>
+                      <div className="flex flex-1 min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <p className="body-text font-medium min-w-0 truncate">{productTitle}</p>
+                          <span className="badge badge-neutral shrink-0">Slettet</span>
                         </div>
-                        {order.snapshotPrice != null && (
-                          <>
-                            <div className="flex flex-col items-end gap-0.5">
-                              <span className="label">Pris/stk</span>
-                              <p className="small-text">{formatPrice(order.snapshotPrice)}</p>
-                            </div>
-                            <div className="flex flex-col items-end gap-0.5">
-                              <span className="label">Totalt</span>
-                              <p className="small-text font-semibold text-primary">
-                                {formatPrice(order.snapshotPrice * order.amount)}
-                              </p>
-                            </div>
-                          </>
-                        )}
+                        <div className="flex gap-4 flex-wrap shrink-0">
+                          <div className="flex flex-col items-end gap-0.5">
+                            <span className="label">Antall</span>
+                            <p className="small-text">{order.amount} stk</p>
+                          </div>
+                          {order.snapshotPrice != null && (
+                            <>
+                              <div className="flex flex-col items-end gap-0.5">
+                                <span className="label">Pris/stk</span>
+                                <p className="small-text">{formatPrice(order.snapshotPrice)}</p>
+                              </div>
+                              <div className="flex flex-col items-end gap-0.5">
+                                <span className="label">Totalt</span>
+                                <p className="small-text font-semibold text-primary">
+                                  {formatPrice(order.snapshotPrice * order.amount)}
+                                </p>
+                              </div>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
+
+                    {snapshotContact && (
+                      <div className="mt-3 pt-3 border-t border-border ">
+                        {/* Desktop row */}
+                        <div className="hidden sm:flex items-center">
+                          <div className="self-center shrink-0 pl-2 pr-6 py-0.5">
+                            <span className="label">Kontaktperson</span>
+                          </div>
+                          <div className="ml-auto flex items-start">
+                            <div className="flex flex-col gap-0.5 w-30">
+                              <span className="label flex items-center gap-1">
+                                <IconPerson className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                                Navn
+                              </span>
+                              <span className="small-text text-muted">{snapshotContact.name}</span>
+                            </div>
+                            <div className="w-px self-stretch bg-border mx-3" />
+                            <div className="flex flex-col gap-0.5 w-52">
+                              <span className="label flex items-center gap-1">
+                                <IconEmail className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                                E-post
+                              </span>
+                              <a href={`mailto:${snapshotContact.email}`} className="text-secondary hover:underline small-text truncate">
+                                {snapshotContact.email}
+                              </a>
+                            </div>
+                            <div className="w-px self-stretch bg-border mx-3" />
+                            <div className="flex flex-col gap-0.5 w-36">
+                              <span className="label flex items-center gap-1">
+                                <IconPhone className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                                Telefon
+                              </span>
+                              <a href={`tel:${snapshotContact.phone}`} className="text-secondary hover:underline small-text">
+                                {snapshotContact.phone}
+                              </a>
+                            </div>
+                            {snapshotContact.title && (
+                              <>
+                                <div className="w-px self-stretch bg-border mx-3" />
+                                <div className="flex flex-col gap-0.5 w-32">
+                                  <span className="label flex items-center gap-1">
+                                    <IconRole className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                                    Tittel
+                                  </span>
+                                  <span className="small-text text-muted">{snapshotContact.title}</span>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Mobile stack */}
+                        <div className="sm:hidden flex flex-col gap-1.5 min-w-0">
+                          <span className="small-text text-muted flex items-center gap-1 min-w-0">
+                            <IconPerson className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                            <span className="truncate">{snapshotContact.name}</span>
+                          </span>
+                          <a href={`mailto:${snapshotContact.email}`} className="text-secondary hover:underline small-text flex items-center gap-1 min-w-0">
+                            <IconEmail className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                            <span className="truncate">{snapshotContact.email}</span>
+                          </a>
+                          <div className="flex items-center gap-4 flex-wrap">
+                            <a href={`tel:${snapshotContact.phone}`} className="text-secondary hover:underline small-text flex items-center gap-1">
+                              <IconPhone className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                              {snapshotContact.phone}
+                            </a>
+                            {snapshotContact.title && (
+                              <span className="small-text text-muted flex items-center gap-1">
+                                <IconRole className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                                {snapshotContact.title}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
