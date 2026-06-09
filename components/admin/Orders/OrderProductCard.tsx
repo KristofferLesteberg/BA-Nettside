@@ -99,13 +99,14 @@ export default function OrderCard({ order }: Props) {
   }
 
   const thumbnail = order.product?.images?.[0]?.id
+  const productTitle = order.product?.title ?? order.snapshotTitle
 
   return (
     <div className="card card-subtle py-3 px-5" role="article">
       {popUpElement}
 
       {/* Main row */}
-      <div className="flex items-center">
+      <div className="flex items-center ">
 
         {/* Left: name, id, mobile badges */}
         <div className="flex-1 min-w-0">
@@ -118,10 +119,10 @@ export default function OrderCard({ order }: Props) {
             <span className={STATUS_STYLES[order.status]}>
               {STATUS_LABELS[order.status]}
             </span>
-            {order.product && (
+            {productTitle && (
               <span className="badge badge-lg badge-neutral gap-1.5">
                 <IconProduct className="shrink-0" aria-hidden="true" />
-                <span className="truncate max-w-32">{order.product.title}</span>
+                <span className="truncate max-w-32">{productTitle}</span>
               </span>
             )}
           </div>
@@ -138,11 +139,11 @@ export default function OrderCard({ order }: Props) {
               </span>
             </div>
 
-            {order.product && (
+            {productTitle && (
               <div className="flex justify-center -ml-1.5">
                 <span className="badge badge-lg badge-neutral gap-1.5 max-w-48">
                   <IconProduct className="shrink-0" aria-hidden="true" />
-                  <span className="truncate">{order.product.title}</span>
+                  <span className="truncate">{productTitle}</span>
                 </span>
               </div>
             )}
@@ -281,7 +282,7 @@ export default function OrderCard({ order }: Props) {
       {/* Notes accordion — all screen sizes */ }
 
       {/* Product accordion — all screen sizes */}
-      {order.product && (
+      {(order.product || productTitle) && (
         <div className="mt-2 border-t border-border">
           <button
             onClick={() => setShowProduct(v => !v)}
@@ -295,43 +296,76 @@ export default function OrderCard({ order }: Props) {
           <div id={`order-product-${order.id}`} className={`grid transition-[grid-template-rows] duration-200 ${showProduct ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
             <div className="overflow-hidden min-h-0">
               <div className="pb-2">
-                <Link
-                  href={`/produkter/${order.productId}`}
-                  className="card-accented flex items-center gap-4 hover:opacity-80 transition-opacity"
-                >
-                  {thumbnail ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={`/images/low-res/${thumbnail}.webp`}
-                      alt={order.product.title}
-                      className="w-16 h-16 object-cover rounded-md shrink-0"
-                    />
-                  ) : (
+                {order.product ? (
+                  <Link
+                    href={`/produkter/${order.productId}`}
+                    className="card-accented flex items-center gap-4 hover:opacity-80 transition-opacity"
+                  >
+                    {thumbnail ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={`/images/low-res/${thumbnail}.webp`}
+                        alt={order.product.title}
+                        className="w-16 h-16 object-cover rounded-md shrink-0"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-md bg-muted shrink-0 flex items-center justify-center">
+                        <IconProduct className="text-text-faint text-lg" aria-hidden="true" />
+                      </div>
+                    )}
+                    <div className="flex flex-1 min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                      <p className="body-text font-medium min-w-0 truncate">{order.product.title}</p>
+                      <div className="flex gap-4 flex-wrap shrink-0">
+                        <div className="flex flex-col items-end gap-0.5">
+                          <span className="label">Antall</span>
+                          <p className="small-text">{order.amount} stk</p>
+                        </div>
+                        <div className="flex flex-col items-end gap-0.5">
+                          <span className="label">Pris/stk</span>
+                          <p className="small-text">{formatPrice(order.product.price)}</p>
+                        </div>
+                        <div className="flex flex-col items-end gap-0.5">
+                          <span className="label">Totalt</span>
+                          <p className="small-text font-semibold text-primary">
+                            {formatPrice(Number(order.product.price) * order.amount)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ) : (
+                  <div className="card flex items-center gap-4 opacity-70">
                     <div className="w-16 h-16 rounded-md bg-muted shrink-0 flex items-center justify-center">
                       <IconProduct className="text-text-faint text-lg" aria-hidden="true" />
                     </div>
-                  )}
-
-                  <div className="flex flex-1 min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="body-text font-medium min-w-0 truncate">{order.product.title}</p>
-                    <div className="flex gap-4 flex-wrap shrink-0">
-                      <div className="flex flex-col items-end gap-0.5">
-                        <span className="label">Antall</span>
-                        <p className="small-text">{order.amount} stk</p>
+                    <div className="flex flex-1 min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <p className="body-text font-medium min-w-0 truncate">{productTitle}</p>
+                        <span className="badge badge-neutral shrink-0">Slettet</span>
                       </div>
-                      <div className="flex flex-col items-end gap-0.5">
-                        <span className="label">Pris/stk</span>
-                        <p className="small-text">{formatPrice(order.product.price)}</p>
-                      </div>
-                      <div className="flex flex-col items-end gap-0.5">
-                        <span className="label">Totalt</span>
-                        <p className="small-text font-semibold text-primary">
-                          {formatPrice(Number(order.product.price) * order.amount)}
-                        </p>
+                      <div className="flex gap-4 flex-wrap shrink-0">
+                        <div className="flex flex-col items-end gap-0.5">
+                          <span className="label">Antall</span>
+                          <p className="small-text">{order.amount} stk</p>
+                        </div>
+                        {order.snapshotPrice != null && (
+                          <>
+                            <div className="flex flex-col items-end gap-0.5">
+                              <span className="label">Pris/stk</span>
+                              <p className="small-text">{formatPrice(order.snapshotPrice)}</p>
+                            </div>
+                            <div className="flex flex-col items-end gap-0.5">
+                              <span className="label">Totalt</span>
+                              <p className="small-text font-semibold text-primary">
+                                {formatPrice(order.snapshotPrice * order.amount)}
+                              </p>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
-                </Link>
+                )}
               </div>
             </div>
           </div>

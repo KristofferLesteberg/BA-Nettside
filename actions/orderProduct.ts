@@ -32,6 +32,7 @@ export async function getAllOrders() {
 
   return orders.map(order => ({
     ...order,
+    snapshotPrice: order.snapshotPrice ? order.snapshotPrice.toNumber() : null,
     product: order.product
       ? { ...order.product, price: order.product.price.toNumber() }
       : null,
@@ -52,8 +53,15 @@ export async function getOrderById(id: number) {
 
 export async function createProductOrder(data: unknown) {
   const parsed = OrderProductCreateSchema.parse(data)
-  const ProductOrder = await prisma.productOrder.create({ 
-    data: parsed
+  const product = parsed.productId
+    ? await prisma.product.findUnique({ where: { id: parsed.productId }, select: { title: true, price: true } })
+    : null
+  const ProductOrder = await prisma.productOrder.create({
+    data: {
+      ...parsed,
+      snapshotTitle: product?.title ?? null,
+      snapshotPrice: product?.price ?? null,
+    }
   })
   await sendOrderEmail({ ...parsed, orderId: ProductOrder.id })
   revalidatePath("/admin")
