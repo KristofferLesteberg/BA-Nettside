@@ -1,5 +1,5 @@
 "use client"
-import { deleteOrder, getAllOrders, UpdateOrder } from "@/actions/orderProduct"
+import { deleteOrder, getAllOrders, UpdateOrder, updateOrderNotes } from "@/actions/orderProduct"
 import { OrderStatus } from "@/generated/prisma"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -8,7 +8,7 @@ import { usePopUp } from "@/components/shared/PopUp"
 import toast from "react-hot-toast"
 import {
   IconDelete, IconEmail, IconPhone, IconProductQty, IconProduct,
-  IconChevronDown, IconInfo, IconStatusChange,
+  IconChevronDown, IconInfo, IconStatusChange, IconPerson, IconRole,
 } from "@/app/lib/icons"
 import { formatPrice } from "@/app/lib/product-utils"
 
@@ -38,6 +38,9 @@ export default function OrderCard({ order }: Props) {
   const [showProduct, setShowProduct] = useState(false)
   const [kontaktOpen, setKontaktOpen] = useState(false)
   const [descOpen,    setDescOpen]    = useState(false)
+  const [notesOpen,   setNotesOpen]   = useState(false)
+  const [notes,       setNotes]       = useState(order.notes ?? '')
+  const savedNotes = useRef(order.notes ?? '')
 
   const [menuMounted, setMenuMounted] = useState(false)
   const [menuOpen,    setMenuOpen]    = useState(false)
@@ -96,13 +99,21 @@ export default function OrderCard({ order }: Props) {
   }
 
   const thumbnail = order.product?.images?.[0]?.id
+  const productTitle = order.product?.title ?? order.snapshotTitle
+  const snapshotContact = order.snapshotContact as {
+  name: string
+  email: string
+  phone: string
+  title: string
+} | null
+
 
   return (
     <div className="card card-subtle py-3 px-5" role="article">
       {popUpElement}
 
       {/* Main row */}
-      <div className="flex items-center">
+      <div className="flex items-center ">
 
         {/* Left: name, id, mobile badges */}
         <div className="flex-1 min-w-0">
@@ -115,10 +126,10 @@ export default function OrderCard({ order }: Props) {
             <span className={STATUS_STYLES[order.status]}>
               {STATUS_LABELS[order.status]}
             </span>
-            {order.product && (
+            {productTitle && (
               <span className="badge badge-lg badge-neutral gap-1.5">
                 <IconProduct className="shrink-0" aria-hidden="true" />
-                <span className="truncate max-w-32">{order.product.title}</span>
+                <span className="truncate max-w-32">{productTitle}</span>
               </span>
             )}
           </div>
@@ -135,11 +146,11 @@ export default function OrderCard({ order }: Props) {
               </span>
             </div>
 
-            {order.product && (
+            {productTitle && (
               <div className="flex justify-center -ml-1.5">
                 <span className="badge badge-lg badge-neutral gap-1.5 max-w-48">
                   <IconProduct className="shrink-0" aria-hidden="true" />
-                  <span className="truncate">{order.product.title}</span>
+                  <span className="truncate">{productTitle}</span>
                 </span>
               </div>
             )}
@@ -224,7 +235,7 @@ export default function OrderCard({ order }: Props) {
         <div className="border-t border-border">
           <button
             onClick={() => setKontaktOpen(v => !v)}
-            className="group flex items-center justify-between w-full py-2 small-text font-medium text-text"
+            className="group flex items-center justify-between w-full py-2 small-text font-medium text-text cursor-pointer"
             aria-expanded={kontaktOpen}
             aria-controls={`order-kontakt-${order.id}`}
           >
@@ -252,7 +263,7 @@ export default function OrderCard({ order }: Props) {
       <div className="mt-2 border-t border-border">
         <button
           onClick={() => setDescOpen(v => !v)}
-          className="group flex items-center justify-between w-full py-2 small-text font-medium text-text"
+          className="group flex items-center justify-between w-full py-2 small-text font-medium text-text cursor-pointer"
           aria-expanded={descOpen}
           aria-controls={`order-desc-${order.id}`}
         >
@@ -275,12 +286,14 @@ export default function OrderCard({ order }: Props) {
         </div>
       </div>
 
+      {/* Notes accordion — all screen sizes */ }
+
       {/* Product accordion — all screen sizes */}
-      {order.product && (
+      {(order.product || productTitle) && (
         <div className="mt-2 border-t border-border">
           <button
             onClick={() => setShowProduct(v => !v)}
-            className="group flex items-center justify-between w-full py-2 small-text font-medium text-text"
+            className="group flex items-center justify-between w-full py-2 small-text font-medium text-text cursor-pointer"
             aria-expanded={showProduct}
             aria-controls={`order-product-${order.id}`}
           >
@@ -290,48 +303,183 @@ export default function OrderCard({ order }: Props) {
           <div id={`order-product-${order.id}`} className={`grid transition-[grid-template-rows] duration-200 ${showProduct ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
             <div className="overflow-hidden min-h-0">
               <div className="pb-2">
-                <Link
-                  href={`/produkter/${order.productId}`}
-                  className="card-accented flex items-center gap-4 hover:opacity-80 transition-opacity"
-                >
-                  {thumbnail ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={`/images/low-res/${thumbnail}.webp`}
-                      alt={order.product.title}
-                      className="w-16 h-16 object-cover rounded-md shrink-0"
-                    />
-                  ) : (
-                    <div className="w-16 h-16 rounded-md bg-muted shrink-0 flex items-center justify-center">
-                      <IconProduct className="text-text-faint text-lg" aria-hidden="true" />
+                {order.product ? (
+                  <Link
+                    href={`/produkter/${order.productId}`}
+                    className="card-accented flex items-center gap-4 hover:opacity-80 transition-opacity"
+                  >
+                    {thumbnail ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={`/images/low-res/${thumbnail}.webp`}
+                        alt={order.product.title}
+                        className="w-16 h-16 object-cover rounded-md shrink-0"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-md bg-muted shrink-0 flex items-center justify-center">
+                        <IconProduct className="text-text-faint text-lg" aria-hidden="true" />
+                      </div>
+                    )}
+                    <div className="flex flex-1 min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                      <p className="body-text font-medium min-w-0 truncate">{order.product.title}</p>
+                      <div className="flex gap-4 flex-wrap shrink-0">
+                        <div className="flex flex-col items-end gap-0.5">
+                          <span className="label">Antall</span>
+                          <p className="small-text">{order.amount} stk</p>
+                        </div>
+                        <div className="flex flex-col items-end gap-0.5">
+                          <span className="label">Pris/stk</span>
+                          <p className="small-text">{formatPrice(order.product.price)}</p>
+                        </div>
+                        <div className="flex flex-col items-end gap-0.5">
+                          <span className="label">Totalt</span>
+                          <p className="small-text font-semibold text-primary">
+                            {formatPrice(Number(order.product.price) * order.amount)}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  )}
+                  </Link>
+                ) : (
+                  <div className="card opacity-70">
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 rounded-md bg-muted shrink-0 flex items-center justify-center">
+                        <IconProduct className="text-text-faint text-lg" aria-hidden="true" />
+                      </div>
+                      <div className="flex flex-1 min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <p className="body-text font-medium min-w-0 truncate">{productTitle}</p>
+                          <span className="badge badge-neutral shrink-0">Slettet</span>
+                        </div>
+                        <div className="flex gap-4 flex-wrap shrink-0">
+                          <div className="flex flex-col items-end gap-0.5">
+                            <span className="label">Antall</span>
+                            <p className="small-text">{order.amount} stk</p>
+                          </div>
+                          {order.snapshotPrice != null && (
+                            <>
+                              <div className="flex flex-col items-end gap-0.5">
+                                <span className="label">Pris/stk</span>
+                                <p className="small-text">{formatPrice(order.snapshotPrice)}</p>
+                              </div>
+                              <div className="flex flex-col items-end gap-0.5">
+                                <span className="label">Totalt</span>
+                                <p className="small-text font-semibold text-primary">
+                                  {formatPrice(order.snapshotPrice * order.amount)}
+                                </p>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
 
-                  <div className="flex flex-1 min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="body-text font-medium min-w-0 truncate">{order.product.title}</p>
-                    <div className="flex gap-4 flex-wrap shrink-0">
-                      <div className="flex flex-col items-end gap-0.5">
-                        <span className="label">Antall</span>
-                        <p className="small-text">{order.amount} stk</p>
+                    {snapshotContact && (
+                      <div className="mt-3 pt-3 border-t border-border">
+                        {/* Desktop row */}
+                        <div className="hidden sm:flex items-center cursor-pointer">
+                          <div className="self-center shrink-0 pl-2 pr-6 py-0.5">
+                            <span className="label">Kontaktperson</span>
+                          </div>
+                          <div className="ml-auto flex items-start">
+                            <div className="flex flex-col gap-0.5 w-30">
+                              <span className="label flex items-center gap-1">
+                                <IconPerson className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                                Navn
+                              </span>
+                              <span className="small-text text-muted">{snapshotContact.name}</span>
+                            </div>
+                            <div className="w-px self-stretch bg-border mx-3" />
+                            <div className="flex flex-col gap-0.5 w-52">
+                              <span className="label flex items-center gap-1">
+                                <IconEmail className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                                E-post
+                              </span>
+                              <a href={`mailto:${snapshotContact.email}`} className="text-secondary hover:underline small-text truncate">
+                                {snapshotContact.email}
+                              </a>
+                            </div>
+                            <div className="w-px self-stretch bg-border mx-3" />
+                            <div className="flex flex-col gap-0.5 w-36">
+                              <span className="label flex items-center gap-1">
+                                <IconPhone className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                                Telefon
+                              </span>
+                              <a href={`tel:${snapshotContact.phone}`} className="text-secondary hover:underline small-text">
+                                {snapshotContact.phone}
+                              </a>
+                            </div>
+                            {snapshotContact.title && (
+                              <>
+                                <div className="w-px self-stretch bg-border mx-3" />
+                                <div className="flex flex-col gap-0.5 w-32">
+                                  <span className="label flex items-center gap-1">
+                                    <IconRole className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                                    Tittel
+                                  </span>
+                                  <span className="small-text text-muted">{snapshotContact.title}</span>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Mobile stack */}
+                        <div className="sm:hidden flex flex-col gap-1.5 min-w-0">
+                          <span className="small-text text-muted flex items-center gap-1 min-w-0">
+                            <IconPerson className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                            <span className="truncate">{snapshotContact.name}</span>
+                          </span>
+                          <a href={`mailto:${snapshotContact.email}`} className="text-secondary hover:underline small-text flex items-center gap-1 min-w-0">
+                            <IconEmail className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                            <span className="truncate">{snapshotContact.email}</span>
+                          </a>
+                          <div className="flex items-center gap-4 flex-wrap">
+                            <a href={`tel:${snapshotContact.phone}`} className="text-secondary hover:underline small-text flex items-center gap-1">
+                              <IconPhone className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                              {snapshotContact.phone}
+                            </a>
+                            {snapshotContact.title && (
+                              <span className="small-text text-muted flex items-center gap-1">
+                                <IconRole className="text-text-faint w-3 h-3 shrink-0" aria-hidden="true" />
+                                {snapshotContact.title}
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex flex-col items-end gap-0.5">
-                        <span className="label">Pris/stk</span>
-                        <p className="small-text">{formatPrice(order.product.price)}</p>
-                      </div>
-                      <div className="flex flex-col items-end gap-0.5">
-                        <span className="label">Totalt</span>
-                        <p className="small-text font-semibold text-primary">
-                          {formatPrice(Number(order.product.price) * order.amount)}
-                        </p>
-                      </div>
-                    </div>
+                    )}
                   </div>
-                </Link>
+                )}
               </div>
             </div>
           </div>
         </div>
       )}
+      <div className="mt-2 border-t border-border">
+        <button
+          onClick={() => setNotesOpen(v => !v)}
+          className="group flex items-center justify-between w-full py-2 small-text font-medium text-text cursor-pointer"
+          aria-expanded={notesOpen}
+          aria-controls={`order-notes-${order.id}`}
+        >
+          Notater
+          <IconChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${notesOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+        </button>
+        <div id={`order-notes-${order.id}`} className={`grid transition-[grid-template-rows] duration-200 ${notesOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} `}>
+          <div className="overflow-hidden min-h-0">
+            <div className="pb-2">
+              <textarea
+                value={notes}
+                onChange={e => setNotes(e.target.value)}
+                placeholder="Legg til et internt notat…"
+                rows={3}
+                className="w-full small-text text-text bg-transparent border border-border rounded-md px-2 py-1 resize-none placeholder:text-faint focus:outline-none focus:border-border-strong transition-colors"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

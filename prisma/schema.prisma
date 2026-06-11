@@ -107,10 +107,15 @@ model ProductOrder {
   clientPhone String
   amount Int
   extraDetails String?
+  notes String?
   status OrderStatus @default(NEW)
   isSeeded Boolean @default(false)
   productId Int?
   product Product? @relation(fields: [productId], references: [id])
+  snapshotTitle String?
+  snapshotPrice Decimal?
+  snapshotContact Json?
+
 }
 
 model NotificationRecipient {

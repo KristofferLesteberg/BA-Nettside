@@ -252,6 +252,7 @@ export default function OrderProjectForm({ onSuccess }: Props) {
                         setPhone={setPhone}
                         setOrgName={setOrgName}
                         setAddress={setAddress}
+                        onSuccess={() => setTimeout(() => forenameRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)}
                       />
                     </div>
                   </div>
@@ -278,7 +279,10 @@ export default function OrderProjectForm({ onSuccess }: Props) {
                   </div>
 
                   {/* Name */}
-                  <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 ${identityType === 'organization' ? 'mt-6' : ''}`} ref={forenameRef}>
+                  {identityType === 'organization' && (
+                    <p className="label mt-6">Kontaktperson <span className="text-error">*</span></p>
+                  )}
+                  <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 ${identityType === 'organization' ? 'mt-2' : ''}`} ref={forenameRef}>
                     <div className="space-y-1.5">
                       <label className="label">Fornavn <span className="text-error">*</span></label>
                       <input

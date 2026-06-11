@@ -185,9 +185,13 @@ exports.Prisma.ProductOrderScalarFieldEnum = {
   clientPhone: 'clientPhone',
   amount: 'amount',
   extraDetails: 'extraDetails',
+  notes: 'notes',
   status: 'status',
   isSeeded: 'isSeeded',
-  productId: 'productId'
+  productId: 'productId',
+  snapshotTitle: 'snapshotTitle',
+  snapshotPrice: 'snapshotPrice',
+  snapshotContact: 'snapshotContact'
 };
 
 exports.Prisma.NotificationRecipientScalarFieldEnum = {

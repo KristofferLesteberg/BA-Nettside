@@ -1,6 +1,6 @@
 'use server'
 
-import { z } from 'zod'
+import { email, z } from 'zod'
 import { prisma } from '@/app/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth'
@@ -27,11 +27,12 @@ export async function getAllOrders() {
   if (!session) throw new Error('Ikke autorisert')
 
   const orders = await prisma.productOrder.findMany({
-    include: { product: { include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } } } }
+    include: { product: { include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } },  } }
   })
 
   return orders.map(order => ({
     ...order,
+    snapshotPrice: order.snapshotPrice ? order.snapshotPrice.toNumber() : null,
     product: order.product
       ? { ...order.product, price: order.product.price.toNumber() }
       : null,
@@ -52,8 +53,21 @@ export async function getOrderById(id: number) {
 
 export async function createProductOrder(data: unknown) {
   const parsed = OrderProductCreateSchema.parse(data)
-  const ProductOrder = await prisma.productOrder.create({ 
-    data: parsed
+  const product = parsed.productId
+    ? await prisma.product.findUnique({ where: { id: parsed.productId }, select: { title: true, price: true, contactPerson: true } })
+    : null
+  const ProductOrder = await prisma.productOrder.create({
+    data: {
+      ...parsed,
+      snapshotTitle: product?.title ?? null,
+      snapshotPrice: product?.price ?? null,
+      snapshotContact: product?.contactPerson ? { 
+        name: product.contactPerson.name,
+        email: product.contactPerson.email,
+        phone: product.contactPerson.phone,
+        title: product.contactPerson.title,
+      } : undefined
+    }
   })
   await sendOrderEmail({ ...parsed, orderId: ProductOrder.id })
   revalidatePath("/admin")
@@ -79,6 +93,15 @@ export async function UpdateOrder(id: number, status: string) {
     where: { id: id}, data: { status: parsed}
   })
   revalidatePath("/admin")
+}
+
+export async function updateOrderNotes(id: number, notes: string) {
+  const session = await getServerSession(authOptions)
+  if (!session) throw new Error('Ikke autorisert')
+  await prisma.productOrder.update({
+    where: { id },
+    data: { notes: notes.trim() || null },
+  })
 }
 
 export async function getOrdersByProductId(productId: number) {
