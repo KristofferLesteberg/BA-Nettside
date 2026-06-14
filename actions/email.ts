@@ -70,7 +70,7 @@ export async function sendOrderEmail(order: sendOrderEmailProps) {
   ].join('') : null
 
   if (adminRecipients.length > 0) {
-    const adminBody = [
+    const adminBody = [ 
       emailParagraph('Du har mottatt en ny produktbestilling.'),
       emailSection('Ordreoversikt', orderRows),
       emailSection('Kundeinformasjon', clientRows),

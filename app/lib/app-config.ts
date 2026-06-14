@@ -1,5 +1,6 @@
 'use server'
 
+import { Prisma } from '@/generated/prisma'
 import { prisma } from '@/app/lib/prisma'
 import { CONFIG_KEYS, type ConfigKey } from '@/app/lib/app-config-keys'
 
@@ -16,8 +17,13 @@ const HARDCODED_FALLBACKS: Partial<Record<ConfigKey, string>> = {
 }
 
 export async function getAppConfig(key: ConfigKey): Promise<string | undefined> {
-  const row = await prisma.appConfig.findUnique({ where: { key } })
-  if (row) return row.value
+  try {
+    const row = await prisma.appConfig.findUnique({ where: { key } })
+    if (row) return row.value
+  } catch (e) {
+    // Table doesn't exist yet (pending migration) — fall through to defaults
+    if (!(e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2021')) throw e
+  }
 
   const envFallback = ENV_FALLBACKS[key]?.()
   if (envFallback !== undefined) return envFallback
@@ -34,7 +40,12 @@ export async function setAppConfig(key: ConfigKey, value: string): Promise<void>
 }
 
 export async function getAllAppConfig(): Promise<Record<ConfigKey, string | undefined>> {
-  const rows = await prisma.appConfig.findMany()
+  let rows: { key: string; value: string }[] = []
+  try {
+    rows = await prisma.appConfig.findMany()
+  } catch (e) {
+    if (!(e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2021')) throw e
+  }
   const dbMap = Object.fromEntries(rows.map((r) => [r.key, r.value]))
 
   const result = {} as Record<ConfigKey, string | undefined>
