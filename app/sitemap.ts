@@ -1,7 +1,9 @@
 import type { MetadataRoute } from 'next'
 import { getAllProducts } from '@/actions/products'
 
-const BASE_URL = 'https://bat.elev13.sevgs.no'
+export const dynamic = 'force-dynamic'
+
+const BASE_URL = process.env.NEXTAUTH_URL!.replace(/\/$/, '')
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products = await getAllProducts()
