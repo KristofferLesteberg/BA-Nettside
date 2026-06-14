@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { IconEmail, IconFacebook, IconWebsite, IconLocation } from '@/app/lib/icons'
 import type { IconType } from 'react-icons'
+import type { Variants } from 'framer-motion'
 import MotionDiv from '@/components/shared/MotionDiv'
 import MotionUl from '@/components/shared/MotionUl'
 import MotionLi from '@/components/shared/MotionLi'
@@ -50,14 +51,14 @@ const contactItems: ContactItem[] = [
   },
 ]
 
-const listContainer = {
+const listContainer: Variants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.2 } },
 }
 
-const listItem = {
+const listItem: Variants = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' as const } },
 }
 
 export default function ContactPage() {

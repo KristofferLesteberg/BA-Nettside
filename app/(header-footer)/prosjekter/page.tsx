@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import type { Variants } from 'framer-motion'
 import MotionDiv from '@/components/shared/MotionDiv'
 import PrerequisitesForm from '@/components/projects/PrerequisitesForm'
 
@@ -8,14 +9,14 @@ export const metadata: Metadata = {
   description: 'Bestill et prosjekt fra elever på bygg- og anleggsteknikk ved Sam Eyde VGS. Vi tar på oss prosjekter innen bygg og anlegg.',
 }
 
-const cardContainer = {
+const cardContainer: Variants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.12 } },
 }
 
-const cardItem = {
+const cardItem: Variants = {
   hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' as const } },
 }
 
 export default function ProjectsPage() {
