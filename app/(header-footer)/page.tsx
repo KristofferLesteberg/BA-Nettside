@@ -27,37 +27,24 @@ const page = async () => {
         <div className='relative z-10 h-full flex flex-col'>
           <div className='h-(--header-height) shrink-0' />
           <div className='flex-1 flex flex-col items-center justify-center text-center px-4 pb-10'>
-            <MotionDiv
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
+            <div>
               <h1 className='heading-display text-white'>
                 Kjøp byggematerialer eller få jobben gjort av fagfolk
               </h1>
-            </MotionDiv>
-            <MotionDiv
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
+            </div>
+            <div>
               <p className='text-text-on-dark-muted text-xl mt-4 max-w-2xl'>
                 Velkommen til Sam Eyde VGS – her kan du kjøpe produkter eller bestille prosjekter fra våre elever.
               </p>
-            </MotionDiv>
-            <MotionDiv
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              className='flex flex-row gap-3 mt-6'
-            >
+            </div>
+            <div className='flex flex-row gap-3 mt-6'>
               <Link href="/produkter">
                 <button className='btn btn-primary p-3 hover:bg-primary-hover'>Se på våre produkter!</button>
               </Link>
               <Link href="/prosjekter">
                 <button className='btn btn-primary p-3 hover:bg-primary-hover'>Bestill en av våre Elever!</button>
               </Link>
-            </MotionDiv>
+            </div>
           </div>
         </div>
       </section>
