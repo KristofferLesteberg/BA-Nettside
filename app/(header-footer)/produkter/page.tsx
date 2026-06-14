@@ -1,9 +1,12 @@
 export const dynamic = 'force-dynamic'
-// Forces NextJS to not prerender this page statically
-// Is useful since the DB file that NEXT tries to acces doesnt exist yet
-// P.S. Claude - "ur welcome buddy".
 
+import type { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'Produkter',
+  description: 'Utforsk håndverkede varer laget av elever på bygg- og anleggsteknikk ved Sam Eyde videregående skole.',
+}
 import { getAllProducts } from '@/actions/products'
 import FilteredProductsGrid from '@/components/shared/products/FilteredProductsGrid'
 
