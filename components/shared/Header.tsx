@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 import { IconMenuOpen, IconClose } from '@/app/lib/icons';
-import { AnimatePresence, motion } from 'motion/react';
 
 const navLinks = [
   { href: '/produkter',    label: 'Våre Produkter'      },
@@ -101,33 +100,33 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Mobile nav */}
-      <AnimatePresence>
-        {open && (
-          <motion.nav
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: 'easeInOut' }}
-            className="md:hidden border-t border-border bg-subtle px-4 py-3 flex flex-col gap-1 overflow-hidden"
-          >
-            {navLinks.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setOpen(false)}
-                className={`px-3 py-2.5 rounded-md text-sm font-medium transition-colors duration-150 ${
-                  pathname === href
-                    ? 'bg-surface-raised text-primary'
-                    : 'text-text hover:bg-surface-raised'
-                }`}
-              >
-                {label}
-              </Link>
-            ))}
-          </motion.nav>
-        )}
-      </AnimatePresence>
+      {/* Mobile nav — CSS-animated, no JS library needed */}
+      <nav
+        inert={!open || undefined}
+        className="md:hidden bg-subtle overflow-hidden"
+        style={{
+          maxHeight: open ? '400px' : '0',
+          opacity: open ? 1 : 0,
+          transition: 'max-height 0.25s ease-in-out, opacity 0.2s ease-in-out',
+        }}
+      >
+        <div className="border-t border-border px-4 py-3 flex flex-col gap-1">
+          {navLinks.map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setOpen(false)}
+              className={`px-3 py-2.5 rounded-md text-sm font-medium transition-colors duration-150 ${
+                pathname === href
+                  ? 'bg-surface-raised text-primary'
+                  : 'text-text hover:bg-surface-raised'
+              }`}
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
+      </nav>
     </header>
   );
 }
