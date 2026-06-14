@@ -3,9 +3,8 @@ import { getAllProducts } from '@/actions/products'
 
 export const dynamic = 'force-dynamic'
 
-const BASE_URL = process.env.NEXTAUTH_URL!.replace(/\/$/, '')
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const BASE_URL = process.env.NEXTAUTH_URL!.replace(/\/$/, '')
   const products = await getAllProducts()
 
   const productUrls: MetadataRoute.Sitemap = products.map((product) => ({
