@@ -69,11 +69,18 @@ deploy:
   script:
     - |
       ssh "$DEPLOY_USER@$DEPLOY_HOST" "
+        # ONE-OFF MIGRATION: flattens the old high-res/med-res/low-res tiers into a single
+        # file per id (high-res kept as the canonical original). Remove this block after
+        # it has run once successfully.
+        if [ -d /var/data/ba-nettside-images/high-res ]; then
+          find /var/data/ba-nettside-images/high-res -maxdepth 1 -name '*.webp' -exec mv -n {} /var/data/ba-nettside-images/ \; &&
+          rm -rf /var/data/ba-nettside-images/high-res /var/data/ba-nettside-images/med-res /var/data/ba-nettside-images/low-res
+        fi &&
         echo '$CI_REGISTRY_PASSWORD' | docker login -u '$CI_REGISTRY_USER' --password-stdin '$CI_REGISTRY' &&
         docker image prune -f &&
         docker pull '$IMAGE' &&
         docker rm -f ba-nettside || true &&
-        docker run -d --name ba-nettside --network proxy --restart unless-stopped -v /var/data/ba-nettside:/app/data -v /var/data/ba-nettside-images:/app/public/images -e DATABASE_URL='$DATABASE_URL' -e ADMIN_PASSWORD='$ADMIN_PASSWORD' -e ADMIN_USERNAME='$ADMIN_USERNAME' -e NEXTAUTH_SECRET='$NEXTAUTH_SECRET' -e NEXTAUTH_URL='$NEXTAUTH_URL' -e MAIL_HOST='$MAIL_HOST' -e MAIL_PORT='$MAIL_PORT' -e MAIL_USER='$MAIL_USER' -e MAIL_PASS='$MAIL_PASS' '$IMAGE'
+        docker run -d --name ba-nettside --network proxy --restart unless-stopped -v /var/data/ba-nettside:/app/data -v /var/data/ba-nettside-images:/app/images -e DATABASE_URL='$DATABASE_URL' -e ADMIN_PASSWORD='$ADMIN_PASSWORD' -e ADMIN_USERNAME='$ADMIN_USERNAME' -e NEXTAUTH_SECRET='$NEXTAUTH_SECRET' -e NEXTAUTH_URL='$NEXTAUTH_URL' -e MAIL_HOST='$MAIL_HOST' -e MAIL_PORT='$MAIL_PORT' -e MAIL_USER='$MAIL_USER' -e MAIL_PASS='$MAIL_PASS' '$IMAGE'
       "
   only:
     - main
