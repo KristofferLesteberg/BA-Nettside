@@ -17,9 +17,11 @@ function isSupportedType(type: string): type is SupportedMimeType {
   return SUPPORTED_TYPES.includes(type as SupportedMimeType)
 }
 
+const IMAGES_DIR = path.join(process.cwd(), "images")
+
 export async function uploadProductImage(
-  file: File, 
-  productId: number, 
+  file: File,
+  productId: number,
   sortOrder: number = 0,
   staticId?: string
 ) {
@@ -29,27 +31,13 @@ export async function uploadProductImage(
 
   const buffer = Buffer.from(await file.arrayBuffer())
   const id = staticId ?? randomUUID()
-  const outputPathHigh = path.join(process.cwd(), "public", "images", "high-res", `${id}.webp`)
-  const outputPathMed = path.join(process.cwd(), "public", "images", "med-res", `${id}.webp`)
-  const outputPathLow = path.join(process.cwd(), "public", "images", "low-res", `${id}.webp`)
+  const outputPath = path.join(IMAGES_DIR, `${id}.webp`)
 
-  await fs.mkdir(path.dirname(outputPathHigh), { recursive: true })
-  await fs.mkdir(path.dirname(outputPathMed), { recursive: true })
-  await fs.mkdir(path.dirname(outputPathLow), { recursive: true })
+  await fs.mkdir(IMAGES_DIR, { recursive: true })
 
   await sharp(buffer)
     .webp({ quality: 80 })
-    .toFile(outputPathHigh)
-
-  await sharp(buffer)
-    .resize(800, 800, { fit: "inside", withoutEnlargement: true })
-    .webp({ quality: 80 })
-    .toFile(outputPathMed)
-
-  await sharp(buffer)
-    .resize(400, 400, { fit: "inside", withoutEnlargement: true })
-    .webp({ quality: 85 })
-    .toFile(outputPathLow)
+    .toFile(outputPath)
 
   await prisma.productImage.create({
     data: { id, productId, sortOrder }
@@ -72,53 +60,6 @@ export async function uploadProductImages(
     );
     sortOrder++;
   }
-}
-
-export async function getProductThumbnail(productId: number) {
-  const image = await prisma.productImage.findFirst({
-    where: { productId, sortOrder: 0 },
-  })
-
-  return image ? {
-    id: image.id,
-    url: `/images/low-res/${image.id}.webp`
-  } : null
-}
-
-export async function getProductImagesHighRes(productId: number) {
-  const images = await prisma.productImage.findMany({
-    where: { productId: productId },
-    orderBy: { sortOrder: "asc" }
-  })
-
-  return images.map(img => ({
-    id: img.id,
-    url: `/images/high-res/${img.id}.webp`
-  }))
-}
-
-export async function getProductImagesMedRes(productId: number) {
-  const images = await prisma.productImage.findMany({
-    where: { productId: productId },
-    orderBy: { sortOrder: "asc" }
-  })
-
-  return images.map(img => ({
-    id: img.id,
-    url: `/images/med-res/${img.id}.webp`
-  }))
-}
-
-export async function getProductImagesLowRes(productId: number) {
-  const images = await prisma.productImage.findMany({
-    where: { productId: productId },
-    orderBy: { sortOrder: "asc" }
-  })
-
-  return images.map(img => ({
-    id: img.id,
-    url: `/images/low-res/${img.id}.webp`
-  }))
 }
 
 export async function syncProductImages(
@@ -154,13 +95,7 @@ export async function syncProductImages(
 }
 
 export async function deleteProductImage(imageId: string) {
-  const filePathHigh = path.join(process.cwd(), "public", "images", "high-res", `${imageId}.webp`)
-  const filePathMed = path.join(process.cwd(), "public", "images", "med-res", `${imageId}.webp`)
-  const filePathLow = path.join(process.cwd(), "public", "images", "low-res", `${imageId}.webp`)
-
-  await fs.unlink(filePathHigh).catch(() => {})
-  await fs.unlink(filePathMed).catch(() => {})
-  await fs.unlink(filePathLow).catch(() => {})
+  await fs.unlink(path.join(IMAGES_DIR, `${imageId}.webp`)).catch(() => {})
 
   await prisma.productImage.delete({
     where: { id: imageId }
@@ -173,12 +108,7 @@ export async function deleteAllProductImages(productId: number) {
   })
 
   for (const image of images) {
-    const filePathHigh = path.join(process.cwd(), "public", "images", "high-res", `${image.id}.webp`)
-    const filePathMed = path.join(process.cwd(), "public", "images", "med-res", `${image.id}.webp`)
-    const filePathLow = path.join(process.cwd(), "public", "images", "low-res", `${image.id}.webp`)
-    await fs.unlink(filePathHigh).catch(() => {})
-    await fs.unlink(filePathMed).catch(() => {})
-    await fs.unlink(filePathLow).catch(() => {})
+    await fs.unlink(path.join(IMAGES_DIR, `${image.id}.webp`)).catch(() => {})
   }
 
   await prisma.productImage.deleteMany({
@@ -193,9 +123,9 @@ export async function uploadReviewImage(file: File, staticId?: string): Promise<
 
   const buffer = Buffer.from(await file.arrayBuffer())
   const id = staticId ?? randomUUID()
-  const outputPath = path.join(process.cwd(), "public", "images", `${id}.webp`)
+  const outputPath = path.join(IMAGES_DIR, `${id}.webp`)
 
-  await fs.mkdir(path.dirname(outputPath), { recursive: true })
+  await fs.mkdir(IMAGES_DIR, { recursive: true })
 
   await sharp(buffer)
     .resize(400, 400, { fit: "cover", position: "center" })
@@ -206,6 +136,5 @@ export async function uploadReviewImage(file: File, staticId?: string): Promise<
 }
 
 export async function deleteReviewImage(imageId: string) {
-  const filePath = path.join(process.cwd(), "public", "images", `${imageId}.webp`)
-  await fs.unlink(filePath).catch(() => {})
+  await fs.unlink(path.join(IMAGES_DIR, `${imageId}.webp`)).catch(() => {})
 }
