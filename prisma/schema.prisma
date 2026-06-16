@@ -107,7 +107,6 @@ model ProductOrder {
   clientPhone String
   amount Int
   extraDetails String?
-  notes String?
   status OrderStatus @default(NEW)
   isSeeded Boolean @default(false)
   productId Int?
@@ -115,7 +114,18 @@ model ProductOrder {
   snapshotTitle String?
   snapshotPrice Decimal?
   snapshotContact Json?
+  notes OrderNote[]
+}
 
+model OrderNote {
+  id Int @id @default(autoincrement())
+  orderId Int
+  order ProductOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  text String
+  authorName String?
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
 }
 
 model NotificationRecipient {
