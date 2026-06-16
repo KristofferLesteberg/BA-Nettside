@@ -25,7 +25,7 @@ export default function PublicProductCard({ product, priority }: Props) {
       <div className="relative w-full aspect-4/3 overflow-hidden rounded-t-lg bg-surface">
         {product.image ? (
           <Image
-            src={`/images/low-res/${product.image.id}.webp`}
+            src={`/images/${product.image.id}.webp`}
             alt={product.title}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

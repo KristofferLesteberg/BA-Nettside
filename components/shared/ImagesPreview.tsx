@@ -282,7 +282,7 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
                 }}
               >
                 <Image
-                  src={`/images/high-res/${id}.webp`}
+                  src={`/images/${id}.webp`}
                   alt=""
                   fill
                   sizes="(max-width: 768px) 100vw, 85vw"
@@ -372,7 +372,7 @@ export default function ImagesPreview({ imageIds, initialIndex = 0, onClose }: I
                   aria-label={`Gå til bilde ${i + 1}`}
                 >
                   <Image
-                    src={`/images/low-res/${id}.webp`}
+                    src={`/images/${id}.webp`}
                     alt=""
                     fill
                     sizes={`${THUMB_SIZE}px`}

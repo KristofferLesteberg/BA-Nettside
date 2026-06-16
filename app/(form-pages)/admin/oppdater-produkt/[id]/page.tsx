@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       price={Number(product.price).toString()}
       amount={String(product.amount)}
       measures={measures}
-      existingImages={product.images.map(img => ({ id: img.id, url: `/images/med-res/${img.id}.webp` }))}
+      existingImages={product.images.map(img => ({ id: img.id, url: `/images/${img.id}.webp` }))}
       contactId={product.contactPersonId ? String(product.contactPersonId) : ''}
       draft={product.draft}
     />

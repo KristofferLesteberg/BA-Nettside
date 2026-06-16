@@ -150,7 +150,7 @@ export default function ImageCarousel({
             {images.map((imageId, index) => (
               <SwiperSlide key={imageId}>
                 <ContainedImage
-                  src={`/images/med-res/${imageId}.webp`}
+                  src={`/images/${imageId}.webp`}
                   sizes={sizes}
                   priority={index === 0}
                 />
