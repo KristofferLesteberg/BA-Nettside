@@ -19,10 +19,9 @@ export default function Header() {
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
   const openRef = useRef(false);
+  const lastScrollY = useRef(0);
 
   useEffect(() => { openRef.current = open; }, [open]);
-
-  let lastScrollY = 0;
 
   const scrollHeader = () => {
     const currentScrollY = window.scrollY;
@@ -30,10 +29,9 @@ export default function Header() {
       setOpen(false);
       setVisible(false);
     } else {
-      setVisible(currentScrollY < lastScrollY || currentScrollY < 20);
+      setVisible(currentScrollY < lastScrollY.current || currentScrollY < 20);
     }
-    // eslint-disable-next-line react-hooks/immutability
-    lastScrollY = currentScrollY;
+    lastScrollY.current = currentScrollY;
   }
 
   useEffect(() => {
@@ -68,6 +66,8 @@ export default function Header() {
             src="/icons/SamEyde_vgs_rgb.svg"
             alt="Sam Eyde VGS"
             fill
+            priority
+            sizes="(min-width: 640px) 192px, 160px"
             className="object-contain object-left"
           />
         </Link>
