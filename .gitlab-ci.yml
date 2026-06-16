@@ -69,13 +69,6 @@ deploy:
   script:
     - |
       ssh "$DEPLOY_USER@$DEPLOY_HOST" "
-        # ONE-OFF MIGRATION: flattens the old high-res/med-res/low-res tiers into a single
-        # file per id (high-res kept as the canonical original). Remove this block after
-        # it has run once successfully.
-        if [ -d /var/data/ba-nettside-images/high-res ]; then
-          find /var/data/ba-nettside-images/high-res -maxdepth 1 -name '*.webp' -exec mv -n {} /var/data/ba-nettside-images/ \; &&
-          rm -rf /var/data/ba-nettside-images/high-res /var/data/ba-nettside-images/med-res /var/data/ba-nettside-images/low-res
-        fi &&
         echo '$CI_REGISTRY_PASSWORD' | docker login -u '$CI_REGISTRY_USER' --password-stdin '$CI_REGISTRY' &&
         docker image prune -f &&
         docker pull '$IMAGE' &&
