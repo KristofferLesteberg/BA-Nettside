@@ -27,7 +27,10 @@ export async function getAllOrders() {
   if (!session) throw new Error('Ikke autorisert')
 
   const orders = await prisma.productOrder.findMany({
-    include: { product: { include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } },  } }
+    include: {
+      product: { include: { images: { take: 1, orderBy: { sortOrder: 'asc' } } } },
+      notes: { orderBy: { createdAt: 'asc' } },
+    },
   })
 
   return orders.map(order => ({
@@ -93,15 +96,6 @@ export async function UpdateOrder(id: number, status: string) {
     where: { id: id}, data: { status: parsed}
   })
   revalidatePath("/admin")
-}
-
-export async function updateOrderNotes(id: number, notes: string) {
-  const session = await getServerSession(authOptions)
-  if (!session) throw new Error('Ikke autorisert')
-  await prisma.productOrder.update({
-    where: { id },
-    data: { notes: notes.trim() || null },
-  })
 }
 
 export async function getOrdersByProductId(productId: number) {
