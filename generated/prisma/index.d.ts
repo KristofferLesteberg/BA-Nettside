@@ -44,6 +44,11 @@ export type ContactPerson = $Result.DefaultSelection<Prisma.$ContactPersonPayloa
  */
 export type ProductOrder = $Result.DefaultSelection<Prisma.$ProductOrderPayload>
 /**
+ * Model OrderNote
+ * 
+ */
+export type OrderNote = $Result.DefaultSelection<Prisma.$OrderNotePayload>
+/**
  * Model NotificationRecipient
  * 
  */
@@ -284,6 +289,16 @@ export class PrismaClient<
     * ```
     */
   get productOrder(): Prisma.ProductOrderDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.orderNote`: Exposes CRUD operations for the **OrderNote** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OrderNotes
+    * const orderNotes = await prisma.orderNote.findMany()
+    * ```
+    */
+  get orderNote(): Prisma.OrderNoteDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.notificationRecipient`: Exposes CRUD operations for the **NotificationRecipient** model.
@@ -754,6 +769,7 @@ export namespace Prisma {
     ClientReview: 'ClientReview',
     ContactPerson: 'ContactPerson',
     ProductOrder: 'ProductOrder',
+    OrderNote: 'OrderNote',
     NotificationRecipient: 'NotificationRecipient',
     AppConfig: 'AppConfig',
     EmailQueue: 'EmailQueue'
@@ -772,7 +788,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "product" | "productImage" | "projectRequest" | "clientReview" | "contactPerson" | "productOrder" | "notificationRecipient" | "appConfig" | "emailQueue"
+      modelProps: "product" | "productImage" | "projectRequest" | "clientReview" | "contactPerson" | "productOrder" | "orderNote" | "notificationRecipient" | "appConfig" | "emailQueue"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1220,6 +1236,80 @@ export namespace Prisma {
           }
         }
       }
+      OrderNote: {
+        payload: Prisma.$OrderNotePayload<ExtArgs>
+        fields: Prisma.OrderNoteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OrderNoteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderNotePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OrderNoteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderNotePayload>
+          }
+          findFirst: {
+            args: Prisma.OrderNoteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderNotePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OrderNoteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderNotePayload>
+          }
+          findMany: {
+            args: Prisma.OrderNoteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderNotePayload>[]
+          }
+          create: {
+            args: Prisma.OrderNoteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderNotePayload>
+          }
+          createMany: {
+            args: Prisma.OrderNoteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OrderNoteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderNotePayload>[]
+          }
+          delete: {
+            args: Prisma.OrderNoteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderNotePayload>
+          }
+          update: {
+            args: Prisma.OrderNoteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderNotePayload>
+          }
+          deleteMany: {
+            args: Prisma.OrderNoteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OrderNoteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OrderNoteUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderNotePayload>[]
+          }
+          upsert: {
+            args: Prisma.OrderNoteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderNotePayload>
+          }
+          aggregate: {
+            args: Prisma.OrderNoteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOrderNote>
+          }
+          groupBy: {
+            args: Prisma.OrderNoteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OrderNoteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OrderNoteCountArgs<ExtArgs>
+            result: $Utils.Optional<OrderNoteCountAggregateOutputType> | number
+          }
+        }
+      }
       NotificationRecipient: {
         payload: Prisma.$NotificationRecipientPayload<ExtArgs>
         fields: Prisma.NotificationRecipientFieldRefs
@@ -1556,6 +1646,7 @@ export namespace Prisma {
     clientReview?: ClientReviewOmit
     contactPerson?: ContactPersonOmit
     productOrder?: ProductOrderOmit
+    orderNote?: OrderNoteOmit
     notificationRecipient?: NotificationRecipientOmit
     appConfig?: AppConfigOmit
     emailQueue?: EmailQueueOmit
@@ -1702,6 +1793,37 @@ export namespace Prisma {
    */
   export type ContactPersonCountOutputTypeCountProductArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductWhereInput
+  }
+
+
+  /**
+   * Count Type ProductOrderCountOutputType
+   */
+
+  export type ProductOrderCountOutputType = {
+    notes: number
+  }
+
+  export type ProductOrderCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    notes?: boolean | ProductOrderCountOutputTypeCountNotesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProductOrderCountOutputType without action
+   */
+  export type ProductOrderCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOrderCountOutputType
+     */
+    select?: ProductOrderCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProductOrderCountOutputType without action
+   */
+  export type ProductOrderCountOutputTypeCountNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderNoteWhereInput
   }
 
 
@@ -7469,7 +7591,6 @@ export namespace Prisma {
     clientPhone: string | null
     amount: number | null
     extraDetails: string | null
-    notes: string | null
     status: $Enums.OrderStatus | null
     isSeeded: boolean | null
     productId: number | null
@@ -7484,7 +7605,6 @@ export namespace Prisma {
     clientPhone: string | null
     amount: number | null
     extraDetails: string | null
-    notes: string | null
     status: $Enums.OrderStatus | null
     isSeeded: boolean | null
     productId: number | null
@@ -7499,7 +7619,6 @@ export namespace Prisma {
     clientPhone: number
     amount: number
     extraDetails: number
-    notes: number
     status: number
     isSeeded: number
     productId: number
@@ -7531,7 +7650,6 @@ export namespace Prisma {
     clientPhone?: true
     amount?: true
     extraDetails?: true
-    notes?: true
     status?: true
     isSeeded?: true
     productId?: true
@@ -7546,7 +7664,6 @@ export namespace Prisma {
     clientPhone?: true
     amount?: true
     extraDetails?: true
-    notes?: true
     status?: true
     isSeeded?: true
     productId?: true
@@ -7561,7 +7678,6 @@ export namespace Prisma {
     clientPhone?: true
     amount?: true
     extraDetails?: true
-    notes?: true
     status?: true
     isSeeded?: true
     productId?: true
@@ -7664,7 +7780,6 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails: string | null
-    notes: string | null
     status: $Enums.OrderStatus
     isSeeded: boolean
     productId: number | null
@@ -7699,7 +7814,6 @@ export namespace Prisma {
     clientPhone?: boolean
     amount?: boolean
     extraDetails?: boolean
-    notes?: boolean
     status?: boolean
     isSeeded?: boolean
     productId?: boolean
@@ -7707,6 +7821,8 @@ export namespace Prisma {
     snapshotPrice?: boolean
     snapshotContact?: boolean
     product?: boolean | ProductOrder$productArgs<ExtArgs>
+    notes?: boolean | ProductOrder$notesArgs<ExtArgs>
+    _count?: boolean | ProductOrderCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["productOrder"]>
 
   export type ProductOrderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7716,7 +7832,6 @@ export namespace Prisma {
     clientPhone?: boolean
     amount?: boolean
     extraDetails?: boolean
-    notes?: boolean
     status?: boolean
     isSeeded?: boolean
     productId?: boolean
@@ -7733,7 +7848,6 @@ export namespace Prisma {
     clientPhone?: boolean
     amount?: boolean
     extraDetails?: boolean
-    notes?: boolean
     status?: boolean
     isSeeded?: boolean
     productId?: boolean
@@ -7750,7 +7864,6 @@ export namespace Prisma {
     clientPhone?: boolean
     amount?: boolean
     extraDetails?: boolean
-    notes?: boolean
     status?: boolean
     isSeeded?: boolean
     productId?: boolean
@@ -7759,9 +7872,11 @@ export namespace Prisma {
     snapshotContact?: boolean
   }
 
-  export type ProductOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientName" | "clientEmail" | "clientPhone" | "amount" | "extraDetails" | "notes" | "status" | "isSeeded" | "productId" | "snapshotTitle" | "snapshotPrice" | "snapshotContact", ExtArgs["result"]["productOrder"]>
+  export type ProductOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientName" | "clientEmail" | "clientPhone" | "amount" | "extraDetails" | "status" | "isSeeded" | "productId" | "snapshotTitle" | "snapshotPrice" | "snapshotContact", ExtArgs["result"]["productOrder"]>
   export type ProductOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductOrder$productArgs<ExtArgs>
+    notes?: boolean | ProductOrder$notesArgs<ExtArgs>
+    _count?: boolean | ProductOrderCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductOrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductOrder$productArgs<ExtArgs>
@@ -7774,6 +7889,7 @@ export namespace Prisma {
     name: "ProductOrder"
     objects: {
       product: Prisma.$ProductPayload<ExtArgs> | null
+      notes: Prisma.$OrderNotePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -7782,7 +7898,6 @@ export namespace Prisma {
       clientPhone: string
       amount: number
       extraDetails: string | null
-      notes: string | null
       status: $Enums.OrderStatus
       isSeeded: boolean
       productId: number | null
@@ -8184,6 +8299,7 @@ export namespace Prisma {
   export interface Prisma__ProductOrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     product<T extends ProductOrder$productArgs<ExtArgs> = {}>(args?: Subset<T, ProductOrder$productArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    notes<T extends ProductOrder$notesArgs<ExtArgs> = {}>(args?: Subset<T, ProductOrder$notesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8219,7 +8335,6 @@ export namespace Prisma {
     readonly clientPhone: FieldRef<"ProductOrder", 'String'>
     readonly amount: FieldRef<"ProductOrder", 'Int'>
     readonly extraDetails: FieldRef<"ProductOrder", 'String'>
-    readonly notes: FieldRef<"ProductOrder", 'String'>
     readonly status: FieldRef<"ProductOrder", 'OrderStatus'>
     readonly isSeeded: FieldRef<"ProductOrder", 'Boolean'>
     readonly productId: FieldRef<"ProductOrder", 'Int'>
@@ -8644,6 +8759,30 @@ export namespace Prisma {
   }
 
   /**
+   * ProductOrder.notes
+   */
+  export type ProductOrder$notesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderNote
+     */
+    select?: OrderNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderNote
+     */
+    omit?: OrderNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderNoteInclude<ExtArgs> | null
+    where?: OrderNoteWhereInput
+    orderBy?: OrderNoteOrderByWithRelationInput | OrderNoteOrderByWithRelationInput[]
+    cursor?: OrderNoteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrderNoteScalarFieldEnum | OrderNoteScalarFieldEnum[]
+  }
+
+  /**
    * ProductOrder without action
    */
   export type ProductOrderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8659,6 +8798,1105 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ProductOrderInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model OrderNote
+   */
+
+  export type AggregateOrderNote = {
+    _count: OrderNoteCountAggregateOutputType | null
+    _avg: OrderNoteAvgAggregateOutputType | null
+    _sum: OrderNoteSumAggregateOutputType | null
+    _min: OrderNoteMinAggregateOutputType | null
+    _max: OrderNoteMaxAggregateOutputType | null
+  }
+
+  export type OrderNoteAvgAggregateOutputType = {
+    id: number | null
+    orderId: number | null
+  }
+
+  export type OrderNoteSumAggregateOutputType = {
+    id: number | null
+    orderId: number | null
+  }
+
+  export type OrderNoteMinAggregateOutputType = {
+    id: number | null
+    orderId: number | null
+    text: string | null
+    authorName: string | null
+    createdAt: Date | null
+  }
+
+  export type OrderNoteMaxAggregateOutputType = {
+    id: number | null
+    orderId: number | null
+    text: string | null
+    authorName: string | null
+    createdAt: Date | null
+  }
+
+  export type OrderNoteCountAggregateOutputType = {
+    id: number
+    orderId: number
+    text: number
+    authorName: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type OrderNoteAvgAggregateInputType = {
+    id?: true
+    orderId?: true
+  }
+
+  export type OrderNoteSumAggregateInputType = {
+    id?: true
+    orderId?: true
+  }
+
+  export type OrderNoteMinAggregateInputType = {
+    id?: true
+    orderId?: true
+    text?: true
+    authorName?: true
+    createdAt?: true
+  }
+
+  export type OrderNoteMaxAggregateInputType = {
+    id?: true
+    orderId?: true
+    text?: true
+    authorName?: true
+    createdAt?: true
+  }
+
+  export type OrderNoteCountAggregateInputType = {
+    id?: true
+    orderId?: true
+    text?: true
+    authorName?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type OrderNoteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrderNote to aggregate.
+     */
+    where?: OrderNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderNotes to fetch.
+     */
+    orderBy?: OrderNoteOrderByWithRelationInput | OrderNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OrderNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OrderNotes
+    **/
+    _count?: true | OrderNoteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OrderNoteAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OrderNoteSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OrderNoteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OrderNoteMaxAggregateInputType
+  }
+
+  export type GetOrderNoteAggregateType<T extends OrderNoteAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrderNote]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOrderNote[P]>
+      : GetScalarType<T[P], AggregateOrderNote[P]>
+  }
+
+
+
+
+  export type OrderNoteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderNoteWhereInput
+    orderBy?: OrderNoteOrderByWithAggregationInput | OrderNoteOrderByWithAggregationInput[]
+    by: OrderNoteScalarFieldEnum[] | OrderNoteScalarFieldEnum
+    having?: OrderNoteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OrderNoteCountAggregateInputType | true
+    _avg?: OrderNoteAvgAggregateInputType
+    _sum?: OrderNoteSumAggregateInputType
+    _min?: OrderNoteMinAggregateInputType
+    _max?: OrderNoteMaxAggregateInputType
+  }
+
+  export type OrderNoteGroupByOutputType = {
+    id: number
+    orderId: number
+    text: string
+    authorName: string | null
+    createdAt: Date
+    _count: OrderNoteCountAggregateOutputType | null
+    _avg: OrderNoteAvgAggregateOutputType | null
+    _sum: OrderNoteSumAggregateOutputType | null
+    _min: OrderNoteMinAggregateOutputType | null
+    _max: OrderNoteMaxAggregateOutputType | null
+  }
+
+  type GetOrderNoteGroupByPayload<T extends OrderNoteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OrderNoteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OrderNoteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OrderNoteGroupByOutputType[P]>
+            : GetScalarType<T[P], OrderNoteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OrderNoteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    orderId?: boolean
+    text?: boolean
+    authorName?: boolean
+    createdAt?: boolean
+    order?: boolean | ProductOrderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orderNote"]>
+
+  export type OrderNoteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    orderId?: boolean
+    text?: boolean
+    authorName?: boolean
+    createdAt?: boolean
+    order?: boolean | ProductOrderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orderNote"]>
+
+  export type OrderNoteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    orderId?: boolean
+    text?: boolean
+    authorName?: boolean
+    createdAt?: boolean
+    order?: boolean | ProductOrderDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["orderNote"]>
+
+  export type OrderNoteSelectScalar = {
+    id?: boolean
+    orderId?: boolean
+    text?: boolean
+    authorName?: boolean
+    createdAt?: boolean
+  }
+
+  export type OrderNoteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderId" | "text" | "authorName" | "createdAt", ExtArgs["result"]["orderNote"]>
+  export type OrderNoteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    order?: boolean | ProductOrderDefaultArgs<ExtArgs>
+  }
+  export type OrderNoteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    order?: boolean | ProductOrderDefaultArgs<ExtArgs>
+  }
+  export type OrderNoteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    order?: boolean | ProductOrderDefaultArgs<ExtArgs>
+  }
+
+  export type $OrderNotePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OrderNote"
+    objects: {
+      order: Prisma.$ProductOrderPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      orderId: number
+      text: string
+      authorName: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["orderNote"]>
+    composites: {}
+  }
+
+  type OrderNoteGetPayload<S extends boolean | null | undefined | OrderNoteDefaultArgs> = $Result.GetResult<Prisma.$OrderNotePayload, S>
+
+  type OrderNoteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OrderNoteFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OrderNoteCountAggregateInputType | true
+    }
+
+  export interface OrderNoteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OrderNote'], meta: { name: 'OrderNote' } }
+    /**
+     * Find zero or one OrderNote that matches the filter.
+     * @param {OrderNoteFindUniqueArgs} args - Arguments to find a OrderNote
+     * @example
+     * // Get one OrderNote
+     * const orderNote = await prisma.orderNote.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OrderNoteFindUniqueArgs>(args: SelectSubset<T, OrderNoteFindUniqueArgs<ExtArgs>>): Prisma__OrderNoteClient<$Result.GetResult<Prisma.$OrderNotePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OrderNote that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OrderNoteFindUniqueOrThrowArgs} args - Arguments to find a OrderNote
+     * @example
+     * // Get one OrderNote
+     * const orderNote = await prisma.orderNote.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OrderNoteFindUniqueOrThrowArgs>(args: SelectSubset<T, OrderNoteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrderNoteClient<$Result.GetResult<Prisma.$OrderNotePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OrderNote that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderNoteFindFirstArgs} args - Arguments to find a OrderNote
+     * @example
+     * // Get one OrderNote
+     * const orderNote = await prisma.orderNote.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OrderNoteFindFirstArgs>(args?: SelectSubset<T, OrderNoteFindFirstArgs<ExtArgs>>): Prisma__OrderNoteClient<$Result.GetResult<Prisma.$OrderNotePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OrderNote that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderNoteFindFirstOrThrowArgs} args - Arguments to find a OrderNote
+     * @example
+     * // Get one OrderNote
+     * const orderNote = await prisma.orderNote.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OrderNoteFindFirstOrThrowArgs>(args?: SelectSubset<T, OrderNoteFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrderNoteClient<$Result.GetResult<Prisma.$OrderNotePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OrderNotes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderNoteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OrderNotes
+     * const orderNotes = await prisma.orderNote.findMany()
+     * 
+     * // Get first 10 OrderNotes
+     * const orderNotes = await prisma.orderNote.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const orderNoteWithIdOnly = await prisma.orderNote.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OrderNoteFindManyArgs>(args?: SelectSubset<T, OrderNoteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OrderNote.
+     * @param {OrderNoteCreateArgs} args - Arguments to create a OrderNote.
+     * @example
+     * // Create one OrderNote
+     * const OrderNote = await prisma.orderNote.create({
+     *   data: {
+     *     // ... data to create a OrderNote
+     *   }
+     * })
+     * 
+     */
+    create<T extends OrderNoteCreateArgs>(args: SelectSubset<T, OrderNoteCreateArgs<ExtArgs>>): Prisma__OrderNoteClient<$Result.GetResult<Prisma.$OrderNotePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OrderNotes.
+     * @param {OrderNoteCreateManyArgs} args - Arguments to create many OrderNotes.
+     * @example
+     * // Create many OrderNotes
+     * const orderNote = await prisma.orderNote.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OrderNoteCreateManyArgs>(args?: SelectSubset<T, OrderNoteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OrderNotes and returns the data saved in the database.
+     * @param {OrderNoteCreateManyAndReturnArgs} args - Arguments to create many OrderNotes.
+     * @example
+     * // Create many OrderNotes
+     * const orderNote = await prisma.orderNote.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OrderNotes and only return the `id`
+     * const orderNoteWithIdOnly = await prisma.orderNote.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OrderNoteCreateManyAndReturnArgs>(args?: SelectSubset<T, OrderNoteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderNotePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OrderNote.
+     * @param {OrderNoteDeleteArgs} args - Arguments to delete one OrderNote.
+     * @example
+     * // Delete one OrderNote
+     * const OrderNote = await prisma.orderNote.delete({
+     *   where: {
+     *     // ... filter to delete one OrderNote
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OrderNoteDeleteArgs>(args: SelectSubset<T, OrderNoteDeleteArgs<ExtArgs>>): Prisma__OrderNoteClient<$Result.GetResult<Prisma.$OrderNotePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OrderNote.
+     * @param {OrderNoteUpdateArgs} args - Arguments to update one OrderNote.
+     * @example
+     * // Update one OrderNote
+     * const orderNote = await prisma.orderNote.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OrderNoteUpdateArgs>(args: SelectSubset<T, OrderNoteUpdateArgs<ExtArgs>>): Prisma__OrderNoteClient<$Result.GetResult<Prisma.$OrderNotePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OrderNotes.
+     * @param {OrderNoteDeleteManyArgs} args - Arguments to filter OrderNotes to delete.
+     * @example
+     * // Delete a few OrderNotes
+     * const { count } = await prisma.orderNote.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OrderNoteDeleteManyArgs>(args?: SelectSubset<T, OrderNoteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrderNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderNoteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OrderNotes
+     * const orderNote = await prisma.orderNote.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OrderNoteUpdateManyArgs>(args: SelectSubset<T, OrderNoteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrderNotes and returns the data updated in the database.
+     * @param {OrderNoteUpdateManyAndReturnArgs} args - Arguments to update many OrderNotes.
+     * @example
+     * // Update many OrderNotes
+     * const orderNote = await prisma.orderNote.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OrderNotes and only return the `id`
+     * const orderNoteWithIdOnly = await prisma.orderNote.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OrderNoteUpdateManyAndReturnArgs>(args: SelectSubset<T, OrderNoteUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderNotePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OrderNote.
+     * @param {OrderNoteUpsertArgs} args - Arguments to update or create a OrderNote.
+     * @example
+     * // Update or create a OrderNote
+     * const orderNote = await prisma.orderNote.upsert({
+     *   create: {
+     *     // ... data to create a OrderNote
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OrderNote we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OrderNoteUpsertArgs>(args: SelectSubset<T, OrderNoteUpsertArgs<ExtArgs>>): Prisma__OrderNoteClient<$Result.GetResult<Prisma.$OrderNotePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OrderNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderNoteCountArgs} args - Arguments to filter OrderNotes to count.
+     * @example
+     * // Count the number of OrderNotes
+     * const count = await prisma.orderNote.count({
+     *   where: {
+     *     // ... the filter for the OrderNotes we want to count
+     *   }
+     * })
+    **/
+    count<T extends OrderNoteCountArgs>(
+      args?: Subset<T, OrderNoteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OrderNoteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OrderNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderNoteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OrderNoteAggregateArgs>(args: Subset<T, OrderNoteAggregateArgs>): Prisma.PrismaPromise<GetOrderNoteAggregateType<T>>
+
+    /**
+     * Group by OrderNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderNoteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OrderNoteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OrderNoteGroupByArgs['orderBy'] }
+        : { orderBy?: OrderNoteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OrderNoteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrderNoteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OrderNote model
+   */
+  readonly fields: OrderNoteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OrderNote.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OrderNoteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    order<T extends ProductOrderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductOrderDefaultArgs<ExtArgs>>): Prisma__ProductOrderClient<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OrderNote model
+   */
+  interface OrderNoteFieldRefs {
+    readonly id: FieldRef<"OrderNote", 'Int'>
+    readonly orderId: FieldRef<"OrderNote", 'Int'>
+    readonly text: FieldRef<"OrderNote", 'String'>
+    readonly authorName: FieldRef<"OrderNote", 'String'>
+    readonly createdAt: FieldRef<"OrderNote", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OrderNote findUnique
+   */
+  export type OrderNoteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderNote
+     */
+    select?: OrderNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderNote
+     */
+    omit?: OrderNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderNote to fetch.
+     */
+    where: OrderNoteWhereUniqueInput
+  }
+
+  /**
+   * OrderNote findUniqueOrThrow
+   */
+  export type OrderNoteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderNote
+     */
+    select?: OrderNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderNote
+     */
+    omit?: OrderNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderNote to fetch.
+     */
+    where: OrderNoteWhereUniqueInput
+  }
+
+  /**
+   * OrderNote findFirst
+   */
+  export type OrderNoteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderNote
+     */
+    select?: OrderNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderNote
+     */
+    omit?: OrderNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderNote to fetch.
+     */
+    where?: OrderNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderNotes to fetch.
+     */
+    orderBy?: OrderNoteOrderByWithRelationInput | OrderNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrderNotes.
+     */
+    cursor?: OrderNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrderNotes.
+     */
+    distinct?: OrderNoteScalarFieldEnum | OrderNoteScalarFieldEnum[]
+  }
+
+  /**
+   * OrderNote findFirstOrThrow
+   */
+  export type OrderNoteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderNote
+     */
+    select?: OrderNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderNote
+     */
+    omit?: OrderNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderNote to fetch.
+     */
+    where?: OrderNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderNotes to fetch.
+     */
+    orderBy?: OrderNoteOrderByWithRelationInput | OrderNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrderNotes.
+     */
+    cursor?: OrderNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrderNotes.
+     */
+    distinct?: OrderNoteScalarFieldEnum | OrderNoteScalarFieldEnum[]
+  }
+
+  /**
+   * OrderNote findMany
+   */
+  export type OrderNoteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderNote
+     */
+    select?: OrderNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderNote
+     */
+    omit?: OrderNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which OrderNotes to fetch.
+     */
+    where?: OrderNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrderNotes to fetch.
+     */
+    orderBy?: OrderNoteOrderByWithRelationInput | OrderNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OrderNotes.
+     */
+    cursor?: OrderNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrderNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrderNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrderNotes.
+     */
+    distinct?: OrderNoteScalarFieldEnum | OrderNoteScalarFieldEnum[]
+  }
+
+  /**
+   * OrderNote create
+   */
+  export type OrderNoteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderNote
+     */
+    select?: OrderNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderNote
+     */
+    omit?: OrderNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderNoteInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OrderNote.
+     */
+    data: XOR<OrderNoteCreateInput, OrderNoteUncheckedCreateInput>
+  }
+
+  /**
+   * OrderNote createMany
+   */
+  export type OrderNoteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OrderNotes.
+     */
+    data: OrderNoteCreateManyInput | OrderNoteCreateManyInput[]
+  }
+
+  /**
+   * OrderNote createManyAndReturn
+   */
+  export type OrderNoteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderNote
+     */
+    select?: OrderNoteSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderNote
+     */
+    omit?: OrderNoteOmit<ExtArgs> | null
+    /**
+     * The data used to create many OrderNotes.
+     */
+    data: OrderNoteCreateManyInput | OrderNoteCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderNoteIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrderNote update
+   */
+  export type OrderNoteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderNote
+     */
+    select?: OrderNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderNote
+     */
+    omit?: OrderNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderNoteInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OrderNote.
+     */
+    data: XOR<OrderNoteUpdateInput, OrderNoteUncheckedUpdateInput>
+    /**
+     * Choose, which OrderNote to update.
+     */
+    where: OrderNoteWhereUniqueInput
+  }
+
+  /**
+   * OrderNote updateMany
+   */
+  export type OrderNoteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OrderNotes.
+     */
+    data: XOR<OrderNoteUpdateManyMutationInput, OrderNoteUncheckedUpdateManyInput>
+    /**
+     * Filter which OrderNotes to update
+     */
+    where?: OrderNoteWhereInput
+    /**
+     * Limit how many OrderNotes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OrderNote updateManyAndReturn
+   */
+  export type OrderNoteUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderNote
+     */
+    select?: OrderNoteSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderNote
+     */
+    omit?: OrderNoteOmit<ExtArgs> | null
+    /**
+     * The data used to update OrderNotes.
+     */
+    data: XOR<OrderNoteUpdateManyMutationInput, OrderNoteUncheckedUpdateManyInput>
+    /**
+     * Filter which OrderNotes to update
+     */
+    where?: OrderNoteWhereInput
+    /**
+     * Limit how many OrderNotes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderNoteIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrderNote upsert
+   */
+  export type OrderNoteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderNote
+     */
+    select?: OrderNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderNote
+     */
+    omit?: OrderNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderNoteInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OrderNote to update in case it exists.
+     */
+    where: OrderNoteWhereUniqueInput
+    /**
+     * In case the OrderNote found by the `where` argument doesn't exist, create a new OrderNote with this data.
+     */
+    create: XOR<OrderNoteCreateInput, OrderNoteUncheckedCreateInput>
+    /**
+     * In case the OrderNote was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OrderNoteUpdateInput, OrderNoteUncheckedUpdateInput>
+  }
+
+  /**
+   * OrderNote delete
+   */
+  export type OrderNoteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderNote
+     */
+    select?: OrderNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderNote
+     */
+    omit?: OrderNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderNoteInclude<ExtArgs> | null
+    /**
+     * Filter which OrderNote to delete.
+     */
+    where: OrderNoteWhereUniqueInput
+  }
+
+  /**
+   * OrderNote deleteMany
+   */
+  export type OrderNoteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrderNotes to delete
+     */
+    where?: OrderNoteWhereInput
+    /**
+     * Limit how many OrderNotes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OrderNote without action
+   */
+  export type OrderNoteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrderNote
+     */
+    select?: OrderNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrderNote
+     */
+    omit?: OrderNoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderNoteInclude<ExtArgs> | null
   }
 
 
@@ -11818,7 +13056,6 @@ export namespace Prisma {
     clientPhone: 'clientPhone',
     amount: 'amount',
     extraDetails: 'extraDetails',
-    notes: 'notes',
     status: 'status',
     isSeeded: 'isSeeded',
     productId: 'productId',
@@ -11828,6 +13065,17 @@ export namespace Prisma {
   };
 
   export type ProductOrderScalarFieldEnum = (typeof ProductOrderScalarFieldEnum)[keyof typeof ProductOrderScalarFieldEnum]
+
+
+  export const OrderNoteScalarFieldEnum: {
+    id: 'id',
+    orderId: 'orderId',
+    text: 'text',
+    authorName: 'authorName',
+    createdAt: 'createdAt'
+  };
+
+  export type OrderNoteScalarFieldEnum = (typeof OrderNoteScalarFieldEnum)[keyof typeof OrderNoteScalarFieldEnum]
 
 
   export const NotificationRecipientScalarFieldEnum: {
@@ -12389,7 +13637,6 @@ export namespace Prisma {
     clientPhone?: StringFilter<"ProductOrder"> | string
     amount?: IntFilter<"ProductOrder"> | number
     extraDetails?: StringNullableFilter<"ProductOrder"> | string | null
-    notes?: StringNullableFilter<"ProductOrder"> | string | null
     status?: EnumOrderStatusFilter<"ProductOrder"> | $Enums.OrderStatus
     isSeeded?: BoolFilter<"ProductOrder"> | boolean
     productId?: IntNullableFilter<"ProductOrder"> | number | null
@@ -12397,6 +13644,7 @@ export namespace Prisma {
     snapshotPrice?: DecimalNullableFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
     snapshotContact?: JsonNullableFilter<"ProductOrder">
     product?: XOR<ProductNullableScalarRelationFilter, ProductWhereInput> | null
+    notes?: OrderNoteListRelationFilter
   }
 
   export type ProductOrderOrderByWithRelationInput = {
@@ -12406,7 +13654,6 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrderInput | SortOrder
-    notes?: SortOrderInput | SortOrder
     status?: SortOrder
     isSeeded?: SortOrder
     productId?: SortOrderInput | SortOrder
@@ -12414,6 +13661,7 @@ export namespace Prisma {
     snapshotPrice?: SortOrderInput | SortOrder
     snapshotContact?: SortOrderInput | SortOrder
     product?: ProductOrderByWithRelationInput
+    notes?: OrderNoteOrderByRelationAggregateInput
   }
 
   export type ProductOrderWhereUniqueInput = Prisma.AtLeast<{
@@ -12426,7 +13674,6 @@ export namespace Prisma {
     clientPhone?: StringFilter<"ProductOrder"> | string
     amount?: IntFilter<"ProductOrder"> | number
     extraDetails?: StringNullableFilter<"ProductOrder"> | string | null
-    notes?: StringNullableFilter<"ProductOrder"> | string | null
     status?: EnumOrderStatusFilter<"ProductOrder"> | $Enums.OrderStatus
     isSeeded?: BoolFilter<"ProductOrder"> | boolean
     productId?: IntNullableFilter<"ProductOrder"> | number | null
@@ -12434,6 +13681,7 @@ export namespace Prisma {
     snapshotPrice?: DecimalNullableFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
     snapshotContact?: JsonNullableFilter<"ProductOrder">
     product?: XOR<ProductNullableScalarRelationFilter, ProductWhereInput> | null
+    notes?: OrderNoteListRelationFilter
   }, "id">
 
   export type ProductOrderOrderByWithAggregationInput = {
@@ -12443,7 +13691,6 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrderInput | SortOrder
-    notes?: SortOrderInput | SortOrder
     status?: SortOrder
     isSeeded?: SortOrder
     productId?: SortOrderInput | SortOrder
@@ -12467,13 +13714,69 @@ export namespace Prisma {
     clientPhone?: StringWithAggregatesFilter<"ProductOrder"> | string
     amount?: IntWithAggregatesFilter<"ProductOrder"> | number
     extraDetails?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
-    notes?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
     status?: EnumOrderStatusWithAggregatesFilter<"ProductOrder"> | $Enums.OrderStatus
     isSeeded?: BoolWithAggregatesFilter<"ProductOrder"> | boolean
     productId?: IntNullableWithAggregatesFilter<"ProductOrder"> | number | null
     snapshotTitle?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
     snapshotPrice?: DecimalNullableWithAggregatesFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
     snapshotContact?: JsonNullableWithAggregatesFilter<"ProductOrder">
+  }
+
+  export type OrderNoteWhereInput = {
+    AND?: OrderNoteWhereInput | OrderNoteWhereInput[]
+    OR?: OrderNoteWhereInput[]
+    NOT?: OrderNoteWhereInput | OrderNoteWhereInput[]
+    id?: IntFilter<"OrderNote"> | number
+    orderId?: IntFilter<"OrderNote"> | number
+    text?: StringFilter<"OrderNote"> | string
+    authorName?: StringNullableFilter<"OrderNote"> | string | null
+    createdAt?: DateTimeFilter<"OrderNote"> | Date | string
+    order?: XOR<ProductOrderScalarRelationFilter, ProductOrderWhereInput>
+  }
+
+  export type OrderNoteOrderByWithRelationInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    text?: SortOrder
+    authorName?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    order?: ProductOrderOrderByWithRelationInput
+  }
+
+  export type OrderNoteWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: OrderNoteWhereInput | OrderNoteWhereInput[]
+    OR?: OrderNoteWhereInput[]
+    NOT?: OrderNoteWhereInput | OrderNoteWhereInput[]
+    orderId?: IntFilter<"OrderNote"> | number
+    text?: StringFilter<"OrderNote"> | string
+    authorName?: StringNullableFilter<"OrderNote"> | string | null
+    createdAt?: DateTimeFilter<"OrderNote"> | Date | string
+    order?: XOR<ProductOrderScalarRelationFilter, ProductOrderWhereInput>
+  }, "id">
+
+  export type OrderNoteOrderByWithAggregationInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    text?: SortOrder
+    authorName?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: OrderNoteCountOrderByAggregateInput
+    _avg?: OrderNoteAvgOrderByAggregateInput
+    _max?: OrderNoteMaxOrderByAggregateInput
+    _min?: OrderNoteMinOrderByAggregateInput
+    _sum?: OrderNoteSumOrderByAggregateInput
+  }
+
+  export type OrderNoteScalarWhereWithAggregatesInput = {
+    AND?: OrderNoteScalarWhereWithAggregatesInput | OrderNoteScalarWhereWithAggregatesInput[]
+    OR?: OrderNoteScalarWhereWithAggregatesInput[]
+    NOT?: OrderNoteScalarWhereWithAggregatesInput | OrderNoteScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"OrderNote"> | number
+    orderId?: IntWithAggregatesFilter<"OrderNote"> | number
+    text?: StringWithAggregatesFilter<"OrderNote"> | string
+    authorName?: StringNullableWithAggregatesFilter<"OrderNote"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"OrderNote"> | Date | string
   }
 
   export type NotificationRecipientWhereInput = {
@@ -13070,13 +14373,13 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
-    notes?: string | null
     status?: $Enums.OrderStatus
     isSeeded?: boolean
     snapshotTitle?: string | null
     snapshotPrice?: Decimal | DecimalJsLike | number | string | null
     snapshotContact?: NullableJsonNullValueInput | InputJsonValue
     product?: ProductCreateNestedOneWithoutOrdersInput
+    notes?: OrderNoteCreateNestedManyWithoutOrderInput
   }
 
   export type ProductOrderUncheckedCreateInput = {
@@ -13086,13 +14389,13 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
-    notes?: string | null
     status?: $Enums.OrderStatus
     isSeeded?: boolean
     productId?: number | null
     snapshotTitle?: string | null
     snapshotPrice?: Decimal | DecimalJsLike | number | string | null
     snapshotContact?: NullableJsonNullValueInput | InputJsonValue
+    notes?: OrderNoteUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type ProductOrderUpdateInput = {
@@ -13101,13 +14404,13 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
     snapshotTitle?: NullableStringFieldUpdateOperationsInput | string | null
     snapshotPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     snapshotContact?: NullableJsonNullValueInput | InputJsonValue
     product?: ProductUpdateOneWithoutOrdersNestedInput
+    notes?: OrderNoteUpdateManyWithoutOrderNestedInput
   }
 
   export type ProductOrderUncheckedUpdateInput = {
@@ -13117,13 +14420,13 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
     productId?: NullableIntFieldUpdateOperationsInput | number | null
     snapshotTitle?: NullableStringFieldUpdateOperationsInput | string | null
     snapshotPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     snapshotContact?: NullableJsonNullValueInput | InputJsonValue
+    notes?: OrderNoteUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type ProductOrderCreateManyInput = {
@@ -13133,7 +14436,6 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
-    notes?: string | null
     status?: $Enums.OrderStatus
     isSeeded?: boolean
     productId?: number | null
@@ -13148,7 +14450,6 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
     snapshotTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13163,13 +14464,64 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
     productId?: NullableIntFieldUpdateOperationsInput | number | null
     snapshotTitle?: NullableStringFieldUpdateOperationsInput | string | null
     snapshotPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     snapshotContact?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type OrderNoteCreateInput = {
+    text: string
+    authorName?: string | null
+    createdAt?: Date | string
+    order: ProductOrderCreateNestedOneWithoutNotesInput
+  }
+
+  export type OrderNoteUncheckedCreateInput = {
+    id?: number
+    orderId: number
+    text: string
+    authorName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type OrderNoteUpdateInput = {
+    text?: StringFieldUpdateOperationsInput | string
+    authorName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    order?: ProductOrderUpdateOneRequiredWithoutNotesNestedInput
+  }
+
+  export type OrderNoteUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    orderId?: IntFieldUpdateOperationsInput | number
+    text?: StringFieldUpdateOperationsInput | string
+    authorName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderNoteCreateManyInput = {
+    id?: number
+    orderId: number
+    text: string
+    authorName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type OrderNoteUpdateManyMutationInput = {
+    text?: StringFieldUpdateOperationsInput | string
+    authorName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderNoteUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    orderId?: IntFieldUpdateOperationsInput | number
+    text?: StringFieldUpdateOperationsInput | string
+    authorName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationRecipientCreateInput = {
@@ -13890,6 +15242,16 @@ export namespace Prisma {
     isNot?: ProductWhereInput | null
   }
 
+  export type OrderNoteListRelationFilter = {
+    every?: OrderNoteWhereInput
+    some?: OrderNoteWhereInput
+    none?: OrderNoteWhereInput
+  }
+
+  export type OrderNoteOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ProductOrderCountOrderByAggregateInput = {
     id?: SortOrder
     clientName?: SortOrder
@@ -13897,7 +15259,6 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrder
-    notes?: SortOrder
     status?: SortOrder
     isSeeded?: SortOrder
     productId?: SortOrder
@@ -13920,7 +15281,6 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrder
-    notes?: SortOrder
     status?: SortOrder
     isSeeded?: SortOrder
     productId?: SortOrder
@@ -13935,7 +15295,6 @@ export namespace Prisma {
     clientPhone?: SortOrder
     amount?: SortOrder
     extraDetails?: SortOrder
-    notes?: SortOrder
     status?: SortOrder
     isSeeded?: SortOrder
     productId?: SortOrder
@@ -13974,6 +15333,45 @@ export namespace Prisma {
     _sum?: NestedDecimalNullableFilter<$PrismaModel>
     _min?: NestedDecimalNullableFilter<$PrismaModel>
     _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type ProductOrderScalarRelationFilter = {
+    is?: ProductOrderWhereInput
+    isNot?: ProductOrderWhereInput
+  }
+
+  export type OrderNoteCountOrderByAggregateInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    text?: SortOrder
+    authorName?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type OrderNoteAvgOrderByAggregateInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+  }
+
+  export type OrderNoteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    text?: SortOrder
+    authorName?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type OrderNoteMinOrderByAggregateInput = {
+    id?: SortOrder
+    orderId?: SortOrder
+    text?: SortOrder
+    authorName?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type OrderNoteSumOrderByAggregateInput = {
+    id?: SortOrder
+    orderId?: SortOrder
   }
 
   export type NotificationRecipientCountOrderByAggregateInput = {
@@ -14299,6 +15697,20 @@ export namespace Prisma {
     connect?: ProductWhereUniqueInput
   }
 
+  export type OrderNoteCreateNestedManyWithoutOrderInput = {
+    create?: XOR<OrderNoteCreateWithoutOrderInput, OrderNoteUncheckedCreateWithoutOrderInput> | OrderNoteCreateWithoutOrderInput[] | OrderNoteUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: OrderNoteCreateOrConnectWithoutOrderInput | OrderNoteCreateOrConnectWithoutOrderInput[]
+    createMany?: OrderNoteCreateManyOrderInputEnvelope
+    connect?: OrderNoteWhereUniqueInput | OrderNoteWhereUniqueInput[]
+  }
+
+  export type OrderNoteUncheckedCreateNestedManyWithoutOrderInput = {
+    create?: XOR<OrderNoteCreateWithoutOrderInput, OrderNoteUncheckedCreateWithoutOrderInput> | OrderNoteCreateWithoutOrderInput[] | OrderNoteUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: OrderNoteCreateOrConnectWithoutOrderInput | OrderNoteCreateOrConnectWithoutOrderInput[]
+    createMany?: OrderNoteCreateManyOrderInputEnvelope
+    connect?: OrderNoteWhereUniqueInput | OrderNoteWhereUniqueInput[]
+  }
+
   export type EnumOrderStatusFieldUpdateOperationsInput = {
     set?: $Enums.OrderStatus
   }
@@ -14319,6 +15731,48 @@ export namespace Prisma {
     delete?: ProductWhereInput | boolean
     connect?: ProductWhereUniqueInput
     update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutOrdersInput, ProductUpdateWithoutOrdersInput>, ProductUncheckedUpdateWithoutOrdersInput>
+  }
+
+  export type OrderNoteUpdateManyWithoutOrderNestedInput = {
+    create?: XOR<OrderNoteCreateWithoutOrderInput, OrderNoteUncheckedCreateWithoutOrderInput> | OrderNoteCreateWithoutOrderInput[] | OrderNoteUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: OrderNoteCreateOrConnectWithoutOrderInput | OrderNoteCreateOrConnectWithoutOrderInput[]
+    upsert?: OrderNoteUpsertWithWhereUniqueWithoutOrderInput | OrderNoteUpsertWithWhereUniqueWithoutOrderInput[]
+    createMany?: OrderNoteCreateManyOrderInputEnvelope
+    set?: OrderNoteWhereUniqueInput | OrderNoteWhereUniqueInput[]
+    disconnect?: OrderNoteWhereUniqueInput | OrderNoteWhereUniqueInput[]
+    delete?: OrderNoteWhereUniqueInput | OrderNoteWhereUniqueInput[]
+    connect?: OrderNoteWhereUniqueInput | OrderNoteWhereUniqueInput[]
+    update?: OrderNoteUpdateWithWhereUniqueWithoutOrderInput | OrderNoteUpdateWithWhereUniqueWithoutOrderInput[]
+    updateMany?: OrderNoteUpdateManyWithWhereWithoutOrderInput | OrderNoteUpdateManyWithWhereWithoutOrderInput[]
+    deleteMany?: OrderNoteScalarWhereInput | OrderNoteScalarWhereInput[]
+  }
+
+  export type OrderNoteUncheckedUpdateManyWithoutOrderNestedInput = {
+    create?: XOR<OrderNoteCreateWithoutOrderInput, OrderNoteUncheckedCreateWithoutOrderInput> | OrderNoteCreateWithoutOrderInput[] | OrderNoteUncheckedCreateWithoutOrderInput[]
+    connectOrCreate?: OrderNoteCreateOrConnectWithoutOrderInput | OrderNoteCreateOrConnectWithoutOrderInput[]
+    upsert?: OrderNoteUpsertWithWhereUniqueWithoutOrderInput | OrderNoteUpsertWithWhereUniqueWithoutOrderInput[]
+    createMany?: OrderNoteCreateManyOrderInputEnvelope
+    set?: OrderNoteWhereUniqueInput | OrderNoteWhereUniqueInput[]
+    disconnect?: OrderNoteWhereUniqueInput | OrderNoteWhereUniqueInput[]
+    delete?: OrderNoteWhereUniqueInput | OrderNoteWhereUniqueInput[]
+    connect?: OrderNoteWhereUniqueInput | OrderNoteWhereUniqueInput[]
+    update?: OrderNoteUpdateWithWhereUniqueWithoutOrderInput | OrderNoteUpdateWithWhereUniqueWithoutOrderInput[]
+    updateMany?: OrderNoteUpdateManyWithWhereWithoutOrderInput | OrderNoteUpdateManyWithWhereWithoutOrderInput[]
+    deleteMany?: OrderNoteScalarWhereInput | OrderNoteScalarWhereInput[]
+  }
+
+  export type ProductOrderCreateNestedOneWithoutNotesInput = {
+    create?: XOR<ProductOrderCreateWithoutNotesInput, ProductOrderUncheckedCreateWithoutNotesInput>
+    connectOrCreate?: ProductOrderCreateOrConnectWithoutNotesInput
+    connect?: ProductOrderWhereUniqueInput
+  }
+
+  export type ProductOrderUpdateOneRequiredWithoutNotesNestedInput = {
+    create?: XOR<ProductOrderCreateWithoutNotesInput, ProductOrderUncheckedCreateWithoutNotesInput>
+    connectOrCreate?: ProductOrderCreateOrConnectWithoutNotesInput
+    upsert?: ProductOrderUpsertWithoutNotesInput
+    connect?: ProductOrderWhereUniqueInput
+    update?: XOR<XOR<ProductOrderUpdateToOneWithWhereWithoutNotesInput, ProductOrderUpdateWithoutNotesInput>, ProductOrderUncheckedUpdateWithoutNotesInput>
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -14696,12 +16150,12 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
-    notes?: string | null
     status?: $Enums.OrderStatus
     isSeeded?: boolean
     snapshotTitle?: string | null
     snapshotPrice?: Decimal | DecimalJsLike | number | string | null
     snapshotContact?: NullableJsonNullValueInput | InputJsonValue
+    notes?: OrderNoteCreateNestedManyWithoutOrderInput
   }
 
   export type ProductOrderUncheckedCreateWithoutProductInput = {
@@ -14711,12 +16165,12 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
-    notes?: string | null
     status?: $Enums.OrderStatus
     isSeeded?: boolean
     snapshotTitle?: string | null
     snapshotPrice?: Decimal | DecimalJsLike | number | string | null
     snapshotContact?: NullableJsonNullValueInput | InputJsonValue
+    notes?: OrderNoteUncheckedCreateNestedManyWithoutOrderInput
   }
 
   export type ProductOrderCreateOrConnectWithoutProductInput = {
@@ -14807,7 +16261,6 @@ export namespace Prisma {
     clientPhone?: StringFilter<"ProductOrder"> | string
     amount?: IntFilter<"ProductOrder"> | number
     extraDetails?: StringNullableFilter<"ProductOrder"> | string | null
-    notes?: StringNullableFilter<"ProductOrder"> | string | null
     status?: EnumOrderStatusFilter<"ProductOrder"> | $Enums.OrderStatus
     isSeeded?: BoolFilter<"ProductOrder"> | boolean
     productId?: IntNullableFilter<"ProductOrder"> | number | null
@@ -14995,6 +16448,28 @@ export namespace Prisma {
     create: XOR<ProductCreateWithoutOrdersInput, ProductUncheckedCreateWithoutOrdersInput>
   }
 
+  export type OrderNoteCreateWithoutOrderInput = {
+    text: string
+    authorName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type OrderNoteUncheckedCreateWithoutOrderInput = {
+    id?: number
+    text: string
+    authorName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type OrderNoteCreateOrConnectWithoutOrderInput = {
+    where: OrderNoteWhereUniqueInput
+    create: XOR<OrderNoteCreateWithoutOrderInput, OrderNoteUncheckedCreateWithoutOrderInput>
+  }
+
+  export type OrderNoteCreateManyOrderInputEnvelope = {
+    data: OrderNoteCreateManyOrderInput | OrderNoteCreateManyOrderInput[]
+  }
+
   export type ProductUpsertWithoutOrdersInput = {
     update: XOR<ProductUpdateWithoutOrdersInput, ProductUncheckedUpdateWithoutOrdersInput>
     create: XOR<ProductCreateWithoutOrdersInput, ProductUncheckedCreateWithoutOrdersInput>
@@ -15035,6 +16510,107 @@ export namespace Prisma {
     images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
   }
 
+  export type OrderNoteUpsertWithWhereUniqueWithoutOrderInput = {
+    where: OrderNoteWhereUniqueInput
+    update: XOR<OrderNoteUpdateWithoutOrderInput, OrderNoteUncheckedUpdateWithoutOrderInput>
+    create: XOR<OrderNoteCreateWithoutOrderInput, OrderNoteUncheckedCreateWithoutOrderInput>
+  }
+
+  export type OrderNoteUpdateWithWhereUniqueWithoutOrderInput = {
+    where: OrderNoteWhereUniqueInput
+    data: XOR<OrderNoteUpdateWithoutOrderInput, OrderNoteUncheckedUpdateWithoutOrderInput>
+  }
+
+  export type OrderNoteUpdateManyWithWhereWithoutOrderInput = {
+    where: OrderNoteScalarWhereInput
+    data: XOR<OrderNoteUpdateManyMutationInput, OrderNoteUncheckedUpdateManyWithoutOrderInput>
+  }
+
+  export type OrderNoteScalarWhereInput = {
+    AND?: OrderNoteScalarWhereInput | OrderNoteScalarWhereInput[]
+    OR?: OrderNoteScalarWhereInput[]
+    NOT?: OrderNoteScalarWhereInput | OrderNoteScalarWhereInput[]
+    id?: IntFilter<"OrderNote"> | number
+    orderId?: IntFilter<"OrderNote"> | number
+    text?: StringFilter<"OrderNote"> | string
+    authorName?: StringNullableFilter<"OrderNote"> | string | null
+    createdAt?: DateTimeFilter<"OrderNote"> | Date | string
+  }
+
+  export type ProductOrderCreateWithoutNotesInput = {
+    clientName: string
+    clientEmail: string
+    clientPhone: string
+    amount: number
+    extraDetails?: string | null
+    status?: $Enums.OrderStatus
+    isSeeded?: boolean
+    snapshotTitle?: string | null
+    snapshotPrice?: Decimal | DecimalJsLike | number | string | null
+    snapshotContact?: NullableJsonNullValueInput | InputJsonValue
+    product?: ProductCreateNestedOneWithoutOrdersInput
+  }
+
+  export type ProductOrderUncheckedCreateWithoutNotesInput = {
+    id?: number
+    clientName: string
+    clientEmail: string
+    clientPhone: string
+    amount: number
+    extraDetails?: string | null
+    status?: $Enums.OrderStatus
+    isSeeded?: boolean
+    productId?: number | null
+    snapshotTitle?: string | null
+    snapshotPrice?: Decimal | DecimalJsLike | number | string | null
+    snapshotContact?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type ProductOrderCreateOrConnectWithoutNotesInput = {
+    where: ProductOrderWhereUniqueInput
+    create: XOR<ProductOrderCreateWithoutNotesInput, ProductOrderUncheckedCreateWithoutNotesInput>
+  }
+
+  export type ProductOrderUpsertWithoutNotesInput = {
+    update: XOR<ProductOrderUpdateWithoutNotesInput, ProductOrderUncheckedUpdateWithoutNotesInput>
+    create: XOR<ProductOrderCreateWithoutNotesInput, ProductOrderUncheckedCreateWithoutNotesInput>
+    where?: ProductOrderWhereInput
+  }
+
+  export type ProductOrderUpdateToOneWithWhereWithoutNotesInput = {
+    where?: ProductOrderWhereInput
+    data: XOR<ProductOrderUpdateWithoutNotesInput, ProductOrderUncheckedUpdateWithoutNotesInput>
+  }
+
+  export type ProductOrderUpdateWithoutNotesInput = {
+    clientName?: StringFieldUpdateOperationsInput | string
+    clientEmail?: StringFieldUpdateOperationsInput | string
+    clientPhone?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
+    snapshotTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshotPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    snapshotContact?: NullableJsonNullValueInput | InputJsonValue
+    product?: ProductUpdateOneWithoutOrdersNestedInput
+  }
+
+  export type ProductOrderUncheckedUpdateWithoutNotesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    clientName?: StringFieldUpdateOperationsInput | string
+    clientEmail?: StringFieldUpdateOperationsInput | string
+    clientPhone?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+    isSeeded?: BoolFieldUpdateOperationsInput | boolean
+    productId?: NullableIntFieldUpdateOperationsInput | number | null
+    snapshotTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshotPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    snapshotContact?: NullableJsonNullValueInput | InputJsonValue
+  }
+
   export type ProductImageCreateManyProductInput = {
     id: string
     sortOrder?: number
@@ -15047,7 +16623,6 @@ export namespace Prisma {
     clientPhone: string
     amount: number
     extraDetails?: string | null
-    notes?: string | null
     status?: $Enums.OrderStatus
     isSeeded?: boolean
     snapshotTitle?: string | null
@@ -15076,12 +16651,12 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
     snapshotTitle?: NullableStringFieldUpdateOperationsInput | string | null
     snapshotPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     snapshotContact?: NullableJsonNullValueInput | InputJsonValue
+    notes?: OrderNoteUpdateManyWithoutOrderNestedInput
   }
 
   export type ProductOrderUncheckedUpdateWithoutProductInput = {
@@ -15091,12 +16666,12 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
     snapshotTitle?: NullableStringFieldUpdateOperationsInput | string | null
     snapshotPrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     snapshotContact?: NullableJsonNullValueInput | InputJsonValue
+    notes?: OrderNoteUncheckedUpdateManyWithoutOrderNestedInput
   }
 
   export type ProductOrderUncheckedUpdateManyWithoutProductInput = {
@@ -15106,7 +16681,6 @@ export namespace Prisma {
     clientPhone?: StringFieldUpdateOperationsInput | string
     amount?: IntFieldUpdateOperationsInput | number
     extraDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
     snapshotTitle?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15167,6 +16741,33 @@ export namespace Prisma {
     publishedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     draft?: BoolFieldUpdateOperationsInput | boolean
     isSeeded?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type OrderNoteCreateManyOrderInput = {
+    id?: number
+    text: string
+    authorName?: string | null
+    createdAt?: Date | string
+  }
+
+  export type OrderNoteUpdateWithoutOrderInput = {
+    text?: StringFieldUpdateOperationsInput | string
+    authorName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderNoteUncheckedUpdateWithoutOrderInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    text?: StringFieldUpdateOperationsInput | string
+    authorName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderNoteUncheckedUpdateManyWithoutOrderInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    text?: StringFieldUpdateOperationsInput | string
+    authorName?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

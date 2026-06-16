@@ -58,15 +58,21 @@ export default function OrderNotesTimeline({ orderId, initialNotes }: Props) {
       {notes.length === 0 ? (
         <p className="small-text text-faint italic">Ingen notater lagt til</p>
       ) : (
-        <div className="flex flex-col max-h-72 overflow-y-auto pr-1 gap-2">
-          {notes.map(note => (
+        <div className="flex flex-col max-h-72 overflow-y-auto pr-1.5">
+          {notes.map((note, i) => (
             <div
               key={note.id}
               className={`grid ease-out ${note.removing ? 'transition-[grid-template-rows] duration-200 grid-rows-[0fr]' : note.born ? 'grid-rows-[0fr]' : 'transition-[grid-template-rows] duration-300 grid-rows-[1fr]'}`}
             >
-              <div className="overflow-hidden">
-                <div className={`transition-opacity ${note.removing ? 'duration-200 opacity-0 pointer-events-none' : note.born ? 'opacity-0' : 'duration-300 opacity-100'}`}>
-                  <div className="card-subtle flex flex-col gap-1.5 p-3">
+              <div className="overflow-hidden pl-3">
+                <div className={`flex items-start gap-2 transition-opacity ${note.removing ? 'duration-200 opacity-0 pointer-events-none' : note.born ? 'opacity-0' : 'duration-300 opacity-100'}`}>
+                  <div className="flex flex-col items-center self-stretch shrink-0">
+                    <span className={`flex-1 w-0.5 rounded-full mb-1.5 ${i > 0 ? 'bg-secondary/25' : ''}`} />
+                    <span className="w-2.5 h-2.5 rounded-full bg-secondary ring-3 ring-secondary/15 shrink-0" />
+                    <span className={`flex-1 w-0.5 rounded-full mt-1.5 ${i < notes.length - 1 ? 'bg-secondary/25' : ''}`} />
+                  </div>
+
+                  <div className="card-subtle flex-1 min-w-0 flex flex-col gap-1.5 p-3 mb-3">
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2 min-w-0 flex-wrap">
                         <span className="small-text text-faint whitespace-nowrap">{formatTimestamp(new Date(note.createdAt))}</span>
