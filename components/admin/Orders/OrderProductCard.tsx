@@ -1,5 +1,5 @@
 "use client"
-import { deleteOrder, getAllOrders, UpdateOrder, updateOrderNotes } from "@/actions/orderProduct"
+import { deleteOrder, getAllOrders, UpdateOrder } from "@/actions/orderProduct"
 import { OrderStatus } from "@/generated/prisma"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -11,6 +11,7 @@ import {
   IconChevronDown, IconInfo, IconStatusChange, IconPerson, IconRole,
 } from "@/app/lib/icons"
 import { formatPrice } from "@/app/lib/product-utils"
+import OrderNotesTimeline from "./OrderNotesTimeline"
 
 type OrderWithProduct = Awaited<ReturnType<typeof getAllOrders>>[number]
 
@@ -39,8 +40,6 @@ export default function OrderCard({ order }: Props) {
   const [kontaktOpen, setKontaktOpen] = useState(false)
   const [descOpen,    setDescOpen]    = useState(false)
   const [notesOpen,   setNotesOpen]   = useState(false)
-  const [notes,       setNotes]       = useState(order.notes ?? '')
-  const savedNotes = useRef(order.notes ?? '')
 
   const [menuMounted, setMenuMounted] = useState(false)
   const [menuOpen,    setMenuOpen]    = useState(false)
@@ -463,19 +462,13 @@ export default function OrderCard({ order }: Props) {
           aria-expanded={notesOpen}
           aria-controls={`order-notes-${order.id}`}
         >
-          Notater
+          Notater{order.notes.length > 0 && ` (${order.notes.length})`}
           <IconChevronDown className={`w-3 h-3 text-text-faint transition-all duration-150 group-hover:scale-125 group-hover:text-text-muted ${notesOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
         </button>
         <div id={`order-notes-${order.id}`} className={`grid transition-[grid-template-rows] duration-200 ${notesOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} `}>
           <div className="overflow-hidden min-h-0">
             <div className="pb-2">
-              <textarea
-                value={notes}
-                onChange={e => setNotes(e.target.value)}
-                placeholder="Legg til et internt notat…"
-                rows={3}
-                className="w-full small-text text-text bg-transparent border border-border rounded-md px-2 py-1 resize-none placeholder:text-faint focus:outline-none focus:border-border-strong transition-colors"
-              />
+              <OrderNotesTimeline orderId={order.id} initialNotes={order.notes} />
             </div>
           </div>
         </div>
