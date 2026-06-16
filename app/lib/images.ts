@@ -36,6 +36,7 @@ export async function uploadProductImage(
   await fs.mkdir(IMAGES_DIR, { recursive: true })
 
   await sharp(buffer)
+    .resize(2000, 2000, { fit: "inside", withoutEnlargement: true })
     .webp({ quality: 80 })
     .toFile(outputPath)
 
