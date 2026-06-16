@@ -116,3 +116,10 @@ export const ContactPersonUpdateSchema = ContactPersonCreateSchema.partial()
 
 export type ContactPersonCreate = z.infer<typeof ContactPersonCreateSchema>
 export type ContactPersonUpdate = z.infer<typeof ContactPersonUpdateSchema>
+
+export const OrderNoteCreateSchema = z.object({
+  text: z.string().min(1, 'Notatet kan ikke være tomt'),
+  authorName: z.preprocess((val) => (val === '' ? undefined : val), z.string().optional()),
+})
+
+export type OrderNoteCreate = z.infer<typeof OrderNoteCreateSchema>
