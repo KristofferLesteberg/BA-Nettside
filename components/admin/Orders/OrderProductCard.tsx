@@ -468,7 +468,7 @@ export default function OrderCard({ order }: Props) {
         <div id={`order-notes-${order.id}`} className={`grid transition-[grid-template-rows] duration-200 ${notesOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} `}>
           <div className="overflow-hidden min-h-0">
             <div className="pb-2">
-              <OrderNotesTimeline orderId={order.id} initialNotes={order.notes} />
+              <OrderNotesTimeline orderId={order.id} initialNotes={order.notes} open={notesOpen} />
             </div>
           </div>
         </div>

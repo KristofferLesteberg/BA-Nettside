@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { IconDelete, IconPlus, IconPerson } from "@/app/lib/icons"
 import { usePopUp } from "@/components/shared/PopUp"
 import { deleteOrderNote } from "@/actions/orderNotes"
@@ -19,18 +19,27 @@ function formatTimestamp(date: Date) {
 interface Props {
   orderId: number
   initialNotes: OrderNote[]
+  open: boolean
 }
 
-export default function OrderNotesTimeline({ orderId, initialNotes }: Props) {
+export default function OrderNotesTimeline({ orderId, initialNotes, open }: Props) {
   const [notes, setNotes] = useState<NoteItem[]>(initialNotes)
   const [modalOpen, setModalOpen] = useState(false)
   const { open: openPopUp, element: popUpElement } = usePopUp()
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open && scrollRef.current) scrollRef.current.scrollTop = 0
+  }, [open])
 
   const handleCreated = (note: OrderNote) => {
     setNotes(prev => [...prev, { ...note, born: true }])
     requestAnimationFrame(() => {
       setNotes(prev => prev.map(n => n.id === note.id ? { ...n, born: false } : n))
     })
+    setTimeout(() => {
+      scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
+    }, 320)
   }
 
   const handleDelete = async (id: number) => {
@@ -58,7 +67,7 @@ export default function OrderNotesTimeline({ orderId, initialNotes }: Props) {
       {notes.length === 0 ? (
         <p className="small-text text-faint italic">Ingen notater lagt til</p>
       ) : (
-        <div className="flex flex-col max-h-72 overflow-y-auto pr-1.5">
+        <div ref={scrollRef} className="flex flex-col max-h-72 overflow-y-auto pr-1.5">
           {notes.map((note, i) => (
             <div
               key={note.id}
