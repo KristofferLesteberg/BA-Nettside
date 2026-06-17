@@ -17,14 +17,13 @@ export default function NewReviewPage() {
     formData.append('message', message)
     if (imageFile) formData.append('image', imageFile)
 
-    try {
-      await toast.promise(createReview(formData), {
-        loading: 'Oppretter anmeldelse…',
-        success: 'Anmeldelse opprettet',
-        error: (e: unknown) => e instanceof Error ? e.message : 'Noe gikk galt',
-      })
-      router.push('/admin')
-    } catch {}
+    const result = await createReview(formData)
+    if (!result.success) {
+      toast.error(result.error)
+      return
+    }
+    toast.success('Anmeldelse opprettet')
+    router.push('/admin')
   }
 
   return (

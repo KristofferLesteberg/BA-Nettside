@@ -30,13 +30,13 @@ export default function UpdateContactClient({ contactId, name, email, phone, tit
     formData.append('phone', data.phone)
     formData.append('title', data.title)
 
-    try {
-      await updateContactPerson(contactId, formData)
-      toast.success('Oppdatert kontakt informasjonen')
-      router.push('/admin?tab=kontakt personer')
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Kunne ikke oppdatere kontakt informasjonen')
+    const result = await updateContactPerson(contactId, formData)
+    if (!result.success) {
+      toast.error(result.error)
+      return
     }
+    toast.success('Oppdatert kontakt informasjonen')
+    router.push('/admin?tab=kontakt personer')
   }
 
   return (

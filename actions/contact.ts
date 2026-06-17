@@ -39,7 +39,7 @@ export async function getContactById(id: number) {
   return contact
 }
 
-export async function createContactPerson(formData: FormData) {
+export async function createContactPerson(formData: FormData): Promise<{ success: true; id: number } | { success: false; error: string }> {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
 
@@ -49,16 +49,16 @@ export async function createContactPerson(formData: FormData) {
     phone: formData.get('phone'),
     title: formData.get('title'),
   })
-  if (!result.success) throw new Error(result.error.issues[0].message)
+  if (!result.success) return { success: false, error: result.error.issues[0].message }
   const data = result.data
 
   const contact = await prisma.contactPerson.create({ data })
 
   revalidatePath('/admin')
-  return { id: contact.id }
+  return { success: true, id: contact.id }
 }
 
-export async function updateContactPerson(id: number, formData: FormData) {
+export async function updateContactPerson(id: number, formData: FormData): Promise<{ success: true } | { success: false; error: string }> {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
 
@@ -71,12 +71,13 @@ export async function updateContactPerson(id: number, formData: FormData) {
     phone: formData.get('phone') || undefined,
     title: formData.get('title') || undefined,
   })
-  if (!result.success) throw new Error(result.error.issues[0].message)
+  if (!result.success) return { success: false, error: result.error.issues[0].message }
   const data = result.data
 
   await prisma.contactPerson.update({ where: { id }, data })
 
   revalidatePath('/admin')
+  return { success: true }
 }
 
 export async function deleteContactPerson(id: number) {

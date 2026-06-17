@@ -35,13 +35,13 @@ export default function UpdateReviewClient({
     formData.append('message', message)
     if (imageFile) formData.append('image', imageFile)
 
-    try {
-      await updateReview(reviewId, formData)
-      toast.success('Anmeldelse oppdatert')
-      router.push('/admin?tab=anmeldelser')
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Noe gikk galt')
+    const result = await updateReview(reviewId, formData)
+    if (!result.success) {
+      toast.error(result.error)
+      return
     }
+    toast.success('Anmeldelse oppdatert')
+    router.push('/admin?tab=anmeldelser')
   }
 
   return (

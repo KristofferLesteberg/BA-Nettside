@@ -40,7 +40,7 @@ export async function getReviewById(id: number) {
   return review
 }
 
-export async function createReview(formData: FormData) {
+export async function createReview(formData: FormData): Promise<{ success: true; id: number } | { success: false; error: string }> {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
 
@@ -51,7 +51,7 @@ export async function createReview(formData: FormData) {
     orgURL:  formData.get('orgURL')  || undefined,
     message: formData.get('message'),
   })
-  if (!result.success) throw new Error(result.error.issues[0].message)
+  if (!result.success) return { success: false, error: result.error.issues[0].message }
   const data = result.data
 
   const review = await prisma.clientReview.create({ data })
@@ -64,10 +64,10 @@ export async function createReview(formData: FormData) {
 
   revalidatePath('/admin')
   revalidatePath('/')
-  return { id: review.id }
+  return { success: true, id: review.id }
 }
 
-export async function updateReview(id: number, formData: FormData) {
+export async function updateReview(id: number, formData: FormData): Promise<{ success: true } | { success: false; error: string }> {
   const session = await getServerSession(authOptions)
   if (!session) throw new Error('Ikke autorisert')
 
@@ -81,7 +81,7 @@ export async function updateReview(id: number, formData: FormData) {
     orgURL:  formData.get('orgURL')  || undefined,
     message: formData.get('message') || undefined,
   })
-  if (!result.success) throw new Error(result.error.issues[0].message)
+  if (!result.success) return { success: false, error: result.error.issues[0].message }
   const data = result.data
 
   let imageId = existing.imageId
@@ -95,6 +95,7 @@ export async function updateReview(id: number, formData: FormData) {
 
   revalidatePath('/admin')
   revalidatePath('/')
+  return { success: true }
 }
 
 export async function deleteReview(id: number) {
