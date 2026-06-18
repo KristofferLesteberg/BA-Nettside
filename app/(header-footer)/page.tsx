@@ -29,7 +29,7 @@ const page = async () => {
           <div className='flex-1 flex flex-col items-center justify-center text-center px-4 pb-10'>
             <div>
               <h1 className='heading-display text-white'>
-                Kjøp byggematerialer eller få jobben gjort av fagfolk
+                Få jobben gjort av fremtidens fagfolk
               </h1>
             </div>
             <div>
@@ -89,7 +89,7 @@ const page = async () => {
                     varmeanlegg, samt arbeid med både nye installasjoner og rehabilitering.
                   </p>
                   <div
-                    style={{ backgroundImage: 'url("/static-images/fp-img2.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }}
+                    style={{ backgroundImage: 'url("/static-images/fp-img3.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }}
                     className='w-full md:w-1/2 h-64 md:h-80 rounded-lg shrink-0'
                   />
                 </div>
@@ -117,7 +117,7 @@ const page = async () => {
                     aktuelt.
                   </p>
                   <div
-                    style={{ backgroundImage: 'url("/static-images/fp-img3.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }}
+                    style={{ backgroundImage: 'url("/static-images/anlegg.jpg")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center 50%' }}
                     className='w-full md:w-1/2 h-64 md:h-80 rounded-lg shrink-0'
                   />
                 </div>
